@@ -3,16 +3,16 @@ package org.woen.team17517.Robot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class Lightning {
+public class Lighting {
 
     public LightningMode lightMode = LightningMode.OFF;
     DcMotor svet1;
     DcMotor svet2;
-    AiRRobot aiRRobot;
-    public Lightning(AiRRobot robot) {
-        aiRRobot = robot;
-        svet1 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("svet1");
-        svet2 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("svet2");
+    Robot robot;
+    public Lighting(Robot robot) {
+        this.robot = robot;
+        svet1 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet1");
+        svet2 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet2");
         svet1.setDirection(DcMotorSimple.Direction.FORWARD);
         svet2.setDirection(DcMotorSimple.Direction.FORWARD);
     }

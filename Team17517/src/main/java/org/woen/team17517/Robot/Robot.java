@@ -2,27 +2,27 @@ package org.woen.team17517.Robot;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class AiRRobot {
+public class Robot {
     public DriveTrain driveTrain;
-    public Graber graber;
+    public Grabber grabber;
     public Lift lift;
-    public Lightning lightning;
+    public Lighting lighting;
     public Odometry odometry;
     public LinearOpMode linearOpMode;
 
-    public AiRRobot(LinearOpMode linearOpMode1) {
+    public Robot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
         driveTrain = new DriveTrain(this);
-        graber = new Graber(this);
+        grabber = new Grabber(this);
         lift = new Lift(this);
 
-        lightning = new Lightning(this);
+        lighting = new Lighting(this);
         odometry = new Odometry(this);
     }
 
     public void allUpdate() {
         lift.update();
-        lightning.update();
+        lighting.update();
         odometry.update();
     }
 }

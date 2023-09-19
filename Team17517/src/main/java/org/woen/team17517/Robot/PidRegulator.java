@@ -2,13 +2,13 @@ package org.woen.team17517.Robot;
 
 import static java.lang.Math.abs;
 
-public class PidRegulator {
+public class PidRegulator { //TODO Feedforward
     double kP = 0;
     double kI = 0;
     double kD = 0;
     double ui = 0;
     double errold;
-    double told;
+    double told; //TODO ElapsedTime
 
     public PidRegulator(double p, double i, double d) {
         kP = p;
@@ -16,13 +16,11 @@ public class PidRegulator {
         kD = d;
     }
 
-
     public double update(double err) {
-
         double time = System.currentTimeMillis() / 1000.0;
         double up = err * kP;
         ui += (err * kI) * (time - told);
-        if (abs(ui) > 0.25) {
+        if (abs(ui) > 0.25) { //TODO parameter
             ui = 0.25;
         }
         double ud = (err - errold) * kD / (time - told);

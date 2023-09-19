@@ -3,94 +3,91 @@ package org.woen.team17517.Programms;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.woen.team17517.Robot.AiRRobot;
 import org.woen.team17517.Robot.Lift;
-import org.woen.team17517.Robot.Lightning;
+import org.woen.team17517.Robot.Lighting;
+import org.woen.team17517.Robot.Robot;
 
 @TeleOp
 public class TeleOpM extends LinearOpMode {
     public double speed = 1.0;
-    boolean oldsquare = false;
+    boolean oldSquare = false;
     boolean graberPosition;
-    boolean oldcircle = false;
-    boolean oldtriangle = false;
-    double liftpos = 0;
-
-    boolean oldbumer = false;
-    AiRRobot aiRRobot;
+    boolean oldCircle = false;
+    boolean oldTriangle = false;
+    boolean oldBumper = false;
+    Robot robot;
     boolean speedcontrol = false;
 
     @Override
-    public void runOpMode() throws InterruptedException {
-
-        aiRRobot = new AiRRobot(this);
+    public void runOpMode() {
+        robot = new Robot(this);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
-        aiRRobot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
-        aiRRobot.lightning.lightMode = Lightning.LightningMode.SMOOTH;
-        aiRRobot.lift.liftPosition = Lift.LiftPosition.ZERO;
+        robot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
+        robot.lighting.lightMode = Lighting.LightningMode.SMOOTH;
+        robot.lift.liftPosition = Lift.LiftPosition.ZERO;
         while (opModeIsActive()) {
+            boolean circle = gamepad1.circle;
             boolean square = gamepad1.square;
-            if (square && !oldsquare) {
+            boolean triangle = gamepad1.triangle;
+            boolean cross = gamepad1.cross;
+
+            if (square && !oldSquare) {
                 graberPosition = !graberPosition;
             }
             if (gamepad1.ps) {
-                aiRRobot.lift.reset();
+                robot.lift.reset();
             }
 
-
-            boolean circle = gamepad1.circle;
-            aiRRobot.graber.Target_Graber(graberPosition);
-            boolean triangle = gamepad1.triangle;
-            boolean cross = gamepad1.cross;
+            robot.grabber.setPosition(graberPosition);
             if (gamepad1.dpad_down) {
-                aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
-                aiRRobot.lift.liftPosition = Lift.LiftPosition.ZERO;
+                robot.lift.liftMode = Lift.LiftMode.AUTO;
+                robot.lift.liftPosition = Lift.LiftPosition.ZERO;
             }
 
             if (gamepad1.dpad_up) {
-                aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
-                aiRRobot.lift.liftPosition = Lift.LiftPosition.UP;
+                robot.lift.liftMode = Lift.LiftMode.AUTO;
+                robot.lift.liftPosition = Lift.LiftPosition.UP;
             }
 
             if (gamepad1.dpad_left) {
-                aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
-                aiRRobot.lift.liftPosition = Lift.LiftPosition.LOW;
+                robot.lift.liftMode = Lift.LiftMode.AUTO;
+                robot.lift.liftPosition = Lift.LiftPosition.LOW;
             }
             if (gamepad1.dpad_right) {
-                aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
-                aiRRobot.lift.liftPosition = Lift.LiftPosition.MIDDLE;
+                robot.lift.liftMode = Lift.LiftMode.AUTO;
+                robot.lift.liftPosition = Lift.LiftPosition.MIDDLE;
             }
 
             if (gamepad1.left_trigger > 0.1) {
-                aiRRobot.lift.liftMode = Lift.LiftMode.MANUAl;
+                robot.lift.liftMode = Lift.LiftMode.MANUAL;
             } else if (triangle || cross) {
-                aiRRobot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
+                robot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
             }
             if (triangle) {
-                aiRRobot.lift.power = 1.0;
+                robot.lift.power = 1.0;
             }
             if (cross) {
-                aiRRobot.lift.power = -0.1;
+                robot.lift.power = -0.1;
             }
             if (!triangle && !cross) {
-                aiRRobot.lift.power = 0.1;
+                robot.lift.power = 0.1;
             }
-            aiRRobot.odometry.update();
-            aiRRobot.lift.update();
+            robot.odometry.update();
+            robot.lift.update();
 
 
-            telemetry.addData("x", aiRRobot.odometry.x);
-            telemetry.addData("y", aiRRobot.odometry.y);
-            telemetry.addData("heading", aiRRobot.odometry.heading);
-            telemetry.addData("motor1", aiRRobot.lift.motor1.getCurrentPosition());
-            telemetry.addData("motor2", aiRRobot.lift.motor2.getCurrentPosition());
-            telemetry.addData("top", aiRRobot.lift.buttonUp.getState());
-            telemetry.addData("down", aiRRobot.lift.buttonDown.getState());
-            aiRRobot.lightning.update();
-            aiRRobot.driveTrain.displayEncoders();
+            telemetry.addData("x", robot.odometry.x);
+            telemetry.addData("y", robot.odometry.y);
+            telemetry.addData("heading", robot.odometry.heading);
+            telemetry.addData("motor1", robot.lift.liftMotor1.getCurrentPosition());
+            telemetry.addData("motor2", robot.lift.liftMotor2.getCurrentPosition());
+            telemetry.addData("top", robot.lift.buttonUp.getState());
+            telemetry.addData("down", robot.lift.buttonDown.getState());
+            robot.lighting.update();
+            robot.driveTrain.displayEncoders();
             double axial = -gamepad1.left_stick_y * speed;
             double lateral = -gamepad1.left_stick_x * speed;
             double yaw = -gamepad1.right_stick_x * speed;
@@ -100,12 +97,11 @@ public class TeleOpM extends LinearOpMode {
                 lateral /= 3;
                 yaw /= 3;
             }
-            oldbumer = gamepad1.right_bumper;
-            aiRRobot.driveTrain.setPowers(axial, lateral, yaw);
-            oldsquare = square;
-            oldcircle = circle;
-            oldtriangle = triangle;
-            //driveTrain.positionsEncodersXY();
+            oldBumper = gamepad1.right_bumper;
+            robot.driveTrain.setPowers(axial, lateral, yaw);
+            oldSquare = square;
+            oldCircle = circle;
+            oldTriangle = triangle;
             telemetry.update();
         }
     }
