@@ -3,21 +3,18 @@ package org.woen.team17517.Robot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.woen.team17517.Programms.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.woen.team17517.Programms.AprilTagDetectionPipeline;
 
 import java.util.ArrayList;
 
 public class Camera {
+    static final double FEET_PER_METER = 3.28084;
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
-
-    static final double FEET_PER_METER = 3.28084;
-
-
     double fx = 578.272;
     double fy = 578.272;
     double cx = 402.145;
@@ -71,6 +68,7 @@ public class Camera {
     }
 
     public void stopcamera() {
-        camera.closeCameraDeviceAsync(() -> {});
+        camera.closeCameraDeviceAsync(() -> {
+        });
     }
 }

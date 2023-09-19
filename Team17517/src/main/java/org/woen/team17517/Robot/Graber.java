@@ -5,21 +5,18 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
 public class Graber {
+    public static double POS_CLOSE = 0.75;
+    public static double POS_OPEN = 1.00;
     Servo servo;
     Servo servo1;
     AiRRobot aiRRobot;
     boolean pos = false;
-
     double timeGraber = System.currentTimeMillis() / 1000;
-
     public Graber(AiRRobot robot) {
         aiRRobot = robot;
         servo = aiRRobot.linearOpMode.hardwareMap.get(Servo.class, "Servo1");
         servo1 = aiRRobot.linearOpMode.hardwareMap.get(Servo.class, "Servo");
     }
-
-    public static double POS_CLOSE = 0.75;
-    public static double POS_OPEN = 1.00;
 
     public void Target_Graber(boolean triang) {
         if (pos != triang)

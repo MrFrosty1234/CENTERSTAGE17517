@@ -14,24 +14,22 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 public class Odometry {
-    BNO055IMU gyro;
-
-    double crr = 24 * 20 / (9.8 * PI)/(124/121.8);
-
-    private DcMotor left_front_drive;
-    private DcMotor left_back_drive;
-    private DcMotor right_front_drive;
-    private DcMotor right_back_drive;
     public double x = 0, y = 0, heading = 0;
-
+    BNO055IMU gyro;
+    double crr = 24 * 20 / (9.8 * PI) / (124 / 121.8);
     double lfdold = 0;
     double lbdold = 0;
     double rfdold = 0;
     double rbdold = 0;
     LinearOpMode linearOpMode1;
     AiRRobot aiRRobot;
+    private final DcMotor left_front_drive;
+    private final DcMotor left_back_drive;
+    private final DcMotor right_front_drive;
+    private final DcMotor right_back_drive;
+
     public Odometry(AiRRobot robot) {
-        aiRRobot=robot;
+        aiRRobot = robot;
         gyro = aiRRobot.linearOpMode.hardwareMap.get(BNO055IMU.class, "imu");
 
         left_front_drive = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("left_front_drive");
@@ -56,7 +54,7 @@ public class Odometry {
 
         double deltaX = xPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
         double deltaY = yPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
-        deltaY= deltaY*0.85602812451;
+        deltaY = deltaY * 0.85602812451;
         x += deltaX * cos(toRadians(-angle)) + deltaY * sin(toRadians(-angle));
         y += -deltaX * sin(toRadians(-angle)) + deltaY * cos(toRadians(-angle));
         heading = angle;

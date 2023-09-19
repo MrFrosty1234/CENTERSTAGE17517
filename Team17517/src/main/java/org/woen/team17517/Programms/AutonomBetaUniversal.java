@@ -21,19 +21,19 @@ public class AutonomBetaUniversal extends LinearOpMode {
         telemetry.update();
         camera.stopcamera();
         aiRRobot.graber.Target_Graber(false);
-        aiRRobot.driveTrain.setFieldPosition(60,0,0);
-        if(c == 18){
-            aiRRobot.driveTrain.setFieldPosition(60,0,-90);
-            aiRRobot.driveTrain.setFieldPosition(60,55,-90);
-            aiRRobot.driveTrain.setFieldPosition(60,55,-180);
+        aiRRobot.driveTrain.setFieldPosition(60, 0, 0);
+        if (c == 18) {
+            aiRRobot.driveTrain.setFieldPosition(60, 0, -90);
+            aiRRobot.driveTrain.setFieldPosition(60, 55, -90);
+            aiRRobot.driveTrain.setFieldPosition(60, 55, -180);
         }
-        if (c == 6){
-            aiRRobot.driveTrain.setFieldPosition(60,0,90);
-            aiRRobot.driveTrain.setFieldPosition(60,-55,90);
-            aiRRobot.driveTrain.setFieldPosition(60,-55,180);
+        if (c == 6) {
+            aiRRobot.driveTrain.setFieldPosition(60, 0, 90);
+            aiRRobot.driveTrain.setFieldPosition(60, -55, 90);
+            aiRRobot.driveTrain.setFieldPosition(60, -55, 180);
         }
-        if(c == 0){
-            aiRRobot.driveTrain.setFieldPosition(60,0,90);
+        if (c == 0) {
+            aiRRobot.driveTrain.setFieldPosition(60, 0, 90);
         }
     }
 }

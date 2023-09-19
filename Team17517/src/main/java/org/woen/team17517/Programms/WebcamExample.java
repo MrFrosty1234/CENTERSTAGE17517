@@ -1,4 +1,3 @@
-
 package org.woen.team17517.Programms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -28,8 +27,10 @@ public class WebcamExample extends LinearOpMode {
             public void onOpened() {
                 webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
+
             @Override
-            public void onError(int errorCode) {}
+            public void onError(int errorCode) {
+            }
         });
 
         telemetry.addLine("Waiting for start");

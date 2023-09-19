@@ -19,7 +19,8 @@ public class AiRRobot {
         lightning = new Lightning(this);
         odometry = new Odometry(this);
     }
-    public void allUpdate(){
+
+    public void allUpdate() {
         lift.update();
         lightning.update();
         odometry.update();

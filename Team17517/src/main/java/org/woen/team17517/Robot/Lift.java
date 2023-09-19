@@ -10,26 +10,25 @@ import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class Lift {
+    public static double POS_UP = 0.71;
+    public static double POS_DOWN = 0.32;
     public DcMotor motor1;
     public DcMotor motor2;
-    private PidRegulator PIDZL1 = new PidRegulator(1.5 / 251.5, 0, 0);
-    private PidRegulator PIDZL2 = new PidRegulator(1.5 / 251.5, 0, 0);
     public DigitalChannel buttonUp;
     public DigitalChannel buttonDown;
+    public double power = 0;
+    public LiftPosition liftPosition = LiftPosition.ZERO;
+    public LiftMode liftMode = LiftMode.AUTO;
     double told;
     double err1 = 0;
     double err2 = 0;
     boolean pos = false;
-    public double power = 0;
-    public LiftPosition liftPosition = LiftPosition.ZERO;
     boolean circleold = false;
-
-    public enum LiftMode {
-        AUTO, MANUAl, MANUALLIMIT;
-    }
-
-    public LiftMode liftMode = LiftMode.AUTO;
     AiRRobot aiRRobot;
+    int liftOffset1 = 0;
+    int liftOffset2 = 0;
+    private final PidRegulator PIDZL1 = new PidRegulator(1.5 / 251.5, 0, 0);
+    private final PidRegulator PIDZL2 = new PidRegulator(1.5 / 251.5, 0, 0);
 
     public Lift(AiRRobot robot) {
         aiRRobot = robot;
@@ -65,19 +64,6 @@ public class Lift {
         return m0;
     }
 
-    public enum LiftPosition {
-        ZERO(0), GROUND(100), CUPSON1(400), CUPSON2(370), LOW(780), MIDDLE(1008), UP(1108);
-
-        LiftPosition(int value) {
-            this.value = value;
-        }
-
-        public int value;
-    }
-
-    int liftOffset1 = 0;
-    int liftOffset2 = 0;
-
     private int getPosition1() {
         return motor1.getCurrentPosition() - liftOffset1;
     }
@@ -89,7 +75,7 @@ public class Lift {
     public void setPowersLimit(double x) {
         int pos1 = getPosition1();
         int pos2 = getPosition2();
-        if (x > 0 && buttonUp.getState() == true) {
+        if (x > 0 && buttonUp.getState()) {
             if (pos1 > LiftPosition.UP.value) {
                 motor1.setPower(0);
             } else {
@@ -155,9 +141,6 @@ public class Lift {
 
     }
 
-    public static double POS_UP = 0.71;
-    public static double POS_DOWN = 0.32;
-
     public void update() {
 
 
@@ -189,7 +172,7 @@ public class Lift {
                     err2 = target2 - l2;
                     double poweryl1 = 0.2 + PIDZL1.update(err1);
                     double poweryl2 = 0.2 + PIDZL2.update(err2);
-                    motor1.setPower(Range.clip(poweryl1, -0.1   , 0.7));
+                    motor1.setPower(Range.clip(poweryl1, -0.1, 0.7));
                     motor2.setPower(Range.clip(poweryl2, -0.1, 0.7));
                 }
                 break;
@@ -217,9 +200,20 @@ public class Lift {
     }
 
     public boolean isAtPosition() {
-        if (abs(err1) < 5 && abs(err2) < 5)
-            return true;
-        else
-            return false;
+        return abs(err1) < 5 && abs(err2) < 5;
+    }
+
+    public enum LiftMode {
+        AUTO, MANUAl, MANUALLIMIT
+    }
+
+    public enum LiftPosition {
+        ZERO(0), GROUND(100), CUPSON1(400), CUPSON2(370), LOW(780), MIDDLE(1008), UP(1108);
+
+        public int value;
+
+        LiftPosition(int value) {
+            this.value = value;
+        }
     }
 }

@@ -10,11 +10,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class ProgramAvtonom3 extends LinearOpMode {
     BNO055IMU gyro;
+    double crr = 24 * 20 / (9.8 * PI);
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    double crr = 24 * 20 / (9.8 * PI);
+
     @Override
     public void runOpMode() {
         gyro = hardwareMap.get(BNO055IMU.class, "imu");
@@ -42,9 +43,8 @@ public class ProgramAvtonom3 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
-
-
     }
+
     void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
@@ -84,9 +84,10 @@ public class ProgramAvtonom3 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
     void TurnGuro(double x, double v) {
         double angle = toDegrees(gyro.getAngularOrientation().firstAngle);
-        while ((abs(angle)) < x && opModeIsActive()){
+        while ((abs(angle)) < x && opModeIsActive()) {
             leftFrontDrive.setPower(-v);
             rightFrontDrive.setPower(v);
             leftBackDrive.setPower(-v);
@@ -108,6 +109,7 @@ public class ProgramAvtonom3 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
     void LeftRight(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
@@ -147,6 +149,7 @@ public class ProgramAvtonom3 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
     void ForwardBack(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
@@ -186,6 +189,7 @@ public class ProgramAvtonom3 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
     void Diogonal3Axises(double x, double y, double z) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
@@ -237,6 +241,7 @@ public class ProgramAvtonom3 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
     void Diogonal2Axises(double x, double y) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();

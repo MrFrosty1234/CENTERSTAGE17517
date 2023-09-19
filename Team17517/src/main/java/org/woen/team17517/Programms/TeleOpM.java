@@ -9,17 +9,16 @@ import org.woen.team17517.Robot.Lightning;
 
 @TeleOp
 public class TeleOpM extends LinearOpMode {
+    public double speed = 1.0;
     boolean oldsquare = false;
     boolean graberPosition;
     boolean oldcircle = false;
     boolean oldtriangle = false;
-    public double speed = 1.0;
-
     double liftpos = 0;
 
-    boolean oldbumer=false;
+    boolean oldbumer = false;
     AiRRobot aiRRobot;
-    boolean speedcontrol=false;
+    boolean speedcontrol = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,7 +28,7 @@ public class TeleOpM extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        aiRRobot.lift.liftMode= Lift.LiftMode.MANUALLIMIT;
+        aiRRobot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
         aiRRobot.lightning.lightMode = Lightning.LightningMode.SMOOTH;
         aiRRobot.lift.liftPosition = Lift.LiftPosition.ZERO;
         while (opModeIsActive()) {
@@ -37,7 +36,7 @@ public class TeleOpM extends LinearOpMode {
             if (square && !oldsquare) {
                 graberPosition = !graberPosition;
             }
-            if(gamepad1.ps){
+            if (gamepad1.ps) {
                 aiRRobot.lift.reset();
             }
 
@@ -87,21 +86,21 @@ public class TeleOpM extends LinearOpMode {
             telemetry.addData("y", aiRRobot.odometry.y);
             telemetry.addData("heading", aiRRobot.odometry.heading);
             telemetry.addData("motor1", aiRRobot.lift.motor1.getCurrentPosition());
-            telemetry.addData("motor2",aiRRobot.lift.motor2.getCurrentPosition());
-            telemetry.addData("top",aiRRobot.lift.buttonUp.getState());
-            telemetry.addData("down",aiRRobot.lift.buttonDown.getState());
+            telemetry.addData("motor2", aiRRobot.lift.motor2.getCurrentPosition());
+            telemetry.addData("top", aiRRobot.lift.buttonUp.getState());
+            telemetry.addData("down", aiRRobot.lift.buttonDown.getState());
             aiRRobot.lightning.update();
-              aiRRobot.driveTrain.displayEncoders();
+            aiRRobot.driveTrain.displayEncoders();
             double axial = -gamepad1.left_stick_y * speed;
             double lateral = -gamepad1.left_stick_x * speed;
             double yaw = -gamepad1.right_stick_x * speed;
 
-            if(gamepad1.right_bumper) {
+            if (gamepad1.right_bumper) {
                 axial /= 3;
                 lateral /= 3;
                 yaw /= 3;
             }
-            oldbumer=gamepad1.right_bumper;
+            oldbumer = gamepad1.right_bumper;
             aiRRobot.driveTrain.setPowers(axial, lateral, yaw);
             oldsquare = square;
             oldcircle = circle;

@@ -30,8 +30,9 @@ public class PidRegulator {
         told = time;
         return up + ud + ui;
     }
-    public void reset(){
-        ui=0;
-        told=System.currentTimeMillis()/1000.0;
+
+    public void reset() {
+        ui = 0;
+        told = System.currentTimeMillis() / 1000.0;
     }
 }

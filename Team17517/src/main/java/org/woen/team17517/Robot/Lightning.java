@@ -5,18 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Lightning {
 
+    public LightningMode lightMode = LightningMode.OFF;
     DcMotor svet1;
     DcMotor svet2;
-
-    public enum LightningMode {
-        OFF, ON, SMOOTH;
-    }
-
-    public LightningMode lightMode = LightningMode.OFF;
     AiRRobot aiRRobot;
-
     public Lightning(AiRRobot robot) {
-        aiRRobot=robot;
+        aiRRobot = robot;
         svet1 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("svet1");
         svet2 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("svet2");
         svet1.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -45,6 +39,10 @@ public class Lightning {
                 smooth();
                 break;
         }
+    }
+
+    public enum LightningMode {
+        OFF, ON, SMOOTH
     }
 }
 

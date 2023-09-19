@@ -19,27 +19,27 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 @Config
 public class DriveTrain {
-    BNO055IMU gyro;
-    private DcMotor left_front_drive;
-    private DcMotor left_back_drive;
-    private DcMotor right_front_drive;
-    private DcMotor right_back_drive;
-    private PidRegulator PIDX = new PidRegulator(kPdrive, kIdrive, kDdrive);
-    private PidRegulator PIDY = new PidRegulator(kPdrive, kIdrive, kDdrive);
-    private PidRegulator PIDZ = new PidRegulator(kProtation, kIrotation, kDrotation);
-    private PidRegulator PIDFIELDX = new PidRegulator(kPdrive, kIdrive, kDdrive);
-    private PidRegulator PIDFIELDY = new PidRegulator(kPdrive, kIdrive, kDdrive);
     public static double kPdrive = 0.045;
     public static double kIdrive = 0.025;
     public static double kDdrive = 0;
     public static double kProtation = 0.04;
     public static double kIrotation = 0.01;
     public static double kDrotation = 0;
+    BNO055IMU gyro;
     double told;
     double crr = 24 * 20 / (9.8 * PI);
     double targetangle = 0;
     double xold = 0, yold = 0;
     AiRRobot aiRRobot;
+    private final DcMotor left_front_drive;
+    private final DcMotor left_back_drive;
+    private final DcMotor right_front_drive;
+    private final DcMotor right_back_drive;
+    private final PidRegulator PIDX = new PidRegulator(kPdrive, kIdrive, kDdrive);
+    private final PidRegulator PIDY = new PidRegulator(kPdrive, kIdrive, kDdrive);
+    private final PidRegulator PIDZ = new PidRegulator(kProtation, kIrotation, kDrotation);
+    private final PidRegulator PIDFIELDX = new PidRegulator(kPdrive, kIdrive, kDdrive);
+    private final PidRegulator PIDFIELDY = new PidRegulator(kPdrive, kIdrive, kDdrive);
 
     public DriveTrain(AiRRobot robot) {
         aiRRobot = robot;
@@ -127,8 +127,8 @@ public class DriveTrain {
 
     double constantVelocityMotion(double start, double time, double speed, double finish) {
         double dist = finish - start;
-        if (finish < speed * time  + start)
-             return finish;
+        if (finish < speed * time + start)
+            return finish;
         if (start > finish)
             return speed * time * (-1) + start;
         else
