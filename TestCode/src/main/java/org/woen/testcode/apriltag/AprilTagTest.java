@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.woen.team17517.test;
+package org.woen.testcode.apriltag;
 
 import android.annotation.SuppressLint;
 import android.graphics.Camera;
