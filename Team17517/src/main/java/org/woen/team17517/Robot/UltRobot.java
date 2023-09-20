@@ -2,7 +2,7 @@ package org.woen.team17517.Robot;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class Robot {
+public class UltRobot {
     public DriveTrain driveTrain;
     public Grabber grabber;
     public Lift lift;
@@ -10,7 +10,7 @@ public class Robot {
     public Odometry odometry;
     public LinearOpMode linearOpMode;
 
-    public Robot(LinearOpMode linearOpMode1) {
+    public UltRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
         driveTrain = new DriveTrain(this);
         grabber = new Grabber(this);

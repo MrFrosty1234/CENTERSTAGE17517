@@ -21,14 +21,14 @@ public class Odometry {
     double lbdold = 0;
     double rfdold = 0;
     double rbdold = 0;
-    Robot robot;
+    UltRobot robot;
 
     private final DcMotor left_front_drive;
     private final DcMotor left_back_drive;
     private final DcMotor right_front_drive;
     private final DcMotor right_back_drive;
 
-    public Odometry(Robot robot) {
+    public Odometry(UltRobot robot) {
         this.robot = robot;
         gyro = this.robot.linearOpMode.hardwareMap.get(BNO055IMU.class, "imu");
 

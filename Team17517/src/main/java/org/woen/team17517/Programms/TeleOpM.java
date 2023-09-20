@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.woen.team17517.Robot.Lift;
 import org.woen.team17517.Robot.Lighting;
-import org.woen.team17517.Robot.Robot;
+import org.woen.team17517.Robot.UltRobot;
 
 @TeleOp
 public class TeleOpM extends LinearOpMode {
@@ -15,12 +15,12 @@ public class TeleOpM extends LinearOpMode {
     boolean oldCircle = false;
     boolean oldTriangle = false;
     boolean oldBumper = false;
-    Robot robot;
+    UltRobot robot;
     boolean speedcontrol = false;
 
     @Override
     public void runOpMode() {
-        robot = new Robot(this);
+        robot = new UltRobot(this);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 

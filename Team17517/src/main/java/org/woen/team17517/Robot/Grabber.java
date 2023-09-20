@@ -9,11 +9,11 @@ public class Grabber {
     public static double POS_OPEN = 1.00;
     Servo servo;
     Servo servo1;
-    Robot robot;
+    UltRobot robot;
     boolean targetPosition = false;
     double timeGrabber;
 
-    public Grabber(Robot robot) {
+    public Grabber(UltRobot robot) {
         this.robot = robot;
         servo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "Servo1");
         servo1 = this.robot.linearOpMode.hardwareMap.get(Servo.class, "Servo");

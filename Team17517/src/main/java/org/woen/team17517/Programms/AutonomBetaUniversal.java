@@ -3,16 +3,16 @@ package org.woen.team17517.Programms;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.woen.team17517.Robot.Robot;
+import org.woen.team17517.Robot.UltRobot;
 import org.woen.team17517.Robot.Camera;
 
 @Autonomous
 public class AutonomBetaUniversal extends LinearOpMode {
-    Robot robot;
+    UltRobot robot;
     Camera camera;
 
     public void runOpMode() {
-        robot = new Robot(this);
+        robot = new UltRobot(this);
         camera = new Camera(hardwareMap);
         robot.lift.reset();
         waitForStart();

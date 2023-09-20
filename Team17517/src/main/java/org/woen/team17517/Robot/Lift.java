@@ -23,13 +23,13 @@ public class Lift {
     double err2 = 0;
     boolean servoLiftUp = false;
     boolean servoLiftButtonOld = false;
-    Robot robot;
+    UltRobot robot;
     int liftOffset1 = 0;
     int liftOffset2 = 0;
     private final PidRegulator PIDZL1 = new PidRegulator(0.005964, 0, 0);
     private final PidRegulator PIDZL2 = new PidRegulator(0.005964, 0, 0);
 
-    public Lift(Robot robot) {
+    public Lift(UltRobot robot) {
         this.robot = robot;
         this.robot.grabber.servo1.setPosition(SERVO_POS_DOWN);
         liftMotor1 = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor1");

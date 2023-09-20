@@ -28,7 +28,7 @@ public class DriveTrain {
     BNO055IMU gyro;
     double encoderToCm = 24 * 20 / (9.8 * PI); //TODO Parameters
     double headingTargetGlobal = 0;
-    Robot robot;
+    UltRobot robot;
     private final DcMotor left_front_drive;
     private final DcMotor left_back_drive;
     private final DcMotor right_front_drive;
@@ -39,7 +39,7 @@ public class DriveTrain {
     private final PidRegulator pidFieldX = new PidRegulator(kPdrive, kIdrive, kDdrive);
     private final PidRegulator pidFieldY = new PidRegulator(kPdrive, kIdrive, kDdrive);
 
-    public DriveTrain(Robot robot) {
+    public DriveTrain(UltRobot robot) {
         this.robot = robot;
         gyro = robot.linearOpMode.hardwareMap.get(BNO055IMU.class, "imu");
 

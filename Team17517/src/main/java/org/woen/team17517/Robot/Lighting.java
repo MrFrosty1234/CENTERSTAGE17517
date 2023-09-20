@@ -8,8 +8,8 @@ public class Lighting {
     public LightningMode lightMode = LightningMode.OFF;
     DcMotor svet1;
     DcMotor svet2;
-    Robot robot;
-    public Lighting(Robot robot) {
+    UltRobot robot;
+    public Lighting(UltRobot robot) {
         this.robot = robot;
         svet1 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet1");
         svet2 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet2");

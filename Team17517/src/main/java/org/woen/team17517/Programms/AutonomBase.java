@@ -4,17 +4,17 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.woen.team17517.Robot.Robot;
+import org.woen.team17517.Robot.UltRobot;
 
 
 abstract public class AutonomBase extends LinearOpMode {
-    Robot robot;
+    UltRobot robot;
     TelemetryPacket telemetryPacket;
 
     @Override
     public void runOpMode() {
 
-        robot = new Robot(this);
+        robot = new UltRobot(this);
         telemetryPacket = new TelemetryPacket();
         telemetryPacket.fieldOverlay().strokeLine(0, 0, 141.3 / 2.54, 21.9 / 2.54);
         FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
