@@ -44,7 +44,8 @@ public class DriveTrain {
     public static double powerYMax = 0.75;
     public static double powerHeadingMin = -0.55;
     public static double powerHeadingMax =  0.55;
-    BNO055IMU gyro;
+
+    double gyro;
     double encoderToCm = encodersWithoutReductor * motorReductor / (radiusWheelCm * PI);
     double headingTargetGlobal = 0;
     UltRobot robot;
@@ -57,13 +58,14 @@ public class DriveTrain {
     private final PidRegulator pidH = new PidRegulator(kProtation, kIrotation, kDrotation);
     private final PidRegulator pidFieldX = new PidRegulator(kPdrive, kIdrive, kDdrive);
     private final PidRegulator pidFieldY = new PidRegulator(kPdrive, kIdrive, kDdrive);
-    private double headingError = headingTargetGlobal - gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+
+
 
     public DriveTrain(UltRobot robot) {
         this.robot = robot;
-        gyro = robot.linearOpMode.hardwareMap.get(BNO055IMU.class, "imu");
 
-        gyro.initialize(new BNO055IMU.Parameters());
+        gyro = robot.gyro.getAngle();
+
         left_front_drive = robot.linearOpMode.hardwareMap.dcMotor.get("left_front_drive");
         left_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("left_back_drive");
         right_front_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_front_drive");
