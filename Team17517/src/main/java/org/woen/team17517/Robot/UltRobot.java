@@ -27,5 +27,6 @@ public class UltRobot {
         lighting.update();
         odometry.update();
         gyro.update();
+        grabber.update();
     }
 }

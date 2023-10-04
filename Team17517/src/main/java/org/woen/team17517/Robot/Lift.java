@@ -74,7 +74,7 @@ public class Lift {
     public void setPowersLimit(double x) {
         int pos1 = getPosition1();
         int pos2 = getPosition2();
-        if (x > 0 && buttonUp.getState()) {
+        if (x > 0 && buttonUp.getState)) {
             if (pos1 > LiftPosition.UP.value) {
                 liftMotor1.setPower(0);
             } else {
@@ -175,7 +175,7 @@ public class Lift {
                 servoLiftButtonOld = robot.linearOpMode.gamepad1.circle;
 
                 if (robot.linearOpMode.gamepad1.circle != servoLiftButtonOld) {
-                    robot.grabber.servo1.setPosition(servoLiftUp ? SERVO_POS_UP : SERVO_POS_DOWN);
+
                     servoLiftUp = !servoLiftUp;
                 }
 

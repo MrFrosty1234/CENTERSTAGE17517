@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 public class Odometry {
     public double x = 0, y = 0, heading = 0;
-    BNO055IMU gyro;
+    double gyro;
     double encoderToCm = 24 * 20 / (9.8 * PI) / (124 / 121.8);
 
     double lfdold = 0;
@@ -30,7 +30,7 @@ public class Odometry {
 
     public Odometry(UltRobot robot) {
         this.robot = robot;
-        gyro = this.robot.linearOpMode.hardwareMap.get(BNO055IMU.class, "imu");
+        gyro = robot.gyro.getAngle();
 
         left_front_drive = this.robot.linearOpMode.hardwareMap.dcMotor.get("left_front_drive");
         left_back_drive = this.robot.linearOpMode.hardwareMap.dcMotor.get("left_back_drive");
@@ -48,7 +48,7 @@ public class Odometry {
         int lbd = left_back_drive.getCurrentPosition();
         int rfd = right_front_drive.getCurrentPosition();
         int rbd = right_back_drive.getCurrentPosition();
-        double angle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle;
+        double angle = robot.gyro.getAngle();
 
         double deltaX = wheelsToXPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
         double deltaY = wheelsToYPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
