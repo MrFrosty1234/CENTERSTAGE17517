@@ -172,7 +172,7 @@ public class Lift {
                 setPowersLimit(power);
                 break;
             case MANUAL:
-                servoLiftButtonOld = robot.linearOpMode.gamepad1.circle;
+                servoLiftButtonOld = robot.linearOpMode.gamepad1.ci rcle;
 
                 if (robot.linearOpMode.gamepad1.circle != servoLiftButtonOld) {
 

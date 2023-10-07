@@ -1,6 +1,8 @@
 package org.woen.team17517.Robot;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.AnalogSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -9,23 +11,25 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Grabber {
     UltRobot robot;
     DcMotor pixelMotor;
-    DigitalChannel pixelSensorRight;
-    DigitalChannel pixelSensorLeft;
+    AnalogInput pixelSensorRight;
+    AnalogInput pixelSensorLeft;
+    public static double voltage;
     double pixelsCount = 0;
     double pixelsCountOld = 0;
     double targetPower = 1;
 
+
     public Grabber(UltRobot robot) {
         this.robot = robot;
-        pixelSensorLeft = this.robot.linearOpMode.hardwareMap.digitalChannel.get("pixelStorageLeft");
-        pixelSensorRight = this.robot.linearOpMode.hardwareMap.digitalChannel.get("pixelStorageRight");
+        pixelSensorLeft = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageLeft");
+        pixelSensorRight = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageRight");
         pixelMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("pixelMotor");
     }
 
 
     public void update() {
         pixelsCountOld = pixelsCount;
-            if (pixelSensorLeft.getState() && pixelSensorRight.getState()) {
+            if (pixelSensorLeft.getVoltage() > voltage && pixelSensorRight.getVoltage() > voltage) {
                 pixelMotor.setPower(targetPower);
             } else
                 pixelMotor.setPower(0);
