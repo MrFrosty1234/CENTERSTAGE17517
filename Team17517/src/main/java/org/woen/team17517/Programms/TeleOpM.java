@@ -41,7 +41,7 @@ public class TeleOpM extends LinearOpMode {
                 robot.lift.reset();
             }
 
-            robot.grabber.setPosition(graberPosition);
+
             if (gamepad1.dpad_down) {
                 robot.lift.liftMode = Lift.LiftMode.AUTO;
                 robot.lift.liftPosition = Lift.LiftPosition.ZERO;
@@ -97,6 +97,9 @@ public class TeleOpM extends LinearOpMode {
                 lateral /= 3;
                 yaw /= 3;
             }
+
+            robot.grabber.enable(gamepad1.square);
+
             oldBumper = gamepad1.right_bumper;
             robot.driveTrain.setPowers(axial, lateral, yaw);
             oldSquare = square;
