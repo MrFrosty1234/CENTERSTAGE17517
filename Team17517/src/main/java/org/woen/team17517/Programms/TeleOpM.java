@@ -63,17 +63,22 @@ public class TeleOpM extends LinearOpMode {
 
             if (gamepad1.left_trigger > 0.1) {
                 robot.lift.liftMode = Lift.LiftMode.MANUAL;
+                robot.lift.liftPos = !robot.lift.liftPos;
             } else if (triangle || cross) {
                 robot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
+                robot.lift.liftPos = !robot.lift.liftPos;
             }
             if (triangle) {
                 robot.lift.power = 1.0;
+                robot.lift.liftPos = !robot.lift.liftPos;
             }
             if (cross) {
                 robot.lift.power = -0.1;
+                robot.lift.liftPos = !robot.lift.liftPos;
             }
             if (!triangle && !cross) {
                 robot.lift.power = 0.1;
+                robot.lift.liftPos = !robot.lift.liftPos;
             }
             robot.odometry.update();
             robot.lift.update();
