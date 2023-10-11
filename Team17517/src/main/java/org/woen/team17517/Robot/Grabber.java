@@ -29,7 +29,7 @@ public class Grabber {
 
     public void update() {
         pixelsCountOld = pixelsCount;
-            if (pixelSensorLeft.getVoltage() > voltage && pixelSensorRight.getVoltage() > voltage) {
+            if (pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) {
                 pixelMotor.setPower(targetPower);
             } else
                 pixelMotor.setPower(0);

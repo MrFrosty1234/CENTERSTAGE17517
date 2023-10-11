@@ -31,7 +31,7 @@ public class Lift {
 
     public Lift(UltRobot robot) {
         this.robot = robot;
-        this.robot.grabber.servo1.setPosition(SERVO_POS_DOWN);
+
         liftMotor1 = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor1");
         liftMotor2 = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor2");
         buttonUp = this.robot.linearOpMode.hardwareMap.digitalChannel.get("top");
@@ -74,7 +74,7 @@ public class Lift {
     public void setPowersLimit(double x) {
         int pos1 = getPosition1();
         int pos2 = getPosition2();
-        if (x > 0 && buttonUp.getState)) {
+        if (x > 0) {
             if (pos1 > LiftPosition.UP.value) {
                 liftMotor1.setPower(0);
             } else {
@@ -140,8 +140,6 @@ public class Lift {
     public void update() {
         switch (liftMode) {
             case AUTO:
-                if (robot.grabber.isClosed()) robot.grabber.servo1.setPosition(SERVO_POS_UP);
-                else robot.grabber.servo1.setPosition(SERVO_POS_DOWN);
                 if (liftPosition == LiftPosition.UP) {
                     if (buttonUp.getState()) {
                         liftMotor1.setPower(1.0);
@@ -167,19 +165,9 @@ public class Lift {
                 }
                 break;
             case MANUALLIMIT:
-                if (robot.grabber.isClosed()) robot.grabber.servo1.setPosition(SERVO_POS_UP);
-                else robot.grabber.servo1.setPosition(SERVO_POS_DOWN);
                 setPowersLimit(power);
                 break;
             case MANUAL:
-                servoLiftButtonOld = robot.linearOpMode.gamepad1.ci rcle;
-
-                if (robot.linearOpMode.gamepad1.circle != servoLiftButtonOld) {
-
-                    servoLiftUp = !servoLiftUp;
-                }
-
-                servoLiftButtonOld = robot.linearOpMode.gamepad1.circle;
                 setPowers(power);
                 break;
         }
@@ -194,7 +182,7 @@ public class Lift {
     }
 
     public enum LiftPosition {
-        ZERO(0), GROUND(100), CUPSON1(400), CUPSON2(370), LOW(780), MIDDLE(1008), UP(1108);
+        ZERO(0), LOW(780), MIDDLE(1008), UP(1108);
         public int value;
 
         LiftPosition(int value) {
