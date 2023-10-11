@@ -94,21 +94,11 @@ public class TeleOpM extends LinearOpMode {
             telemetry.addData("down", robot.lift.buttonDown.getState());
             robot.lighting.update();
             robot.driveTrain.displayEncoders();
-            if(gamepad1.left_stick_x < 0)
-                gamepad1.left_stick_x = gamepad1.left_stick_x*gamepad1.left_stick_x * signum(gamepad1.left_stick_x);
-            else
-                gamepad1.left_stick_x = gamepad1.left_stick_x * gamepad1.left_stick_x;
-            if (gamepad1.left_stick_y < 0)
-                gamepad1.left_stick_y = gamepad1.left_stick_y * gamepad1.left_stick_y * signum(gamepad1.left_stick_x*gamepad1.left_stick_y);
-            else
-                gamepad1.left_stick_y = gamepad1.left_stick_y * gamepad1.left_stick_y;
-            if(gamepad1.right_stick_x < 0)
-                gamepad1.right_stick_x = gamepad1.right_stick_x * gamepad1.right_stick_x * signum(gamepad1.right_stick_x);
-            else
-                gamepad1.right_stick_x = gamepad1.right_stick_x * gamepad1.right_stick_x;
+
             double axial = -gamepad1.left_stick_y * speed;
             double lateral = -gamepad1.left_stick_x * speed;
             double yaw = -gamepad1.right_stick_x * speed;
+
 
             if (gamepad1.right_bumper) {
                 axial /= 3;
@@ -119,11 +109,14 @@ public class TeleOpM extends LinearOpMode {
             robot.grabber.enable(gamepad1.square);
 
             oldBumper = gamepad1.right_bumper;
-            robot.driveTrain.setPowers(axial, lateral, yaw);
+            robot.driveTrain.setPowers(moveLikeKTM(axial),moveLikeKTM(lateral),moveLikeKTM(yaw));
             oldSquare = square;
             oldCircle = circle;
             oldTriangle = triangle;
             telemetry.update();
         }
+    }
+    double moveLikeKTM(double power){
+        return power*power*signum(power);
     }
 }
