@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.woen.team17517.Robot.Lift;
 import org.woen.team17517.Robot.Lighting;
 import org.woen.team17517.Robot.UltRobot;
+import static java.lang.Math.signum;
 
 @TeleOp
 public class TeleOpM extends LinearOpMode {
@@ -93,6 +94,18 @@ public class TeleOpM extends LinearOpMode {
             telemetry.addData("down", robot.lift.buttonDown.getState());
             robot.lighting.update();
             robot.driveTrain.displayEncoders();
+            if(gamepad1.left_stick_x < 0)
+                gamepad1.left_stick_x = gamepad1.left_stick_x*gamepad1.left_stick_x * signum(gamepad1.left_stick_x);
+            else
+                gamepad1.left_stick_x = gamepad1.left_stick_x * gamepad1.left_stick_x;
+            if (gamepad1.left_stick_y < 0)
+                gamepad1.left_stick_y = gamepad1.left_stick_y * gamepad1.left_stick_y * signum(gamepad1.left_stick_x*gamepad1.left_stick_y);
+            else
+                gamepad1.left_stick_y = gamepad1.left_stick_y * gamepad1.left_stick_y;
+            if(gamepad1.right_stick_x < 0)
+                gamepad1.right_stick_x = gamepad1.right_stick_x * gamepad1.right_stick_x * signum(gamepad1.right_stick_x);
+            else
+                gamepad1.right_stick_x = gamepad1.right_stick_x * gamepad1.right_stick_x;
             double axial = -gamepad1.left_stick_y * speed;
             double lateral = -gamepad1.left_stick_x * speed;
             double yaw = -gamepad1.right_stick_x * speed;
