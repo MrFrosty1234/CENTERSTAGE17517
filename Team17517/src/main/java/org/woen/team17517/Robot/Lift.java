@@ -28,10 +28,10 @@ public class Lift {
     int liftOffset2 = 0;
     private final PidRegulator PIDZL1 = new PidRegulator(0.005964, 0, 0);
     private final PidRegulator PIDZL2 = new PidRegulator(0.005964, 0, 0);
-
+    public boolean liftPos = true;
     public Lift(UltRobot robot) {
         this.robot = robot;
-        this.robot.grabber.servo1.setPosition(SERVO_POS_DOWN);
+
         liftMotor1 = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor1");
         liftMotor2 = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor2");
         buttonUp = this.robot.linearOpMode.hardwareMap.digitalChannel.get("top");
@@ -67,14 +67,12 @@ public class Lift {
         return liftMotor1.getCurrentPosition() - liftOffset1;
     }
 
-    private int getPosition2() {
-        return liftMotor2.getCurrentPosition() - liftOffset2;
-    }
+    private int getPosition2() {return liftMotor2.getCurrentPosition() - liftOffset2;}
 
     public void setPowersLimit(double x) {
         int pos1 = getPosition1();
         int pos2 = getPosition2();
-        if (x > 0 && buttonUp.getState()) {
+        if (x > 0) {
             if (pos1 > LiftPosition.UP.value) {
                 liftMotor1.setPower(0);
             } else {
@@ -139,21 +137,7 @@ public class Lift {
 
     public void update() {
         switch (liftMode) {
-            case AUTO:
-                if (robot.grabber.isClosed()) robot.grabber.servo1.setPosition(SERVO_POS_UP);
-                else robot.grabber.servo1.setPosition(SERVO_POS_DOWN);
-                if (liftPosition == LiftPosition.UP) {
-                    if (buttonUp.getState()) {
-                        liftMotor1.setPower(1.0);
-                        liftMotor2.setPower(1.0);
-                    } else {
-                        err1 = err2 = 0;
-                        liftMotor1.setPower(0.3);
-                        liftMotor2.setPower(0.3);
-                        liftOffset1 = liftMotor1.getCurrentPosition() - LiftPosition.UP.value;
-                        liftOffset2 = liftMotor2.getCurrentPosition() - LiftPosition.UP.value;
-                    }
-                } else {
+            case AUTO: {
                     double target1 = liftPosition.value;
                     double target2 = liftPosition.value;
                     double l1 = getPosition1();
@@ -164,22 +148,16 @@ public class Lift {
                     double poweryl2 = 0.2 + PIDZL2.update(err2);
                     liftMotor1.setPower(Range.clip(poweryl1, -0.1, 0.7));
                     liftMotor2.setPower(Range.clip(poweryl2, -0.1, 0.7));
+                    if(abs(l1) > 50 && abs(l2) > 50)
+                        liftPos = false;
+                    else
+                        liftPos = true;
                 }
                 break;
             case MANUALLIMIT:
-                if (robot.grabber.isClosed()) robot.grabber.servo1.setPosition(SERVO_POS_UP);
-                else robot.grabber.servo1.setPosition(SERVO_POS_DOWN);
                 setPowersLimit(power);
                 break;
             case MANUAL:
-                servoLiftButtonOld = robot.linearOpMode.gamepad1.circle;
-
-                if (robot.linearOpMode.gamepad1.circle != servoLiftButtonOld) {
-                    robot.grabber.servo1.setPosition(servoLiftUp ? SERVO_POS_UP : SERVO_POS_DOWN);
-                    servoLiftUp = !servoLiftUp;
-                }
-
-                servoLiftButtonOld = robot.linearOpMode.gamepad1.circle;
                 setPowers(power);
                 break;
         }
@@ -194,7 +172,7 @@ public class Lift {
     }
 
     public enum LiftPosition {
-        ZERO(0), GROUND(100), CUPSON1(400), CUPSON2(370), LOW(780), MIDDLE(1008), UP(1108);
+        ZERO(0), LOW(780), MIDDLE(1008), UP(1108);
         public int value;
 
         LiftPosition(int value) {

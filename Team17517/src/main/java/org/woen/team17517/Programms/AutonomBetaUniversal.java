@@ -20,7 +20,7 @@ public class AutonomBetaUniversal extends LinearOpMode {
         telemetry.addData("camera", c);
         telemetry.update();
         camera.stopcamera();
-        robot.grabber.setPosition(false);
+        robot.grabber.enable(true);
         robot.driveTrain.moveField(60, 0, 0);
         if (c == 18) {
             robot.driveTrain.moveField(60, 0, -90);
