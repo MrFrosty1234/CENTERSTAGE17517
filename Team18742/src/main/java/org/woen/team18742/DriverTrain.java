@@ -1,11 +1,37 @@
 package org.woen.team18742;
 
-public class DriverTrain {
-    public DriverTrain() {
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+public class DriverTrain {
+    private DcMotor _leftForwardDrive = null;
+    private DcMotor _rightForwardDrive = null;
+    private DcMotor _grabberDrive = null;
+    private DcMotor _leftBackDrive = null;
+    private DcMotor _rightBackDrive = null;
+    private Collector _collector = null;
+
+    public DriverTrain(Collector collector) {
+        _collector = collector;
+
+        _leftForwardDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "leftmotor");
+        _rightForwardDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "rightmotor");
+        _grabberDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "grabbermotor");
+        _leftBackDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "leftbackmotor");
+        _rightBackDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "rightbackmotor");
+
+        _leftBackDrive.setDirection(REVERSE);
+        _leftForwardDrive.setDirection(REVERSE);
     }
 
     public void Update() {
 
+    }
+
+    public void DriveDirection(double forward, double side, double rotate){
+        _leftForwardDrive.setPower(forward - side - rotate);
+        _rightBackDrive.setPower(forward - side + rotate);
+        _leftBackDrive.setPower(forward + side - rotate);
+        _rightForwardDrive.setPower(forward + side + rotate);
     }
 }
