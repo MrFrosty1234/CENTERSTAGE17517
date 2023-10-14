@@ -1,4 +1,4 @@
-package org.woen.testcode;
+package org.woen.team18742;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp
-public class omnikolesa extends LinearOpMode {
+public class Omnikolesa extends LinearOpMode {
 
     DcMotor leftForwardDrive = null;
     DcMotor rightForwardDrive = null;
@@ -22,21 +22,23 @@ public class omnikolesa extends LinearOpMode {
         grabberDrive = hardwareMap.get(DcMotor.class, "grabbermotor");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftbackmotor");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightbackmotor");
+        leftBackDrive.setDirection(REVERSE);
         leftForwardDrive.setDirection(REVERSE);
-        rightBackDrive.setDirection(REVERSE);
+        //rightBackDrive.setDirection(REVERSE);
+        //rightForwardDrive.setDirection(REVERSE);
         waitForStart();
-        boolean buttonXold = true;
-        boolean graber = true;
+        boolean buttonXold = false;
+        boolean graber = false;
         while (opModeIsActive()) {
             double forward = gamepad1.left_stick_y;
-            double side = gamepad1.right_stick_x;
+            double side = gamepad1.left_stick_x;
             double rightStickY = gamepad1.left_stick_y;
             double rotate = gamepad1.right_stick_x;
             boolean buttonX = gamepad1.cross;
-            leftForwardDrive.setPower(forward + side + rotate);
-            rightBackDrive.setPower(forward - side - rotate);
-            leftBackDrive.setPower(forward - side + rotate);
-            rightForwardDrive.setPower(forward + side - rotate);
+            leftForwardDrive.setPower(forward - side - rotate);
+            rightBackDrive.setPower(forward - side + rotate);
+            leftBackDrive.setPower(forward + side - rotate);
+            rightForwardDrive.setPower(forward + side + rotate);
             if (buttonX && !buttonXold)
             {
                 graber = !graber;
