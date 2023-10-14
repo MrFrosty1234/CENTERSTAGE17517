@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.woen.team17517.Robot.Lift;
 import org.woen.team17517.Robot.Lighting;
 import org.woen.team17517.Robot.UltRobot;
+import static java.lang.Math.signum;
 
 @TeleOp
 public class TeleOpM extends LinearOpMode {
@@ -63,17 +64,22 @@ public class TeleOpM extends LinearOpMode {
 
             if (gamepad1.left_trigger > 0.1) {
                 robot.lift.liftMode = Lift.LiftMode.MANUAL;
+                robot.lift.liftPos = !robot.lift.liftPos;
             } else if (triangle || cross) {
                 robot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
+                robot.lift.liftPos = !robot.lift.liftPos;
             }
             if (triangle) {
                 robot.lift.power = 1.0;
+                robot.lift.liftPos = !robot.lift.liftPos;
             }
             if (cross) {
                 robot.lift.power = -0.1;
+                robot.lift.liftPos = !robot.lift.liftPos;
             }
             if (!triangle && !cross) {
                 robot.lift.power = 0.1;
+                robot.lift.liftPos = !robot.lift.liftPos;
             }
             robot.odometry.update();
             robot.lift.update();
@@ -88,9 +94,11 @@ public class TeleOpM extends LinearOpMode {
             telemetry.addData("down", robot.lift.buttonDown.getState());
             robot.lighting.update();
             robot.driveTrain.displayEncoders();
+
             double axial = -gamepad1.left_stick_y * speed;
             double lateral = -gamepad1.left_stick_x * speed;
             double yaw = -gamepad1.right_stick_x * speed;
+
 
             if (gamepad1.right_bumper) {
                 axial /= 3;
@@ -101,11 +109,14 @@ public class TeleOpM extends LinearOpMode {
             robot.grabber.enable(gamepad1.square);
 
             oldBumper = gamepad1.right_bumper;
-            robot.driveTrain.setPowers(axial, lateral, yaw);
+            robot.driveTrain.setPowers(moveLikeKTM(axial),moveLikeKTM(lateral),moveLikeKTM(yaw));
             oldSquare = square;
             oldCircle = circle;
             oldTriangle = triangle;
             telemetry.update();
         }
+    }
+    double moveLikeKTM(double power){
+        return power*power*signum(power);
     }
 }
