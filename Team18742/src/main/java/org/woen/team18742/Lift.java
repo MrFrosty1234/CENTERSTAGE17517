@@ -16,14 +16,15 @@ public class Lift {
         new Thread() {
             @Override
             public void run() {
-                _collector.Driver.ResetIncoder();
+                _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 double errold;
                 double kp = 1;
                 double kd = 1;
-                double err = distance - _collector.Driver.GetDistance();
+                double err = distance - _liftM1.getCurrentPosition() / 480;
                 errold = err;
                 while (abs(err) > 2 && _collector.CommandCode.opModeIsActive()) {
-                    err = distance - _collector.Driver.GetDistance();
+                    err = distance - _liftM1.getCurrentPosition() / 480;
                     double u = (err * kp) + (err - errold) * kd;
                     _liftM1.setPower(u);
                     _liftM2.setPower(u);

@@ -127,12 +127,18 @@ public class Automatic {
         double errold;
         double kp = 1;
         double kd = 1;
+        double ki = 1;
+        double ierr = 0;
         double err = distance - _collector.Driver.GetDistance();
         errold = err;
-        while (_collector.CommandCode.opModeIsActive() && abs(err) > 2) {
+        while (_collector.CommandCode.opModeIsActive() && abs(err) > 2)
+        {
             err = distance - _collector.Driver.GetDistance();
-            double u = (err * kp) + (err - errold) * kd;
+            ierr += err;
+            double u = (err * kp) + (err - errold) * kd + ierr * ki;
             _collector.Driver.DriveDirection(u, 0, 0);
+            if(ierr > abs(20))
+             ierr = 0;
         }
         _collector.Driver.DriveDirection(0, 0, 0);
     }
