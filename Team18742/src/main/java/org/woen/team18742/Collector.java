@@ -20,6 +20,7 @@ public class Collector {
     }
 
     public void Start(){
+        Lift.Start();
         Auto.Start();
     }
 
