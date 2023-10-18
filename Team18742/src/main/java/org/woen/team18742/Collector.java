@@ -1,11 +1,8 @@
 package org.woen.team18742;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 public class Collector {
     public Automatic Auto;
     public Manual Manual;
-    private State _currentState;
     public Lift Lift;
     public DriverTrain Driver;
     public CommandCode CommandCode;
@@ -19,25 +16,21 @@ public class Collector {
         Auto = new Automatic(this);
         Lift = new Lift(this);
 
-        _currentState = State.MANUAL;
-
         _prevTriangle = false;
     }
 
-    void Update() {
+    public void Start(){
+        Auto.Start();
+    }
+
+    public void Update() {
         if (CommandCode.gamepad1.triangle && !_prevTriangle) {
-            if (_currentState == State.MANUAL)
-                _currentState = State.AUTO;
-            else
-                _currentState = State.MANUAL;
+            Auto.Start();
         }
 
         _prevTriangle = CommandCode.gamepad1.triangle;
 
-        if (_currentState == State.MANUAL)
-            Manual.Update();
-        else
-            Auto.Update();
+        Manual.Update();
 
         Driver.Update();
         Lift.Update();

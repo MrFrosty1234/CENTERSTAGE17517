@@ -14,6 +14,8 @@ public class CommandCode extends LinearOpMode {
         waitForStart();
         resetRuntime();
 
+        _collector.Start();
+
         while (opModeIsActive()) {
             _collector.Update();
         }
