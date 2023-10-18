@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class DriverTrain {
     private DcMotor _leftForwardDrive = null;
     private DcMotor _rightForwardDrive = null;
-    private DcMotor _grabberDrive = null;
     private DcMotor _leftBackDrive = null;
     private DcMotor _rightBackDrive = null;
     private Collector _collector = null;
@@ -20,7 +19,6 @@ public class DriverTrain {
 
         _leftForwardDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "leftmotor");
         _rightForwardDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "rightmotor");
-        _grabberDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "grabbermotor");
         _leftBackDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "leftbackmotor");
         _rightBackDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "rightbackmotor");
 
