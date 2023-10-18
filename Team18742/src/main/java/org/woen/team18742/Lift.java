@@ -18,7 +18,7 @@ public class Lift {
         double kd = 1;
         double err = distance - _collector.Driver.GetDistance();
         errold = err;
-        while (_collector.CommandCode.opModeIsActive() && abs(err) > 2) {
+        while (abs(err) > 2) {
             err = distance - _collector.Driver.GetDistance();
             double u = (err * kp) + (err - errold) * kd;
             _liftM1.setPower(u);
@@ -53,6 +53,8 @@ public class Lift {
         _XOld = X;
 
         if (_Lift)
-            _grabberDrive.setPower(-1);
+            moveLift(51);
+        else
+         moveLift(0);
     }
 }
