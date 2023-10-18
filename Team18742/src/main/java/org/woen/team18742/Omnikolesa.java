@@ -24,8 +24,6 @@ public class Omnikolesa extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightbackmotor");
         leftBackDrive.setDirection(REVERSE);
         leftForwardDrive.setDirection(REVERSE);
-        //rightBackDrive.setDirection(REVERSE);
-        //rightForwardDrive.setDirection(REVERSE);
         waitForStart();
         boolean buttonXold = false;
         boolean graber = false;
@@ -49,7 +47,6 @@ public class Omnikolesa extends LinearOpMode {
                 grabberDrive.setPower(-1);
             } else
             {
-                grabberDrive.setPower(0);
             }
         }
     }
