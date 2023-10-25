@@ -37,51 +37,24 @@ public class Automatic {
     void moveForward(double distance) {
         _collector.Driver.ResetIncoder();
 
-        double errold = 0;
-        double kp = 1;
-        double kd = 1;
-        double time = 0;
-        double timeold = 0;
-        double rastoyanie = sensorDistance.getDistance(DistanceUnit.CM);
-        double err = distance - rastoyanie;
-        while (_collector.CommandCode.opModeIsActive() && abs(err) > 2) {
-            rastoyanie = sensorDistance.getDistance(DistanceUnit.CM);
-            err = distance - rastoyanie;
-            time = System.currentTimeMillis() / 1000.0;
-            double u = (err * kp) + (err - errold) * kd / (time - timeold);
-            errold = err;
-            timeold = time;
-            _collector.Driver.DriveDirection(u, 0, 0);
-        }
-        _collector.Driver.DriveDirection(0, 0, 0);
+        PID pid = new PID(1, 1, 1, 20);
+
+        while (_collector.CommandCode.opModeIsActive() && abs(pid.ErrOld) > 2)
+            _collector.Driver.DriveDirection(pid.Update(sensorDistance.getDistance(DistanceUnit.CM), distance), 0, 0);
+
+        _collector.Driver.Stop();
     }
 
     void turnGyro(double degrees) {
         imu.resetYaw();
-        double errold = 0;
-        double kp = 1;
-        double kd = 1;
-        double time = 0;
-        double timeold = 0;
-        targetDegrees = degrees;
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        double err = degrees - orientation.getYaw(AngleUnit.DEGREES);
-        while (_collector.CommandCode.opModeIsActive() && abs(err) > 2) {
-            orientation = imu.getRobotYawPitchRollAngles();
-            err = degrees - orientation.getYaw(AngleUnit.DEGREES);
-            time = System.currentTimeMillis() / 1000.0;
-            double u = (err * kp) + (err - errold) * kd / (time - timeold);
-            errold = err;
-            timeold = time;
-            if (err > 180) {
-                err = degrees - 360;
-            }
-            if (err > (-180)) {
-                err = degrees + 360;
-            }
-            _collector.Driver.DriveDirection(0, 0, u);
-        }
-        _collector.Driver.DriveDirection(0, 0, 0);
+
+        PID pid = new PID(1, 1, 1, 180);
+
+        while (_collector.CommandCode.opModeIsActive() && abs(pid.ErrOld) > 2)
+            _collector.Driver.DriveDirection(0, 0, pid.Update(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES), degrees));
+
+        _collector.Driver.Stop();
     }
 
 
@@ -121,25 +94,17 @@ public class Automatic {
 
             _collector.Driver.DriveDirection(uForward, uTurn, 0);
         }
+
+        _collector.Driver.Stop();
     }
     void encoder(double distance) {
         _collector.Driver.ResetIncoder();
-        double errold;
-        double kp = 1;
-        double kd = 1;
-        double ki = 1;
-        double ierr = 0;
-        double err = distance - _collector.Driver.GetDistance();
-        errold = err;
-        while (_collector.CommandCode.opModeIsActive() && abs(err) > 2)
-        {
-            err = distance - _collector.Driver.GetDistance();
-            ierr += err;
-            double u = (err * kp) + (err - errold) * kd + ierr * ki;
-            _collector.Driver.DriveDirection(u, 0, 0);
-            if(ierr > abs(20))
-             ierr = 0;
-        }
-        _collector.Driver.DriveDirection(0, 0, 0);
+
+        PID pid = new PID(1, 1, 1, 20);
+
+        while (_collector.CommandCode.opModeIsActive() && abs(pid.ErrOld) > 2)
+            _collector.Driver.DriveDirection(pid.Update(_collector.Driver.GetDistance(), distance), 0, 0);
+
+        _collector.Driver.Stop();
     }
 }
