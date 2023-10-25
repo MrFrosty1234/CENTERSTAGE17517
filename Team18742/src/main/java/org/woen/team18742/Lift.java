@@ -13,21 +13,21 @@ public class Lift {
     private Servo _servoLift1, _servoLift2;
 
     void moveLift(double distance) {
-                _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                double errold;
-                double kp = 1;
-                double kd = 1;
-                double err = distance - _liftM1.getCurrentPosition() / 480 * 360;
-                errold = err;
-                while (abs(err) > 2 && _collector.CommandCode.opModeIsActive()) {
-                    err = distance - _liftM1.getCurrentPosition() / 480 * 360;
-                    double u = (err * kp) + (err - errold) * kd;
-                    _liftM1.setPower(u);
-                    _liftM2.setPower(u);
-                }
-                _liftM1.setPower(0);
-                _liftM2.setPower(0);
+        _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        double errold;
+        double kp = 1;
+        double kd = 1;
+        double err = distance - _liftM1.getCurrentPosition() / 480 * 360;
+        errold = err;
+        while (abs(err) > 2 && _collector.CommandCode.opModeIsActive()) {
+            err = distance - _liftM1.getCurrentPosition() / 480 * 360;
+            double u = (err * kp) + (err - errold) * kd;
+            _liftM1.setPower(u);
+            _liftM2.setPower(u);
+        }
+        _liftM1.setPower(0);
+        _liftM2.setPower(0);
     }
 
     private Collector _collector;
@@ -58,9 +58,9 @@ public class Lift {
     }
 
     public void Update() {
-        boolean X = _collector.CommandCode.gamepad1.x;
+        boolean X = _collector.CommandCode.gamepad1.cross;
         boolean Y = _collector.CommandCode.gamepad1.y;
-        boolean O = _collector.CommandCode.gamepad1.o;
+        boolean O = _collector.CommandCode.gamepad1.circle;
 
         if (X && !_XOld)
             _Lift = !_Lift;
@@ -69,8 +69,7 @@ public class Lift {
 
         if (_Lift) {
             moveLift(51);
-        }
-        else {
+        } else {
             moveLift(0);
         }
 
@@ -82,8 +81,7 @@ public class Lift {
 
         if (_Lift1) {
             _servoLift1.setPosition(0);
-        }
-        else {
+        } else {
             _servoLift1.setPosition(0);
         }
 
@@ -95,8 +93,7 @@ public class Lift {
 
         if (_Lift2) {
             _servoLift2.setPosition(0);
-        }
-        else {
+        } else {
             _servoLift2.setPosition(0);
         }
     }
