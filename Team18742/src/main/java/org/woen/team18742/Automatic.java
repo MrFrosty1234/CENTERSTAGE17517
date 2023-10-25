@@ -14,8 +14,6 @@ public class Automatic {
     private Collector _collector;
 
     public Automatic(Collector collector){
-        imu = collector.CommandCode.hardwareMap.get(IMU.class, "imu");
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
         sensorDistance = collector.CommandCode.hardwareMap.get(DistanceSensor.class, "sensor_distance");
 
         _collector = collector;
@@ -28,7 +26,6 @@ public class Automatic {
     }
 
     private double targetDegrees;
-    private IMU imu;
     private RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
     private RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
     private RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
@@ -46,20 +43,19 @@ public class Automatic {
     }
 
     void turnGyro(double degrees) {
-        imu.resetYaw();
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        _collector.Gyro.Reset();
 
         PID pid = new PID(1, 1, 1, 180);
 
         while (_collector.CommandCode.opModeIsActive() && abs(pid.ErrOld) > 2)
-            _collector.Driver.DriveDirection(0, 0, pid.Update(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES), degrees));
+            _collector.Driver.DriveDirection(0, 0, pid.Update(_collector.Gyro.GetDegrees(), degrees));
 
         _collector.Driver.Stop();
     }
 
 
     void distanceSensor(double distance) {
-        imu.resetYaw();
+        _collector.Gyro.Reset();
         double errold = 0;
         double kp = 1;
         double kd = 1;
@@ -70,14 +66,12 @@ public class Automatic {
         double time1 = 0;
         double timeold1 = 0;
         double rastoyanie = 0;
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        double errTurn = targetDegrees - orientation.getYaw(AngleUnit.DEGREES);
+        double errTurn = targetDegrees - _collector.Gyro.GetDegrees();
         double errDistance = distance - rastoyanie;
         double uForward = (errDistance * kp1) + (errDistance - errold) * kd1 / (time1 - timeold1);
 
         while (_collector.CommandCode.opModeIsActive() && abs(errTurn) > 2 && abs(errDistance) > 2) {
-            orientation = imu.getRobotYawPitchRollAngles();
-            errTurn = targetDegrees - orientation.getYaw(AngleUnit.DEGREES);
+            errTurn = targetDegrees - _collector.Gyro.GetDegrees();
             if (errTurn > 180) {
                 errTurn = errTurn - 360;
             }

@@ -53,7 +53,22 @@ public class DriverTrain {
 
     public double GetDistance(){
         return (_leftBackDrive.getCurrentPosition()+_rightForwardDrive.getCurrentPosition()+_leftForwardDrive.getCurrentPosition()+_rightBackDrive.getCurrentPosition())/4.0/encoderconstat*PI*diametr;
+    }
 
+    public double GetLeftBackIncoder(){
+        return  _leftBackDrive.getCurrentPosition() / encoderconstat * PI * diametr;
+    }
+
+    public double GetLeftForwardIncoder(){
+        return  _leftForwardDrive.getCurrentPosition() / encoderconstat * PI * diametr;
+    }
+
+    public double GetRightBackIncoder(){
+        return  _rightBackDrive.getCurrentPosition() / encoderconstat * PI * diametr;
+    }
+
+    public double GetRightForwardIncoder(){
+        return  _rightForwardDrive.getCurrentPosition() / encoderconstat * PI * diametr;
     }
 
     public void Stop(){

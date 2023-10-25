@@ -8,11 +8,13 @@ public class Collector {
     public Lift Lift;
     public DriverTrain Driver;
     public LinearOpMode CommandCode;
+    public Gyroscope Gyro;
     private boolean _prevTriangle;
 
     public Collector(LinearOpMode commandCode) {
         CommandCode = commandCode;
 
+        Gyro = new Gyroscope(this);
         Driver = new DriverTrain(this);
         Manual = new Manual(this);
         Auto = new Automatic(this);
