@@ -156,12 +156,11 @@ public class DriveTrain {
 
         moveTimer.reset();
 
-        double timeStart = moveTimer.startTime(); //TODO ElapsedTime
         double moveTime = 0;
 
         while (((abs(xError)) > minXErr || (abs(yError)) > minYErr || (abs(headingError)) > minHeadingErr) && moveTime < movingTime && robot.linearOpMode.opModeIsActive()) { //TODO parameters
-            double timeNow = moveTimer.seconds() - timeStart;
-            moveTime = timeNow - timeStart;
+            double timeNow = moveTimer.seconds();
+            moveTime = timeNow;
 
             xError = xTarget - robot.odometry.x;
             yError = yTarget - robot.odometry.y;
