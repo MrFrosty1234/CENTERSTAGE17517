@@ -1,6 +1,7 @@
 package org.woen.team18742;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.signum;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -22,9 +23,9 @@ public class Automatic {
     }
 
     public void Start(){
-        encoder(15);
-        turnGyro(90);
-        distanceSensor(20);
+       // encoder(15);
+       // turnGyro(90);
+       // distanceSensor(20);
     }
 
     private double targetDegrees;
@@ -114,31 +115,49 @@ public class Automatic {
             time = System.currentTimeMillis() / 1000.0;
             time1 = System.currentTimeMillis() / 1000.0;
             double uTurn = (errTurn * kp) + (errTurn - errold) * kd / (time - timeold);
+            uForward = (errDistance * kp1) + (errDistance - errold) * kd1 / (time1 - timeold1);
             errold = errTurn;
             timeold1 = time1;
             timeold = time;
             rastoyanie = sensorDistance.getDistance(DistanceUnit.CM);
 
-            _collector.Driver.DriveDirection(uForward, uTurn, 0);
+            _collector.Driver.DriveDirection(uForward, 0, uTurn);
         }
     }
-    void encoder(double distance) {
+    void encoder(double distance,double degrees) {
         _collector.Driver.ResetIncoder();
-        double errold;
+        double errold = 0;
         double kp = 1;
         double kd = 1;
+        double time = 0;
+        double timeold = 0;
         double ki = 1;
         double ierr = 0;
+        //////////
+        targetDegrees = degrees;
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        imu.resetYaw();
+        double errold1 = 0;
+        double kp1 = 1;
+        double kd1 = 1;
+        double time1 = 0;
+        double timeold1 = 0;
         double err = distance - _collector.Driver.GetDistance();
-        errold = err;
-        while (_collector.CommandCode.opModeIsActive() && abs(err) > 2)
+        double err1 = degrees - orientation.getYaw(AngleUnit.DEGREES);
+        while (_collector.CommandCode.opModeIsActive() && (abs(err) > 2))
         {
             err = distance - _collector.Driver.GetDistance();
+            err1   = degrees - orientation.getYaw(AngleUnit.DEGREES);
             ierr += err;
-            double u = (err * kp) + (err - errold) * kd + ierr * ki;
-            _collector.Driver.DriveDirection(u, 0, 0);
+            double u = (err * kp) + (err - errold) / (time - timeold) * kd + ierr * ki;
+            double u1 = (err1 * kp1) + (err1 - errold1) * kd1 / (time1 - timeold1);
+            timeold = time;
+            errold = err;
+            errold1 = err1;
+            timeold1 = time1;
+            _collector.Driver.DriveDirection(u, 0, u1);
             if(ierr > abs(20))
-             ierr = 0;
+             ierr = 20*signum(ierr);
         }
         _collector.Driver.DriveDirection(0, 0, 0);
     }

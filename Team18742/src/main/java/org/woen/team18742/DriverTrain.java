@@ -21,7 +21,10 @@ public class DriverTrain {
         _rightForwardDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "rightmotor");
         _leftBackDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "leftbackmotor");
         _rightBackDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "rightbackmotor");
-
+        _leftForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _rightForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftBackDrive.setDirection(REVERSE);
         _leftForwardDrive.setDirection(REVERSE);
     }
@@ -50,5 +53,6 @@ public class DriverTrain {
 
     public double GetDistance(){
         return (_leftBackDrive.getCurrentPosition()+_rightForwardDrive.getCurrentPosition()+_leftForwardDrive.getCurrentPosition()+_rightBackDrive.getCurrentPosition())/4.0/encoderconstat*PI*diametr;
+
     }
 }

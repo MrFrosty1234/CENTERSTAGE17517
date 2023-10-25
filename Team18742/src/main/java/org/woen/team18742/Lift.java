@@ -13,31 +13,28 @@ public class Lift {
     private Servo _servoLift1, _servoLift2;
 
     void moveLift(double distance) {
-        new Thread() {
-            @Override
-            public void run() {
                 _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 double errold;
                 double kp = 1;
                 double kd = 1;
-                double err = distance - _liftM1.getCurrentPosition() / 480;
+                double err = distance - _liftM1.getCurrentPosition() / 480 * 360;
                 errold = err;
                 while (abs(err) > 2 && _collector.CommandCode.opModeIsActive()) {
-                    err = distance - _liftM1.getCurrentPosition() / 480;
+                    err = distance - _liftM1.getCurrentPosition() / 480 * 360;
                     double u = (err * kp) + (err - errold) * kd;
                     _liftM1.setPower(u);
                     _liftM2.setPower(u);
                 }
                 _liftM1.setPower(0);
                 _liftM2.setPower(0);
-            }
-        }.start();
     }
 
     private Collector _collector;
 
     private boolean _Lift = false, _XOld = false;
+    private boolean _Lift1 = false, _YOld = false;
+    private boolean _Lift2 = false, _OOld = false;
 
     public Lift(Collector collector) {
         _collector = collector;
@@ -45,6 +42,8 @@ public class Lift {
         _grabberDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "grabbermotor");
         _liftM1 = _collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor1");
         _liftM2 = _collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor2");
+        _liftM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        _liftM2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         _servoLift1 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift1");
         _servoLift2 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");
@@ -60,6 +59,8 @@ public class Lift {
 
     public void Update() {
         boolean X = _collector.CommandCode.gamepad1.x;
+        boolean Y = _collector.CommandCode.gamepad1.y;
+        boolean O = _collector.CommandCode.gamepad1.o;
 
         if (X && !_XOld)
             _Lift = !_Lift;
@@ -68,12 +69,34 @@ public class Lift {
 
         if (_Lift) {
             moveLift(51);
-            _servoLift1.setPosition(0);
-            _servoLift2.setPosition(0);
         }
         else {
             moveLift(0);
+        }
+
+
+        if (Y && !_YOld)
+            _Lift1 = !_Lift1;
+
+        _YOld = Y;
+
+        if (_Lift1) {
             _servoLift1.setPosition(0);
+        }
+        else {
+            _servoLift1.setPosition(0);
+        }
+
+
+        if (O && !_OOld)
+            _Lift2 = !_Lift2;
+
+        _OOld = X;
+
+        if (_Lift2) {
+            _servoLift2.setPosition(0);
+        }
+        else {
             _servoLift2.setPosition(0);
         }
     }

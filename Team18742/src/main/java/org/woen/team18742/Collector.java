@@ -1,14 +1,16 @@
 package org.woen.team18742;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 public class Collector {
     public Automatic Auto;
     public Manual Manual;
     public Lift Lift;
     public DriverTrain Driver;
-    public CommandCode CommandCode;
+    public LinearOpMode CommandCode;
     private boolean _prevTriangle;
 
-    public Collector(CommandCode commandCode) {
+    public Collector(LinearOpMode commandCode) {
         CommandCode = commandCode;
 
         Driver = new DriverTrain(this);
