@@ -55,4 +55,12 @@ public class DriverTrain {
         return (_leftBackDrive.getCurrentPosition()+_rightForwardDrive.getCurrentPosition()+_leftForwardDrive.getCurrentPosition()+_rightBackDrive.getCurrentPosition())/4.0/encoderconstat*PI*diametr;
 
     }
+
+    public void Stop(){
+        _leftForwardDrive.setPower(0);
+        _rightBackDrive.setPower(0);
+        _leftBackDrive.setPower(0);
+        _rightForwardDrive.setPower(0);
+    }
+
 }
