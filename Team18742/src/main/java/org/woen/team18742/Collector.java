@@ -2,41 +2,40 @@ package org.woen.team18742;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class Collector extends LinearOpMode {
-    private Automatic _automatic;
-    private Manual _manual;
-    private State _currentState;
-    private DriverTrain _drivers;
+public class Collector {
+    public Automatic Auto;
+    public Manual Manual;
+    public Lift Lift;
+    public DriverTrain Driver;
+    public LinearOpMode CommandCode;
+    private boolean _prevTriangle;
 
-    @Override
-    public void runOpMode() {
-        _automatic = new Automatic();
-        _manual = new Manual();
-        _drivers = new DriverTrain();
+    public Collector(LinearOpMode commandCode) {
+        CommandCode = commandCode;
 
-        _currentState = State.MANUAL;
+        Driver = new DriverTrain(this);
+        Manual = new Manual(this);
+        Auto = new Automatic(this);
+        Lift = new Lift(this);
 
-        waitForStart();
-        resetRuntime();
+        _prevTriangle = false;
+    }
 
-        boolean prevTriangle = false;
+    public void Start(){
+        Lift.Start();
+        Auto.Start();
+    }
 
-        while (opModeIsActive()) {
-            if(gamepad1.triangle && !prevTriangle) {
-                if(_currentState == State.MANUAL)
-                    _currentState = State.AUTO;
-                else
-                    _currentState = State.MANUAL;
-            }
-
-            prevTriangle = gamepad1.triangle;
-
-            if(_currentState == State.MANUAL)
-                _manual.Update();
-            else
-                _automatic.Update();
-
-            _drivers.Update();
+    public void Update() {
+        if (CommandCode.gamepad1.triangle && !_prevTriangle) {
+            Auto.Start();
         }
+
+        _prevTriangle = CommandCode.gamepad1.triangle;
+
+        Manual.Update();
+
+        Driver.Update();
+        Lift.Update();
     }
 }
