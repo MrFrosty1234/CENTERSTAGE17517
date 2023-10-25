@@ -9,6 +9,7 @@ public class Collector {
     public DriverTrain Driver;
     public LinearOpMode CommandCode;
     public Gyroscope Gyro;
+    public Odometry Odometry;
     private boolean _prevTriangle;
 
     public Collector(LinearOpMode commandCode) {
@@ -19,13 +20,16 @@ public class Collector {
         Manual = new Manual(this);
         Auto = new Automatic(this);
         Lift = new Lift(this);
+        Odometry = new Odometry(this);
 
         _prevTriangle = false;
     }
 
     public void Start(){
         Lift.Start();
-        Auto.Start();
+
+        if(CommandCode instanceof AutonomOpMode)
+            Auto.Start();
     }
 
     public void Update() {
@@ -39,5 +43,6 @@ public class Collector {
 
         Driver.Update();
         Lift.Update();
+        Odometry.Update();
     }
 }
