@@ -10,27 +10,20 @@ public class DriverTrain {
     private DcMotor _rightForwardDrive = null;
     private DcMotor _leftBackDrive = null;
     private DcMotor _rightBackDrive = null;
-    private Collector _collector = null;
 
     private final double diametr = 9.8, encoderconstat = 1440;
 
-    public DriverTrain(Collector collector) {
-        _collector = collector;
-
-        _leftForwardDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "leftmotor");
-        _rightForwardDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "rightmotor");
-        _leftBackDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "leftbackmotor");
-        _rightBackDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "rightbackmotor");
+    public DriverTrain(CollectorSample collector) {
+        _leftForwardDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "leftmotor");
+        _rightForwardDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "rightmotor");
+        _leftBackDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "leftbackmotor");
+        _rightBackDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "rightbackmotor");
         _leftForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftBackDrive.setDirection(REVERSE);
         _leftForwardDrive.setDirection(REVERSE);
-    }
-
-    public void Update() {
-
     }
 
     public void DriveDirection(double forward, double side, double rotate){

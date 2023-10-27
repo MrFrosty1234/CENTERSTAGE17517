@@ -12,7 +12,7 @@ public class Odometry {
 
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
 
-    public Odometry(Collector collector){
+    public Odometry(CollectorSample collector){
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
     }

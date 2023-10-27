@@ -9,7 +9,7 @@ import org.opencv.ml.ANN_MLP;
 public class Gyroscope {
     private IMU _imu;
 
-    public Gyroscope(Collector collector){
+    public Gyroscope(CollectorSample collector){
         _imu = collector.CommandCode.hardwareMap.get(IMU.class, "imu");
         _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
     }

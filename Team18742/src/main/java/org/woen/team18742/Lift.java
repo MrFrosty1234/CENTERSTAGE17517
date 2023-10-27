@@ -30,13 +30,13 @@ public class Lift {
         _liftM2.setPower(0);
     }
 
-    private Collector _collector;
+    private CollectorSample _collector;
 
     private boolean _Lift = false, _XOld = false;
     private boolean _Lift1 = false, _YOld = false;
     private boolean _Lift2 = false, _OOld = false;
 
-    public Lift(Collector collector) {
+    public Lift(CollectorSample collector) {
         _collector = collector;
 
         _grabberDrive = _collector.CommandCode.hardwareMap.get(DcMotor.class, "grabbermotor");

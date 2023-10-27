@@ -13,10 +13,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class Automatic {
-    private Collector _collector;
+    private AutonomCollector _collector;
     private Odometry _odometry;
 
-    public Automatic(Collector collector){
+    public Automatic(AutonomCollector collector){
         _collector = collector;
         _odometry = collector.Odometry;
     }
