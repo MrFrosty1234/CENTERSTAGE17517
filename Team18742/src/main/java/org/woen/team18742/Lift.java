@@ -59,7 +59,7 @@ public class Lift {
 
     public void Update() {
         boolean X = _collector.CommandCode.gamepad1.cross;
-        boolean Y = _collector.CommandCode.gamepad1.y;
+        boolean Y = _collector.CommandCode.gamepad1.triangle;
         boolean O = _collector.CommandCode.gamepad1.circle;
 
         if (X && !_XOld)

@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class Collector extends CollectorSample {
     public Manual Manual;
-    public Lift Lift;
     public LinearOpMode CommandCode;
     private boolean _prevTriangle;
 
@@ -12,7 +11,6 @@ public class Collector extends CollectorSample {
         super(commandCode);
 
         Manual = new Manual(this);
-        Lift = new Lift(this);
 
         _prevTriangle = false;
     }

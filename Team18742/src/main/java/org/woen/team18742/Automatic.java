@@ -25,6 +25,18 @@ public class Automatic {
         turnGyro(90);
     }
 
+    private void PIDMove(double forward, double side){
+        PID pidForward = new PID(1, 1, 1, 1), pidSide = new PID(1, 1, 1, 1);
+
+        double targetX = _collector.Odometry.X + forward, targetY = _collector.Odometry.Y + side;
+
+        while (_collector.CommandCode.opModeIsActive() && GetDistance( targetX, targetY) > 2){
+            moveWorldCoords(pidForward.Update(_collector.Odometry.X, targetX), pidSide.Update(_collector.Odometry.Y, targetY));
+        }
+
+        _collector.Driver.Stop();
+    }
+
     private void turnGyro(double degrees) {
         PID pid = new PID(1, 1, 1, 180);
 
