@@ -1,9 +1,11 @@
 package org.woen.team18742;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.checkerframework.checker.units.qual.C;
 
+@TeleOp
 public class CommandCode extends LinearOpMode {
     private Collector _collector;
 

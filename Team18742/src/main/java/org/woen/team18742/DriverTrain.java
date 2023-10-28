@@ -22,15 +22,15 @@ public class DriverTrain {
         _leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        _leftBackDrive.setDirection(REVERSE);
-        _leftForwardDrive.setDirection(REVERSE);
+        _rightForwardDrive.setDirection(REVERSE);
+        _rightBackDrive .setDirection(REVERSE);
     }
 
     public void DriveDirection(double forward, double side, double rotate){
-        _leftForwardDrive.setPower(forward - side - rotate);
-        _rightBackDrive.setPower(forward - side + rotate);
-        _leftBackDrive.setPower(forward + side - rotate);
-        _rightForwardDrive.setPower(forward + side + rotate);
+        _leftForwardDrive.setPower(forward + side + rotate);
+        _rightBackDrive.setPower(forward + side - rotate);
+        _leftBackDrive.setPower(forward - side + rotate);
+        _rightForwardDrive.setPower(forward - side - rotate);
     }
 
     public void ResetIncoder() {

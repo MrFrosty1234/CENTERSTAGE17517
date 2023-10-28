@@ -12,6 +12,7 @@ public class CollectorSample {
         CommandCode = commandCode;
 
         Lift = new Lift(this);
+
         Gyro = new Gyroscope(this);
         Driver = new DriverTrain(this);
     }
