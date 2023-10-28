@@ -153,7 +153,6 @@ public class DriveTrain {
         pidH.update(headingError);
 
         ElapsedTime moveTimer = new ElapsedTime();
-
         moveTimer.reset();
 
         double moveTime = 0;

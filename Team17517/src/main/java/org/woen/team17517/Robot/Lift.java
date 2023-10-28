@@ -10,10 +10,10 @@ import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class Lift {
-    public static double SERVO_POS_UP = 0.71;
-    public static double SERVO_POS_DOWN = 0.32;
-    public DcMotor liftMotor1;
-    public DcMotor liftMotor2;
+    public static double kP = 0.005964;
+    public static double kI = 0;
+    public static double kD = 0;
+    public DcMotor liftMotor;
     public DigitalChannel buttonUp;
     public DigitalChannel buttonDown;
     public double power = 0;
@@ -24,83 +24,53 @@ public class Lift {
     boolean servoLiftUp = false;
     boolean servoLiftButtonOld = false;
     UltRobot robot;
-    int liftOffset1 = 0;
-    int liftOffset2 = 0;
-    private final PidRegulator PIDZL1 = new PidRegulator(0.005964, 0, 0);
-    private final PidRegulator PIDZL2 = new PidRegulator(0.005964, 0, 0);
+    int liftOffset= 0;
+    private final PidRegulator PIDZL1 = new PidRegulator(kP, kI, kD);
     public boolean liftPos = true;
     public Lift(UltRobot robot) {
         this.robot = robot;
 
-        liftMotor1 = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor1");
-        liftMotor2 = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor2");
-        buttonUp = this.robot.linearOpMode.hardwareMap.digitalChannel.get("top");
-        buttonDown = this.robot.linearOpMode.hardwareMap.digitalChannel.get("end");
-        liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
-        liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor");
+        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         buttonUp.setMode(DigitalChannel.Mode.INPUT);
         buttonDown.setMode(DigitalChannel.Mode.INPUT);
     }
 
     public void reset() {
-        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setPowers(double x) {
-        liftMotor1.setPower(x);
-        liftMotor2.setPower(x);
+        liftMotor.setPower(x);
     }
 
-    public double encoders() {
-        double m1 = liftMotor1.getCurrentPosition();
-        double m2 = liftMotor2.getCurrentPosition();
-        double m0 = (m1 + m2) / 2;
-        return m0;
+
+    private int getPosition() {
+        return liftMotor.getCurrentPosition() - liftOffset;
     }
 
-    private int getPosition1() {
-        return liftMotor1.getCurrentPosition() - liftOffset1;
-    }
-
-    private int getPosition2() {return liftMotor2.getCurrentPosition() - liftOffset2;}
 
     public void setPowersLimit(double x) {
-        int pos1 = getPosition1();
-        int pos2 = getPosition2();
+        int pos = getPosition();
         if (x > 0) {
-            if (pos1 > LiftPosition.UP.value) {
-                liftMotor1.setPower(0);
+            if (pos > LiftPosition.UP.value) {
+                liftMotor.setPower(0);
             } else {
-                liftMotor1.setPower(x);
-            }
-            if (pos2 > LiftPosition.UP.value) {
-
-                liftMotor2.setPower(0);
-            } else {
-                liftMotor2.setPower(x);
+                liftMotor.setPower(x);
             }
         } else {
-            if (pos1 < LiftPosition.ZERO.value) {
-                liftMotor1.setPower(0);
+            if (pos < LiftPosition.ZERO.value) {
+                liftMotor.setPower(0);
             } else {
-                liftMotor1.setPower(x);
-            }
-            if (pos2 < LiftPosition.ZERO.value) {
-                liftMotor2.setPower(0);
-            } else {
-                liftMotor2.setPower(x);
+                liftMotor.setPower(x);
             }
         }
     }
 
     public void displayEncoders() {
-        robot.linearOpMode.telemetry.addData("lift1", liftMotor1.getCurrentPosition());
-        robot.linearOpMode.telemetry.addData("lift2", liftMotor2.getCurrentPosition());
+        robot.linearOpMode.telemetry.addData("lift", liftMotor.getCurrentPosition());
         robot.linearOpMode.telemetry.update();
     }
 
@@ -109,16 +79,15 @@ public class Lift {
         double height = position.value;
 
         liftMode = LiftMode.AUTO;
-        double l1 = liftMotor1.getCurrentPosition();
-        double l2 = liftMotor2.getCurrentPosition();
-        double motorsY = (l1 + l2) / 2;
+        double l = liftMotor.getCurrentPosition();
+        double motorsY = (l + l) / 2;
 
         double target1 = height;
         double target2 = height;
-        err1 = target1 - l1;
-        err2 = target2 - l2;
+        err1 = target1 - l;
+
+
         PIDZL1.update(motorsY);
-        PIDZL2.update(motorsY);
 
         double t1 = (double) System.currentTimeMillis() / 1000.0;
         double t;
@@ -131,24 +100,18 @@ public class Lift {
             update();
         }
 
-        liftMotor1.setPower(0);
-        liftMotor2.setPower(0);
+        liftMotor.setPower(0);
     }
 
     public void update() {
         switch (liftMode) {
             case AUTO: {
                     double target1 = liftPosition.value;
-                    double target2 = liftPosition.value;
-                    double l1 = getPosition1();
-                    double l2 = getPosition2();
-                    err1 = target1 - l1;
-                    err2 = target2 - l2;
+                    double l = getPosition();
+                    err1 = target1 - l;
                     double poweryl1 = 0.2 + PIDZL1.update(err1);
-                    double poweryl2 = 0.2 + PIDZL2.update(err2);
-                    liftMotor1.setPower(Range.clip(poweryl1, -0.1, 0.7));
-                    liftMotor2.setPower(Range.clip(poweryl2, -0.1, 0.7));
-                    if(abs(l1) > 50 && abs(l2) > 50)
+                    liftMotor.setPower(Range.clip(poweryl1, -0.1, 0.7));
+                    if(abs(l) > 50)
                         liftPos = false;
                     else
                         liftPos = true;
