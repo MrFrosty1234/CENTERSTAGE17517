@@ -10,7 +10,7 @@ public class Lift {
     private DcMotor _grabberDrive = null;
     private DcMotor _liftM1 = null;
     private DcMotor _liftM2 = null;
-    public Servo _servoLift1, _servoLift2;
+    public Servo _servoLift1, _servoLift2, _servoPlane;
 
 
     void moveLift(double distance) {
@@ -47,6 +47,7 @@ public class Lift {
         _liftM2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _servoLift1 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift1");
         _servoLift2 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");
+        _servoPlane = _collector.CommandCode.hardwareMap.get(Servo.class, "servoPlane");
 
         _grabberDrive.setPower(0);
         _liftM1.setPower(0);
@@ -55,17 +56,22 @@ public class Lift {
 
         _servoLift1.setPosition(0);
         _servoLift2.setPosition(0);
+        _servoPlane.setPosition(0);
 }
 
     public void Update() {
         boolean X = _collector.CommandCode.gamepad1.cross;
         boolean Y = _collector.CommandCode.gamepad1.triangle;
         boolean O = _collector.CommandCode.gamepad1.circle;
+        boolean A = _collector.CommandCode.gamepad1.square;
 
         if (X && !_XOld)
             _Lift = !_Lift;
 
         _XOld = X;
+
+        if(A && System.currentTimeMillis() > 90000)
+            _servoPlane.setPosition(0);
 
         if (_Lift) {
             moveLift(51);
