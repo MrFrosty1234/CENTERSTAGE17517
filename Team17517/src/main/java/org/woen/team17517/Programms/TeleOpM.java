@@ -88,8 +88,7 @@ public class TeleOpM extends LinearOpMode {
             telemetry.addData("x", robot.odometry.x);
             telemetry.addData("y", robot.odometry.y);
             telemetry.addData("heading", robot.odometry.heading);
-            telemetry.addData("motor1", robot.lift.liftMotor1.getCurrentPosition());
-            telemetry.addData("motor2", robot.lift.liftMotor2.getCurrentPosition());
+            telemetry.addData("motor", robot.lift.liftMotor.getCurrentPosition());
             telemetry.addData("top", robot.lift.buttonUp.getState());
             telemetry.addData("down", robot.lift.buttonDown.getState());
             robot.lighting.update();
