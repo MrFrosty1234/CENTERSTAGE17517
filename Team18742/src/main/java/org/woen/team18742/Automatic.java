@@ -1,6 +1,8 @@
 package org.woen.team18742;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -11,100 +13,73 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class Automatic {
-    private Collector _collector;
+    private AutonomCollector _collector;
+    private Odometry _odometry;
 
-    public Automatic(Collector collector){
-        imu = collector.CommandCode.hardwareMap.get(IMU.class, "imu");
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
-        sensorDistance = collector.CommandCode.hardwareMap.get(DistanceSensor.class, "sensor_distance");
-
+    public Automatic(AutonomCollector collector){
         _collector = collector;
+        _odometry = collector.Odometry;
     }
 
     public void Start(){
-        encoder(15);
         turnGyro(90);
-        distanceSensor(20);
     }
 
-    private double targetDegrees;
-    private IMU imu;
-    private RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-    private RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
-    private RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-    private DistanceSensor sensorDistance;
+    private void PIDMove(double forward, double side){
+        PID pidForward = new PID(1, 1, 1, 1), pidSide = new PID(1, 1, 1, 1);
 
-    void moveForward(double distance) {
-        _collector.Driver.ResetIncoder();
+        double targetX = _collector.Odometry.X + forward, targetY = _collector.Odometry.Y + side;
 
-        PID pid = new PID(1, 1, 1, 20);
-
-        while (_collector.CommandCode.opModeIsActive() && abs(pid.ErrOld) > 2)
-            _collector.Driver.DriveDirection(pid.Update(sensorDistance.getDistance(DistanceUnit.CM), distance), 0, 0);
-
-        _collector.Driver.Stop();
-    }
-
-    void turnGyro(double degrees) {
-        imu.resetYaw();
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-
-        PID pid = new PID(1, 1, 1, 180);
-
-        while (_collector.CommandCode.opModeIsActive() && abs(pid.ErrOld) > 2)
-            _collector.Driver.DriveDirection(0, 0, pid.Update(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES), degrees));
-
-        _collector.Driver.Stop();
-    }
-
-
-    void distanceSensor(double distance) {
-        imu.resetYaw();
-        double errold = 0;
-        double kp = 1;
-        double kd = 1;
-        double kp1 = 1;
-        double kd1 = 1;
-        double time = 0;
-        double timeold = 0;
-        double time1 = 0;
-        double timeold1 = 0;
-        double rastoyanie = 0;
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        double errTurn = targetDegrees - orientation.getYaw(AngleUnit.DEGREES);
-        double errDistance = distance - rastoyanie;
-        double uForward = (errDistance * kp1) + (errDistance - errold) * kd1 / (time1 - timeold1);
-
-        while (_collector.CommandCode.opModeIsActive() && abs(errTurn) > 2 && abs(errDistance) > 2) {
-            orientation = imu.getRobotYawPitchRollAngles();
-            errTurn = targetDegrees - orientation.getYaw(AngleUnit.DEGREES);
-            if (errTurn > 180) {
-                errTurn = errTurn - 360;
-            }
-            if (errTurn < (-180)) {
-                errTurn = errTurn + 360;
-            }
-            time = System.currentTimeMillis() / 1000.0;
-            time1 = System.currentTimeMillis() / 1000.0;
-            double uTurn = (errTurn * kp) + (errTurn - errold) * kd / (time - timeold);
-            errold = errTurn;
-            timeold1 = time1;
-            timeold = time;
-            rastoyanie = sensorDistance.getDistance(DistanceUnit.CM);
-
-            _collector.Driver.DriveDirection(uForward, uTurn, 0);
+        while (_collector.CommandCode.opModeIsActive() && GetDistance( targetX, targetY) > 2){
+            moveWorldCoords(pidForward.Update(_collector.Odometry.X, targetX), pidSide.Update(_collector.Odometry.Y, targetY));
         }
 
         _collector.Driver.Stop();
     }
-    void encoder(double distance) {
-        _collector.Driver.ResetIncoder();
 
-        PID pid = new PID(1, 1, 1, 20);
+    private void turnGyro(double degrees) {
+        PID pid = new PID(1, 1, 1, 180);
 
         while (_collector.CommandCode.opModeIsActive() && abs(pid.ErrOld) > 2)
-            _collector.Driver.DriveDirection(pid.Update(_collector.Driver.GetDistance(), distance), 0, 0);
+            _collector.Driver.DriveDirection(0, 0, pid.Update(_collector.Gyro.GetDegrees(), degrees));
 
         _collector.Driver.Stop();
+    }
+
+    private void SetSpeedWorldCoords(double speedForward, double speedSide){
+        double vectorInRotation = Math.atan2(speedSide, speedForward);
+
+        double worldVectorRotation = vectorInRotation - _collector.Gyro.GetRadians();
+
+        double power = speedForward * speedForward + speedSide * speedSide;
+
+        _collector.Driver.DriveDirection(power * cos(-worldVectorRotation) + power * sin(-worldVectorRotation),
+                -power * sin(-worldVectorRotation) + power * cos(-worldVectorRotation), 0);
+    }
+
+    private void moveWorldCoords(double x, double y){
+        double targetDegree = Math.atan2(y, x);
+
+        double vectorDegree = targetDegree - _collector.Gyro.GetRadians();
+
+        double vectorX = cos(-vectorDegree) + sin(-vectorDegree),
+        vectorY = -sin(-vectorDegree) + cos(-vectorDegree);
+
+        double targetX = x + _odometry.X, targetY = y + _odometry.Y;
+
+        while (_collector.CommandCode.opModeIsActive() && GetDistance(targetX, targetY) > 2)
+        {
+            _odometry.Update();
+
+            _collector.Driver.DriveDirection(vectorX, vectorY, 0);
+        }
+
+        _collector.Driver.Stop();
+    }
+
+    private double GetDistance(double x, double y){
+        double difX = x - _odometry.X, difY = y - _odometry.Y;
+
+        return difX * difX + difY * difY;
     }
 }
