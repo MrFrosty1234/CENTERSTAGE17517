@@ -90,7 +90,7 @@ public class Lift {
         if (O && !_OOld)
             _Lift2 = !_Lift2;
 
-        _OOld = X;
+        _OOld = X; 
 
         if (_Lift2) {
             _servoLift2.setPosition(0);
