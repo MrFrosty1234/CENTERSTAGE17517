@@ -4,6 +4,7 @@ public class Telemetry {
     public static boolean lift = false;
     public static boolean driveTrain = false;
     public static boolean grabber = false;
+    public static boolean odometry = false;
 
     public Telemetry(UltRobot robot){
         this.robot = robot;
@@ -28,6 +29,11 @@ public class Telemetry {
             robot.linearOpMode.telemetry.addData("pixels count",robot.grabber.pixelsCount);
             robot.linearOpMode.telemetry.addData("pixelSensorLeft",robot.grabber.pixelSensorLeft);
             robot.linearOpMode.telemetry.addData("pixelSensorRight",robot.grabber.pixelSensorRight);
+        }
+        if(odometry){
+            robot.linearOpMode.telemetry.addData("x",robot.odometry.x);
+            robot.linearOpMode.telemetry.addData("y",robot.odometry.y);
+            robot.linearOpMode.telemetry.addData("heading",robot.odometry.heading);
         }
          robot.linearOpMode.telemetry.update();
     }
