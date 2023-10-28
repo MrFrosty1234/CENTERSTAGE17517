@@ -20,9 +20,6 @@ public class Lift {
     public LiftPosition liftPosition = LiftPosition.ZERO;
     public LiftMode liftMode = LiftMode.AUTO;
     double err1 = 0;
-    double err2 = 0;
-    boolean servoLiftUp = false;
-    boolean servoLiftButtonOld = false;
     UltRobot robot;
     int liftOffset= 0;
     private final PidRegulator PIDZL1 = new PidRegulator(kP, kI, kD);
@@ -72,35 +69,6 @@ public class Lift {
     public void displayEncoders() {
         robot.linearOpMode.telemetry.addData("lift", liftMotor.getCurrentPosition());
         robot.linearOpMode.telemetry.update();
-    }
-
-    public void setMotor(LiftPosition position) {
-        liftPosition = position;
-        double height = position.value;
-
-        liftMode = LiftMode.AUTO;
-        double l = liftMotor.getCurrentPosition();
-        double motorsY = (l + l) / 2;
-
-        double target1 = height;
-        double target2 = height;
-        err1 = target1 - l;
-
-
-        PIDZL1.update(motorsY);
-
-        double t1 = (double) System.currentTimeMillis() / 1000.0;
-        double t;
-        double tr = 0;
-
-        while (!isAtPosition() && tr < 3 && robot.linearOpMode.opModeIsActive()) {
-            t = (double) System.currentTimeMillis() / 1000.0;
-            tr = t - t1;
-            liftMode = LiftMode.AUTO;
-            update();
-        }
-
-        liftMotor.setPower(0);
     }
 
     public void update() {

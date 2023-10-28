@@ -42,7 +42,6 @@ public class TeleOpM extends LinearOpMode {
                 robot.lift.reset();
             }
 
-
             if (gamepad1.dpad_down) {
                 robot.lift.liftMode = Lift.LiftMode.AUTO;
                 robot.lift.liftPosition = Lift.LiftPosition.ZERO;

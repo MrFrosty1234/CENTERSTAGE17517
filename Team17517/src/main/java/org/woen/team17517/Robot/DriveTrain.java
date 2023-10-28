@@ -44,15 +44,18 @@ public class DriveTrain {
     public static double powerYMax = 0.75;
     public static double powerHeadingMin = -0.55;
     public static double powerHeadingMax =  0.55;
+    public double xError = 0;
+    public double yError = 0;
+    public double headingError = 0;
 
     double gyro;
     double encoderToCm = encodersWithoutReductor * motorReductor / (radiusWheelCm * PI);
     double headingTargetGlobal = 0;
     UltRobot robot;
-    private final DcMotor left_front_drive;
-    private final DcMotor left_back_drive;
-    private final DcMotor right_front_drive;
-    private final DcMotor right_back_drive;
+    public final DcMotor left_front_drive;
+    public final DcMotor left_back_drive;
+    public final DcMotor right_front_drive;
+    public final DcMotor right_back_drive;
     private final PidRegulator pidX = new PidRegulator(kPdrive, kIdrive, kDdrive);
     private final PidRegulator pidY = new PidRegulator(kPdrive, kIdrive, kDdrive);
     private final PidRegulator pidH = new PidRegulator(kProtation, kIrotation, kDrotation);
@@ -141,10 +144,10 @@ public class DriveTrain {
         pidFieldX.reset();
         pidFieldY.reset();
         pidH.reset();
-        double xError = xTarget - robot.odometry.x;
-        double yError = yTarget - robot.odometry.y;
+        xError = xTarget - robot.odometry.x;
+        yError = yTarget - robot.odometry.y;
         headingTargetGlobal = headingTarget;
-        double headingError = headingTargetGlobal - robot.odometry.heading;
+       headingError = headingTargetGlobal - robot.odometry.heading;
 
         angleTransform(headingError);
 
