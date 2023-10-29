@@ -16,6 +16,7 @@ public class AutonomCollector extends CollectorSample{
     @Override
     public void Start() {
         Auto.Start();
+        Lift.Start();
     }
 
     @Override
