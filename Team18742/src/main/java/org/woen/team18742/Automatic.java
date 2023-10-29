@@ -22,6 +22,7 @@ public class Automatic {
     }
 
     public void Start(){
+        PIDMove(1, 0);
         turnGyro(90);
     }
 
@@ -38,7 +39,8 @@ public class Automatic {
     }
 
     private void turnGyro(double degrees) {
-        PID pid = new PID(1, 1, 1, 180);
+        PID pid = new PID(1, 1, 1, 1);
+        pid.Update(_collector.Gyro.GetDegrees(), degrees);
 
         while (_collector.CommandCode.opModeIsActive() && abs(pid.ErrOld) > 2)
             _collector.Driver.DriveDirection(0, 0, pid.Update(_collector.Gyro.GetDegrees(), degrees));

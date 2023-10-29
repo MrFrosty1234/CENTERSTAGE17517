@@ -12,24 +12,9 @@ public class Lift {
     private DcMotor _liftM2 = null;
     public Servo _servoLift1, _servoLift2, _servoPlane;
 
+    private PID liftPid;
 
-    void moveLift(double distance) {
-                _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                double errold;
-                double kp = 1;
-                double kd = 1;
-                double err = distance - _liftM1.getCurrentPosition() / 480 * 360;
-                errold = err;
-                while (abs(err) > 2 && _collector.CommandCode.opModeIsActive()) {
-                    err = distance - _liftM1.getCurrentPosition() / 480 * 360;
-                    double u = (err * kp) + (err - errold) * kd;
-                    _liftM1.setPower(u);
-                    _liftM2.setPower(u);
-                }
-                _liftM1.setPower(0);
-                _liftM2.setPower(0);
-    }
+    private double _targetLiftPose = 0;
 
     private CollectorSample _collector;
 
@@ -49,6 +34,8 @@ public class Lift {
         _servoLift2 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");
         _servoPlane = _collector.CommandCode.hardwareMap.get(Servo.class, "servoPlane");
 
+        liftPid = new PID(1, 1, 1, 1);
+
         _grabberDrive.setPower(0);
         _liftM1.setPower(0);
         _liftM2.setPower(0);
@@ -57,7 +44,7 @@ public class Lift {
         _servoLift1.setPosition(0);
         _servoLift2.setPosition(0);
         _servoPlane.setPosition(0);
-}
+    }
 
     public void Update() {
         boolean X = _collector.CommandCode.gamepad1.cross;
@@ -70,16 +57,18 @@ public class Lift {
 
         _XOld = X;
 
-        if(A && System.currentTimeMillis() > 90000)
+        if (A && System.currentTimeMillis() > 90000)
             _servoPlane.setPosition(0);
 
-        if (_Lift) {
-            moveLift(51);
-        }
-        else {
-            moveLift(0);
-        }
+        if (_Lift)
+            _targetLiftPose = 51;
+        else
+            _targetLiftPose = 0;
 
+        double u = liftPid.Update(_liftM1.getCurrentPosition() / 480, _targetLiftPose);
+
+        _liftM1.setPower(u);
+        _liftM2.setPower(u);
 
         if (Y && !_YOld)
             _Lift1 = !_Lift1;
@@ -88,20 +77,18 @@ public class Lift {
 
         if (_Lift1) {
             _servoLift1.setPosition(0);
-        }
-        else {
+        } else {
             _servoLift1.setPosition(0);
         }
 
         if (O && !_OOld)
             _Lift2 = !_Lift2;
 
-        _OOld = X; 
+        _OOld = X;
 
         if (_Lift2) {
             _servoLift2.setPosition(0);
-        }
-        else {
+        } else {
             _servoLift2.setPosition(0);
         }
 
@@ -112,13 +99,15 @@ public class Lift {
 
         if (_Lift2) {
             _servoLift2.setPosition(0);
-        }
-        else {
+        } else {
             _servoLift2.setPosition(0);
         }
     }
 
     public void Start() {
         _grabberDrive.setPower(1);
+
+        _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
