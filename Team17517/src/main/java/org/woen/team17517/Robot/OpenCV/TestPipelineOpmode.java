@@ -10,17 +10,20 @@ import org.firstinspires.ftc.vision.VisionPortal;
 public class TestPipelineOpmode extends LinearOpMode {
 
     VisionPortal visionPortal;
+    PipeLine pipeLine = new PipeLine();
     @Override
     public void runOpMode() throws InterruptedException {
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-                .addProcessor(new PipeLine)
+                .addProcessor(pipeLine)
                 .build();
 
         waitForStart();
 
-        if (opModeIsActive()) {
-            // ...
+        while (opModeIsActive()) {
+            telemetry.addData("number of parking", pipeLine.pos);
+            telemetry.addData("team", pipeLine.team);
+            telemetry.update();
         }
 
 
