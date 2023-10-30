@@ -73,7 +73,7 @@ public class PipeLine implements VisionProcessor {
         if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
             pos = 3;
         }
-        return pos;
+        return frame;
     }
 
     @Override
