@@ -12,7 +12,7 @@ public class Lift {
     private DcMotor _liftM2 = null;
     public Servo _servoLift1, _servoLift2, _servoPlane;
 
-    private PID liftPid;
+    private PID _liftPid1, _liftPid2;
 
     private double _targetLiftPose = 0;
 
@@ -34,7 +34,8 @@ public class Lift {
         _servoLift2 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");
         _servoPlane = _collector.CommandCode.hardwareMap.get(Servo.class, "servoPlane");
 
-        liftPid = new PID(1, 1, 1, 1);
+        _liftPid1 = new PID(1, 1, 1, 1);
+        _liftPid2 = new PID(1, 1, 1, 1);
 
         _grabberDrive.setPower(0);
         _liftM1.setPower(0);
@@ -65,10 +66,8 @@ public class Lift {
         else
             _targetLiftPose = 0;
 
-        double u = liftPid.Update(_liftM1.getCurrentPosition() / 480, _targetLiftPose);
-
-        _liftM1.setPower(u);
-        _liftM2.setPower(u);
+        _liftM1.setPower(_liftPid1.Update(_liftM1.getCurrentPosition() / 480, _targetLiftPose));
+        _liftM2.setPower(_liftPid2.Update(_liftM2.getCurrentPosition() / 480, _targetLiftPose));
 
         if (Y && !_YOld)
             _Lift1 = !_Lift1;
@@ -109,5 +108,8 @@ public class Lift {
 
         _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        _liftM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        _liftM2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
