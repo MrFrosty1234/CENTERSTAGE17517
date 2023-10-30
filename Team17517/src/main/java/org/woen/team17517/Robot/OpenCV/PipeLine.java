@@ -44,7 +44,7 @@ public class PipeLine implements VisionProcessor {
     double x1Start = x * 0;
     double x2Finish = x * 0.6;
     double x2Start = x * 0.3;
-    double x3Finish = x * 0.9;
+    double x3Finish = x;
     double x3Start = x * 0.6;
     double centerOfRectX = 0;
     double centerOfRectY = 0;
