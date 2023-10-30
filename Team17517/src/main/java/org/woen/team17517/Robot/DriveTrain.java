@@ -66,8 +66,7 @@ public class DriveTrain {
 
     public DriveTrain(UltRobot robot) {
         this.robot = robot;
-
-        gyro = robot.gyro.getAngle();
+        
 
         left_front_drive = robot.linearOpMode.hardwareMap.dcMotor.get("left_front_drive");
         left_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("left_back_drive");

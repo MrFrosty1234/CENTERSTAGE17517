@@ -19,6 +19,7 @@ public class Grabber {
     DcMotorEx pixelMotor;
     AnalogInput pixelSensorRight;
     AnalogInput pixelSensorLeft;
+    public Servo pixelServo;
     public static double voltage;
     double pixelsCount = 0;
     double pixelsCountOld = 0;
@@ -36,7 +37,9 @@ public class Grabber {
 
         pixelSensorLeft = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageLeft");
         pixelSensorRight = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageRight");
+        pixelServo = this.robot.linearOpMode.hardwareMap.get(Servo.class,"pixelServo");
         pixelMotor = (DcMotorEx) this.robot.linearOpMode.hardwareMap.dcMotor.get("pixelMotor");
+
     }
 
 
@@ -72,5 +75,6 @@ public class Grabber {
             targetPower = 1;
         else
             targetPower = 0;
+
     }
 }
