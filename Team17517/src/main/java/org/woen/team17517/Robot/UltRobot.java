@@ -10,12 +10,14 @@ public class UltRobot {
     public Odometry odometry;
     public LinearOpMode linearOpMode;
     public Gyro gyro;
+    public Telemetry telemetry;
 
     public UltRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
         driveTrain = new DriveTrain(this);
         grabber = new Grabber(this);
         lift = new Lift(this);
+        telemetry = new Telemetry(this);
 
         gyro = new Gyro(this);
         lighting = new Lighting(this);
@@ -28,5 +30,6 @@ public class UltRobot {
         odometry.update();
         gyro.update();
         grabber.update();
+        telemetry.update();
     }
 }

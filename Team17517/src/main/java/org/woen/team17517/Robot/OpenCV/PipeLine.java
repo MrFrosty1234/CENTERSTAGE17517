@@ -25,7 +25,13 @@ public class PipeLine implements VisionProcessor {
     double b2 = 296;
     Mat img_range_red = new Mat();
     Mat img_range_blue = new Mat();
-    //UltRobot robot;
+
+    double x1Finish = x * 0.3;
+    double x1Start = x * 0;
+    double x2Finish = x * 0.6;
+    double x2Start = x * 0.3;
+    double x3Finish = x * 0.9;
+    double x3Start = x * 0.6;
     double centerOfRectX = 0;
     double centerOfRectY = 0;
     public int pos = 0;
@@ -58,13 +64,13 @@ public class PipeLine implements VisionProcessor {
         centerOfRectX = boundingRect.x + boundingRect.width / 2;
         centerOfRectY = boundingRect.y + boundingRect.height / 2;
 
-        if (centerOfRectX < 200 && centerOfRectX > 0) {
+        if (centerOfRectX < x1Finish && centerOfRectX > x1Start) {
             pos = 1;
         }
-        if (centerOfRectX < 360 && centerOfRectX > 160) {
+        if (centerOfRectX < x2Finish && centerOfRectX > x2Start) {
             pos = 2;
         }
-        if (centerOfRectX < 480 && centerOfRectX > 320) {
+        if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
             pos = 3;
         }
         return pos;
