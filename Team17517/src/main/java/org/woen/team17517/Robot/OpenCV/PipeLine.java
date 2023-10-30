@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -26,15 +27,15 @@ public class PipeLine implements VisionProcessor {
     Mat img_range_red = new Mat();
     Mat img_range_blue = new Mat();
     public double hRedDown = 10;
-    public double cRedDown = 200;
-    public double vRedDowm = 150;
+    public double cRedDown = 50;
+    public double vRedDowm = 154.4;
     public double hRedUp = 30;
     public double cRedUp = 255;
     public double vRedUp = 255;
 
     public double hBlueDown = 85;
-    public double cBlueDown = 200;
-    public double vBlueDowm = 150;
+    public double cBlueDown = 53.8;
+    public double vBlueDowm = 148.8;
     public double hBlueUp = 100;
     public double cBlueUp = 255;
     public double vBlueUp = 255;
@@ -65,16 +66,12 @@ public class PipeLine implements VisionProcessor {
         inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
         inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
 
-        if (mean(frame).val[0] > 10) {
-            team = true;
-        } else {
-            team = false;
-        }
-        /*
+        Core.bitwise_or(img_range_red,img_range_blue,frame);
+
         Rect boundingRect = boundingRect(frame);
 
-        centerOfRectX = boundingRect.x + boundingRect.width / 2;
-        centerOfRectY = boundingRect.y + boundingRect.height / 2;
+        centerOfRectX = boundingRect.x + boundingRect.width / 2.0;
+        centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
 
         if (centerOfRectX < x1Finish && centerOfRectX > x1Start) {
             pos = 1;
@@ -86,8 +83,7 @@ public class PipeLine implements VisionProcessor {
             pos = 3;
         }
 
-         */
-        return img_range_blue;
+        return frame;
     }
 
     @Override
