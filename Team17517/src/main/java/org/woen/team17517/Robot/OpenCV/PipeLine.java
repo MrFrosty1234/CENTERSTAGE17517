@@ -25,6 +25,19 @@ public class PipeLine implements VisionProcessor {
     double b2 = 296;
     Mat img_range_red = new Mat();
     Mat img_range_blue = new Mat();
+    public double hRedDown = 10;
+    public double cRedDown = 200;
+    public double vRedDowm = 150;
+    public double hRedUp = 30;
+    public double cRedUp = 255;
+    public double vRedUp = 255;
+
+    public double hBlueDown = 85;
+    public double cBlueDown = 200;
+    public double vBlueDowm = 150;
+    public double hBlueUp = 100;
+    public double cBlueUp = 255;
+    public double vBlueUp = 255;
 
     double x1Finish = x * 0.3;
     double x1Start = x * 0;
@@ -49,16 +62,15 @@ public class PipeLine implements VisionProcessor {
 
         blur(frame, frame, new Size(10, 10));
 
-        inRange(frame, new Scalar(0, 0, 0), new Scalar(221, 50, 83), img_range_red);
-        inRange(frame, new Scalar(240, 82, 90), new Scalar(0, 0, 240), img_range_blue);
+        inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
+        inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
 
         if (mean(frame).val[0] > 10) {
             team = true;
         } else {
             team = false;
         }
-
-
+        /*
         Rect boundingRect = boundingRect(frame);
 
         centerOfRectX = boundingRect.x + boundingRect.width / 2;
@@ -73,7 +85,9 @@ public class PipeLine implements VisionProcessor {
         if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
             pos = 3;
         }
-        return frame;
+
+         */
+        return img_range_blue;
     }
 
     @Override
