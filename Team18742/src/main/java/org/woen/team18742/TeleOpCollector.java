@@ -2,12 +2,12 @@ package org.woen.team18742;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class Collector extends CollectorSample {
+public class TeleOpCollector extends BaseCollector {
     public Manual Manual;
     //public LinearOpMode CommandCode;
     private boolean _prevTriangle;
 
-    public Collector(LinearOpMode commandCode) {
+    public TeleOpCollector(LinearOpMode commandCode) {
         super(commandCode);
 
         Manual = new Manual(this);

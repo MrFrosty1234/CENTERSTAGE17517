@@ -2,7 +2,7 @@ package org.woen.team18742;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class AutonomCollector extends CollectorSample{
+public class AutonomCollector extends BaseCollector {
     public Automatic Auto;
     public Odometry Odometry;
 

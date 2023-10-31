@@ -2,7 +2,6 @@ package org.woen.team18742;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static java.lang.Math.toRadians;
 
 public class Odometry {
     public double X = 0, Y = 0;
@@ -12,7 +11,7 @@ public class Odometry {
 
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
 
-    public Odometry(CollectorSample collector){
+    public Odometry(BaseCollector collector){
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
     }
