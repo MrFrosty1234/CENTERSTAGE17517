@@ -11,15 +11,15 @@ public class Lighting {
     UltRobot robot;
     public Lighting(UltRobot robot) {
         this.robot = robot;
-        svet1 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet1");
-        svet2 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet2");
-        svet1.setDirection(DcMotorSimple.Direction.FORWARD);
-        svet2.setDirection(DcMotorSimple.Direction.FORWARD);
+       // svet1 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet1");
+       // svet2 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet2");
+      //  svet1.setDirection(DcMotorSimple.Direction.FORWARD);
+       // svet2.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public void setPower(double x) {
-        svet1.setPower(x);
-        svet2.setPower(x);
+       // svet1.setPower(x);
+        //svet2.setPower(x);
     }
 
     public void smooth() {

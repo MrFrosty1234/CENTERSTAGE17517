@@ -24,11 +24,12 @@ public class AutonomBetaUniversal extends LinearOpMode {
         camera = new Camera(hardwareMap);
         pipeLine = new PipeLine();
         robot.lift.reset();
-        waitForStart();
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(pipeLine)
                 .build();
+        waitForStart();
+
         telemetry.update();
         visionPortal.close();
         robot.grabber.enable(true);
@@ -38,5 +39,7 @@ public class AutonomBetaUniversal extends LinearOpMode {
            robot.driveTrain.moveField(60,0,0);
        if(pipeLine.pos == 3)
            robot.driveTrain.moveField(60,-60,0);
+       robot.grabber.powerPixelMotor(-1);
+       sleep(500);
     }
 }

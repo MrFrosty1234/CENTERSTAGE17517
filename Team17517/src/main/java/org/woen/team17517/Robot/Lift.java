@@ -28,10 +28,8 @@ public class Lift {
         this.robot = robot;
 
         liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor");
-        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        buttonUp.setMode(DigitalChannel.Mode.INPUT);
-        buttonDown.setMode(DigitalChannel.Mode.INPUT);
     }
 
     public void reset() {
@@ -78,7 +76,7 @@ public class Lift {
                     double l = getPosition();
                     err1 = target1 - l;
                     double poweryl1 = 0.2 + PIDZL1.update(err1);
-                    liftMotor.setPower(Range.clip(poweryl1, -0.1, 0.7));
+                    liftMotor.setPower(Range.clip(poweryl1, -0.4, 1));
                     if(abs(l) > 50)
                         liftPos = false;
                     else

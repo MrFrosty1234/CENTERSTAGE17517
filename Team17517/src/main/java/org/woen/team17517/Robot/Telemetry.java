@@ -27,8 +27,8 @@ public class Telemetry {
         }
         if(grabber) {
             robot.linearOpMode.telemetry.addData("pixels count",robot.grabber.pixelsCount);
-            robot.linearOpMode.telemetry.addData("pixelSensorLeft",robot.grabber.pixelSensorLeft);
-            robot.linearOpMode.telemetry.addData("pixelSensorRight",robot.grabber.pixelSensorRight);
+    //        robot.linearOpMode.telemetry.addData("pixelSensorLeft",robot.grabber.pixelSensorLeft);
+      //      robot.linearOpMode.telemetry.addData("pixelSensorRight",robot.grabber.pixelSensorRight);
         }
         if(odometry){
             robot.linearOpMode.telemetry.addData("x",robot.odometry.x);

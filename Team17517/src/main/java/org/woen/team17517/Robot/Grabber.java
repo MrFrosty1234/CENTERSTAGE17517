@@ -3,27 +3,31 @@ package org.woen.team17517.Robot;
 import static org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit.AMPS;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.AnalogSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 @Config
 public class Grabber {
     UltRobot robot;
-    DcMotorEx pixelMotor;
-    AnalogInput pixelSensorRight;
-    AnalogInput pixelSensorLeft;
-    public Servo pixelServo;
+    public DcMotorEx pixelMotor;
+    // AnalogInput pixelSensorRight;
+    // AnalogInput pixelSensorLeft;
+    public Servo pixelLeftServo;
+    public Servo pixelGrabServo;
+    public Servo progibServo;
     public static double voltage;
     double pixelsCount = 0;
     double pixelsCountOld = 0;
     double targetPower = 1;
+
+    int perekid = 0;
+    int grabber = 0;
+
+    public static double grabberOpen = 0.30;
+    public static double grabberClose = 0;
+    public static double perekidStart = 0.90    ;
+    public static double perekidFinish = 0.25;
 
     boolean protectorIteration = false;
     boolean ampsProtection = false;
@@ -35,13 +39,18 @@ public class Grabber {
         moveTimer.reset();
         this.robot = robot;
 
-        pixelSensorLeft = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageLeft");
-        pixelSensorRight = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageRight");
-        pixelServo = this.robot.linearOpMode.hardwareMap.get(Servo.class,"pixelServo");
+        // pixelSensorLeft = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageLeft");
+        //pixelSensorRight = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageRight");
+        progibServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServo");
         pixelMotor = (DcMotorEx) this.robot.linearOpMode.hardwareMap.dcMotor.get("pixelMotor");
+       // pixelLeftServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoLeft");
+        pixelGrabServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
 
     }
 
+    public void powerPixelMotor(double power){
+        pixelMotor.setPower(power * 0.5);
+    }
 
     public void update() {
         double motorCurrent = pixelMotor.getCurrent(AMPS);
@@ -62,12 +71,12 @@ public class Grabber {
         }
 
         pixelsCountOld = pixelsCount;
-        if ((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
-            pixelMotor.setPower(targetPower);
-            robot.lift.liftPos = !robot.lift.liftPos;
-        } else
-            pixelMotor.setPower(0);
-        robot.linearOpMode.telemetry.addData("motorCurrent", motorCurrent);
+        // if ((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
+        //     pixelMotor.setPower(targetPower);
+        //   robot.lift.liftPos = !robot.lift.liftPos;
+        //} else
+        //   pixelMotor.setPower(0);
+        //robot.linearOpMode.telemetry.addData("motorCurrent", motorCurrent);
     }
 
     public void enable(boolean motorPowerControll) {
@@ -76,5 +85,29 @@ public class Grabber {
         else
             targetPower = 0;
 
+    }
+   public void positionGrabber(){
+        if(grabber == 0){
+            pixelGrabServo.setPosition(grabberClose);
+            grabber = 1;
+        }
+        else{
+            if(grabber == 1){
+                pixelGrabServo.setPosition(grabberOpen);
+                grabber = 0;
+            }
+        }
+    }
+    public void positionPerekid(){
+        if(perekid == 0){
+            robot.grabber.progibServo.setPosition(perekidStart);
+            perekid = 1;
+        }
+        else {
+            if (perekid == 1) {
+                robot.grabber.progibServo.setPosition(perekidFinish);
+                perekid = 0;
+            }
+        }
     }
 }

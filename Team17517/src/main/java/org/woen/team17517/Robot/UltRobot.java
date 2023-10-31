@@ -14,19 +14,19 @@ public class UltRobot {
 
     public UltRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
-        //driveTrain = new DriveTrain(this);
+        driveTrain = new DriveTrain(this);
         grabber = new Grabber(this);
-        //lift = new Lift(this);
-        //telemetry = new Telemetry(this);
+        lift = new Lift(this);
+        telemetry = new Telemetry(this);
 
-        //gyro = new Gyro(this);
-        //lighting = new Lighting(this);
-        //odometry = new Odometry(this);
+        gyro = new Gyro(this);
+        lighting = new Lighting(this);
+        odometry = new Odometry(this);
     }
 
     public void allUpdate() {
         lift.update();
-        lighting.update();
+        //lighting.update();
         odometry.update();
         gyro.update();
         grabber.update();
