@@ -95,7 +95,7 @@ public class Lift {
     }
 
     public boolean isAtPosition() {
-        return abs(err1) < 5 && abs(err2) < 5;
+        return abs(err1) < 5;
     }
 
     public enum LiftMode {

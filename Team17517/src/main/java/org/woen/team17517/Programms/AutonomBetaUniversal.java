@@ -18,7 +18,9 @@ public class AutonomBetaUniversal extends LinearOpMode {
     VisionPortal visionPortal;
     PipeLine pipeLine;
     public void runOpMode() {
+
         robot = new UltRobot(this);
+
         camera = new Camera(hardwareMap);
         pipeLine = new PipeLine();
         robot.lift.reset();
