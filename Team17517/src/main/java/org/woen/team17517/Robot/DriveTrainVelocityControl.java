@@ -4,17 +4,19 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.signum;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+@Config
 public class DriveTrainVelocityControl {
     UltRobot robot;
     private double voltage;
-    private double kd;
-    private double ki;
-    private double kp;
-    private double ks;
-    private double kSlide;
+    private static double kd;
+    private static double ki;
+    private static double kp;
+    private  static double ks = 1/2400;
+    private static double kSlide = 0.85;
     PIDCmethod speed = new PIDCmethod(kp,ki,kd,ks);
     private PIDCmethod PIDvelocity = new PIDCmethod(kp,ki,kd,ks);
     private double targetX = 0;
@@ -70,6 +72,10 @@ public class DriveTrainVelocityControl {
     public double velocityMoveX(double target)
     {
         return speed.PID(target,this.voltage,this.xEnc,ks);
+    }
+    public double getMetersPerSecondSpeed(double target)
+    {
+        return target/1440*0.098*Math.PI;
     }
 
     public void update()
