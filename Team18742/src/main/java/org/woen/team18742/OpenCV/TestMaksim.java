@@ -1,4 +1,4 @@
-package org.woen.team17517.Robot.OpenCV;
+package org.woen.team18742.OpenCV;
 
 
 import static org.opencv.core.Core.*;
@@ -15,7 +15,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-public class PipeLine implements VisionProcessor {
+class PipeLine implements VisionProcessor {
     double x = 640;
     double y = 480;
     double r1 = 5;
