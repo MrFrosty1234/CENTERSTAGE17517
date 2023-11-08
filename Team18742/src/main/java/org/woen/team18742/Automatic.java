@@ -22,8 +22,6 @@ public class Automatic {
     }
 
     public void Start() {
-        PIDMove(1, 0);
-        turnGyro(90);
     }
 
     private void PIDMove(double forward, double side) {
@@ -32,7 +30,7 @@ public class Automatic {
         double targetX = _collector.Odometry.X + forward, targetY = _collector.Odometry.Y + side;
 
         while (_collector.CommandCode.opModeIsActive() && GetDistance(targetX, targetY) > 2) {
-            moveWorldCoords(pidForward.Update(_collector.Odometry.X, targetX), pidSide.Update(_collector.Odometry.Y, targetY));
+            SetSpeedWorldCoords(pidForward.Update(_collector.Odometry.X, targetX), pidSide.Update(_collector.Odometry.Y, targetY));
         }
 
         _collector.Driver.Stop();
@@ -56,7 +54,7 @@ public class Automatic {
         _collector.Driver.Stop();
     }
 
-    private void SetSpeedWorldCoords(double speedForward, double speedSide) {
+    public void SetSpeedWorldCoords(double speedForward, double speedSide) {
         double vectorInRotation = Math.atan2(speedSide, speedForward);
 
         double worldVectorRotation = vectorInRotation - _collector.Gyro.GetRadians();
@@ -68,24 +66,6 @@ public class Automatic {
 
     }
 
-    private void moveWorldCoords(double x, double y) {
-        double targetDegree = Math.atan2(y, x);
-
-        double vectorDegree = targetDegree - _collector.Gyro.GetRadians();
-
-        double vectorX = cos(-vectorDegree) + sin(-vectorDegree),
-                vectorY = -sin(-vectorDegree) + cos(-vectorDegree);
-
-        double targetX = x + _odometry.X, targetY = y + _odometry.Y;
-
-        while (_collector.CommandCode.opModeIsActive() && GetDistance(targetX, targetY) > 2) {
-            _odometry.Update();
-
-            _collector.Driver.DriveDirection(vectorX, vectorY, 0);
-        }
-
-        _collector.Driver.Stop();
-    }
 
     private double GetDistance(double x, double y) {
         double difX = x - _odometry.X, difY = y - _odometry.Y;

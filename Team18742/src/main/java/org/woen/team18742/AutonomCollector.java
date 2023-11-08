@@ -17,6 +17,7 @@ public class AutonomCollector extends BaseCollector {
     public void Start() {
         Auto.Start();
         Lift.Start();
+        Auto.SetSpeedWorldCoords(0, 0.6);
     }
 
     @Override
