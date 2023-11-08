@@ -1,11 +1,12 @@
 package org.woen.team18742;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp
+@Autonomous
 public class AutonomOpMode extends LinearOpMode {
-    private AutonomCollector _collector;
+    private BaseCollector _collector;
 
     @Override
     public void runOpMode() {

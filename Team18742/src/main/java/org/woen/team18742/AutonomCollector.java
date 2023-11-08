@@ -2,7 +2,7 @@ package org.woen.team18742;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class AutonomCollector extends CollectorSample{
+public class AutonomCollector extends BaseCollector {
     public Automatic Auto;
     public Odometry Odometry;
 
@@ -17,6 +17,7 @@ public class AutonomCollector extends CollectorSample{
     public void Start() {
         Auto.Start();
         Lift.Start();
+        Auto.SetSpeedWorldCoords(0, 0.6);
     }
 
     @Override

@@ -2,13 +2,13 @@ package org.woen.team18742;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class CollectorSample {
+public class BaseCollector {
     public LinearOpMode CommandCode;
     public Gyroscope Gyro;
     public DriverTrain Driver;
     public Lift Lift;
 
-    public CollectorSample(LinearOpMode commandCode){
+    public BaseCollector(LinearOpMode commandCode){
         CommandCode = commandCode;
 
         Lift = new Lift(this);

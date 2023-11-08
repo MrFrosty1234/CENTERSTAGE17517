@@ -4,12 +4,11 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.opencv.ml.ANN_MLP;
 
 public class Gyroscope {
     private IMU _imu;
 
-    public Gyroscope(CollectorSample collector){
+    public Gyroscope(BaseCollector collector){
         _imu = collector.CommandCode.hardwareMap.get(IMU.class, "imu");
         _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
     }

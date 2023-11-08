@@ -17,8 +17,11 @@ public class PID {
         ErrOld = 0;
     }
 
-    public double Update(double val, double desiredVal) {
-        double error = val - desiredVal;
+    public double Update(double sensor, double target) {
+        return Update(target);
+    }
+
+    public double Update(double error) {
 
         _integrall += error;
 

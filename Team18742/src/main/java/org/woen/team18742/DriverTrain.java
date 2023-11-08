@@ -13,7 +13,7 @@ public class DriverTrain {
 
     private final double diametr = 9.8, encoderconstat = 1440;
 
-    public DriverTrain(CollectorSample collector) {
+    public DriverTrain(BaseCollector collector) {
         _leftForwardDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "leftmotor");
         _rightForwardDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "rightmotor");
         _leftBackDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "leftbackmotor");
@@ -24,11 +24,12 @@ public class DriverTrain {
         _rightForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightForwardDrive.setDirection(REVERSE);
         _rightBackDrive .setDirection(REVERSE);
+
     }
 
     public void DriveDirection(double forward, double side, double rotate){
-        _leftForwardDrive.setPower(forward + side + rotate);
-        _rightBackDrive.setPower(forward + side - rotate);
+       _leftForwardDrive.setPower(forward + side + rotate);
+       _rightBackDrive.setPower(forward + side - rotate);
         _leftBackDrive.setPower(forward - side + rotate);
         _rightForwardDrive.setPower(forward - side - rotate);
     }
@@ -44,7 +45,11 @@ public class DriverTrain {
         _rightForwardDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public double GetDistance(){
+    public double GetForwardDistance(){
+        return (_leftBackDrive.getCurrentPosition()-_rightForwardDrive.getCurrentPosition()+_leftForwardDrive.getCurrentPosition()-_rightBackDrive.getCurrentPosition())/4.0/encoderconstat*PI*diametr;
+    }
+
+    public double GetSideDistance(){
         return (_leftBackDrive.getCurrentPosition()+_rightForwardDrive.getCurrentPosition()+_leftForwardDrive.getCurrentPosition()+_rightBackDrive.getCurrentPosition())/4.0/encoderconstat*PI*diametr;
     }
 
