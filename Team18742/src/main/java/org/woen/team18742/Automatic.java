@@ -57,14 +57,12 @@ public class Automatic {
     public void SetSpeedWorldCoords(double speedForward, double speedSide) {
         double vectorInRotation = Math.atan2(speedSide, speedForward);
 
-        _collector.CommandCode.telemetry.addLine(Math.toDegrees(vectorInRotation) + "");
-
         double worldVectorRotation = vectorInRotation - _collector.Gyro.GetRadians();
 
-        double power = speedForward * speedForward + speedSide * speedSide;
+        double power = Math.sqrt(speedForward * speedForward + speedSide * speedSide);
 
-        _collector.Driver.DriveDirection(power * cos(-worldVectorRotation) + power * sin(-worldVectorRotation),
-                -power * sin(-worldVectorRotation) + power * cos(-worldVectorRotation), 0);
+        _collector.Driver.DriveDirection(-(power * cos(-worldVectorRotation) + power * sin(-worldVectorRotation)),
+                -(-power * sin(-worldVectorRotation) + power * cos(-worldVectorRotation)), 0);
 
     }
 
@@ -72,6 +70,6 @@ public class Automatic {
     private double GetDistance(double x, double y) {
         double difX = x - _odometry.X, difY = y - _odometry.Y;
 
-        return difX * difX + difY * difY;
+        return Math.sqrt(difX * difX + difY * difY);
     }
 }

@@ -17,11 +17,12 @@ public class AutonomCollector extends BaseCollector {
     public void Start() {
         Auto.Start();
         Lift.Start();
-        Auto.SetSpeedWorldCoords(0, 0.6);
+        Driver.DriveDirection(0.5, 0, 0);
     }
 
     @Override
     public void Update() {
+        super.Update();
         Odometry.Update();
     }
 }
