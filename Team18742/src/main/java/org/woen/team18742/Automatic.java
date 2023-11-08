@@ -57,6 +57,8 @@ public class Automatic {
     public void SetSpeedWorldCoords(double speedForward, double speedSide) {
         double vectorInRotation = Math.atan2(speedSide, speedForward);
 
+        _collector.CommandCode.telemetry.addLine(Math.toDegrees(vectorInRotation) + "");
+
         double worldVectorRotation = vectorInRotation - _collector.Gyro.GetRadians();
 
         double power = speedForward * speedForward + speedSide * speedSide;
