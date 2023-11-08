@@ -28,10 +28,10 @@ public class DriverTrain {
     }
 
     public void DriveDirection(double forward, double side, double rotate){
-       _leftForwardDrive.setPower(-forward + side + rotate);
-       _rightBackDrive.setPower(-forward + side - rotate);
-        _leftBackDrive.setPower(-forward - side + rotate);
-        _rightForwardDrive.setPower(-forward - side - rotate);
+       _leftForwardDrive.setPower(forward + side + rotate);
+       _rightBackDrive.setPower(forward + side - rotate);
+        _leftBackDrive.setPower(forward - side + rotate);
+        _rightForwardDrive.setPower(forward - side - rotate);
     }
 
     public void ResetIncoder() {

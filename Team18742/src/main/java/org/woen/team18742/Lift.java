@@ -60,7 +60,6 @@ public class Lift {
 
         if (A && System.currentTimeMillis() - origmillis > 90000)
             _servoPlane.setPosition(0.50);
-
         else
             _servoPlane.setPosition(0.83);
         ////////////////////////////////
@@ -92,7 +91,7 @@ public class Lift {
     }
 
     public void Start() {
-        _grabberDrive.setPower(1);
+       // _grabberDrive.setPower(1);
 
         _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

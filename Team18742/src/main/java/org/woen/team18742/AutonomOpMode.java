@@ -1,9 +1,10 @@
 package org.woen.team18742;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp
+@Autonomous
 public class AutonomOpMode extends LinearOpMode {
     private TeleOpCollector _collector;
 
@@ -18,9 +19,10 @@ public class AutonomOpMode extends LinearOpMode {
 
         _collector.Driver.DriveDirection(0,0,0);
         ///////////////////////
-        _collector.Driver.DriveDirection(0,1,0);
-        sleep(3000);
-        _collector.Driver.DriveDirection(0,0,0);
+        _collector.Driver.DriveDirection(-0.3,0,0);
+        sleep(2300);
+        _collector.Driver.DriveDirection(0.5,0,0);
+        sleep(200);
         /////////////////////////
         while (opModeIsActive()) {
             _collector.Update();
