@@ -9,8 +9,8 @@ public class AutonomCollector extends BaseCollector {
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
 
-        Auto = new Automatic(this);
         Odometry = new Odometry(this);
+        Auto = new Automatic(this);
     }
 
     @Override

@@ -7,6 +7,7 @@ import static java.lang.Math.sin;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -22,6 +23,7 @@ public class Automatic {
     }
 
     public void Start() {
+        PIDMove(2, 0);
     }
 
     private void PIDMove(double forward, double side) {
@@ -30,7 +32,10 @@ public class Automatic {
         double targetX = _collector.Odometry.X + forward, targetY = _collector.Odometry.Y + side;
 
         while (_collector.CommandCode.opModeIsActive() && GetDistance(targetX, targetY) > 2) {
-            SetSpeedWorldCoords(pidForward.Update(_collector.Odometry.X, targetX), pidSide.Update(_collector.Odometry.Y, targetY));
+            _collector.CommandCode.telemetry.addLine(GetDistance(targetX, targetY) + "");
+            SetSpeedWorldCoords(pidForward.Update(targetX -_collector.Odometry.X), pidSide.Update(targetY - _collector.Odometry.Y));
+
+            _odometry.Update();
         }
 
         _collector.Driver.Stop();
