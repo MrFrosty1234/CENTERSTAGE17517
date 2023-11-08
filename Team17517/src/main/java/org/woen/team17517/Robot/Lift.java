@@ -83,7 +83,7 @@ public class Lift {
                         liftPos = true;
                 }
                 break;
-            case MANUALLIMIT:
+            case MANUALLIMIT:      
                 setPowersLimit(power);
                 break;
             case MANUAL:
