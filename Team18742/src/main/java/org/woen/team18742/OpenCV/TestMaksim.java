@@ -39,7 +39,7 @@ class PipeLine implements VisionProcessor {
     public double hBlueUp = 100;
     public double cBlueUp = 255;
     public double vBlueUp = 255;
-
+    public boolean alyans = false;
     double x1Finish = x * 0.3;
     double x1Start = x * 0;
     double x2Finish = x * 0.6;
@@ -62,12 +62,14 @@ class PipeLine implements VisionProcessor {
         resize(frame, frame, new Size(x, y));// установка разрешения
 
         blur(frame, frame, new Size(10, 10));//размытие для компенсации шумов с камеры
-// можно иф для установки цвета команды и только 1 инрейндж
-        inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
-        //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
-        inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
+        if (alyans) {// можно иф для установки цвета команды и только 1 инрейндж
+            inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
+        } else {
+            //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
+            inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
+        }
 
-        Core.bitwise_or(img_range_red,img_range_blue,frame);//объединяем два инрейнджа
+        Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
 
         Rect boundingRect = boundingRect(frame);//boudingRect рисуем прямоугольник
 
