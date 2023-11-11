@@ -7,6 +7,7 @@ import static java.lang.Math.sin;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -22,8 +23,7 @@ public class Automatic {
     }
 
     public void Start() {
-        PIDMove(1, 0);
-        turnGyro(90);
+        PIDMove(2, 0);
     }
 
     private void PIDMove(double forward, double side) {
@@ -32,7 +32,10 @@ public class Automatic {
         double targetX = _collector.Odometry.X + forward, targetY = _collector.Odometry.Y + side;
 
         while (_collector.CommandCode.opModeIsActive() && GetDistance(targetX, targetY) > 2) {
-            moveWorldCoords(pidForward.Update(_collector.Odometry.X, targetX), pidSide.Update(_collector.Odometry.Y, targetY));
+            _collector.CommandCode.telemetry.addLine(GetDistance(targetX, targetY) + "");
+            SetSpeedWorldCoords(pidForward.Update(targetX -_collector.Odometry.X), pidSide.Update(targetY - _collector.Odometry.Y));
+
+            _odometry.Update();
         }
 
         _collector.Driver.Stop();
@@ -56,40 +59,22 @@ public class Automatic {
         _collector.Driver.Stop();
     }
 
-    private void SetSpeedWorldCoords(double speedForward, double speedSide) {
+    public void SetSpeedWorldCoords(double speedForward, double speedSide) {
         double vectorInRotation = Math.atan2(speedSide, speedForward);
 
         double worldVectorRotation = vectorInRotation - _collector.Gyro.GetRadians();
 
-        double power = speedForward * speedForward + speedSide * speedSide;
+        double power = Math.sqrt(speedForward * speedForward + speedSide * speedSide);
 
-        _collector.Driver.DriveDirection(power * cos(-worldVectorRotation) + power * sin(-worldVectorRotation),
-                -power * sin(-worldVectorRotation) + power * cos(-worldVectorRotation), 0);
+        _collector.Driver.DriveDirection(-(power * cos(-worldVectorRotation) + power * sin(-worldVectorRotation)),
+                -(-power * sin(-worldVectorRotation) + power * cos(-worldVectorRotation)), 0);
 
     }
 
-    private void moveWorldCoords(double x, double y) {
-        double targetDegree = Math.atan2(y, x);
-
-        double vectorDegree = targetDegree - _collector.Gyro.GetRadians();
-
-        double vectorX = cos(-vectorDegree) + sin(-vectorDegree),
-                vectorY = -sin(-vectorDegree) + cos(-vectorDegree);
-
-        double targetX = x + _odometry.X, targetY = y + _odometry.Y;
-
-        while (_collector.CommandCode.opModeIsActive() && GetDistance(targetX, targetY) > 2) {
-            _odometry.Update();
-
-            _collector.Driver.DriveDirection(vectorX, vectorY, 0);
-        }
-
-        _collector.Driver.Stop();
-    }
 
     private double GetDistance(double x, double y) {
         double difX = x - _odometry.X, difY = y - _odometry.Y;
 
-        return difX * difX + difY * difY;
+        return Math.sqrt(difX * difX + difY * difY);
     }
 }

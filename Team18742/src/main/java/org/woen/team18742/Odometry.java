@@ -3,6 +3,8 @@ package org.woen.team18742;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Odometry {
     public double X = 0, Y = 0;
 
@@ -11,9 +13,12 @@ public class Odometry {
 
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
 
+    private Telemetry _telemetry;
+
     public Odometry(BaseCollector collector){
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
+        _telemetry = collector.CommandCode.telemetry;
     }
 
     public void Update(){
@@ -34,5 +39,8 @@ public class Odometry {
         _leftBackDrive = lbd;
         _rightBackDrive = rbd;
         _rightForwardDrive = rfd;
+
+        _telemetry.addLine("position = ").
+                addData(" X ", X).addData(" Y ", Y).addData("time = ", System.currentTimeMillis());
     }
 }

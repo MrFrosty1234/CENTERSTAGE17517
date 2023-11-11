@@ -4,6 +4,7 @@ public class PID {
     private final double _pKoef, _dKoef, _iKoef, _limit;
     private double _integrall = 0;
     public double ErrOld = 0;
+    public double Err = 0;
 
     public PID(double pKoef, double iKoef, double dKoef, double limit) {
         _pKoef = pKoef;
@@ -22,13 +23,14 @@ public class PID {
     }
 
     public double Update(double error) {
-
         _integrall += error;
 
         if(Math.abs(_integrall) >= _limit)
             _integrall = Math.signum(_integrall) * _limit;
 
         double u = error * _pKoef + _integrall * _iKoef + (error - ErrOld) * _dKoef;
+
+        Err = error;
 
         ErrOld = error;
 

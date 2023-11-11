@@ -9,18 +9,20 @@ public class AutonomCollector extends BaseCollector {
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
 
-        Auto = new Automatic(this);
         Odometry = new Odometry(this);
+        Auto = new Automatic(this);
     }
 
     @Override
     public void Start() {
         Auto.Start();
         Lift.Start();
+        Driver.DriveDirection(0.5, 0, 0);
     }
 
     @Override
     public void Update() {
+        super.Update();
         Odometry.Update();
     }
 }
