@@ -146,7 +146,7 @@ public class DriveTrain {
         xError = xTarget - robot.odometry.x;
         yError = yTarget - robot.odometry.y;
         headingTargetGlobal = headingTarget;
-       headingError = headingTargetGlobal - robot.odometry.heading;
+        headingError = headingTargetGlobal - robot.odometry.heading;
 
         angleTransform(headingError);
 

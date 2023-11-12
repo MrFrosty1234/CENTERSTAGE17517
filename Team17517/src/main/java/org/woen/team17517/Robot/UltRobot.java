@@ -1,5 +1,6 @@
 package org.woen.team17517.Robot;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
@@ -12,15 +13,17 @@ public class UltRobot {
     public Odometry odometry;
     public LinearOpMode linearOpMode;
     public Gyro gyro;
-    public Telemetry telemetry;
+    public TelemetryOutput telemetryOutput;
+    public DriveTrainVelocityControl driveTrainVelocityControl;
 
     public UltRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
+        telemetryOutput = new TelemetryOutput(this);
         driveTrain = new DriveTrain(this);
         grabber = new Grabber(this);
-        lift = new Lift(this);
-
         voltageSensorPoint = new VoltageSensorPoint(this);
+        lift = new Lift(this);
+        driveTrainVelocityControl  = new DriveTrainVelocityControl(this);
         gyro = new Gyro(this);
         lighting = new Lighting(this);
         odometry = new Odometry(this);
@@ -32,7 +35,8 @@ public class UltRobot {
         odometry.update();
         gyro.update();
         grabber.update();
-        telemetry.update();
+        telemetryOutput.update();
         voltageSensorPoint.update();
+        driveTrainVelocityControl.update();
     }
 }
