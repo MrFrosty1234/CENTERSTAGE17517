@@ -39,8 +39,5 @@ public class Odometry {
         _leftBackDrive = lbd;
         _rightBackDrive = rbd;
         _rightForwardDrive = rfd;
-
-        _telemetry.addLine("position = ").
-                addData(" X ", X).addData(" Y ", Y).addData("time = ", System.currentTimeMillis());
     }
 }

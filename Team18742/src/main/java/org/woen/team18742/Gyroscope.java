@@ -12,7 +12,7 @@ public class Gyroscope {
 
     public Gyroscope(BaseCollector collector){
         _imu = collector.CommandCode.hardwareMap.get(IMU.class, "imu");
-        _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(xyzOrientation(0,0,0))));
+        _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP)));
         Reset();
     }
 
