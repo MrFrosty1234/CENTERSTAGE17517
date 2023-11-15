@@ -19,12 +19,13 @@ public class OpMode extends LinearOpMode {
                 .build();
 
         waitForStart();
-
+        visionPortal.resumeStreaming();
         while (opModeIsActive()) {
             telemetry.addData("number of parking", pipeLine.pos);
             telemetry.addData("team", pipeLine.team);
             telemetry.addData("camera", visionPortal.getCameraState());
             telemetry.update();
+
 
         }
 
