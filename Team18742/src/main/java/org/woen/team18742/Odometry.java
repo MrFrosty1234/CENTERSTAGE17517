@@ -35,6 +35,8 @@ public class Odometry {
         X += deltaX * cos(-_gyro.GetRadians()) + deltaY * sin(-_gyro.GetRadians());
         Y += -deltaX * sin(-_gyro.GetRadians()) + deltaY * cos(-_gyro.GetRadians());
 
+        _telemetry.addLine("X = " + X + " Y = " + Y);
+
         _leftForwardDrive = lfd;
         _leftBackDrive = lbd;
         _rightBackDrive = rbd;
