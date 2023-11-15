@@ -23,8 +23,9 @@ public class OpMode extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("number of parking", pipeLine.pos);
             telemetry.addData("team", pipeLine.team);
+            telemetry.addData("camera", visionPortal.getCameraState());
             telemetry.update();
-            visionPortal.getCameraState();
+
         }
 
 
