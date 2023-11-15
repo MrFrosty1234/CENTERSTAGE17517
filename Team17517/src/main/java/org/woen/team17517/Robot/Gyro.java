@@ -21,7 +21,7 @@ public class Gyro {
     public Gyro(UltRobot robot){
         this.robot = robot;
 
-        gyro = robot.linearOpMode.hardwareMap.get(IMU.class,"gyro");
+        gyro = robot.linearOpMode.hardwareMap.get(IMU.class,"imu");
         Orientation hubRotation = xyzOrientation(xRotation, yRotation, headingRotation);
 
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(hubRotation);

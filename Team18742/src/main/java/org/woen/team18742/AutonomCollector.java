@@ -17,7 +17,6 @@ public class AutonomCollector extends BaseCollector {
     public void Start() {
         Auto.Start();
         Lift.Start();
-        Driver.DriveDirection(0.5, 0, 0);
     }
 
     @Override
