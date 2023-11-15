@@ -21,6 +21,7 @@ public class TestVisionProcessor implements VisionProcessor {
         return frame;
     }
 
+
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
 
