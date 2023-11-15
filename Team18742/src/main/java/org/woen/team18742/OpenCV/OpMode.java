@@ -18,7 +18,11 @@ public class OpMode extends LinearOpMode {
                 .addProcessor(pipeLine)
                 .build();
 
+        visionPortal.setProcessorEnabled(pipeLine, false);
+
         waitForStart();
+
+        visionPortal.setProcessorEnabled(pipeLine, true );
 
         while (opModeIsActive()) {
             telemetry.addData("number of parking", pipeLine.pos);
