@@ -65,7 +65,7 @@ class PipeLine implements VisionProcessor {
             inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
 
             //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
-            //inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
+            inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
 
 
         Core.bitwise_or(img_range_red, img_range_red, frame);//объединяем два инрейнджа
