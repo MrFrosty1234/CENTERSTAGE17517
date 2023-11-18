@@ -13,7 +13,6 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 
 class PipeLine implements VisionProcessor {
     double x = 640;
@@ -62,14 +61,14 @@ class PipeLine implements VisionProcessor {
         resize(frame, frame, new Size(x, y));// установка разрешения
 
         blur(frame, frame, new Size(10, 10));//размытие для компенсации шумов с камеры
-        if (alyans) {// можно иф для установки цвета команды и только 1 инрейндж
+        // можно иф для установки цвета команды и только 1 инрейндж
             inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
-        } else {
+
             //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
             inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
-        }
 
-        Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
+
+        Core.bitwise_or(img_range_blue, img_range_red, frame);//объединяем два инрейнджа
 
         Rect boundingRect = boundingRect(frame);//boudingRect рисуем прямоугольник
 

@@ -31,12 +31,12 @@ public class Automatic {
     private void PIDMove(double forward, double side) {
         PID pidForward = new PID(0.8, 1, 1, 1), pidSide = new PID(0.8, 1, 1, 1);
 
-        double targetX = _collector.Odometry.X + forward, targetY = _collector.Odometry.Y + side;
+        double targetX = _odometry.X + forward, targetY = _odometry.Y + side;
 
         while (_collector.CommandCode.opModeIsActive() && GetDistance(targetX, targetY) > 2) {
-            SetSpeedWorldCoords(pidForward.Update(targetX - _collector.Odometry.X), pidSide.Update(targetY - _collector.Odometry.Y));
+            SetSpeedWorldCoords(pidForward.Update(targetX - _odometry.X), pidSide.Update(targetY - _odometry.Y));
 
-            _collector.CommandCode.telemetry.addLine("rot = " + GetDistance(targetX, targetY));
+            _collector.CommandCode.telemetry.addLine(GetDistance(targetX, targetY) + "");
 
             _collector.CommandCode.telemetry.update();
 
@@ -69,16 +69,17 @@ public class Automatic {
     }
 
     public void SetSpeedWorldCoords(double speedForward, double speedSide) {
+        speedForward = -speedForward;
+        speedSide = - speedSide;
+
         double x = cos(-_collector.Gyro.GetRadians()) * speedForward - sin(-_collector.Gyro.GetRadians()) * -speedSide,
                 y = sin(-_collector.Gyro.GetRadians()) * speedForward + cos (-_collector.Gyro.GetRadians()) * -speedSide;
-
-        _collector.CommandCode.telemetry.addLine("X = " + x + " Y = " + y);
 
         _collector.Driver.DriveDirection(x, y, 0);
     }
 
     private double GetDistance(double x, double y) {
-        double difX = x - _odometry.X, difY = y - _odometry.Y;
+        double difX = _odometry.X - x, difY = _odometry.Y - y;
 
         return Math.sqrt(difX * difX + difY * difY);
     }
