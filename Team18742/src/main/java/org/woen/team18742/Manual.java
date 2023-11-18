@@ -24,6 +24,7 @@ public class Manual {
 
         boolean A = _collector.CommandCode.gamepad1.square;
         boolean X = _collector.CommandCode.gamepad1.cross;
+        boolean O = _collector.CommandCode.gamepad1.circle;
 
         if (A && System.currentTimeMillis() - _origmillis > 90000)
             _servoPlane.setPosition(0.50);
@@ -37,5 +38,8 @@ public class Manual {
         }
 
         _xOld = X;
+
+        if(O)
+            _collector.Lift.Zeroing();
     }
 }

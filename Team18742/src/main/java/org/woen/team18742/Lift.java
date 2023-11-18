@@ -48,9 +48,15 @@ public class Lift {
     }
 
     public void Start() {
+        Zeroing();
+    }
+
+    public void Zeroing(){
         _liftM1.setPower(-0.3);
 
-        while (!_ending.getState());
+        long timeStart = System.currentTimeMillis();
+
+        while (!_ending.getState() || System.currentTimeMillis() - timeStart < 5000);
 
         _liftM1.setPower(0);
 
