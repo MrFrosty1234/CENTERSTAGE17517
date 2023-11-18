@@ -45,7 +45,6 @@ public class Grabber {
         pixelMotor = (DcMotorEx) this.robot.linearOpMode.hardwareMap.dcMotor.get("pixelMotor");
        // pixelLeftServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoLeft");
         pixelGrabServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
-
     }
 
     public void powerPixelMotor(double power){

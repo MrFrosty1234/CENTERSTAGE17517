@@ -49,6 +49,7 @@ public class DriveTrain {
     public double yError = 0;
     public double headingError = 0;
 
+
     double gyro;
     double encoderToCm = encodersWithoutReductor * motorReductor / (radiusWheelCm * PI);
     double headingTargetGlobal = 0;
@@ -67,7 +68,6 @@ public class DriveTrain {
 
     public DriveTrain(UltRobot robot) {
         this.robot = robot;
-        
 
         left_front_drive = robot.linearOpMode.hardwareMap.dcMotor.get("left_front_drive");
         left_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("left_back_drive");
@@ -93,6 +93,7 @@ public class DriveTrain {
         right_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
 
