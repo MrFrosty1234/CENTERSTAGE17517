@@ -1,5 +1,7 @@
 package org.woen.team18742;
 
+import static java.lang.Math.signum;
+
 public class PID {
     private final double _pKoef, _dKoef, _iKoef, _limit;
     private double _integrall = 0;
@@ -16,6 +18,7 @@ public class PID {
     public void Reset() {
         _integrall = 0;
         ErrOld = 0;
+        Err = 0;
     }
 
     public double Update(double sensor, double target) {
@@ -26,7 +29,7 @@ public class PID {
         _integrall += error;
 
         if(Math.abs(_integrall) >= _limit)
-            _integrall = Math.signum(_integrall) * _limit;
+            _integrall = signum(_integrall) * _limit;
 
         double u = error * _pKoef + _integrall * _iKoef + (error - ErrOld) * _dKoef;
 
