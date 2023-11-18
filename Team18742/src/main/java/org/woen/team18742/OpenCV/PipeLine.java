@@ -68,9 +68,9 @@ class PipeLine implements VisionProcessor {
             inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
 
 
-        Core.bitwise_or(img_range_red, img_range_red, frame);//объединяем два инрейнджа
+        Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
 
-        Rect boundingRect = boundingRect(img_range_red);//boudingRect рисуем прямоугольник
+        Rect boundingRect = boundingRect(img_range_blue);//boudingRect рисуем прямоугольник
 
         centerOfRectX = boundingRect.x + boundingRect.width / 2.0;//координаты центра вычисляем
         centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
