@@ -34,7 +34,7 @@ public class DriveTrainVelocityControl {
     private PIDCmethod speedY = new PIDCmethod(kpY, kiY,kdY,ksRat);
     public double targetX   = 0;
     public double targetY   = 0;
-    public double targetRat = 0;
+    public double targetH = 0;
     public double yEnc;
     public double xEnc;
     public double ratEnc;
@@ -118,7 +118,7 @@ public class DriveTrainVelocityControl {
         this.speedRat.setCoificent(kpRat,kiRat,kdRat,ksRat);
         this.speedX.setCoificent(kpX,kiX,kdX,ksX);
         this.speedY.setCoificent(kpY,kiY,kdY,ksY);
-        double velRat = velocityMoveRat(targetRat);
+        double velRat = velocityMoveRat(targetH);
         double velX = velocityMoveX(targetX);
         double velY = velocityMoveY(targetY);
         left_front_drive.setPower(velX + velY + velRat);
