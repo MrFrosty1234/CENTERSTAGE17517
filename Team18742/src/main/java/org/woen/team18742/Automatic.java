@@ -3,10 +3,12 @@ package org.woen.team18742;
 import static java.lang.Math.abs;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import static java.lang.Math.toDegrees;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -22,15 +24,24 @@ public class Automatic {
     }
 
     public void Start() {
+        PIDMove(20, 10);
+        PIDMove(0, -60);
     }
 
     private void PIDMove(double forward, double side) {
-        PID pidForward = new PID(1, 1, 1, 1), pidSide = new PID(1, 1, 1, 1);
+        PID pidForward = new PID(0.8, 1, 1, 1), pidSide = new PID(0.8, 1, 1, 1);
 
-        double targetX = _collector.Odometry.X + forward, targetY = _collector.Odometry.Y + side;
+        double targetX = _odometry.X + forward, targetY = _odometry.Y + side;
 
         while (_collector.CommandCode.opModeIsActive() && GetDistance(targetX, targetY) > 2) {
-            SetSpeedWorldCoords(pidForward.Update(_collector.Odometry.X, targetX), pidSide.Update(_collector.Odometry.Y, targetY));
+            SetSpeedWorldCoords(pidForward.Update(targetX - _odometry.X), pidSide.Update(targetY - _odometry.Y));
+
+            _collector.CommandCode.telemetry.addLine(GetDistance(targetX, targetY) + "");
+
+            _collector.CommandCode.telemetry.update();
+
+            _collector.Gyro.Update();
+            _odometry.Update();
         }
 
         _collector.Driver.Stop();
@@ -47,29 +58,29 @@ public class Automatic {
     private void turnGyro(double degrees) {
         PID pidTurn = new PID(1, 1, 1, 1);
         do {
-            double angleError = degrees - _collector.Gyro.GetDegrees();
+            double angleError = _collector.Gyro.GetDegrees() - degrees;
             angleError = fixangle(angleError);
             _collector.Driver.DriveDirection(0, 0, pidTurn.Update(angleError));
-        } while (_collector.CommandCode.opModeIsActive() && abs(pidTurn.ErrOld) > 2);
+
+            _collector.Gyro.Update();
+            _odometry.Update();
+        } while (_collector.CommandCode.opModeIsActive() && abs(pidTurn.Err) > 2);
         _collector.Driver.Stop();
     }
 
     public void SetSpeedWorldCoords(double speedForward, double speedSide) {
-        double vectorInRotation = Math.atan2(speedSide, speedForward);
+        speedForward = -speedForward;
+        speedSide = - speedSide;
 
-        double worldVectorRotation = vectorInRotation - _collector.Gyro.GetRadians();
+        double x = cos(-_collector.Gyro.GetRadians()) * speedForward - sin(-_collector.Gyro.GetRadians()) * -speedSide,
+                y = sin(-_collector.Gyro.GetRadians()) * speedForward + cos (-_collector.Gyro.GetRadians()) * -speedSide;
 
-        double power = speedForward * speedForward + speedSide * speedSide;
-
-        _collector.Driver.DriveDirection(power * cos(-worldVectorRotation) + power * sin(-worldVectorRotation),
-                -power * sin(-worldVectorRotation) + power * cos(-worldVectorRotation), 0);
-
+        _collector.Driver.DriveDirection(x, y, 0);
     }
 
-
     private double GetDistance(double x, double y) {
-        double difX = x - _odometry.X, difY = y - _odometry.Y;
+        double difX = _odometry.X - x, difY = _odometry.Y - y;
 
-        return difX * difX + difY * difY;
+        return Math.sqrt(difX * difX + difY * difY);
     }
 }

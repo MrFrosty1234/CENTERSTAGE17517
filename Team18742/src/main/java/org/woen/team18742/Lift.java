@@ -6,6 +6,8 @@ import static java.lang.Math.abs;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import java.math.BigDecimal;
+
 public class Lift {
     private DcMotor _grabberDrive = null;
     private DcMotor _liftM1 = null;
@@ -46,7 +48,12 @@ public class Lift {
         _servoLift2.setPosition(0);
     }
 
+    public boolean isATarget(){
+        return Math.abs(liftPid.Err) < 2;
+    }
+
     public void Update() {
+
         boolean X = _collector.CommandCode.gamepad1.left_bumper;
         boolean Y = _collector.CommandCode.gamepad1.triangle;
         boolean O = _collector.CommandCode.gamepad1.circle;

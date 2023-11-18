@@ -15,7 +15,7 @@ public  class PIDCmethod {
 
     }
     double kp,kd,ki,ks = 1;
-    public void setCoificent(double ki,double kp,double kd,double ks){
+    public void setCoificent(double kp,double ki,double kd,double ks){
 
         this.kp = kp;
         this.ki = ki;

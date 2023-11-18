@@ -8,7 +8,8 @@ public class PidRegulator { //TODO Feedforward
     double kD = 0;
     double ui = 0;
     double errold;
-    double told; //TODO ElapsedTime
+    double told; //TODO ElapsedTimeA
+    double u_max;
 
     public PidRegulator(double p, double i, double d) {
         kP = p;
@@ -20,13 +21,14 @@ public class PidRegulator { //TODO Feedforward
         double time = System.currentTimeMillis() / 1000.0;
         double up = err * kP;
         ui += (err * kI) * (time - told);
-        if (abs(ui) > 0.25) { //TODO parameter
-            ui = 0.25;
+        if (abs(ui) > u_max) { //TODO parameter
+            ui = u_max;
         }
         double ud = (err - errold) * kD / (time - told);
         errold = err;
         told = time;
-        return up + ud + ui;
+       double u = up + ud + ui;
+        return u;
     }
 
     public void reset() {

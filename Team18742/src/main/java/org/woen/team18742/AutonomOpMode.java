@@ -19,6 +19,7 @@ public class AutonomOpMode extends LinearOpMode {
 
         while (opModeIsActive()) {
             _collector.Update();
+            telemetry.update();
         }
     }
 }
