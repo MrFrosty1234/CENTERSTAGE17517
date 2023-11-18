@@ -1,9 +1,9 @@
 package org.woen.team18742;
 
 public class Manual {
-    private TeleOpCollector _collector;
+    private BaseCollector _collector;
 
-    public Manual(TeleOpCollector collector) {
+    public Manual(BaseCollector collector) {
         _collector = collector;
     }
 
