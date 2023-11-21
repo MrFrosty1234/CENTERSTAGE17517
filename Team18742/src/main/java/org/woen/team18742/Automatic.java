@@ -23,28 +23,14 @@ public class Automatic {
         _odometry = collector.Odometry;
     }
 
-    public void Start() {
-        PIDMove(20, 10);
-        PIDMove(0, -60);
-    }
+    private PID _pidForward = new PID(0.8, 1, 1, 1), _pidSide = new PID(0.8, 1, 1, 1);
 
-    private void PIDMove(double forward, double side) {
-        PID pidForward = new PID(0.8, 1, 1, 1), pidSide = new PID(0.8, 1, 1, 1);
+    public void PIDMove(double forward, double side) {
+        _movedTargetX = _odometry.X + forward;
+        _movedTargetY = _odometry.Y + side;
 
-        double targetX = _odometry.X + forward, targetY = _odometry.Y + side;
-
-        while (_collector.CommandCode.opModeIsActive() && GetDistance(targetX, targetY) > 2) {
-            SetSpeedWorldCoords(pidForward.Update(targetX - _odometry.X), pidSide.Update(targetY - _odometry.Y));
-
-            _collector.CommandCode.telemetry.addLine(GetDistance(targetX, targetY) + "");
-
-            _collector.CommandCode.telemetry.update();
-
-            _collector.Gyro.Update();
-            _odometry.Update();
-        }
-
-        _collector.Driver.Stop();
+        _pidForward.Reset();
+        _pidSide.Reset();
     }
 
     double fixangle(double degrees) {
@@ -70,10 +56,9 @@ public class Automatic {
 
     public void SetSpeedWorldCoords(double speedForward, double speedSide) {
         speedForward = -speedForward;
-        speedSide = - speedSide;
 
-        double x = cos(-_collector.Gyro.GetRadians()) * speedForward - sin(-_collector.Gyro.GetRadians()) * -speedSide,
-                y = sin(-_collector.Gyro.GetRadians()) * speedForward + cos (-_collector.Gyro.GetRadians()) * -speedSide;
+        double x = cos(-_collector.Gyro.GetRadians()) * speedForward - sin(-_collector.Gyro.GetRadians()) * speedSide,
+                y = sin(-_collector.Gyro.GetRadians()) * speedForward + cos(-_collector.Gyro.GetRadians()) * speedSide;
 
         _collector.Driver.DriveDirection(x, y, 0);
     }
@@ -82,5 +67,18 @@ public class Automatic {
         double difX = _odometry.X - x, difY = _odometry.Y - y;
 
         return Math.sqrt(difX * difX + difY * difY);
+    }
+
+    private double _movedTargetX = 0, _movedTargetY = 0;
+
+    public boolean isMovedEnd() {
+        return GetDistance(_movedTargetX, _movedTargetY) > 2;
+    }
+
+    public void Update() {
+        if (isMovedEnd())
+            _collector.Driver.Stop();
+        else
+            SetSpeedWorldCoords(_pidForward.Update(_odometry.X - _movedTargetX), _pidSide.Update(_odometry.Y - _movedTargetY));
     }
 }

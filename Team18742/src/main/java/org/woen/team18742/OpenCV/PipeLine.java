@@ -68,7 +68,7 @@ class PipeLine implements VisionProcessor {
             inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
 
 
-        Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
+        Core.bitwise_or(img_range_blue, img_range_red, frame);//объединяем два инрейнджа
 
         Rect boundingRect = boundingRect(frame);//boudingRect рисуем прямоугольник
 

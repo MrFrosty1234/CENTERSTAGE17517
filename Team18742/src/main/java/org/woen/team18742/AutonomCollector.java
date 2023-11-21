@@ -13,22 +13,20 @@ public class AutonomCollector extends BaseCollector {
 
         Odometry = new Odometry(this);
         Auto = new Automatic(this);
-        _m = new Manual(this);
     }
 
     @Override
     public void Start() {
-        //Auto.Start();
         Lift.Start();
+
+        Auto.PIDMove(10, 0);
     }
 
     @Override
     public void Update() {
         super.Update();
         Odometry.Update();
-        _m.Update();
 
-        if(CommandCode.gamepad1.square)
-            Auto.Start();
+        Auto.Update();
     }
 }

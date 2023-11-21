@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @TeleOp(name = "Test Pipeline OpMode")
-public class OpMode extends LinearOpMode {
+public class OpModeCamera extends LinearOpMode {
     VisionPortal visionPortal;
     PipeLine pipeLine = new PipeLine();
     @Override
