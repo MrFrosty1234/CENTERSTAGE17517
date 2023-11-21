@@ -19,7 +19,7 @@ public class ConfigVelocityOpMode extends LinearOpMode {
             double rightStickX = gamepad1.right_stick_x;
             robot.driveTrainVelocityControl.targetX =  leftStickX*2400;
             robot.driveTrainVelocityControl.targetY =  leftStickY*2400;
-            robot.driveTrainVelocityControl.targetRat = rightStickX*2400;
+            robot.driveTrainVelocityControl.targetH = rightStickX*2400;
             robot.voltageSensorPoint.update();
             robot.telemetryOutput.update();
             robot.driveTrainVelocityControl.update();

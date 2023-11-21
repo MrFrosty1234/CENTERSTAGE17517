@@ -46,7 +46,7 @@ public class TelemetryOutput {
         if(velocity){
             robot.linearOpMode.telemetry.addData("TargetX", robot.driveTrainVelocityControl.targetX);
             robot.linearOpMode.telemetry.addData("TargetY",robot.driveTrainVelocityControl.targetY);
-            robot.linearOpMode.telemetry.addData("TargetRat",robot.driveTrainVelocityControl.targetRat);
+            robot.linearOpMode.telemetry.addData("TargetH",robot.driveTrainVelocityControl.targetH);
             robot.linearOpMode.telemetry.addData("SpeedX", robot.driveTrainVelocityControl.xEnc);
             robot.linearOpMode.telemetry.addData("SpeedY", robot.driveTrainVelocityControl.yEnc);
             robot.linearOpMode.telemetry.addData("SpeedRat", robot.driveTrainVelocityControl.ratEnc);
