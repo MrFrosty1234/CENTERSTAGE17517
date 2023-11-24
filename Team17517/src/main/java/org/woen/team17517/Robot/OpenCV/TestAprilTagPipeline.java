@@ -59,7 +59,6 @@ public class TestAprilTagPipeline {
 
         startPipeline();
 
-        while (robot.linearOpMode.opModeIsActive()) {
             List<AprilTagDetection> detections = aprilTagPipeline.getDetections();
 
             for (AprilTagDetection detection : detections) {
@@ -102,7 +101,6 @@ public class TestAprilTagPipeline {
 
             }
             robot.linearOpMode.telemetry.update();
-        }
 
         visionPortal.close();
     }
