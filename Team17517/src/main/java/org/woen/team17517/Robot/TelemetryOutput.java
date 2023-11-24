@@ -12,6 +12,7 @@ public class TelemetryOutput {
     public static boolean grabber = false;
     public static boolean odometry = false;
     public static boolean velocity = false;
+    public static boolean odometryAndCamera = false;
 
     public TelemetryOutput(UltRobot robot){
         this.robot = robot;
@@ -50,6 +51,12 @@ public class TelemetryOutput {
             robot.linearOpMode.telemetry.addData("SpeedX", robot.driveTrainVelocityControl.xEnc);
             robot.linearOpMode.telemetry.addData("SpeedY", robot.driveTrainVelocityControl.yEnc);
             robot.linearOpMode.telemetry.addData("SpeedRat", robot.driveTrainVelocityControl.ratEnc);
+        }
+        if(odometryAndCamera){
+            robot.linearOpMode.telemetry.addLine("Camera position:")
+                    .addData("x", robot.testAprilTagPipeline.fieldCameraPos.get(0))
+                    .addData("y", robot.testAprilTagPipeline.fieldCameraPos.get(1))
+                    .addData("z", robot.testAprilTagPipeline.fieldCameraPos.get(2));
         }
          robot.linearOpMode.telemetry.update();
     }

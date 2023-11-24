@@ -31,7 +31,10 @@ public class TestAprilTagPipeline {
 
     UltRobot robot;
     public VectorF fieldCameraPos;
-
+    public double x;
+    public double y;
+    public double z;
+    public VectorF rawTagPoseVector;
 
     public TestAprilTagPipeline(UltRobot robot) {
         this.robot = robot;
@@ -39,6 +42,12 @@ public class TestAprilTagPipeline {
 
 
     void startPipeline() {
+        dashboard = FtcDashboard.getInstance();
+
+        aprilTagPipeline = new AprilTagProcessor.Builder()
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .setDrawAxes(true)
+                .build();
         visionPortal = new VisionPortal.Builder()
                 .setCamera(robot.linearOpMode.hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(colorDetecionPipeLine)
@@ -46,61 +55,50 @@ public class TestAprilTagPipeline {
                 .build();
     }
 
-    public void visionPortalWork(){
-
-
-        dashboard = FtcDashboard.getInstance();
-
-        aprilTagPipeline = new AprilTagProcessor.Builder()
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-                .setDrawAxes(true)
-                .build();
-
+    public void visionPortalWork() {
 
         startPipeline();
 
-            List<AprilTagDetection> detections = aprilTagPipeline.getDetections();
+        List<AprilTagDetection> detections = aprilTagPipeline.getDetections();
 
-            for (AprilTagDetection detection : detections) {
-                if (detection != null)
-                    if (detection.rawPose != null) {
-                        robot.linearOpMode.telemetry.addData("detection id", detection.id);
+        for (AprilTagDetection detection : detections) {
+            if (detection != null)
+                if (detection.rawPose != null) {
+                    robot.linearOpMode.telemetry.addData("detection id", detection.id);
 
-                        AprilTagPoseRaw rawTagPose = detection.rawPose;
-                        VectorF rawTagPoseVector = new VectorF(
-                                (float) rawTagPose.x, (float) rawTagPose.y, (float) rawTagPose.z);
+                    AprilTagPoseRaw rawTagPose = detection.rawPose;
+                    rawTagPoseVector = new VectorF(
+                            (float) rawTagPose.x, (float) rawTagPose.y, (float) rawTagPose.z);
 
-                        AprilTagMetadata metadata = detection.metadata;
+                    AprilTagMetadata metadata = detection.metadata;
 
-                        VectorF fieldTagPos = metadata.fieldPosition;
+                    VectorF fieldTagPos = metadata.fieldPosition;
 
-                        Quaternion fieldTagQ = metadata.fieldOrientation;
+                    Quaternion fieldTagQ = metadata.fieldOrientation;
 
-                        VectorF rotatedPosVector = fieldTagQ.applyToVector(detection.rawPose.R.inverted().multiplied(rawTagPoseVector));
+                    VectorF rotatedPosVector = fieldTagQ.applyToVector(detection.rawPose.R.inverted().multiplied(rawTagPoseVector));
 
-                        fieldCameraPos = fieldTagPos.subtracted(rotatedPosVector);
+                    fieldCameraPos = fieldTagPos.subtracted(rotatedPosVector);
 
-                        double x = DistanceUnit.CM.fromInches(fieldCameraPos.get(0));
-                        double y = DistanceUnit.CM.fromInches(fieldCameraPos.get(1));
-                        double z = DistanceUnit.CM.fromInches(fieldCameraPos.get(2));
+                     x = DistanceUnit.CM.fromInches(fieldCameraPos.get(0));
+                     y = DistanceUnit.CM.fromInches(fieldCameraPos.get(1));
+                     z = DistanceUnit.CM.fromInches(fieldCameraPos.get(2));
 
-                       robot.linearOpMode.telemetry.addLine("Camera position:")
-                                .addData("x", fieldCameraPos.get(0))
-                                .addData("y", fieldCameraPos.get(1))
-                                .addData("z", fieldCameraPos.get(2));
 
-                        TelemetryPacket telemetryPacket = new TelemetryPacket();
-                        telemetryPacket.addLine("AprilTag test");
-                        Canvas canvas = telemetryPacket.fieldOverlay();
-                        canvas.setFill("#FFA000").fillCircle(DistanceUnit.INCH.fromCm(x), DistanceUnit.INCH.fromCm(y), DistanceUnit.INCH.fromCm(22.85));
-                        telemetryPacket.put("x", x);
-                        telemetryPacket.put("y", y);
-                        dashboard.sendTelemetryPacket(telemetryPacket);
 
-                    }
+                    TelemetryPacket telemetryPacket = new TelemetryPacket();
+                    telemetryPacket.addLine("AprilTag test");
+                    Canvas canvas = telemetryPacket.fieldOverlay();
+                    canvas.setFill("#FFA000").fillCircle(DistanceUnit.INCH.fromCm(x), DistanceUnit.INCH.fromCm(y), DistanceUnit.INCH.fromCm(22.85));
+                    telemetryPacket.put("x", x);
+                    telemetryPacket.put("y", y);
+                    dashboard.sendTelemetryPacket(telemetryPacket);
+                    rawTagPoseVector = rawTagPoseVector;
 
-            }
-            robot.linearOpMode.telemetry.update();
+                }
+
+        }
+        robot.linearOpMode.telemetry.update();
 
         visionPortal.close();
     }

@@ -1,5 +1,9 @@
 package org.woen.team17517.Robot;
 
+import static java.lang.Math.sqrt;
+
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+
 public class updateCameraAndOdometry {
 
     UltRobot robot;
@@ -9,13 +13,15 @@ public class updateCameraAndOdometry {
     public updateCameraAndOdometry(UltRobot robot) {
         this.robot = robot;
     }
-    public void update(){
+    public void update() {
         robot.testAprilTagPipeline.visionPortalWork();
+        double x = robot.testAprilTagPipeline.x;
+        double y = robot.testAprilTagPipeline.y;
+        double z = robot.testAprilTagPipeline.z;
 
-        if(robot.testAprilTagPipeline.fieldCameraPos.get(0) < 50){
+        if ((sqrt(x*x + y*y + z*z) - robot.testAprilTagPipeline.rawTagPoseVector) < 50) {
             preority = false;
-        }
-        else {
+        } else {
             preority = true;
         }
         robot.odometry.update();
