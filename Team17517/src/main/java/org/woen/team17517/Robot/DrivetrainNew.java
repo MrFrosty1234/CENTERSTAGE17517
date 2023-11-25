@@ -55,9 +55,9 @@ public class DrivetrainNew {
     }
 
     void update() {
-        if (autoMode = true) {
-            double x = robot.odometry.x;
-            double y = robot.odometry.y;
+        if (autoMode) {
+            double x = robot.updateCameraAndOdometry.coords[0];
+            double y = robot.updateCameraAndOdometry.coords[1];
             double h = robot.odometry.heading;
             errX = targetX - x;
             errY = targetY - y;
