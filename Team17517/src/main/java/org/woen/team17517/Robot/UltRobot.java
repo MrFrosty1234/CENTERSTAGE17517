@@ -8,6 +8,7 @@ import org.woen.team17517.Robot.OpenCV.TestAprilTagPipeline;
 
 public class UltRobot {
     public DriveTrain driveTrain;
+    public DrivetrainNew drivetrainNew;
     public Grabber grabber;
     public Lift lift;
     public Lighting lighting;
@@ -33,6 +34,7 @@ public class UltRobot {
         updateCameraAndOdometry = new updateCameraAndOdometry(this);
         testAprilTagPipeline = new TestAprilTagPipeline(this);
         odometry = new Odometry(this);
+        drivetrainNew = new DrivetrainNew(this);
     }
 
     public void allUpdate() {
