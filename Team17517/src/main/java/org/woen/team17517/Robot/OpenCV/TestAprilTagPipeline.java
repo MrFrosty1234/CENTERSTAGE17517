@@ -57,8 +57,6 @@ public class TestAprilTagPipeline {
 
     public void visionPortalWork() {
 
-        startPipeline();
-
         List<AprilTagDetection> detections = aprilTagPipeline.getDetections();
 
         for (AprilTagDetection detection : detections) {

@@ -9,21 +9,28 @@ public class updateCameraAndOdometry {
     UltRobot robot;
 
     public boolean preority = true;
+    public static double cameraToOdometrySafeEncs = 50;
+    double[] coords = new double[3];
 
     public updateCameraAndOdometry(UltRobot robot) {
         this.robot = robot;
     }
     public void update() {
         robot.testAprilTagPipeline.visionPortalWork();
-        double x = robot.testAprilTagPipeline.x;
-        double y = robot.testAprilTagPipeline.y;
-        double z = robot.testAprilTagPipeline.z;
+        double xVector = robot.testAprilTagPipeline.rawTagPoseVector.get(0);
+        double yVector = robot.testAprilTagPipeline.rawTagPoseVector.get(1);
+        double zVector = robot.testAprilTagPipeline.rawTagPoseVector.get(2);
 
-        if ((sqrt(x*x + y*y + z*z) - robot.testAprilTagPipeline.rawTagPoseVector) < 50) {
+        if (sqrt(xVector * xVector + yVector * yVector + zVector * zVector) < cameraToOdometrySafeEncs) {
             preority = false;
+            coords[0] = xVector;
+            coords[1] = yVector;
+            robot.odometry.x = coords[0];
+            robot.odometry.y = coords[1];
         } else {
+            coords[0] = robot.odometry.x;
+            coords[1] = robot.odometry.y;
             preority = true;
         }
-        robot.odometry.update();
     }
 }
