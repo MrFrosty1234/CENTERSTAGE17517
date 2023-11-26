@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.Range;
 
 @Config
-public class Lift {
+public class Lift implements RobotModule {
     public static double kP = 0.005964;
     public static double kI = 0;
     public static double kD = 0;
@@ -27,12 +27,9 @@ public class Lift {
     public Lift(UltRobot robot) {
         this.robot = robot;
 
-
         liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor");
         liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        buttonUp = this.robot.linearOpMode.hardwareMap.digitalChannel.get("buttonUp");
-        buttonDown = this.robot.linearOpMode.hardwareMap.digitalChannel.get("buttonDown");
         buttonUp.setMode(DigitalChannel.Mode.INPUT);
         buttonDown.setMode(DigitalChannel.Mode.INPUT);
     }
@@ -108,6 +105,7 @@ public class Lift {
     public enum LiftPosition {
         ZERO(0), LOW(780), MIDDLE(1008), UP(1108);
         public int value;
+
         LiftPosition(int value) {
             this.value = value;
         }

@@ -11,8 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.woen.team17517.R;
 
-public class Odometry {
+public class Odometry implements RobotModule {
     public double x = 0, y = 0, heading = 0;
     double gyro;
     double encoderToCm = 24 * 20 / (9.8 * PI) / (124 / 121.8);
@@ -41,6 +42,11 @@ public class Odometry {
         left_back_drive.setDirection(DcMotor.Direction.FORWARD);
         right_front_drive.setDirection(DcMotor.Direction.REVERSE);
         right_back_drive.setDirection(DcMotor.Direction.REVERSE);
+    }
+
+    @Override
+    public boolean isAtPosition() {
+        return true;
     }
 
     public void update() {

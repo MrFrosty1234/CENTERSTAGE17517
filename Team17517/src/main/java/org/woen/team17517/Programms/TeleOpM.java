@@ -16,28 +16,41 @@ public class TeleOpM extends LinearOpMode {
     boolean oldCircle = false;
     boolean oldTriangle = false;
     boolean oldBumper = false;
+    boolean oldDpad_Up = false;
     UltRobot robot;
     boolean speedcontrol = false;
-
+    int k = 1;
+    int kGrab = 1;
+    public static double grabOpen = 0.25;
+    public static double grabClose = 0;
+    public static double perekidStart = 0.85;
+    public static double perekidFinish = 0.45;
     @Override
     public void runOpMode() {
         robot = new UltRobot(this);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
+        int grab = 0;
         waitForStart();
-        robot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
-        robot.lighting.lightMode = Lighting.LightningMode.SMOOTH;
-        robot.lift.liftPosition = Lift.LiftPosition.ZERO;
+       robot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
+       robot.lighting.lightMode = Lighting.LightningMode.SMOOTH;
+       robot.lift.liftPosition = Lift.LiftPosition.ZERO;
         while (opModeIsActive()) {
+            boolean dpad_up = gamepad1.dpad_up;
             boolean circle = gamepad1.circle;
             boolean square = gamepad1.square;
             boolean triangle = gamepad1.triangle;
             boolean cross = gamepad1.cross;
+            if(gamepad1.left_trigger > 0.1)
+                k = -1;
+            else
+                k = 1;
+           if (square) {
+                robot.grabber.pixelMotor.setPower(0.5 * k);
+           }
+           else
+               robot.grabber.pixelMotor.setPower(0);
 
-            if (square && !oldSquare) {
-                graberPosition = !graberPosition;
-            }
             if (gamepad1.ps) {
                 robot.lift.reset();
             }
@@ -46,7 +59,7 @@ public class TeleOpM extends LinearOpMode {
                 robot.lift.liftMode = Lift.LiftMode.AUTO;
                 robot.lift.liftPosition = Lift.LiftPosition.ZERO;
             }
-
+/*
             if (gamepad1.dpad_up) {
                 robot.lift.liftMode = Lift.LiftMode.AUTO;
                 robot.lift.liftPosition = Lift.LiftPosition.UP;
@@ -61,47 +74,44 @@ public class TeleOpM extends LinearOpMode {
                 robot.lift.liftPosition = Lift.LiftPosition.MIDDLE;
             }
 
+
+ */
+            if(dpad_up && !oldDpad_Up){
+                robot.grabber.positionGrabber();
+            }
+            if(circle && !oldCircle){
+                robot.grabber.positionPerekid();
+            }
             if (gamepad1.left_trigger > 0.1) {
                 robot.lift.liftMode = Lift.LiftMode.MANUAL;
-                robot.lift.liftPos = !robot.lift.liftPos;
             } else if (triangle || cross) {
                 robot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
-                robot.lift.liftPos = !robot.lift.liftPos;
             }
             if (triangle) {
                 robot.lift.power = 1.0;
-                robot.lift.liftPos = !robot.lift.liftPos;
             }
             if (cross) {
                 robot.lift.power = -0.1;
-                robot.lift.liftPos = !robot.lift.liftPos;
+
             }
             if (!triangle && !cross) {
                 robot.lift.power = 0.1;
-                robot.lift.liftPos = !robot.lift.liftPos;
+
             }
-            robot.odometry.update();
-            robot.lift.update();
 
 
-            telemetry.addData("x", robot.odometry.x);
-            telemetry.addData("y", robot.odometry.y);
-            telemetry.addData("heading", robot.odometry.heading);
-            telemetry.addData("motor", robot.lift.liftMotor.getCurrentPosition());
-            telemetry.addData("top", robot.lift.buttonUp.getState());
-            telemetry.addData("down", robot.lift.buttonDown.getState());
-            robot.lighting.update();
             robot.driveTrain.displayEncoders();
 
             double axial = -gamepad1.left_stick_y * speed;
             double lateral = -gamepad1.left_stick_x * speed;
             double yaw = -gamepad1.right_stick_x * speed;
 
+            robot.allUpdate();
 
             if (gamepad1.right_bumper) {
-                axial /= 3;
-                lateral /= 3;
-                yaw /= 3;
+                axial /= 1.5;
+                lateral /= 1.5;
+                yaw /= 1.5;
             }
 
             robot.grabber.enable(gamepad1.square);
@@ -111,7 +121,9 @@ public class TeleOpM extends LinearOpMode {
             oldSquare = square;
             oldCircle = circle;
             oldTriangle = triangle;
+            oldDpad_Up = dpad_up;
             telemetry.update();
+
         }
     }
     double moveLikeKTM(double power){
