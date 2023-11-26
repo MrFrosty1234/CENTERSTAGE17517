@@ -28,7 +28,7 @@ public  class PIDCmethod {
     public double PID(double target,double voltage,double enc,double ks) {
         double time1 = System.currentTimeMillis() / 1000.0-time;
         double wrong = target - enc;
-        double P = kp * wrong;
+        P = kp * wrong;
 
         I += wrong * time1 * ki;
 

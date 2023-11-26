@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 
 @Config
-public class DriveTrain {
+public class DriveTrain{
 
     public static double mechanumSideKf = 1.5;
     public static double maxPower = 1.0;

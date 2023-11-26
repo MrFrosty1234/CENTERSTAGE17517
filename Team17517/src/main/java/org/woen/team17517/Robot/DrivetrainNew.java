@@ -1,9 +1,7 @@
 
 package org.woen.team17517.Robot;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-
-public class DrivetrainNew {
+public class DrivetrainNew implements RobotModule{
 
     UltRobot robot = null;
 
@@ -54,7 +52,7 @@ public class DrivetrainNew {
         this.robot = robot;
     }
 
-    void update() {
+     public void update() {
         if (autoMode) {
             double x = robot.updateCameraAndOdometry.coords[0];
             double y = robot.updateCameraAndOdometry.coords[1];
@@ -71,12 +69,12 @@ public class DrivetrainNew {
                 errH = errH + 360;
             }
 
-            robot.driveTrainVelocityControl.targetY = pidH.update(errH);
-            robot.driveTrainVelocityControl.targetX = pidX.update(errX);
-            robot.driveTrainVelocityControl.targetH = pidY.update(errY);
+            robot.driveTrainVelocityControl.targetH = pidH.update(errH);
+            robot.driveTrainVelocityControl.vector.x = pidX.update(errX);
+            robot.driveTrainVelocityControl.vector.y = pidY.update(errY);
         }
     }
-    boolean isAtTarget() {
+     public boolean isAtPosition() {
         if((errX < minx) && (errY <miny) && (errH < minh)){
             return true;
         }

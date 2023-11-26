@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 @Config
-public class TelemetryOutput {
+public class TelemetryOutput implements RobotModule{
     UltRobot robot;
     public static boolean lift = false;
     public static boolean driveTrain = false;
@@ -18,6 +18,12 @@ public class TelemetryOutput {
         this.robot = robot;
         robot.linearOpMode.telemetry = new MultipleTelemetry(robot.linearOpMode.telemetry,FtcDashboard.getInstance().getTelemetry());
     }
+
+    @Override
+    public boolean isAtPosition() {
+        return true;
+    }
+
     public void update(){
         if(lift) {
             robot.linearOpMode.telemetry.addData("liftEncs", robot.lift.liftMotor.getCurrentPosition());
@@ -45,9 +51,9 @@ public class TelemetryOutput {
             robot.linearOpMode.telemetry.addData("heading",robot.odometry.heading);
         }
         if(velocity){
-            robot.linearOpMode.telemetry.addData("TargetX", robot.driveTrainVelocityControl.targetX);
-            robot.linearOpMode.telemetry.addData("TargetY",robot.driveTrainVelocityControl.targetY);
-            robot.linearOpMode.telemetry.addData("TargetH",robot.driveTrainVelocityControl.targetH);
+            robot.linearOpMode.telemetry.addData("TargetX", robot.driveTrainVelocityControl.vector.x);
+            robot.linearOpMode.telemetry.addData("TargetY",robot.driveTrainVelocityControl.vector.y);
+            robot.linearOpMode.telemetry.addData("TargetRat",robot.driveTrainVelocityControl.targetH);
             robot.linearOpMode.telemetry.addData("SpeedX", robot.driveTrainVelocityControl.xEnc);
             robot.linearOpMode.telemetry.addData("SpeedY", robot.driveTrainVelocityControl.yEnc);
             robot.linearOpMode.telemetry.addData("SpeedRat", robot.driveTrainVelocityControl.ratEnc);

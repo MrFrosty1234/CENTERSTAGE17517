@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
-public class Grabber {
+public class Grabber implements RobotModule{
     UltRobot robot;
     public DcMotorEx pixelMotor;
     // AnalogInput pixelSensorRight;
@@ -49,6 +49,11 @@ public class Grabber {
 
     public void powerPixelMotor(double power){
         pixelMotor.setPower(power * 0.5);
+    }
+
+    @Override
+    public boolean isAtPosition() {
+        return true;
     }
 
     public void update() {

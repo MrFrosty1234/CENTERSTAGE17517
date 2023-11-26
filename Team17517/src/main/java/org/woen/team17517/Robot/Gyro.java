@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-public class Gyro {
+public class Gyro implements RobotModule{
     UltRobot robot;
 
     public static double xRotation = 0;
@@ -31,10 +31,17 @@ public class Gyro {
     public void reset(){
         gyro.resetYaw();
     }
+
+    @Override
+    public boolean isAtPosition() {
+        return false;
+    }
+
     public void update(){
         angle = gyro.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
     public double getAngle(){
         return angle;
     }
+
 }
