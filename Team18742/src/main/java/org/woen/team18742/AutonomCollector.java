@@ -6,8 +6,6 @@ public class AutonomCollector extends BaseCollector {
     public Automatic Auto;
     public Odometry Odometry;
 
-    private Manual _m;
-
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
 
@@ -17,16 +15,13 @@ public class AutonomCollector extends BaseCollector {
 
     @Override
     public void Start() {
+        Auto.Start();
         Lift.Start();
-
-        Auto.PIDMove(10, 0);
     }
 
     @Override
     public void Update() {
         super.Update();
         Odometry.Update();
-
-        Auto.Update();
     }
 }

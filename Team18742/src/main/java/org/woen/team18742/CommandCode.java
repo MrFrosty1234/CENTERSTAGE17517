@@ -19,6 +19,7 @@ public class CommandCode extends LinearOpMode {
         while (opModeIsActive()) {
             _collector.Update();
             telemetry.update();
+            _collectorL
         }
     }
 }

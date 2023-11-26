@@ -20,7 +20,6 @@ public class Odometry {
         _gyro = collector.Gyro;
         _telemetry = collector.CommandCode.telemetry;
     }
-
     public void Update(){
         double lfd = _driverTrain.GetLeftForwardIncoder();
         double lbd = _driverTrain.GetLeftBackIncoder();
