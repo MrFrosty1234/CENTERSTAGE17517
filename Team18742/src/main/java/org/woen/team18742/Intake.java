@@ -16,12 +16,13 @@ public class Intake {
 
     public Intake(BaseCollector collector) {
         _collector = collector;
-
+        gripper = _collector.CommandCode.hardwareMap.get(Servo.class, "gripok");
         brushMotor = _collector.CommandCode.hardwareMap.get(DcMotor.class, "brushMotor");
+        clamp = _collector.CommandCode.hardwareMap.get(Servo.class, "gripokiu");
     }
     double speed;
-    double servoGripperreturn = 0.7;
-    double servoGripper = 0.2;
+    double servoGripperreturn = 0.9;
+    double servoGripper = 0.1;
 
     void setGripper(boolean grip) {
         if (grip) {

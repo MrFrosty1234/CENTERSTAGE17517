@@ -19,8 +19,8 @@ public class Lift {
     public Lift(BaseCollector collector) {
         _collector = collector;
 
-        _liftM1 = _collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor1");
-        _ending = _collector.CommandCode.hardwareMap.get(DigitalChannel.class,"ending");
+
+       // _ending = _collector.CommandCode.hardwareMap.get(DigitalChannel.class,"ending");
         _liftM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _servoLift1 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift1");
         _servoLift2 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");

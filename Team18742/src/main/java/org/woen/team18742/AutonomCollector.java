@@ -15,7 +15,7 @@ public class AutonomCollector extends BaseCollector {
 
     @Override
     public void Start() {
-        Auto.Start();
+       // Auto.Start();
         Lift.Start();
     }
 
