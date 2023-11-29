@@ -27,6 +27,7 @@ public class Manual {
         boolean O = _collector.CommandCode.gamepad1.dpad_up;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
         boolean clamp = _collector.CommandCode.gamepad1.cross;
+
        _collector.Intake.setGripper(grip);
 
         if(grip && !oldgrip)

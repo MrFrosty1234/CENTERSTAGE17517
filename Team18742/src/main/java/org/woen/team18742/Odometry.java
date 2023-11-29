@@ -4,6 +4,8 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.woen.team18742.OpenCV.CVOdometry;
 
 public class Odometry {
     public double X = 0, Y = 0;
@@ -15,7 +17,10 @@ public class Odometry {
 
     private Telemetry _telemetry;
 
+    private CVOdometry _CVOdometry;
+
     public Odometry(BaseCollector collector){
+        _CVOdometry = new CVOdometry(this, collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1"));
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
         _telemetry = collector.CommandCode.telemetry;
@@ -38,5 +43,11 @@ public class Odometry {
         _leftBackDrive = lbd;
         _rightBackDrive = rbd;
         _rightForwardDrive = rfd;
+
+        _CVOdometry.Update();
+    }
+
+    public void Start(){
+        _CVOdometry.Start();
     }
 }

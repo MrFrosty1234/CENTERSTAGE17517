@@ -24,6 +24,6 @@ public class BaseCollector {
 
     public void Update(){
         Gyro.Update();
-        Intake.update();
+        Intake.Update();
     }
 }
