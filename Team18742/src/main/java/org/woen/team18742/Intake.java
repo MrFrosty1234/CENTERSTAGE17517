@@ -23,8 +23,11 @@ public class Intake {
     double speed;
     double servoGripperreturn = 0.9;
     double servoGripper = 0.1;
+    private double speed;
+    private double servoGripperreturn = 0.7;
+    private double servoGripper = 0.2;
 
-    void setGripper(boolean grip) {
+    public void setGripper(boolean grip) {
         if (grip) {
             speed = -1;
             gripper.setPosition(servoGripper);
@@ -34,7 +37,7 @@ public class Intake {
         }
     }
 
-    void intakePower(boolean brush) {
+    private void intakePower(boolean brush) {
         if (brush) {
             speed = 1;
             brushMotor.setPower(speed);
@@ -45,10 +48,10 @@ public class Intake {
         }
     }
 
-    double servoClamp = 0.7;
-    double servoClampreturn = 0.2;
+    private double servoClamp = 0.7;
+    private double servoClampreturn = 0.2;
 
-    void setClamp(boolean clampIk) {
+    private void setClamp(boolean clampIk) {
         if (clampIk) {
             gripper.setPosition(servoClamp);
         } else {
@@ -56,11 +59,11 @@ public class Intake {
         }
     }
 
-    boolean pixelDetected() {
+    public boolean pixelDetected() {
         return pixelSensor.getVoltage() > pixelSensorvoltagekoksik;
     }
 
-    void update() {
+   public void Update() {
         if (pixelDetected()) {
             setClamp(true);
             if (inableIntake)
