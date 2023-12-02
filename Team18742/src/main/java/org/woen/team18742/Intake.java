@@ -3,26 +3,31 @@ package org.woen.team18742;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 public class Intake {
-    private DcMotor brushMotor; // ц
+    private DcMotorEx brushMotor; // ц
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
     public static double pixelSensorvoltagekoksik = 1.65;
     boolean inableIntake;
+    private boolean flagdefense = true;
+    ElapsedTime elapsedTime = new ElapsedTime();
 
     public Intake(BaseCollector collector) {
         _collector = collector;
         gripper = _collector.CommandCode.hardwareMap.get(Servo.class, "gripok");
-        brushMotor = _collector.CommandCode.hardwareMap.get(DcMotor.class, "brushMotor");
         clamp = _collector.CommandCode.hardwareMap.get(Servo.class, "gripokiu");
+
+        brushMotor = _collector.CommandCode.hardwareMap.get(DcMotorEx.class, "brushMotor");
     }
-    double speed;
-    double servoGripperreturn = 0.9;
-    double servoGripper = 0.1;
+
     private double speed;
     private double servoGripperreturn = 0.7;
     private double servoGripper = 0.2;
@@ -48,6 +53,33 @@ public class Intake {
         }
     }
 
+    private void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
+        double speed = 1.00;
+        intakePowerWithDefense(brush1,speed);
+    }
+    private void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
+
+        if (brush1) {
+            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= 0.75 && flagdefense) {
+                elapsedTime.reset();
+            }
+            if (elapsedTime.milliseconds() >= 1.5) {
+                flagdefense = false;
+            }
+            if (elapsedTime.milliseconds() >= 3) {
+                flagdefense = true;
+            }
+            if (!flagdefense) {
+                brushMotor.setPower(-speed);
+            } else {
+                brushMotor.setPower(speed);
+            }
+
+        }else{
+            brushMotor.setPower(0);
+        }
+    }
+
     private double servoClamp = 0.7;
     private double servoClampreturn = 0.2;
 
@@ -63,7 +95,7 @@ public class Intake {
         return pixelSensor.getVoltage() > pixelSensorvoltagekoksik;
     }
 
-   public void Update() {
+    public void Update() {
         if (pixelDetected()) {
             setClamp(true);
             if (inableIntake)

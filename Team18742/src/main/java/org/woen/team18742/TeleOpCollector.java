@@ -14,6 +14,7 @@ public class TeleOpCollector extends BaseCollector {
     @Override
     public void Start(){
         Lift.Start();
+        Manual.Start();
     }
 
     @Override

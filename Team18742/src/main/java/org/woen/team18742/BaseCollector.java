@@ -11,7 +11,6 @@ public class BaseCollector {
 
     public BaseCollector(LinearOpMode commandCode){
         CommandCode = commandCode;
-
         Lift = new Lift(this);
 
         Gyro = new Gyroscope(this);
