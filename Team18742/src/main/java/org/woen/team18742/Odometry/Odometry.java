@@ -57,8 +57,15 @@ public class Odometry {
 
         double time = _time.seconds(), deltaTime = time - _previusTime;
 
-        X = X + (_CVOdometry.X - _myX) * deltaTime / (_XCoef + deltaTime);
-        Y = Y + (_CVOdometry.Y - _myY) * deltaTime / (_YCoef + deltaTime);
+        if(_CVOdometry.IsZero) {
+            X = X + (_CVOdometry.X - _myX) * deltaTime / (_XCoef + deltaTime);
+            Y = Y + (_CVOdometry.Y - _myY) * deltaTime / (_YCoef + deltaTime);
+        }
+        else
+        {
+            X = _myX;
+            Y = _myY;
+        }
 
         _previusTime = time;
     }
