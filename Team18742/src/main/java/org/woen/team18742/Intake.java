@@ -75,6 +75,8 @@ public class Intake {
                 brushMotor.setPower(speed);
             }
 
+        }else{
+            brushMotor.setPower(0);
         }
     }
 
