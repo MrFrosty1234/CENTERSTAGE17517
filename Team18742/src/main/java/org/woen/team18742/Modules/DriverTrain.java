@@ -1,9 +1,11 @@
-package org.woen.team18742;
+package org.woen.team18742.Modules;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 import static java.lang.Math.PI;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.woen.team18742.Collectors.BaseCollector;
 
 public class DriverTrain {
     private DcMotor _leftForwardDrive = null;

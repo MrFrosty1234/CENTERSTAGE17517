@@ -1,14 +1,14 @@
-package org.woen.team18742;
+package org.woen.team18742.Modules;
 
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.woen.team18742.Collectors.BaseCollector;
 
 public class Intake {
     private DcMotorEx brushMotor; // ц

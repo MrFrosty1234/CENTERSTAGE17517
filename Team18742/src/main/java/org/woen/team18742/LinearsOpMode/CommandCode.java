@@ -1,7 +1,9 @@
-package org.woen.team18742;
+package org.woen.team18742.LinearsOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.woen.team18742.Odometry.TeleOpCollector;
 
 @TeleOp
 public class CommandCode extends LinearOpMode {

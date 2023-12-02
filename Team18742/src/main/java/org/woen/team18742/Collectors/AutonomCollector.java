@@ -1,12 +1,13 @@
-package org.woen.team18742;
+package org.woen.team18742.Collectors;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.woen.team18742.OpenCV.CVOdometry;
+import org.woen.team18742.Modules.Automatic;
+import org.woen.team18742.Odometry.Odometry;
 
 public class AutonomCollector extends BaseCollector {
     public Automatic Auto;
-    public Odometry Odometry;
+    public org.woen.team18742.Odometry.Odometry Odometry;
 
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
@@ -17,7 +18,9 @@ public class AutonomCollector extends BaseCollector {
 
     @Override
     public void Start() {
-        Lift.Start();
+        super.Start();
+
+        Odometry.Start();
     }
 
     @Override

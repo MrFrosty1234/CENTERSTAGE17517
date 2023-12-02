@@ -1,9 +1,12 @@
-package org.woen.team18742;
+package org.woen.team18742.Odometry;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Manual;
+
 public class TeleOpCollector extends BaseCollector {
-    public Manual Manual;
+    public org.woen.team18742.Modules.Manual Manual;
 
     public TeleOpCollector(LinearOpMode commandCode) {
         super(commandCode);
@@ -13,7 +16,6 @@ public class TeleOpCollector extends BaseCollector {
 
     @Override
     public void Start(){
-        Lift.Start();
         Manual.Start();
     }
 
