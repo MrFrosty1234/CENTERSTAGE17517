@@ -32,7 +32,21 @@ public class Lift {
     }
 
     public void Update() {
-        _liftM1.setPower(_liftPid.Update(_targetLiftPose - _liftM1.getCurrentPosition()));
+        boolean state = _ending.getState();
+
+        if(!state){
+            _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+
+        if(_isZeroing){
+            if(!state || System.currentTimeMillis() - _zeroingTimeStart < 5000){
+                _isZeroing = false;
+                _liftM1.setPower(0);
+            }
+        }
+        else
+            _liftM1.setPower(_liftPid.Update(_targetLiftPose - _liftM1.getCurrentPosition()));
     }
 
     public boolean isATarget(){
@@ -47,16 +61,15 @@ public class Lift {
         Zeroing();
     }
 
+    private boolean _isZeroing = false;
+
+    private long _zeroingTimeStart;
+
     public void Zeroing(){
         _liftM1.setPower(-0.3);
 
-        long timeStart = System.currentTimeMillis();
+        _zeroingTimeStart = System.currentTimeMillis();
 
-        while (!_ending.getState() || System.currentTimeMillis() - timeStart < 5000);
-
-        _liftM1.setPower(0);
-
-        _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        _isZeroing = true;
     }
 }

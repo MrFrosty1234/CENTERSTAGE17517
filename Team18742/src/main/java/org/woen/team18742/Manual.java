@@ -9,12 +9,17 @@ public class Manual {
 
     private Servo _servoPlane = null;
 
-    private long _origmillis = System.currentTimeMillis();
+    private long _origmillis;
 
     public Manual(BaseCollector collector) {
         _collector = collector;
         _servoPlane = _collector.CommandCode.hardwareMap.get(Servo.class, "servoPlane");
     }
+
+    public void Start(){
+         _origmillis = System.currentTimeMillis();
+    }
+
     boolean oldgrip;
     public void Update() {
         _collector.Driver.DriveDirection(

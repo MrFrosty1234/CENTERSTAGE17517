@@ -13,13 +13,15 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagPoseRaw;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.woen.team18742.Odometry;
 
+import java.util.ArrayList;
+
 public class CVOdometry {
     private AprilTagProcessor _aprilTagProcessor;
     private VisionPortal _visionPortal;
 
-    private Odometry _odometry;
+    public double X, Y;
 
-    public CVOdometry(Odometry odometry, WebcamName webcamName) {
+    public CVOdometry(WebcamName webcamName) {
         _aprilTagProcessor = new AprilTagProcessor.Builder()
                 .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
                 .setDrawAxes(true)
@@ -31,8 +33,6 @@ public class CVOdometry {
                 .build();
 
         _visionPortal.setProcessorEnabled(_aprilTagProcessor, false);
-
-        _odometry = odometry;
     }
 
     public void Start() {
@@ -40,9 +40,18 @@ public class CVOdometry {
     }
 
     public void Update() {
+        ArrayList<AprilTagDetection> detections = _aprilTagProcessor.getDetections(); 
+
+        if(detections.size() == 0){
+            X = 0;
+            Y = 0;
+
+            return;
+        }
+
         double xSum = 0, ySum = 0;
 
-        for (AprilTagDetection detection : _aprilTagProcessor.getDetections()) {
+        for (AprilTagDetection detection : detections) {
             if (detection.rawPose != null) {
                 /* Считать позицию тэга относительно камеры и записать её в VectorF*/
                 AprilTagPoseRaw rawTagPose = detection.rawPose;
@@ -68,7 +77,7 @@ public class CVOdometry {
             }
         }
 
-        _odometry.X = xSum / _aprilTagProcessor.getDetections().size();
-        _odometry.Y = ySum / _aprilTagProcessor.getDetections().size();
+        X = xSum / detections.size();
+        Y = ySum / detections.size();
     }
 }
