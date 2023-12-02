@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.Range;
 
 @Config
-public class Lift {
+public class Lift implements RobotModule {
     public static double kP = 0.005964;
     public static double kI = 0;
     public static double kD = 0;

@@ -11,11 +11,19 @@ public class PidRegulator { //TODO Feedforward
     double told; //TODO ElapsedTimeA
     double u_max;
 
+    public PidRegulator(double p, double i, double d, double u_max) {
+        kP = p;
+        kI = i;
+        kD = d;
+        this.u_max = u_max;
+    }
     public PidRegulator(double p, double i, double d) {
         kP = p;
         kI = i;
         kD = d;
+        this.u_max = Double.POSITIVE_INFINITY;
     }
+
 
     public double update(double err) {
         double time = System.currentTimeMillis() / 1000.0;

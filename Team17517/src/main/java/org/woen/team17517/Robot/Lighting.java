@@ -3,7 +3,7 @@ package org.woen.team17517.Robot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class Lighting {
+public class Lighting implements RobotModule{
 
     public LightningMode lightMode = LightningMode.OFF;
     DcMotor svet1;
@@ -25,6 +25,11 @@ public class Lighting {
     public void smooth() {
         double t = System.currentTimeMillis() / 1000.0;
         setPower((Math.sin(t) + 1) / 2);
+    }
+
+    @Override
+    public boolean isAtPosition() {
+        return true;
     }
 
     public void update() {

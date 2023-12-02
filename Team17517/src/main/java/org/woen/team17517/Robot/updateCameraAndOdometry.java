@@ -4,7 +4,7 @@ import static java.lang.Math.sqrt;
 
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 
-public class updateCameraAndOdometry {
+public class updateCameraAndOdometry  implements RobotModule{
 
     UltRobot robot;
 
@@ -15,6 +15,12 @@ public class updateCameraAndOdometry {
     public updateCameraAndOdometry(UltRobot robot) {
         this.robot = robot;
     }
+
+    @Override
+    public boolean isAtPosition() {
+        return true;
+    }
+
     public void update() {
         robot.testAprilTagPipeline.visionPortalWork();
         double xVector = robot.testAprilTagPipeline.rawTagPoseVector.get(0);

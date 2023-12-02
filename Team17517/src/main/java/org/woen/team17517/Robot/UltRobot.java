@@ -1,6 +1,5 @@
 package org.woen.team17517.Robot;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team17517.Robot.OpenCV.TestAprilTagPipeline;
@@ -8,6 +7,7 @@ import org.woen.team17517.Robot.OpenCV.TestAprilTagPipeline;
 
 public class UltRobot {
     public DriveTrain driveTrain;
+    public DrivetrainNew drivetrainNew;
     public Grabber grabber;
     public Lift lift;
     public Lighting lighting;
@@ -19,6 +19,8 @@ public class UltRobot {
     public DriveTrainVelocityControl driveTrainVelocityControl;
     public TestAprilTagPipeline testAprilTagPipeline;
     public Odometry odometry;
+    RobotModule[] robotModules;
+
 
     public UltRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
@@ -33,16 +35,20 @@ public class UltRobot {
         updateCameraAndOdometry = new updateCameraAndOdometry(this);
         testAprilTagPipeline = new TestAprilTagPipeline(this);
         odometry = new Odometry(this);
+        drivetrainNew = new DrivetrainNew(this);
+        this.robotModules = new RobotModule[]{telemetryOutput, grabber, voltageSensorPoint,
+                lift, driveTrainVelocityControl, gyro, lighting, odometry, drivetrainNew,updateCameraAndOdometry};
     }
-
+    public boolean isAtPositionAll(){
+        boolean positionIndicator = true;
+        for(RobotModule robotModule : robotModules){
+            positionIndicator &= robotModule.isAtPosition();
+        }
+        return positionIndicator;
+    }
     public void allUpdate() {
-        lift.update();
-        lighting.update();
-        updateCameraAndOdometry.update();
-        gyro.update();
-        grabber.update();
-        telemetryOutput.update();
-        voltageSensorPoint.update();
-        driveTrainVelocityControl.update();
+        for(RobotModule robotModule: robotModules){
+            robotModule.update();
+        }
     }
 }

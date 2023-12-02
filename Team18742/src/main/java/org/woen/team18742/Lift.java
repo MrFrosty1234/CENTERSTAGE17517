@@ -5,25 +5,21 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Lift {
-    private DcMotor _liftM1 = null;
-    public Servo _servoLift1, _servoLift2;
+    private final DcMotor _liftM1;
+    public final Servo _servoLift1, _servoLift2;
 
-    private PID _liftPid;
+    private final PID _liftPid;
 
     private double _targetLiftPose = 0;
 
-    private BaseCollector _collector;
-
-    private DigitalChannel _ending;
+    private final DigitalChannel _ending;
 
     public Lift(BaseCollector collector) {
-        _collector = collector;
-
-        _liftM1 = _collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor1");
-        _ending = _collector.CommandCode.hardwareMap.get(DigitalChannel.class,"ending");
+        _liftM1 = collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor1");
+        _ending = collector.CommandCode.hardwareMap.get(DigitalChannel.class,"ending");
         _liftM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        _servoLift1 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift1");
-        _servoLift2 = _collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");
+        _servoLift1 = collector.CommandCode.hardwareMap.get(Servo.class, "servoLift1");
+        _servoLift2 = collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");
 
         _liftPid = new PID(1, 1, 1, 1);
 

@@ -3,7 +3,7 @@ package org.woen.team17517.Robot;
 
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-public class VoltageSensorPoint
+public class VoltageSensorPoint implements RobotModule
 {
     UltRobot robot;
     private VoltageSensor voltageSensor;
@@ -14,6 +14,12 @@ public class VoltageSensorPoint
         this.robot = robot;
         voltageSensor = robot.linearOpMode.hardwareMap.voltageSensor.get("Control Hub");
     }
+
+    @Override
+    public boolean isAtPosition() {
+        return true;
+    }
+
     public void update() {
         voltage = voltageSensor.getVoltage();
     }

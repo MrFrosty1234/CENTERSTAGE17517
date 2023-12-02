@@ -15,7 +15,7 @@ public class Manual {
         _collector = collector;
         _servoPlane = _collector.CommandCode.hardwareMap.get(Servo.class, "servoPlane");
     }
-
+    boolean oldgrip;
     public void Update() {
         _collector.Driver.DriveDirection(
                 _collector.CommandCode.gamepad1.left_stick_y,
@@ -23,9 +23,16 @@ public class Manual {
                 _collector.CommandCode.gamepad1.right_stick_x);
 
         boolean A = _collector.CommandCode.gamepad1.square;
-        boolean X = _collector.CommandCode.gamepad1.cross;
-        boolean O = _collector.CommandCode.gamepad1.circle;
+        boolean X = _collector.CommandCode.gamepad1.dpad_down;
+        boolean O = _collector.CommandCode.gamepad1.dpad_up;
+        boolean grip = _collector.CommandCode.gamepad1.triangle;
+        boolean clamp = _collector.CommandCode.gamepad1.cross;
 
+       _collector.Intake.setGripper(grip);
+
+        if(grip && !oldgrip)
+            _collector.Intake.setGripper(grip);
+        oldgrip = grip;
         if (A && System.currentTimeMillis() - _origmillis > 90000)
             _servoPlane.setPosition(0.50);
         else
@@ -34,12 +41,13 @@ public class Manual {
         if(X && _xOld) {
             _lift = !_lift;
 
-            _collector.Lift.SetLiftPose(_lift ? 1 : 5);
+            _collector.Lift.SetLiftPose(_lift ? 0 : 57);
         }
 
         _xOld = X;
 
         if(O)
             _collector.Lift.Zeroing();
+
     }
 }
