@@ -1,18 +1,12 @@
-package org.woen.team18742;
+package org.woen.team18742.Modules;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static java.lang.Math.toDegrees;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.woen.team18742.Collectors.AutonomCollector;
+import org.woen.team18742.Odometry.Odometry;
+import org.woen.team18742.Tools.PID;
 
 public class Automatic {
     private AutonomCollector _collector;

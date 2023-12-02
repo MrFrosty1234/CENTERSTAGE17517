@@ -1,6 +1,9 @@
-package org.woen.team18742;
+package org.woen.team18742.Modules;
 
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Lift.LiftPose;
 
 public class Manual {
     private BaseCollector _collector;
@@ -38,7 +41,7 @@ public class Manual {
         if(grip && !oldgrip)
             _collector.Intake.setGripper(grip);
         oldgrip = grip;
-        if (A && System.currentTimeMillis() - _origmillis > 90000)
+        if (A && _collector.Time.milliseconds() - _origmillis > 90000)
             _servoPlane.setPosition(0.50);
         else
             _servoPlane.setPosition(0.83);
@@ -46,7 +49,7 @@ public class Manual {
         if(X && _xOld) {
             _lift = !_lift;
 
-            _collector.Lift.SetLiftPose(_lift ? 0 : 57);
+            _collector.Lift.SetLiftPose(_lift ? LiftPose.DOWN : LiftPose.UP);
         }
 
         _xOld = X;

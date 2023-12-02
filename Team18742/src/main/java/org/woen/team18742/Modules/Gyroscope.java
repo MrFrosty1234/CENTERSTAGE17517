@@ -1,11 +1,10 @@
-package org.woen.team18742;
-
-import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
+package org.woen.team18742.Modules;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.woen.team18742.Collectors.BaseCollector;
 
 public class Gyroscope {
     private IMU _imu;

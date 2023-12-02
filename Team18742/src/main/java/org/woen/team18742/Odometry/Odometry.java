@@ -1,11 +1,15 @@
-package org.woen.team18742;
+package org.woen.team18742.Odometry;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.woen.team18742.OpenCV.CVOdometry;
+import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.DriverTrain;
+import org.woen.team18742.Modules.Gyroscope;
 
 public class Odometry {
     public double X = 0, Y = 0;
@@ -16,13 +20,14 @@ public class Odometry {
     private final double _XCoef = 0.9;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
 
-    private long _previusTime;
+    private double _previusTime;
 
     private Telemetry _telemetry;
-
+    private ElapsedTime _time;
     private CVOdometry _CVOdometry;
 
     public Odometry(BaseCollector collector) {
+        _time = collector.Time;
         _CVOdometry = new CVOdometry(collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1"));
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
@@ -50,7 +55,7 @@ public class Odometry {
 
         _CVOdometry.Update();
 
-        long time = System.currentTimeMillis(), deltaTime = time - _previusTime;
+        double time = _time.seconds(), deltaTime = time - _previusTime;
 
         X = X + (_CVOdometry.X - _myX) * deltaTime / (_XCoef + deltaTime);
         Y = Y + (_CVOdometry.Y - _myY) * deltaTime / (_YCoef + deltaTime);
@@ -60,6 +65,6 @@ public class Odometry {
 
     public void Start() {
         _CVOdometry.Start();
-        _previusTime = System.currentTimeMillis();
+        _previusTime = _time.seconds();
     }
 }
