@@ -3,10 +3,12 @@ package org.woen.team18742.Collectors;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Lift.Lift;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 public class BaseCollector {
     public LinearOpMode CommandCode;
@@ -18,6 +20,9 @@ public class BaseCollector {
 
     public BaseCollector(LinearOpMode commandCode){
         CommandCode = commandCode;
+
+        ToolTelemetry.SetTelemetry(CommandCode.telemetry);
+
         Lift = new Lift(this);
         Time = new ElapsedTime();
 
