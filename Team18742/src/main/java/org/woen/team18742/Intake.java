@@ -54,26 +54,10 @@ public class Intake {
     }
 
     private void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
-        int speed = 100;
-        if (brush1) {
-            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= 0.75 && flagdefense) {
-                elapsedTime.reset();
-            }
-            if (elapsedTime.milliseconds() >= 1.5) {
-                flagdefense = false;
-            }
-            if (elapsedTime.milliseconds() >= 3) {
-                flagdefense = true;
-            }
-            if (!flagdefense) {
-                brushMotor.setPower(-speed);
-            } else {
-                brushMotor.setPower(speed);
-            }
-
-        }
+        double speed = 1.00;
+        intakePowerWithDefense(brush1,speed);
     }
-    private void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
+    private void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
 
         if (brush1) {
             if (brushMotor.getCurrent(CurrentUnit.AMPS) <= 0.75 && flagdefense) {
