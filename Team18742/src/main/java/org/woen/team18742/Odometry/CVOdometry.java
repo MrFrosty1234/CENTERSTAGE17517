@@ -19,6 +19,7 @@ public class CVOdometry {
     private VisionPortal _visionPortal;
 
     public double X, Y;
+    public boolean IsZero = false;
 
     public CVOdometry(WebcamName webcamName) {
         _aprilTagProcessor = new AprilTagProcessor.Builder()
@@ -45,8 +46,12 @@ public class CVOdometry {
             X = 0;
             Y = 0;
 
+            IsZero = true;
+
             return;
         }
+
+        IsZero = false;
 
         double xSum = 0, ySum = 0;
 

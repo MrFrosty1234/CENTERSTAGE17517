@@ -60,7 +60,6 @@ public class Manual {
         _xOld = X;
 
         if(O)
-            _collector.Lift.Zeroing();
-
+            _collector.Lift.SetLiftPose(LiftPose.ZEROING);
     }
 }
