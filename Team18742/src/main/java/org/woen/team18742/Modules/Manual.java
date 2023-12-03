@@ -24,6 +24,7 @@ public class Manual {
     }
 
     boolean oldgrip;
+    boolean oldperevprot;
     public void Update() {
         _collector.Driver.DriveDirection(
                 _collector.CommandCode.gamepad1.left_stick_y,
@@ -35,12 +36,16 @@ public class Manual {
         boolean O = _collector.CommandCode.gamepad1.dpad_up;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
         boolean clamp = _collector.CommandCode.gamepad1.cross;
+        boolean perevert = _collector.CommandCode.gamepad1.b;
 
        _collector.Intake.setGripper(grip);
 
         if(grip && !oldgrip)
             _collector.Intake.setGripper(grip);
         oldgrip = grip;
+        if(perevert && !oldperevprot)
+            _collector.Intake.setperevorotik(perevert);
+        oldperevprot = perevert;
         if (A && _collector.Time.milliseconds() - _origmillis > 90000)
             _servoPlane.setPosition(0.50);
         else

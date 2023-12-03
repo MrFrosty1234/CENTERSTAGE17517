@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
 
 public class Intake {
+    private Servo servopere;
     private DcMotorEx brushMotor; // ц
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
@@ -23,11 +24,22 @@ public class Intake {
 
     public Intake(BaseCollector collector) {
         _collector = collector;
-        pixelSensor = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "");
+        pixelSensor = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "xuy");
         gripper = _collector.CommandCode.hardwareMap.get(Servo.class, "gripok");
         clamp = _collector.CommandCode.hardwareMap.get(Servo.class, "gripokiu");
-
+        servopere = _collector.CommandCode.hardwareMap.get(Servo.class, "perevertishdolbani");
         brushMotor = _collector.CommandCode.hardwareMap.get(DcMotorEx.class, "brushMotor");
+    }
+
+    private double servoperevorotnazad = 0.7;
+    private double servoperevorot = 0.2;
+
+    public void setperevorotik(boolean perevert) {
+        if (perevert) {
+            servopere.setPosition(servoperevorotnazad);
+        } else {
+            servopere.setPosition(servoperevorot);
+        }
     }
 
     double speed;
@@ -79,9 +91,9 @@ public class Intake {
             }
 
         } else {
-            brushMotor.setPower(0);
+                    brushMotor.setPower(0);
+}
         }
-    }
 
     private double servoClamp = 0.7;
     private double servoClampreturn = 0.2;
@@ -96,22 +108,22 @@ public class Intake {
 
 
     ElapsedTime pixelTimer = new ElapsedTime();
-
+     double pixelTimeconst = 500;
     public boolean pixelDetected() {
         boolean sensorValue = pixelSensor.getVoltage() > pixelSensorvoltagekoksik;
         if (!sensorValue)
             pixelTimer.reset();
-        return pixelTimer.milliseconds() > 500;
+        return pixelTimer.milliseconds() > pixelTimeconst;
     }
 
     ElapsedTime clampTimer = new ElapsedTime();
-
+    double clampTimerconst = 500;
     public void Update() {
         clampTimer.reset();
         if (pixelDetected()) {
             setGripper(true);
-            if (clampTimer.milliseconds() > 500)
-                setClamp(false);
+
+                setClamp(clampTimer.milliseconds() < clampTimerconst);
 
             intakePower(false);
         } else {

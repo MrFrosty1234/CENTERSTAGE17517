@@ -10,8 +10,6 @@ import org.woen.team18742.Tools.PID;
 
 public class Lift {
     private final DcMotor _liftM1;
-    public final Servo _servoLift1, _servoLift2;
-
     private final PID _liftPid;
 
     private double _targetLiftPose = 0;
@@ -21,19 +19,14 @@ public class Lift {
 
     public Lift(BaseCollector collector) {
         _ending = collector.CommandCode.hardwareMap.get(DigitalChannel.class,"ending");
-        _liftM1 = collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor1");
+        _liftM1 = collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor");
         _liftM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        _servoLift1 = collector.CommandCode.hardwareMap.get(Servo.class, "servoLift1");
-        _servoLift2 = collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");
 
         _liftPid = new PID(1, 1, 1, 1);
 
         _liftM1.setPower(0);
 
         _ending.setMode(DigitalChannel.Mode.INPUT);
-
-        _servoLift1.setPosition(0);
-        _servoLift2.setPosition(0);
     }
 
     public void Update() {
