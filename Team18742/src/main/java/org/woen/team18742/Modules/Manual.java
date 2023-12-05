@@ -9,6 +9,7 @@ public class Manual {
     private BaseCollector _collector;
 
     private boolean _xOld = false, _lift = false;
+    private boolean recuiert = false;
 
     private Servo _servoPlane = null;
 
@@ -37,16 +38,20 @@ public class Manual {
         boolean grip = _collector.CommandCode.gamepad1.triangle;
         boolean clamp = _collector.CommandCode.gamepad1.cross;
         boolean perevert = _collector.CommandCode.gamepad1.b;
+        boolean zajat =_collector.CommandCode.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
 
        _collector.Intake.setGripper(grip);
 
         if(grip && !oldgrip)
             _collector.Intake.setGripper(grip);
         oldgrip = grip;
+
+
         if(perevert && !oldperevprot)
-            _collector.Intake.setperevorotik(perevert);
+            recuiert = !recuiert;
+        _collector.Intake.setperevorotik(recuiert);
         oldperevprot = perevert;
-        if (A && _collector.Time.milliseconds() - _origmillis > 90000)
+        if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000))
             _servoPlane.setPosition(0.50);
         else
             _servoPlane.setPosition(0.83);

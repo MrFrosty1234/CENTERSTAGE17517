@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
@@ -17,17 +16,17 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltagekoksik = 1.65;
+    public static double pixelSensorvoltage = 1.65;
     boolean inableIntake;
     private boolean flagdefense = true;
     ElapsedTime elapsedTime = new ElapsedTime();
 
     public Intake(BaseCollector collector) {
         _collector = collector;
-        pixelSensor = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "xuy");
+        pixelSensor = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "pixelSensor");
         gripper = _collector.CommandCode.hardwareMap.get(Servo.class, "gripok");
         clamp = _collector.CommandCode.hardwareMap.get(Servo.class, "gripokiu");
-        servopere = _collector.CommandCode.hardwareMap.get(Servo.class, "perevertishdolbani");
+        servopere = _collector.CommandCode.hardwareMap.get(Servo.class, "perevert");
         brushMotor = _collector.CommandCode.hardwareMap.get(DcMotorEx.class, "brushMotor");
     }
 
@@ -91,9 +90,9 @@ public class Intake {
             }
 
         } else {
-                    brushMotor.setPower(0);
-}
+            brushMotor.setPower(0);
         }
+    }
 
     private double servoClamp = 0.7;
     private double servoClampreturn = 0.2;
@@ -108,9 +107,10 @@ public class Intake {
 
 
     ElapsedTime pixelTimer = new ElapsedTime();
-     double pixelTimeconst = 500;
+    double pixelTimeconst = 500;
+
     public boolean pixelDetected() {
-        boolean sensorValue = pixelSensor.getVoltage() > pixelSensorvoltagekoksik;
+        boolean sensorValue = pixelSensor.getVoltage() > pixelSensorvoltage;
         if (!sensorValue)
             pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
@@ -118,13 +118,12 @@ public class Intake {
 
     ElapsedTime clampTimer = new ElapsedTime();
     double clampTimerconst = 500;
+
     public void Update() {
         clampTimer.reset();
         if (pixelDetected()) {
             setGripper(true);
-
-                setClamp(clampTimer.milliseconds() < clampTimerconst);
-
+            setClamp(clampTimer.milliseconds() < clampTimerconst);
             intakePower(false);
         } else {
             setGripper(false);

@@ -26,7 +26,7 @@ public class Lift {
         _servoLift1 = collector.CommandCode.hardwareMap.get(Servo.class, "servoLift1");
         _servoLift2 = collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");
 
-        _liftPid = new PID(1, 1, 1, 1);
+        _liftPid = new PID(.001, 0, 0, 1);
 
         _liftM1.setPower(0);
 
