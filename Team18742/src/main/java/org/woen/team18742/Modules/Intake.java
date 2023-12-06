@@ -4,6 +4,7 @@ package org.woen.team18742.Modules;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -29,6 +30,8 @@ public class Intake {
         clamp = _collector.CommandCode.hardwareMap.get(Servo.class, "gripokiu");
         servopere = _collector.CommandCode.hardwareMap.get(Servo.class, "perevert");
         brushMotor = _collector.CommandCode.hardwareMap.get(DcMotorEx.class, "brushMotor");
+
+        brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
    public static double servoperevorotnazad = 0.75;
@@ -67,13 +70,23 @@ public class Intake {
         }
     }
 
-    private void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
+    private boolean _isGrabberOn = false;
+
+    public void SetGrabber(){
+        if(_isGrabberOn)
+            _isGrabberOn = false;
+        else
+            _isGrabberOn = true;
+
+        intakePowerWithDefense(_isGrabberOn);
+    }
+
+    public void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
         double speed = 1.00;
         intakePowerWithDefense(brush1, speed);
     }
 
-    private void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
-
+    public void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
         if (brush1) {
             if (brushMotor.getCurrent(CurrentUnit.AMPS) <= 0.75 && flagdefense) {
                 elapsedTime.reset();
@@ -89,7 +102,6 @@ public class Intake {
             } else {
                 brushMotor.setPower(speed);
             }
-
         } else {
             brushMotor.setPower(0);
         }

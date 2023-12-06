@@ -8,7 +8,7 @@ import org.woen.team18742.Lift.LiftPose;
 public class Manual {
     private BaseCollector _collector;
 
-    private boolean _xOld = false, _lift = false;
+    private boolean _xOld = false, _lift = false, _clampOld = false;
     private boolean recuiert = false;
 
     private Servo _servoPlane = null;
@@ -66,5 +66,10 @@ public class Manual {
 
         if(O)
             _collector.Lift.SetLiftPose(LiftPose.ZEROING);
+
+        if(clamp && _clampOld)
+            _collector.Intake.SetGrabber();
+
+        _clampOld = clamp;
     }
 }

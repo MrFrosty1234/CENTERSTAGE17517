@@ -59,7 +59,7 @@ public class Lift {
     }
 
     public void Start() {
-        Zeroing();
+        //Zeroing();
     }
 
     private boolean _isZeroing = false;
