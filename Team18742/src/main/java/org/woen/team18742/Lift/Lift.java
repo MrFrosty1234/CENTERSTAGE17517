@@ -10,7 +10,6 @@ import org.woen.team18742.Tools.PID;
 
 public class Lift {
     private final DcMotor _liftM1;
-    public final Servo _servoLift1, _servoLift2;
 
     private final PID _liftPid;
 
@@ -21,19 +20,16 @@ public class Lift {
 
     public Lift(BaseCollector collector) {
         _ending = collector.CommandCode.hardwareMap.get(DigitalChannel.class,"ending");
-        _liftM1 = collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor1");
+        _liftM1 = collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor");
         _liftM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        _servoLift1 = collector.CommandCode.hardwareMap.get(Servo.class, "servoLift1");
-        _servoLift2 = collector.CommandCode.hardwareMap.get(Servo.class, "servoLift2");
 
         _liftPid = new PID(.001, 0, 0, 1);
 
-        _liftM1.setPower(0);
+      //  _liftM1.setPower(0);
 
         _ending.setMode(DigitalChannel.Mode.INPUT);
 
-        _servoLift1.setPosition(0);
-        _servoLift2.setPosition(0);
+
     }
 
     public void Update() {
@@ -47,10 +43,11 @@ public class Lift {
         if (_isZeroing) {
             if (state || _time.milliseconds() - _zeroingTimeStart < 5000) {
                 _isZeroing = false;
-                _liftM1.setPower(0);
+           //     _liftM1.setPower(0);
             }
-        } else
-            _liftM1.setPower(_liftPid.Update(_targetLiftPose - _liftM1.getCurrentPosition()));
+        } else {
+            // _liftM1.setPower(_liftPid.Update(_targetLiftPose - _liftM1.getCurrentPosition()));
+        }
     }
 
     public boolean isATarget() {
@@ -70,7 +67,7 @@ public class Lift {
     private long _zeroingTimeStart;
 
     public void Zeroing() {
-        _liftM1.setPower(-0.3);
+      //  _liftM1.setPower(-0.3);
 
         _zeroingTimeStart = System.currentTimeMillis();
 

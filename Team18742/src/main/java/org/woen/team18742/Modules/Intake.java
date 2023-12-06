@@ -1,6 +1,7 @@
 package org.woen.team18742.Modules;
 
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -8,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
-
+@Config
 public class Intake {
     private Servo servopere;
     private DcMotorEx brushMotor; // ц
@@ -30,8 +31,8 @@ public class Intake {
         brushMotor = _collector.CommandCode.hardwareMap.get(DcMotorEx.class, "brushMotor");
     }
 
-    private double servoperevorotnazad = 0.7;
-    private double servoperevorot = 0.2;
+   public static double servoperevorotnazad = 0.75;
+    public static double servoperevorot = 0.16;
 
     public void setperevorotik(boolean perevert) {
         if (perevert) {
@@ -42,8 +43,8 @@ public class Intake {
     }
 
     double speed;
-    double servoGripperreturn = 0.9;
-    double servoGripper = 0.1;
+    public static double servoGripperreturn = 0.9;
+    public static double servoGripper = 0.1;
 
     public void setGripper(boolean grip) {
         if (grip) {
@@ -94,8 +95,8 @@ public class Intake {
         }
     }
 
-    private double servoClamp = 0.7;
-    private double servoClampreturn = 0.2;
+    public static double servoClamp = 0.7;
+    public static double servoClampreturn = 0.2;
 
     private void setClamp(boolean clampIk) {
         if (clampIk) {
