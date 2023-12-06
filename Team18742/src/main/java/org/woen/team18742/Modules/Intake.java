@@ -34,8 +34,8 @@ public class Intake {
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-   public static double servoperevorotnazad = 0.75;
-    public static double servoperevorot = 0.16;
+   public static double servoperevorotnazad = 0.16;
+    public static double servoperevorot = 0.765;
 
     public void setperevorotik(boolean perevert) {
         if (perevert) {
@@ -46,8 +46,8 @@ public class Intake {
     }
 
     double speed;
-    public static double servoGripperreturn = 0.9;
-    public static double servoGripper = 0.1;
+    public static double servoGripperreturn = 0.43;
+    public static double servoGripper = 0.221;
 
     public void setGripper(boolean grip) {
         if (grip) {
@@ -133,17 +133,17 @@ public class Intake {
     double clampTimerconst = 500;
 
     public void Update() {
-        clampTimer.reset();
-        if (pixelDetected()) {
-            setGripper(true);
-            setClamp(clampTimer.milliseconds() < clampTimerconst);
-            intakePower(false);
-        } else {
-            setGripper(false);
-            setClamp(true);
-            if (inableIntake)
-                intakePower(true);
-        }
+      //  clampTimer.reset();
+     //   if (pixelDetected()) {
+           // setGripper(true);
+           // setClamp(clampTimer.milliseconds() < clampTimerconst);
+         //   intakePower(false);
+      //  } else {
+          //  setGripper(false);
+          //  setClamp(true);
+           // if (inableIntake)
+            //    intakePower(true);
+        //}
     }
 }
 

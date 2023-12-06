@@ -10,6 +10,7 @@ public class Manual {
 
     private boolean _xOld = false, _lift = false, _clampOld = false, _plane = false, _AOld;
     private boolean recuiert = false;
+    private boolean ferty = false;
 
     private Servo _servoPlane = null;
 
@@ -41,30 +42,23 @@ public class Manual {
         boolean perevert = _collector.CommandCode.gamepad1.b;
         boolean zajat = _collector.CommandCode.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
 
-        _collector.Intake.setGripper(grip);
+        if(grip && !oldgrip) {
+            ferty = !ferty;
+            _collector.Intake.setGripper(ferty);
+        }
 
-        if (grip && !oldgrip)
-            _collector.Intake.setGripper(grip);
         oldgrip = grip;
 
-
-        if (perevert && !oldperevprot)
+        if(perevert && !oldperevprot)
             recuiert = !recuiert;
         _collector.Intake.setperevorotik(recuiert);
         oldperevprot = perevert;
 
-        if (A && !_AOld && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
-            if (_plane) {
-                _servoPlane.setPosition(0.50);
-                _plane = false;
-            } else {
-                _servoPlane.setPosition(0.83);
-                _plane = true;
-            }
+        if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
+                _servoPlane.setPosition(0.10);
+        }else {
+            _servoPlane.setPosition(0.70);
         }
-
-        _AOld = A;
-
         if (X && _xOld) {
             _lift = !_lift;
 
