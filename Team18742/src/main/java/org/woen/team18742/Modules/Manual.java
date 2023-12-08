@@ -34,6 +34,8 @@ public class Manual {
                 _collector.CommandCode.gamepad1.left_stick_x,
                 _collector.CommandCode.gamepad1.right_stick_x);
 
+        double LiftPlus = _collector.CommandCode.gamepad1.left_trigger;
+        double LiftMinus = _collector.CommandCode.gamepad1.right_trigger;
         boolean A = _collector.CommandCode.gamepad1.square;
         boolean X = _collector.CommandCode.gamepad1.dpad_down;
         boolean O = _collector.CommandCode.gamepad1.dpad_up;
@@ -49,7 +51,9 @@ public class Manual {
 
         oldgrip = grip;
 
-        if(perevert && !oldperevprot)
+        _collector.Lift.SetTargetPose(_collector.Lift.GetLiftPose() + LiftPlus * 10 - LiftMinus * 10);
+
+        if (perevert && !oldperevprot)
             recuiert = !recuiert;
         _collector.Intake.setperevorotik(recuiert);
         oldperevprot = perevert;

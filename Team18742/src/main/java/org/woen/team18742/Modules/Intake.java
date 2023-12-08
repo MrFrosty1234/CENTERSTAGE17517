@@ -23,7 +23,7 @@ public class Intake {
     private boolean flagdefense = true;
     ElapsedTime elapsedTime = new ElapsedTime();
 
-    public Intake(BaseCollector collector) {
+    public Intake( BaseCollector collector) {
         _collector = collector;
         pixelSensor = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "pixelSensor");
         gripper = _collector.CommandCode.hardwareMap.get(Servo.class, "gripok");
@@ -50,13 +50,13 @@ public class Intake {
     public static double servoGripper = 0.221;
 
     public void setGripper(boolean grip) {
-        if (grip) {
+        /*if (grip) {
             speed = -1;
             gripper.setPosition(servoGripper);
         } else {
             speed = 1;
             gripper.setPosition(servoGripperreturn);
-        }
+        }*/
     }
 
     private void intakePower(boolean brush) {
@@ -113,11 +113,11 @@ public class Intake {
     public static double servoClampreturn = 0.2;
 
     private void setClamp(boolean clampIk) {
-        if (clampIk) {
+        /*if (clampIk) {
             gripper.setPosition(servoClamp);
         } else {
             gripper.setPosition(servoClampreturn);
-        }
+        }*/
     }
 
 
