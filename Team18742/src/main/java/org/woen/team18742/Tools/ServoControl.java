@@ -1,6 +1,7 @@
 package org.woen.team18742.Tools;
 
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class ServoControl {
     Servo servo;
@@ -8,6 +9,8 @@ public class ServoControl {
     private double servoSekDeg = 180;
     private double targetDegree = 90;
     private double nowDegree = 90;
+    ElapsedTime servotime = new ElapsedTime();
+
     public  ServoControl(Servo servo, double sDr,double sdk){
 
         this.servo = servo;
@@ -17,6 +20,7 @@ public class ServoControl {
     public void setPositionDegres(double deg){
         deg = deg /servoRangeDeg;
         servo.setPosition(deg);
+        servotime.reset();
     }
     public double getTargetDegree(){
         return targetDegree;
