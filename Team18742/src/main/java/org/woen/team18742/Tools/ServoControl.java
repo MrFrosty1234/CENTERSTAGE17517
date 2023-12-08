@@ -47,4 +47,4 @@ public class ServoControl {
         }
 
         return nowDegree;
-    }
+    }}
