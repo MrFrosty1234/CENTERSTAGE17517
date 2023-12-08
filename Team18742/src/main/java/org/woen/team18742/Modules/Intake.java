@@ -20,7 +20,7 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.2;//1.65
+    public static double pixelSensorvoltage = 0.4;//1.65
     boolean inableIntake;
     private boolean flagdefense = true;
     ElapsedTime elapsedTime = new ElapsedTime();
@@ -130,17 +130,16 @@ public class Intake {
     double pixelTimeconst = 500;
 
     public boolean pixelDetected() {
-        //return pixelSensor1.getVoltage() <= pixelSensorvoltage && pixelSensor2.getVoltage() <= pixelSensorvoltage;
-      if (pixelSensor1.getVoltage() <= pixelSensorvoltage && pixelSensor2.getVoltage() <= pixelSensorvoltage)
+       // return pixelSensor1.getVoltage() <= pixelSensorvoltage && pixelSensor2.getVoltage() <= pixelSensorvoltage;
+      if(pixelSensor1.getVoltage() >= pixelSensorvoltage || pixelSensor2.getVoltage() >= pixelSensorvoltage)
            pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
 
     ElapsedTime clampTimer = new ElapsedTime();
     double clampTimerconst = 1500;
-
     public void Update() {
-     /*   clampTimer.reset();
+         clampTimer.reset();
         if (pixelDetected()) {
             clampTimer.reset();
             setGripper(true);
@@ -156,8 +155,9 @@ public class Intake {
         }
 
 
-      */
+
         ToolTelemetry.AddLine(pixelSensor1.getVoltage() + " " + pixelSensor2.getVoltage());
+        ToolTelemetry.AddLine(pixelDetected()+"");
     }
 }
 

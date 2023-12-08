@@ -94,7 +94,7 @@ public class Manual {
 
         if (X && !_XOld) {
             _clampOpen = !_clampOpen;
-            _collector.Intake.setClamp(_clampOpen);
+       //     _collector.Intake.setClamp(_clampOpen);
         }
 
         _XOld = X;
