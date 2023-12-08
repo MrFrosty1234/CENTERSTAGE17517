@@ -135,7 +135,7 @@ public class Intake {
     double clampTimerconst = 500;
 
     public void Update() {
-       clampTimer.reset();
+        /*   clampTimer.reset();
        if (pixelDetected()) {
             setGripper(true);
             setClamp(clampTimer.milliseconds() < clampTimerconst);
@@ -145,7 +145,9 @@ public class Intake {
           setClamp(true);
             if (inableIntake)
                 intakePower(true);
-        }
+
+         */
+       // }
     }
 }
 
