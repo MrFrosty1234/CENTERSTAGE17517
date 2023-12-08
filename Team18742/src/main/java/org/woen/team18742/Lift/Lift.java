@@ -38,7 +38,7 @@ public class Lift {
     }
 
     public void Update() {
-        boolean state = _ending1.getState();
+        //boolean state = _ending1.getState();
 
         /*if (state) {
             _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

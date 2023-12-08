@@ -8,7 +8,7 @@ import org.woen.team18742.Lift.LiftPose;
 public class Manual {
     private BaseCollector _collector;
 
-    private boolean _clampOld = false, _plane = false;
+    private boolean _clampOld = false, _plane = false, _XOld = false, _clampOpen = false;
     private boolean recuiert = false;
     private boolean ferty = false;
 
@@ -37,6 +37,7 @@ public class Manual {
         double LiftPlus = _collector.CommandCode.gamepad1.left_trigger;
         double LiftMinus = _collector.CommandCode.gamepad1.right_trigger;
         boolean A = _collector.CommandCode.gamepad1.square;
+        boolean X = _collector.CommandCode.gamepad1.x;
         boolean liftUp = _collector.CommandCode.gamepad1.dpad_up;
         boolean liftDown = _collector.CommandCode.gamepad1.dpad_down;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
@@ -56,8 +57,10 @@ public class Manual {
         if (perevert && !oldperevprot)
             recuiert = !recuiert;
 
-        if(_collector.Lift.isDown())
+        if(_collector.Lift.isDown()) {
+            recuiert = false;
             _collector.Intake.setperevorotik(false);
+        }
         else
             _collector.Intake.setperevorotik(recuiert);
 
@@ -88,5 +91,12 @@ public class Manual {
             _collector.Intake.SetGrabber();
 
         _clampOld = clamp;
+
+        if (X && !_XOld) {
+            _clampOpen = !_clampOpen;
+            _collector.Intake.setClamp(_clampOpen);
+        }
+
+        _XOld = X;
     }
 }
