@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.ToolTelemetry;
+
 @Config
 public class Intake {
     private Servo servopere;
@@ -34,8 +36,8 @@ public class Intake {
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-   public static double servoperevorotnazad = 0.18;//16
-    public static double servoperevorot = 0.765;
+   public static double servoperevorotnazad = 0.18;
+    public static double servoperevorot = 0.762;
 
     public void setperevorotik(boolean perevert) {
         if (perevert) {
@@ -113,11 +115,11 @@ public class Intake {
     public static double servoClampreturn = 0.2;
 
     private void setClamp(boolean clampIk) {
-        /*if (clampIk) {
+        if (clampIk) {
             gripper.setPosition(servoClamp);
         } else {
             gripper.setPosition(servoClampreturn);
-        }*/
+        }
     }
 
 
@@ -148,6 +150,7 @@ public class Intake {
 
          */
        // }
+       // ToolTelemetry.AddLine(brushMotor.getCurrent(CurrentUnit.AMPS) + "");
     }
 }
 

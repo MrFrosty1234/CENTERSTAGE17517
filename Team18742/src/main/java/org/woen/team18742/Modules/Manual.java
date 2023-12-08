@@ -8,7 +8,7 @@ import org.woen.team18742.Lift.LiftPose;
 public class Manual {
     private BaseCollector _collector;
 
-    private boolean _xOld = false, _lift = false, _clampOld = false, _plane = false, _AOld;
+    private boolean _clampOld = false, _plane = false;
     private boolean recuiert = false;
     private boolean ferty = false;
 
@@ -37,8 +37,8 @@ public class Manual {
         double LiftPlus = _collector.CommandCode.gamepad1.left_trigger;
         double LiftMinus = _collector.CommandCode.gamepad1.right_trigger;
         boolean A = _collector.CommandCode.gamepad1.square;
-        boolean X = _collector.CommandCode.gamepad1.dpad_down;
-        boolean O = _collector.CommandCode.gamepad1.dpad_up;
+        boolean liftUp = _collector.CommandCode.gamepad1.dpad_up;
+        boolean liftDown = _collector.CommandCode.gamepad1.dpad_down;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
         boolean clamp = _collector.CommandCode.gamepad1.cross;
         boolean perevert = _collector.CommandCode.gamepad1.circle;
@@ -55,10 +55,20 @@ public class Manual {
 
         if (perevert && !oldperevprot)
             recuiert = !recuiert;
-        _collector.Intake.setperevorotik(recuiert);
+
+        if(_collector.Lift.isDown())
+            _collector.Intake.setperevorotik(false);
+        else
+            _collector.Intake.setperevorotik(recuiert);
+
         oldperevprot = perevert;
 
-        if (A && !_AOld && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
+        /*if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
+                _servoPlane.setPosition(0.10);
+        }else {
+            _servoPlane.setPosition(0.70);
+        }*/
+        if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
             if (_plane) {
                 _servoPlane.setPosition(0.1);
                 _plane = false;
@@ -68,18 +78,13 @@ public class Manual {
             }
         }
 
-        if (X && _xOld) {
-            _lift = !_lift;
+        if (liftUp)
+            _collector.Lift.SetLiftPose(LiftPose.UP);
 
-            _collector.Lift.SetLiftPose(_lift ? LiftPose.DOWN : LiftPose.UP);
-        }
+        if(liftDown)
+            _collector.Lift.SetLiftPose(LiftPose.DOWN);
 
-        _xOld = X;
-
-        if (O)
-            _collector.Lift.SetLiftPose(LiftPose.ZEROING);
-
-        if (clamp && _clampOld)
+        if (clamp && !_clampOld)
             _collector.Intake.SetGrabber();
 
         _clampOld = clamp;
