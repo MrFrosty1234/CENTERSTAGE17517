@@ -68,6 +68,7 @@ public class Lift {
         _targetLiftPose = pose;
     }
 
+
     public double GetLiftPose() {
         return _targetLiftPose;
     }
@@ -78,6 +79,9 @@ public class Lift {
 
     public boolean isDown(){
         return _ending2.getState();
+    }
+    public boolean isUp(){
+        return _ending1.getState();
     }
 
     public void SetLiftPose(LiftPose pose) {

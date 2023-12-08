@@ -73,17 +73,6 @@ public class Intake {
         }
     }
 
-    private boolean _isGrabberOn = false;
-
-    public void SetGrabber() {
-        if (_isGrabberOn)
-            _isGrabberOn = false;
-        else
-            _isGrabberOn = true;
-
-        intakePowerWithDefense(_isGrabberOn);
-    }
-
     public void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
         double speed = 1.00;
         intakePowerWithDefense(brush1, speed);

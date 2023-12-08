@@ -8,7 +8,8 @@ import org.woen.team18742.Lift.LiftPose;
 public class Manual {
     private BaseCollector _collector;
 
-    private boolean _clampOld = false, _plane = false, _XOld = false, _clampOpen = false;
+    private boolean _clampOld = false, _isBrushOn = false;
+    private boolean _XOld = false, _clampOpen = false;
     private boolean recuiert = false;
     private boolean ferty = false;
 
@@ -34,8 +35,6 @@ public class Manual {
                 _collector.CommandCode.gamepad1.left_stick_x,
                 _collector.CommandCode.gamepad1.right_stick_x);
 
-        double LiftPlus = _collector.CommandCode.gamepad1.left_trigger;
-        double LiftMinus = _collector.CommandCode.gamepad1.right_trigger;
         boolean A = _collector.CommandCode.gamepad1.square;
         boolean X = _collector.CommandCode.gamepad1.x;
         boolean liftUp = _collector.CommandCode.gamepad1.dpad_up;
@@ -52,51 +51,49 @@ public class Manual {
 
         oldgrip = grip;
 
-        _collector.Lift.SetTargetPose(_collector.Lift.GetLiftPose() + LiftPlus * 10 - LiftMinus * 10);
-
         if (perevert && !oldperevprot)
             recuiert = !recuiert;
 
-        if(_collector.Lift.isDown()) {
+        if(!_collector.Lift.isUp()) {
             recuiert = false;
             _collector.Intake.setperevorotik(false);
         }
         else
             _collector.Intake.setperevorotik(recuiert);
 
-        oldperevprot = perevert;
-
-        /*if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
-                _servoPlane.setPosition(0.10);
-        }else {
-            _servoPlane.setPosition(0.70);
-        }*/
-        if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
-            if (_plane) {
-                _servoPlane.setPosition(0.1);
-                _plane = false;
-            } else {
-                _servoPlane.setPosition(0.6);
-                _plane = true;
+        if(_collector.Lift.isDown()){
+            if (clamp && !_clampOld) {
+                _isBrushOn = !_isBrushOn;
+                _collector.Intake.intakePowerWithDefense(_isBrushOn);
             }
         }
+        else
+        {
+            _isBrushOn = false;
+            _collector.Intake.intakePowerWithDefense(_isBrushOn);
+        }
 
-        if (liftUp)
+        if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000))
+            _servoPlane.setPosition(0.10);
+        else{
+            _servoPlane.setPosition(0.70);
+        }
+        if (liftUp) {
+            _clampOpen = true;
+            _collector.Intake.setClamp(true);
             _collector.Lift.SetLiftPose(LiftPose.UP);
+        }
 
         if(liftDown)
             _collector.Lift.SetLiftPose(LiftPose.DOWN);
 
-        if (clamp && !_clampOld)
-            _collector.Intake.SetGrabber();
-
-        _clampOld = clamp;
-
-        if (X && !_XOld) {
+        if(X && !_XOld){
             _clampOpen = !_clampOpen;
-       //     _collector.Intake.setClamp(_clampOpen);
+            _collector.Intake.setClamp(_clampOpen);
         }
 
+        _clampOld = clamp;
+        oldperevprot = perevert;
         _XOld = X;
     }
 }
