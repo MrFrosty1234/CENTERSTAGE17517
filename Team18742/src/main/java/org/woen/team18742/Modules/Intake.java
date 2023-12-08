@@ -25,7 +25,7 @@ public class Intake {
     private boolean flagdefense = true;
     ElapsedTime elapsedTime = new ElapsedTime();
 
-    public Intake( BaseCollector collector) {
+    public Intake(BaseCollector collector) {
         _collector = collector;
         pixelSensor = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "pixelSensor");
         gripper = _collector.CommandCode.hardwareMap.get(Servo.class, "gripok");
@@ -36,7 +36,7 @@ public class Intake {
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-   public static double servoperevorotnazad = 0.18;
+    public static double servoperevorotnazad = 0.18;
     public static double servoperevorot = 0.762;
 
     public void setperevorotik(boolean perevert) {
@@ -74,8 +74,8 @@ public class Intake {
 
     private boolean _isGrabberOn = false;
 
-    public void SetGrabber(){
-        if(_isGrabberOn)
+    public void SetGrabber() {
+        if (_isGrabberOn)
             _isGrabberOn = false;
         else
             _isGrabberOn = true;
@@ -87,18 +87,20 @@ public class Intake {
         double speed = 1.00;
         intakePowerWithDefense(brush1, speed);
     }
-   public static double getvolteges = 1;
-   public static double timesxz = 1500;
-   public static double times1 = 3000;
+
+    public static double getvolteges = 1;
+    public static double timesxz = 1500;
+    public static double times1 = 3000;
+
     public void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
         if (brush1) {
             if (brushMotor.getCurrent(CurrentUnit.AMPS) <= getvolteges && flagdefense) {
                 elapsedTime.reset();
             }
-            if (elapsedTime.milliseconds() >= timesxz) {
+            if (elapsedTime.milliseconds() >= timesxz && flagdefense) {
                 flagdefense = false;
             }
-            if (elapsedTime.milliseconds() >= times1) {
+            if (elapsedTime.milliseconds() >= times1 && !flagdefense) {
                 flagdefense = true;
             }
             if (!flagdefense) {
@@ -149,8 +151,8 @@ public class Intake {
                 intakePower(true);
 
          */
-       // }
-       // ToolTelemetry.AddLine(brushMotor.getCurrent(CurrentUnit.AMPS) + "");
+        // }
+        // ToolTelemetry.AddLine(brushMotor.getCurrent(CurrentUnit.AMPS) + "");
     }
 }
 
