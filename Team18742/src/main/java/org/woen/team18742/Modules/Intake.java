@@ -98,10 +98,10 @@ public class Intake {
             if (brushMotor.getCurrent(CurrentUnit.AMPS) <= getvolteges && flagdefense) {
                 elapsedTime.reset();
             }
-            if (elapsedTime.milliseconds() >= timesxz) {
+            if (elapsedTime.milliseconds() >= timesxz && flagdefense) {
                 flagdefense = false;
             }
-            if (elapsedTime.milliseconds() >= times1) {
+            if (elapsedTime.milliseconds() >= times1 && !flagdefense) {
                 flagdefense = true;
             }
             if (!flagdefense) {
