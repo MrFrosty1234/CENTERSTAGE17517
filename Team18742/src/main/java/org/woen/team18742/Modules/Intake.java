@@ -86,8 +86,8 @@ public class Intake {
         intakePowerWithDefense(brush1, speed);
     }
    public static double getvolteges = 1;
-   public static double timesxz = 1.5;
-   public static double times1 = 3;
+   public static double timesxz = 1500;
+   public static double times1 = 3000;
     public void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
         if (brush1) {
             if (brushMotor.getCurrent(CurrentUnit.AMPS) <= getvolteges && flagdefense) {
