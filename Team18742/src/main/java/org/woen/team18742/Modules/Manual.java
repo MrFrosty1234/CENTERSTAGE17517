@@ -54,11 +54,16 @@ public class Manual {
         _collector.Intake.setperevorotik(recuiert);
         oldperevprot = perevert;
 
-        if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
-                _servoPlane.setPosition(0.10);
-        }else {
-            _servoPlane.setPosition(0.70);
+        if (A && !_AOld && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
+            if (_plane) {
+                _servoPlane.setPosition(0.1);
+                _plane = false;
+            } else {
+                _servoPlane.setPosition(0.6);
+                _plane = true;
+            }
         }
+
         if (X && _xOld) {
             _lift = !_lift;
 

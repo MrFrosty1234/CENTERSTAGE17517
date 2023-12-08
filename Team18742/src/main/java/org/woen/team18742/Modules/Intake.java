@@ -85,16 +85,18 @@ public class Intake {
         double speed = 1.00;
         intakePowerWithDefense(brush1, speed);
     }
-
+   public static double getvolteges = 1;
+   public static double timesxz = 1.5;
+   public static double times1 = 3;
     public void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
         if (brush1) {
-            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= 0.75 && flagdefense) {
+            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= getvolteges && flagdefense) {
                 elapsedTime.reset();
             }
-            if (elapsedTime.milliseconds() >= 1.5) {
+            if (elapsedTime.milliseconds() >= timesxz) {
                 flagdefense = false;
             }
-            if (elapsedTime.milliseconds() >= 3) {
+            if (elapsedTime.milliseconds() >= times1) {
                 flagdefense = true;
             }
             if (!flagdefense) {
@@ -133,17 +135,17 @@ public class Intake {
     double clampTimerconst = 500;
 
     public void Update() {
-      //  clampTimer.reset();
-     //   if (pixelDetected()) {
-           // setGripper(true);
-           // setClamp(clampTimer.milliseconds() < clampTimerconst);
-         //   intakePower(false);
-      //  } else {
-          //  setGripper(false);
-          //  setClamp(true);
-           // if (inableIntake)
-            //    intakePower(true);
-        //}
+       clampTimer.reset();
+       if (pixelDetected()) {
+            setGripper(true);
+            setClamp(clampTimer.milliseconds() < clampTimerconst);
+            intakePower(false);
+        } else {
+        setGripper(false);
+          setClamp(true);
+            if (inableIntake)
+                intakePower(true);
+        }
     }
 }
 
