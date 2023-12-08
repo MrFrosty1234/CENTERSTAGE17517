@@ -50,13 +50,13 @@ public class Intake {
     public static double servoGripper = 0.221;
 
     public void setGripper(boolean grip) {
-        /*if (grip) {
+        if (grip) {
             speed = -1;
             gripper.setPosition(servoGripper);
         } else {
             speed = 1;
             gripper.setPosition(servoGripperreturn);
-        }*/
+        }
     }
 
     private void intakePower(boolean brush) {
