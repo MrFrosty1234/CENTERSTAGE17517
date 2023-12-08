@@ -7,7 +7,7 @@ import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 
 @Autonomous
-public class AutonomOpMode extends LinearOpMode {
+public class Autonom extends LinearOpMode {
     private BaseCollector _collector;
 
     @Override

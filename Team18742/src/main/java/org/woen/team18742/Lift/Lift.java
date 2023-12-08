@@ -18,25 +18,27 @@ public class Lift {
 
     private double _targetLiftPose = 0;
 
-    private final DigitalChannel _ending;
+    private final DigitalChannel _ending1, _ending2;
 
     public Lift(BaseCollector collector) {
-        _ending = collector.CommandCode.hardwareMap.get(DigitalChannel.class, "ending");
+        _ending1 = collector.CommandCode.hardwareMap.get(DigitalChannel.class, "ending1");
+        _ending2 = collector.CommandCode.hardwareMap.get(DigitalChannel.class, "ending2");
         _liftM1 = collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor");
         _liftM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        _liftPid = new PID(0.1, 0.04, 0, 1);
+        _liftPid = new PID(0.55, 0, 0, 1);
 
         _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _liftM1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        //  _liftM1.setPower(0);
+        _liftM1.setPower(0);
 
-        _ending.setMode(DigitalChannel.Mode.INPUT);
+        _ending1.setMode(DigitalChannel.Mode.INPUT);
+        _ending2.setMode(DigitalChannel.Mode.INPUT);
     }
 
     public void Update() {
-        boolean state = !_ending.getState();
+        boolean state = _ending1.getState();
 
         /*if (state) {
             _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -50,10 +52,16 @@ public class Lift {
         //}
         //} else {
         //if (_liftM1.getCurrentPosition() >= 0)
-            _liftM1.setPower(_liftPid.Update(_targetLiftPose - _liftM1.getCurrentPosition()));
+//            _liftM1.setPower(_liftPid.Update(_targetLiftPose - _liftM1.getCurrentPosition()));
 
-        ToolTelemetry.AddLine(_liftM1.getCurrentPosition() + ", " + _targetLiftPose);
+        //ToolTelemetry.AddLine(_liftM1.getCurrentPosition() + ", " + state + ", " + _ending2.getState() + ", " + _targetLiftPose);
         //}
+
+        if(_targetPose == LiftPose.UP && !_ending1.getState())
+            _liftM1.setPower(0.8);
+
+        if(_targetPose == LiftPose.DOWN && !_ending2.getState())
+            _liftM1.setPower(0.005);
     }
 
     public void SetTargetPose(double pose) {
@@ -65,11 +73,18 @@ public class Lift {
     }
 
     public boolean isATarget() {
-        return Math.abs(_liftPid.Err) < 2;
+        return (_targetPose == LiftPose.UP && _ending1.getState()) || (_targetPose == LiftPose.DOWN && _ending2.getState());
+    }
+
+    public boolean isDown(){
+        return _ending2.getState();
     }
 
     public void SetLiftPose(LiftPose pose) {
-        _targetLiftPose = pose.Pose;
+        if(_targetLiftPose > 0)
+            _targetLiftPose = pose.Pose;
+
+        _targetPose = pose;
     }
 
     public void Start() {
@@ -79,6 +94,8 @@ public class Lift {
     private boolean _isZeroing = false;
 
     private long _zeroingTimeStart;
+
+    private LiftPose _targetPose = LiftPose.ZEROING;
 
     public void Zeroing() {
         //  _liftM1.setPower(-0.3);
