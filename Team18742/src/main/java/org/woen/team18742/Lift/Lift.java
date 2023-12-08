@@ -58,7 +58,7 @@ public class Lift {
         //}
 
         if(_targetPose == LiftPose.UP && !_ending1.getState())
-            _liftM1.setPower(0.8);
+            _liftM1.setPower(0.9);
 
         if(_targetPose == LiftPose.DOWN && !_ending2.getState())
             _liftM1.setPower(0.005);

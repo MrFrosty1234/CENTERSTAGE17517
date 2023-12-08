@@ -1,10 +1,11 @@
 package org.woen.team18742.Modules;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Lift.LiftPose;
-
+@Config
 public class Manual {
     private BaseCollector _collector;
 
@@ -44,10 +45,13 @@ public class Manual {
         boolean perevert = _collector.CommandCode.gamepad1.circle;
         boolean zajat = _collector.CommandCode.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
 
-        if(grip && !oldgrip) {
+       /* if(grip && !oldgrip) {
             ferty = !ferty;
             _collector.Intake.setGripper(ferty);
-        }
+        }*/
+
+        if(grip)
+            _collector.Intake.releaseGripper();
 
         oldgrip = grip;
 

@@ -52,6 +52,8 @@ public class Intake {
     public static double servoGripperreturn = 0.43;
     public static double servoGripper = 0.221;
 
+    private boolean gripped = false;
+
     public void setGripper(boolean grip) {
         if (grip) {
             speed = -1;
@@ -60,6 +62,7 @@ public class Intake {
             speed = 1;
             gripper.setPosition(servoGripperreturn);
         }
+        gripped = grip;
     }
 
     private void intakePower(boolean brush) {
@@ -126,17 +129,21 @@ public class Intake {
     }
 
     ElapsedTime clampTimer = new ElapsedTime();
-    double clampTimerconst = 1500;
+    double clampTimerconst = 1000;
+
+    void releaseGripper(){
+        setGripper(false);
+        clampTimer.reset();
+    }
+
     public void Update() {
-         clampTimer.reset();
         if (pixelDetected()) {
-            clampTimer.reset();
             setGripper(true);
-            setClamp(clampTimer.milliseconds() < clampTimerconst);
+            setClamp(clampTimer.milliseconds() < clampTimerconst && _collector.Lift.isDown());
             intakePower(false);
         } else {
-            setGripper(false);
-            setClamp(true);
+            clampTimer.reset();
+            setClamp(!gripped && _collector.Lift.isDown());
             if (inableIntake)
                 intakePower(true);
 
