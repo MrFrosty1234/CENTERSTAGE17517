@@ -34,7 +34,7 @@ public class Intake {
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-   public static double servoperevorotnazad = 0.16;
+   public static double servoperevorotnazad = 0.18;//16
     public static double servoperevorot = 0.765;
 
     public void setperevorotik(boolean perevert) {
