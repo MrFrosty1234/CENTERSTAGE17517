@@ -41,7 +41,7 @@ public class Manual {
         boolean O = _collector.CommandCode.gamepad1.dpad_up;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
         boolean clamp = _collector.CommandCode.gamepad1.cross;
-        boolean perevert = _collector.CommandCode.gamepad1.b;
+        boolean perevert = _collector.CommandCode.gamepad1.circle;
         boolean zajat = _collector.CommandCode.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
 
         if(grip && !oldgrip) {
