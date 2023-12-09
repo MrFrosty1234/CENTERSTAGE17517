@@ -28,7 +28,7 @@ public class OpModeCamera extends LinearOpMode {
         visionPortal.setProcessorEnabled(pipeLine, true);
 
         while (opModeIsActive()) {
-            telemetry.addData("number of parking", pipeLine.pos);
+            telemetry.addData("number of parking", pipeLine.pos);//тихон чек!!!!!!!!!!!!!!!!11
             telemetry.addData("team", pipeLine.team);
             telemetry.addData("camera", visionPortal.getCameraState());
            // telemetry.addData("hcv:", visionPortal.9)
