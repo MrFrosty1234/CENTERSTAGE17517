@@ -136,18 +136,22 @@ public class Intake {
         clampTimer.reset();
     }
 
+    public boolean isPixelLocated = false;
+
     public void Update() {
         if (pixelDetected()) {
             setGripper(true);
             setClamp(clampTimer.milliseconds() < clampTimerconst && _collector.Lift.isDown());
             intakePower(false);
+
+            isPixelLocated = true;
         } else {
             clampTimer.reset();
             setClamp(!gripped && _collector.Lift.isDown());
             if (inableIntake)
                 intakePower(true);
 
-
+            isPixelLocated = false;
         }
 
 
