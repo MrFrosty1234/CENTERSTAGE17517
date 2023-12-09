@@ -1,6 +1,10 @@
 
 package org.woen.team17517.Robot;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.signum;
+
 public class DrivetrainNew implements RobotModule{
 
     UltRobot robot = null;
@@ -32,6 +36,12 @@ public class DrivetrainNew implements RobotModule{
     public static double minh = 1;
     public static double miny = 1;
 
+    private static double diameter = 0.098;
+    private static double trackLength = 27d/2d;
+    public double maxspeedl = diameter*PI/0.2;
+    public double maxspeedr = Math.toDegrees(maxspeedl/trackLength);;
+
+
     PidRegulator pidX = new PidRegulator(kPX, kIX, kDX, u_maxX);
     PidRegulator pidY = new PidRegulator(kPY, kIY, kDY, u_maxY);
     PidRegulator pidH = new PidRegulator(kPH, kIH, kDH, u_maxH);
@@ -42,7 +52,6 @@ public class DrivetrainNew implements RobotModule{
         targetH = h;
         targetY = y;
         autoMode = true;
-
     }
 
   //  void enableAutoMode(boolean )
@@ -68,10 +77,27 @@ public class DrivetrainNew implements RobotModule{
             while (errH < -180) {
                 errH = errH + 360;
             }
+            double H = pidH.update(errH);
+            double X = pidH.update(errX);
+            double Y = pidH.update(errY);
 
-            robot.driveTrainVelocityControl.targetH = pidH.update(errH);
-            robot.driveTrainVelocityControl.vector.x = pidX.update(errX);
-            robot.driveTrainVelocityControl.vector.y = pidY.update(errY);
+
+            if (abs(H)> maxspeedr){
+                H = signum(H)*maxspeedr;
+            }
+            if (abs(X)> maxspeedl){
+                X = signum(X)*maxspeedl;
+            }
+            if (abs(Y)> maxspeedl){
+                Y = signum(Y)*maxspeedl;
+            }
+
+
+
+
+            robot.driveTrainVelocityControl.targetH = H;
+            robot.driveTrainVelocityControl.vector.x = X;
+            robot.driveTrainVelocityControl.vector.y = Y;
         }
     }
      public boolean isAtPosition() {

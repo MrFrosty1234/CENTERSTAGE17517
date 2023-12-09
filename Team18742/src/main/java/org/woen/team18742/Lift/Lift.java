@@ -38,7 +38,7 @@ public class Lift {
     }
 
     public void Update() {
-        //boolean state = _ending1.getState();
+        boolean state = _ending1.getState();
 
         /*if (state) {
             _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -54,14 +54,20 @@ public class Lift {
         //if (_liftM1.getCurrentPosition() >= 0)
 //            _liftM1.setPower(_liftPid.Update(_targetLiftPose - _liftM1.getCurrentPosition()));
 
-        //ToolTelemetry.AddLine(_liftM1.getCurrentPosition() + ", " + state + ", " + _ending2.getState() + ", " + _targetLiftPose);
+        ToolTelemetry.AddLine(_liftM1.getCurrentPosition() + ", " + state + ", " + _ending2.getState() + ", " + _targetLiftPose);
         //}
 
-        if(_targetPose == LiftPose.UP && !_ending1.getState())
-            _liftM1.setPower(0.9);
+        if(_targetPose == LiftPose.UP)
+            if(!_ending1.getState())
+                _liftM1.setPower(0.95);
+            else
+                _liftM1.setPower(0.15);
 
-        if(_targetPose == LiftPose.DOWN && !_ending2.getState())
-            _liftM1.setPower(0.005);
+        if(_targetPose == LiftPose.DOWN)
+            if(!_ending2.getState())
+                _liftM1.setPower(0.007);
+            else
+                _liftM1.setPower(0);
     }
 
     public void SetTargetPose(double pose) {
@@ -99,7 +105,7 @@ public class Lift {
 
     private long _zeroingTimeStart;
 
-    private LiftPose _targetPose = LiftPose.ZEROING;
+    private LiftPose _targetPose = LiftPose.DOWN;
 
     public void Zeroing() {
         //  _liftM1.setPower(-0.3);
