@@ -9,12 +9,12 @@ import org.woen.team18742.Lift.LiftPose;
 public class Manual {
     private BaseCollector _collector;
 
-    private boolean _clampOld = false, _isBrushOn = false;
-    private boolean _XOld = false, _clampOpen = false;
+    private boolean _clampOld = false, _isBrushOn = false, _brushReversOld = false;
+    private boolean _XOld = false, _clampOpen = false, _brushReverseOn = false;
     private boolean recuiert = false;
     private boolean ferty = false;
-    public static double servoplaneOtkrit = 0.08;
-    public static double servoplaneneOtkrit = 0.248;
+    public static double servoplaneOtkrit = 0.5;
+    public static double servoplaneneOtkrit = 0.07;
     private Servo _servoPlane = null;
 
     private long _origmillis;
@@ -39,6 +39,7 @@ public class Manual {
 
         boolean A = _collector.CommandCode.gamepad1.square;
         boolean X = false;
+        boolean brushRevers = _collector.CommandCode.gamepad1.dpad_left;
         boolean liftUp = _collector.CommandCode.gamepad1.dpad_up;
         boolean liftDown = _collector.CommandCode.gamepad1.dpad_down;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
@@ -69,12 +70,19 @@ public class Manual {
         if(_collector.Lift.isDown()){
             if (clamp && !_clampOld) {
                 _isBrushOn = !_isBrushOn;
+                _brushReverseOn = false;
                 _collector.Intake.intakePowerWithDefense(_isBrushOn);
+            } else if(brushRevers && !_brushReversOld){
+                _isBrushOn = false;
+                _brushReverseOn = !_brushReverseOn;
+                _collector.Intake.reversbrush(_brushReverseOn ? -1 : 0);
             }
         }
         else
         {
+            _collector.Intake.reversbrush(0);
             _isBrushOn = false;
+            _brushReverseOn = false;
             _collector.Intake.intakePowerWithDefense(_isBrushOn);
         }
 
@@ -89,8 +97,9 @@ public class Manual {
             _collector.Lift.SetLiftPose(LiftPose.UP);
         }
 
-        if(liftDown)
+        if(liftDown) {
             _collector.Lift.SetLiftPose(LiftPose.DOWN);
+        }
 
         if(X && !_XOld){
             _clampOpen = !_clampOpen;
@@ -100,5 +109,6 @@ public class Manual {
         _clampOld = clamp;
         oldperevprot = perevert;
         _XOld = X;
+        _brushReversOld = brushRevers;
     }
 }
