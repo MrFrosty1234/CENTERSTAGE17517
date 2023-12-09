@@ -10,22 +10,25 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.ToolTelemetry;
+
 @Config
 public class Intake {
     private Servo servopere;
     private DcMotorEx brushMotor; // ц
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
-    private AnalogInput pixelSensor; // Датчик присутствия пикселей над прижимом
+    private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 1.65;
+    public static double pixelSensorvoltage = 0.45;//0.4
     boolean inableIntake;
     private boolean flagdefense = true;
     ElapsedTime elapsedTime = new ElapsedTime();
 
     public Intake(BaseCollector collector) {
         _collector = collector;
-        pixelSensor = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "pixelSensor");
+        pixelSensor1 = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "pixelSensor1");
+        pixelSensor2 = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "pixelSensor2");
         gripper = _collector.CommandCode.hardwareMap.get(Servo.class, "gripok");
         clamp = _collector.CommandCode.hardwareMap.get(Servo.class, "gripokiu");
         servopere = _collector.CommandCode.hardwareMap.get(Servo.class, "perevert");
@@ -34,8 +37,8 @@ public class Intake {
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-   public static double servoperevorotnazad = 0.16;
-    public static double servoperevorot = 0.765;
+    public static double servoperevorotnazad = 0.16;//16
+    public static final double servoperevorot = 0.765;
 
     public void setperevorotik(boolean perevert) {
         if (perevert) {
@@ -49,6 +52,8 @@ public class Intake {
     public static double servoGripperreturn = 0.43;
     public static double servoGripper = 0.221;
 
+    private boolean gripped = false;
+
     public void setGripper(boolean grip) {
         if (grip) {
             speed = -1;
@@ -57,6 +62,7 @@ public class Intake {
             speed = 1;
             gripper.setPosition(servoGripperreturn);
         }
+        gripped = grip;
     }
 
     private void intakePower(boolean brush) {
@@ -70,31 +76,24 @@ public class Intake {
         }
     }
 
-    private boolean _isGrabberOn = false;
-
-    public void SetGrabber(){
-        if(_isGrabberOn)
-            _isGrabberOn = false;
-        else
-            _isGrabberOn = true;
-
-        intakePowerWithDefense(_isGrabberOn);
-    }
-
     public void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
         double speed = 1.00;
         intakePowerWithDefense(brush1, speed);
     }
 
+    public static double getvolteges = 1;
+    public static double timesxz = 1500;
+    public static double times1 = 3000;
+
     public void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
         if (brush1) {
-            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= 0.75 && flagdefense) {
+            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= getvolteges && flagdefense) {
                 elapsedTime.reset();
             }
-            if (elapsedTime.milliseconds() >= 1.5) {
+            if (elapsedTime.milliseconds() >= timesxz && flagdefense) {
                 flagdefense = false;
             }
-            if (elapsedTime.milliseconds() >= 3) {
+            if (elapsedTime.milliseconds() >= times1 && !flagdefense) {
                 flagdefense = true;
             }
             if (!flagdefense) {
@@ -107,14 +106,14 @@ public class Intake {
         }
     }
 
-    public static double servoClamp = 0.7;
-    public static double servoClampreturn = 0.2;
+    public static double servoClamp = 0.44;
+    public static double servoClampreturn = 0.1;
 
-    private void setClamp(boolean clampIk) {
+    public void setClamp(boolean clampIk) {
         if (clampIk) {
-            gripper.setPosition(servoClamp);
+            clamp.setPosition(servoClamp);
         } else {
-            gripper.setPosition(servoClampreturn);
+            clamp.setPosition(servoClampreturn);
         }
     }
 
@@ -123,27 +122,39 @@ public class Intake {
     double pixelTimeconst = 500;
 
     public boolean pixelDetected() {
-        boolean sensorValue = pixelSensor.getVoltage() > pixelSensorvoltage;
-        if (!sensorValue)
-            pixelTimer.reset();
+       // return pixelSensor1.getVoltage() <= pixelSensorvoltage && pixelSensor2.getVoltage() <= pixelSensorvoltage;
+      if(pixelSensor1.getVoltage() >= pixelSensorvoltage || pixelSensor2.getVoltage() >= pixelSensorvoltage)
+           pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
 
     ElapsedTime clampTimer = new ElapsedTime();
-    double clampTimerconst = 500;
+    double clampTimerconst = 1000;
+
+    void releaseGripper(){
+        setGripper(false);
+        clampTimer.reset();
+    }
 
     public void Update() {
-      //  clampTimer.reset();
-     //   if (pixelDetected()) {
-           // setGripper(true);
-           // setClamp(clampTimer.milliseconds() < clampTimerconst);
-         //   intakePower(false);
-      //  } else {
-          //  setGripper(false);
-          //  setClamp(true);
-           // if (inableIntake)
-            //    intakePower(true);
-        //}
+        if (pixelDetected()) {
+            setGripper(true);
+            setClamp(clampTimer.milliseconds() < clampTimerconst && _collector.Lift.isDown());
+            intakePower(false);
+        } else {
+            clampTimer.reset();
+            setClamp(!gripped && _collector.Lift.isDown());
+            if (inableIntake)
+                intakePower(true);
+
+
+        }
+
+
+
+        ToolTelemetry.AddLine(pixelSensor1.getVoltage() + " " + pixelSensor2.getVoltage());
+        ToolTelemetry.AddLine(pixelDetected()+"");
     }
 }
+
 
