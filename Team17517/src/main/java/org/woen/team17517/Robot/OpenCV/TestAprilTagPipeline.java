@@ -40,8 +40,7 @@ public class TestAprilTagPipeline {
         this.robot = robot;
     }
 
-
-    void startPipeline() {
+    public void startPipeline() {
         dashboard = FtcDashboard.getInstance();
 
         aprilTagPipeline = new AprilTagProcessor.Builder()
