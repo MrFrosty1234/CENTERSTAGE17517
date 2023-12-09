@@ -12,7 +12,7 @@ public class UltRobot {
     public Lift lift;
     public Lighting lighting;
     public VoltageSensorPoint voltageSensorPoint;
-    public updateCameraAndOdometry updateCameraAndOdometry;
+    public UpdateCameraAndOdometry updateCameraAndOdometry;
     public LinearOpMode linearOpMode;
     public Gyro gyro;
     public TelemetryOutput telemetryOutput;
@@ -34,12 +34,12 @@ public class UltRobot {
         driveTrainVelocityControl  = new DriveTrainVelocityControl(this);
         gyro = new Gyro(this);
         lighting = new Lighting(this);
-        updateCameraAndOdometry = new updateCameraAndOdometry(this);
+        //updateCameraAndOdometry = new UpdateCameraAndOdometry(this);
         testAprilTagPipeline = new TestAprilTagPipeline(this);
         odometry = new Odometry(this);
         drivetrainNew = new DrivetrainNew(this);
         this.robotModules = new RobotModule[]{telemetryOutput, grabber, timer, voltageSensorPoint,
-                lift, driveTrainVelocityControl, gyro, lighting, odometry, drivetrainNew,updateCameraAndOdometry};
+                lift, driveTrainVelocityControl, gyro, lighting, odometry, drivetrainNew,/*updateCameraAndOdometry*/ };
     }
     public boolean isAtPositionAll(){
         boolean positionIndicator = true;
@@ -54,7 +54,7 @@ public class UltRobot {
         }
     }
 
-    public void updateWhilePositionFalse (Runnable runnables[]){
+    public void updateWhilePositionFalse(Runnable[] runnables){
         for (Runnable runnable : runnables){
             allUpdate();
             runnable.run();

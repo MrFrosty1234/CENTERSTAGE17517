@@ -30,8 +30,8 @@ public class Lift implements RobotModule {
         liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor");
         liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        buttonUp.setMode(DigitalChannel.Mode.INPUT);
-        buttonDown.setMode(DigitalChannel.Mode.INPUT);
+        //buttonUp.setMode(DigitalChannel.Mode.INPUT);
+       // buttonDown.setMode(DigitalChannel.Mode.INPUT);
     }
 
     public void reset() {
@@ -44,7 +44,7 @@ public class Lift implements RobotModule {
     }
 
 
-    private int getPosition() {
+    public int getPosition() {
         return liftMotor.getCurrentPosition() - liftOffset;
     }
 

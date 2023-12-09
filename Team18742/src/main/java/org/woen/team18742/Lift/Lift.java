@@ -54,19 +54,26 @@ public class Lift {
         //if (_liftM1.getCurrentPosition() >= 0)
 //            _liftM1.setPower(_liftPid.Update(_targetLiftPose - _liftM1.getCurrentPosition()));
 
-        //ToolTelemetry.AddLine(_liftM1.getCurrentPosition() + ", " + state + ", " + _ending2.getState() + ", " + _targetLiftPose);
+        ToolTelemetry.AddLine(_liftM1.getCurrentPosition() + ", " + state + ", " + _ending2.getState() + ", " + _targetLiftPose);
         //}
 
-        if(_targetPose == LiftPose.UP && !_ending1.getState())
-            _liftM1.setPower(0.8);
+        if(_targetPose == LiftPose.UP)
+            if(!_ending1.getState())
+                _liftM1.setPower(0.95);
+            else
+                _liftM1.setPower(0.15);
 
-        if(_targetPose == LiftPose.DOWN && !_ending2.getState())
-            _liftM1.setPower(0.005);
+        if(_targetPose == LiftPose.DOWN)
+            if(!_ending2.getState())
+                _liftM1.setPower(0.007);
+            else
+                _liftM1.setPower(0);
     }
 
     public void SetTargetPose(double pose) {
         _targetLiftPose = pose;
     }
+
 
     public double GetLiftPose() {
         return _targetLiftPose;
@@ -78,6 +85,9 @@ public class Lift {
 
     public boolean isDown(){
         return _ending2.getState();
+    }
+    public boolean isUp(){
+        return _ending1.getState();
     }
 
     public void SetLiftPose(LiftPose pose) {
@@ -95,7 +105,7 @@ public class Lift {
 
     private long _zeroingTimeStart;
 
-    private LiftPose _targetPose = LiftPose.ZEROING;
+    private LiftPose _targetPose = LiftPose.DOWN;
 
     public void Zeroing() {
         //  _liftM1.setPower(-0.3);

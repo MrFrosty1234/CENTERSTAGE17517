@@ -9,8 +9,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import java.util.List;
-
 @Config
 public class DriveTrainVelocityControl implements RobotModule{
     UltRobot robot;
@@ -31,9 +29,9 @@ public class DriveTrainVelocityControl implements RobotModule{
     private static double encRatConstant;
     private  final double  maxRobotSpeed = diameter*PI/0.2;
     private final double maxCircleRobotSpeed = Math.toDegrees(maxRobotSpeed/trackLength);
-    private PIDCmethod speedX = new PIDCmethod(kpX, kiX,kdX,ksX);
-    private PIDCmethod speedRat = new PIDCmethod(kpRat,kiRat,kdRat,ksY);
-    private PIDCmethod speedY = new PIDCmethod(kpY, kiY,kdY,ksRat);
+    private PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX);
+    private PIDMethod speedRat = new PIDMethod(kpRat,kiRat,kdRat,ksY);
+    private PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat);
     public double targetH = 0;
     public double yEnc;
     public double xEnc;
@@ -148,9 +146,9 @@ public class DriveTrainVelocityControl implements RobotModule{
     public void update() {
         encUpdate();
 
-        this.speedRat.setCoificent(kpRat,kiRat,kdRat,ksRat);
-        this.speedX.setCoificent(kpX,kiX,kdX,ksX);
-        this.speedY.setCoificent(kpY,kiY,kdY,ksY);
+        this.speedRat.setCoefficent(kpRat,kiRat,kdRat,ksRat);
+        this.speedX.setCoefficent(kpX,kiX,kdX,ksX);
+        this.speedY.setCoefficent(kpY,kiY,kdY,ksY);
 
         double velRat = velocityMoveRat(targetH);
         double velX = velocityMoveX(vector.x);

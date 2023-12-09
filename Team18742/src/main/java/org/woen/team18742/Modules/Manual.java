@@ -1,17 +1,20 @@
 package org.woen.team18742.Modules;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Lift.LiftPose;
-
+@Config
 public class Manual {
     private BaseCollector _collector;
 
-    private boolean _clampOld = false, _plane = false;
+    private boolean _clampOld = false, _isBrushOn = false, _brushReversOld = false;
+    private boolean _XOld = false, _clampOpen = false, _brushReverseOn = false;
     private boolean recuiert = false;
     private boolean ferty = false;
-
+    public static double servoplaneOtkrit = 0.5;
+    public static double servoplaneneOtkrit = 0.07;
     private Servo _servoPlane = null;
 
     private long _origmillis;
@@ -34,9 +37,9 @@ public class Manual {
                 _collector.CommandCode.gamepad1.left_stick_x,
                 _collector.CommandCode.gamepad1.right_stick_x);
 
-        double LiftPlus = _collector.CommandCode.gamepad1.left_trigger;
-        double LiftMinus = _collector.CommandCode.gamepad1.right_trigger;
         boolean A = _collector.CommandCode.gamepad1.square;
+        boolean X = false;
+        boolean brushRevers = _collector.CommandCode.gamepad1.dpad_left;
         boolean liftUp = _collector.CommandCode.gamepad1.dpad_up;
         boolean liftDown = _collector.CommandCode.gamepad1.dpad_down;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
@@ -49,44 +52,63 @@ public class Manual {
             _collector.Intake.setGripper(ferty);
         }
 
+        if(grip)
+            _collector.Intake.releaseGripper();
+
         oldgrip = grip;
 
-        _collector.Lift.SetTargetPose(_collector.Lift.GetLiftPose() + LiftPlus * 10 - LiftMinus * 10);
-
-        if (perevert && !oldperevprot)
-            recuiert = !recuiert;
-
-        if(_collector.Lift.isDown())
+        if(!_collector.Lift.isUp()) {
+            recuiert = false;
             _collector.Intake.setperevorotik(false);
-        else
+        }
+        else {
             _collector.Intake.setperevorotik(recuiert);
-
-        oldperevprot = perevert;
-
-        /*if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
-                _servoPlane.setPosition(0.10);
-        }else {
-            _servoPlane.setPosition(0.70);
-        }*/
-        if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000)) {
-            if (_plane) {
-                _servoPlane.setPosition(0.1);
-                _plane = false;
-            } else {
-                _servoPlane.setPosition(0.6);
-                _plane = true;
-            }
+            if (perevert && !oldperevprot)
+                recuiert = !recuiert;
         }
 
-        if (liftUp)
+        if(_collector.Lift.isDown()){
+            if (clamp && !_clampOld) {
+                _isBrushOn = !_isBrushOn;
+                _brushReverseOn = false;
+                _collector.Intake.intakePowerWithDefense(_isBrushOn);
+            } else if(brushRevers && !_brushReversOld){
+                _isBrushOn = false;
+                _brushReverseOn = !_brushReverseOn;
+                _collector.Intake.reversbrush(_brushReverseOn ? -1 : 0);
+            }
+        }
+        else
+        {
+            _collector.Intake.reversbrush(0);
+            _isBrushOn = false;
+            _brushReverseOn = false;
+            _collector.Intake.intakePowerWithDefense(_isBrushOn);
+        }
+
+        if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000))
+            _servoPlane.setPosition(servoplaneOtkrit);
+        else{
+            _servoPlane.setPosition(servoplaneneOtkrit);
+        }
+        if (liftUp) {
+            _clampOpen = true;
+            _collector.Intake.setClamp(true);
             _collector.Lift.SetLiftPose(LiftPose.UP);
+        }
 
-        if(liftDown)
+        if(liftDown) {
             _collector.Lift.SetLiftPose(LiftPose.DOWN);
+        }
 
-        if (clamp && !_clampOld)
-            _collector.Intake.SetGrabber();
+        if(X && !_XOld){
+            _clampOpen = !_clampOpen;
+            _collector.Intake.setClamp(_clampOpen);
+        }
 
         _clampOld = clamp;
+        oldperevprot = perevert;
+        _XOld = X;
+        _brushReversOld = brushRevers;
     }
 }

@@ -1,21 +1,20 @@
 package org.woen.team17517.Robot;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
 @Config
-public  class PIDCmethod {
+public  class PIDMethod {
 
-    public PIDCmethod( double kp,double ki, double kd){
-            setCoificent(kp, ki, kd,0);
+    public PIDMethod(double kp, double ki, double kd){
+            setCoefficent(kp, ki, kd,0);
     }
-    public PIDCmethod(double kp, double ki, double kd, double ks){
-        setCoificent(kp,ki,kd,ks);
+    public PIDMethod(double kp, double ki, double kd, double ks){
+        setCoefficent(kp,ki,kd,ks);
 
     }
     double kp,kd,ki,ks = 1;
-    public void setCoificent(double kp,double ki,double kd,double ks){
+    public void setCoefficent(double kp, double ki, double kd, double ks){
 
         this.kp = kp;
         this.ki = ki;
