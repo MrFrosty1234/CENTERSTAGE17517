@@ -20,7 +20,7 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.4;//1.65
+    public static double pixelSensorvoltage = 0.45;//0.4
     boolean inableIntake;
     private boolean flagdefense = true;
     ElapsedTime elapsedTime = new ElapsedTime();
@@ -37,7 +37,7 @@ public class Intake {
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public static double servoperevorotnazad = 0.18;//16
+    public static double servoperevorotnazad = 0.16;//16
     public static final double servoperevorot = 0.765;
 
     public void setperevorotik(boolean perevert) {
