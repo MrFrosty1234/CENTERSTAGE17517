@@ -19,9 +19,17 @@ public class Autonom extends LinearOpMode {
 
         _collector.Start();
 
+        _collector.Driver.DriveDirection(0,0,0);
+        _collector.Driver.DriveDirection(0.5,0,0);
+        sleep(1700);
+        _collector.Driver.DriveDirection(-0.2,0,0);
+        sleep(1000);
+        _collector.Driver.Stop();
+
         while (opModeIsActive()) {
-            _collector.Update();
-            telemetry.update();
+            return;
+           // _collector.Update();
+            //telemetry.update();
         }
     }
 }

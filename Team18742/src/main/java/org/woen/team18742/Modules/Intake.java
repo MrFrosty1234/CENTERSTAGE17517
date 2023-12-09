@@ -20,7 +20,7 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.45;//0.4
+    public static double pixelSensorvoltage = 0.187;//0.4
     boolean inableIntake;
     private boolean flagdefense = true;
     ElapsedTime elapsedTime = new ElapsedTime();
@@ -105,6 +105,10 @@ public class Intake {
             brushMotor.setPower(0);
         }
     }
+    public void reversbrush(int speed){
+            brushMotor.setPower(speed);
+
+    }
 
     public static double servoClamp = 0.44;
     public static double servoClampreturn = 0.1;
@@ -123,7 +127,7 @@ public class Intake {
 
     public boolean pixelDetected() {
        // return pixelSensor1.getVoltage() <= pixelSensorvoltage && pixelSensor2.getVoltage() <= pixelSensorvoltage;
-      if(pixelSensor1.getVoltage() >= pixelSensorvoltage || pixelSensor2.getVoltage() >= pixelSensorvoltage)
+      if(pixelSensor1.getVoltage() >= pixelSensorvoltage )//|| pixelSensor2.getVoltage() >= pixelSensorvoltage)
            pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
