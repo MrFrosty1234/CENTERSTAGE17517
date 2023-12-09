@@ -80,7 +80,7 @@ public class Grabber implements RobotModule{
         //   robot.lift.liftPos = !robot.lift.liftPos;
         //} else
         //   pixelMotor.setPower(0);
-        //robot.linearOpMode.telemetry.addData("motorCurrent", motorCurrent);
+        robot.linearOpMode.telemetry.addData("motorCurrent", motorCurrent);
     }
 
     public void enable(boolean motorPowerControll) {

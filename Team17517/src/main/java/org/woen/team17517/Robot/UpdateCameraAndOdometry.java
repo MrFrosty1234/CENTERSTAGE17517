@@ -2,9 +2,7 @@ package org.woen.team17517.Robot;
 
 import static java.lang.Math.sqrt;
 
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-
-public class updateCameraAndOdometry  implements RobotModule{
+public class UpdateCameraAndOdometry implements RobotModule{
 
     UltRobot robot;
 
@@ -12,7 +10,7 @@ public class updateCameraAndOdometry  implements RobotModule{
     public static double cameraToOdometrySafeEncs = 50;
     double[] coords = new double[3];
 
-    public updateCameraAndOdometry(UltRobot robot) {
+    public UpdateCameraAndOdometry(UltRobot robot) {
         this.robot = robot;
     }
 
@@ -22,6 +20,7 @@ public class updateCameraAndOdometry  implements RobotModule{
     }
 
     public void update() {
+        robot.testAprilTagPipeline.startPipeline();
         robot.testAprilTagPipeline.visionPortalWork();
         double xVector = robot.testAprilTagPipeline.rawTagPoseVector.get(0);
         double yVector = robot.testAprilTagPipeline.rawTagPoseVector.get(1);
