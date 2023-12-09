@@ -54,9 +54,9 @@ public class TeleOpM extends LinearOpMode {
         right_front_drive =robot.linearOpMode.hardwareMap.dcMotor.get("right_front_drive");
        left_back_drive =robot.linearOpMode.hardwareMap.dcMotor.get("left_back_drive");
        left_front_drive =robot.linearOpMode.hardwareMap.dcMotor.get("left_front_drive");
-        while (opModeIsActive()) {
+        while(opModeIsActive()){
             boolean dpad_up = gamepad1.dpad_up;
-            boolean circle = gamepad1.circle;
+                boolean circle = gamepad1.circle;
             boolean square = gamepad1.square;
             boolean triangle = gamepad1.triangle;
             boolean cross = gamepad1.cross;
