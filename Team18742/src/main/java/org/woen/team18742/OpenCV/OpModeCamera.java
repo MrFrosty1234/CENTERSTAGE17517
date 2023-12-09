@@ -12,7 +12,7 @@ public class OpModeCamera extends LinearOpMode {
     VisionPortal visionPortal;
 
 
-    VisionPipeLine pipeLine = new VisionPipeLine();
+    TestVisionProcessor pipeLine = new TestVisionProcessor();
 
     @Override
     public void runOpMode() throws InterruptedException {
