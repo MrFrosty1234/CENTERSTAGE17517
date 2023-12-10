@@ -6,21 +6,22 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.OpenCV.PipeLine;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 @Config
 public class Camera {
     private final WebcamName _camera;
     public static boolean IsDebug = false;
-    public static RobotPosition RobotPos;
+    public static int RobotPos;
 
     VisionPortal visionPortal;
     PipeLine pipeLine = new PipeLine();
 
     public Camera(BaseCollector collector) {
-        _camera = collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam1");
+        _camera = collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1");
 
         visionPortal = new VisionPortal.Builder()
-                .setCamera(collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCamera(_camera)
                 .addProcessor(pipeLine)
                 .build();
 
@@ -29,11 +30,8 @@ public class Camera {
 
     private int Pose = 0;
 
-    public RobotPosition GetPosition() {
-        if(IsDebug)
-            return RobotPos;
-
-        switch (Pose) {
+    private RobotPosition GetEnum(int val){
+        switch (val) {
             case 1:
                 return RobotPosition.LEFT;
             case 2:
@@ -43,12 +41,26 @@ public class Camera {
         }
     }
 
+    public RobotPosition GetPosition() {
+        if(IsDebug)
+            return GetEnum(RobotPos);
+
+        return GetEnum(Pose);
+    }
+
     public void Start() {
-        Pose = pipeLine.pos;
         visionPortal.setProcessorEnabled(pipeLine, true);
+        Pose = pipeLine.pos;
+        ToolTelemetry.AddLine("camera = " + Pose);
+    }
+
+    public void Stop(){
+        visionPortal.close();
     }
 
     public void Update() {
         Pose = pipeLine.pos;
+
+        ToolTelemetry.AddLine("camera = " + Pose);
     }
 }
