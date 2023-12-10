@@ -14,7 +14,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 
-class PipeLine implements VisionProcessor {
+public class PipeLine implements VisionProcessor {
     double x = 640;
     double y = 480;
     double r1 = 5;

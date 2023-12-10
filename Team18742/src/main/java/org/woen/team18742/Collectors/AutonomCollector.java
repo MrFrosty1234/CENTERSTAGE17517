@@ -26,50 +26,46 @@ public class AutonomCollector extends BaseCollector {
         _camera = new Camera(this);
 
         switch (_camera.GetPosition()) {
-            case FORWARD_LEFT: {
+            case FORWARD: {
                 _route = new Runnable[]{
                         () -> {
-                            _isPixelWait = true;
-                            Intake.intakePowerWithDefense(true);
                             Auto.PIDMove(20, 0);
                         },
                         () -> {
-                            Intake.intakePowerWithDefense(false);
-                            Lift.SetLiftPose(LiftPose.UP);
-                            Auto.PIDMove(0, -50);
+                            Auto.PIDMove(-5, 0);
                         },
                         () ->{
-                            Intake.setperevorotik(true);
-                            Intake.setGripper(false);
+                          Auto.PIDMove(0, 60);
                         }
                 };
 
                 break;
             }
 
-            case FORWARD_RIGHT: {
+            case RIGHT: {
                 _route = new Runnable[]{
                         () -> {
-                            _isPixelWait = true;
-                            Intake.intakePowerWithDefense(true);
-                            Auto.PIDMove(20, 0);
+                            Auto.PIDMove(80, 5);
                         },
-                        () -> {
-                            Intake.intakePowerWithDefense(false);
-                            Lift.SetLiftPose(LiftPose.UP);
-                            Auto.PIDMove(0, 50);
-                        },
-                        () ->{
-                            Intake.setperevorotik(true);
-                            Intake.setGripper(false);
+                        ()->{
+                            Auto.PIDMove(-10, 60);
                         }
                 };
 
                 break;
             }
 
-            default:
+            default: {
+                _route = new Runnable[]{
+                        () -> {
+                            Auto.PIDMove(60, 0);
+                        },
+                        () -> {
+                            Auto.PIDMove(-10, 60);
+                        }
+                };
                 break;
+            }
         }
     }
 
