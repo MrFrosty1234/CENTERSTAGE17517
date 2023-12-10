@@ -40,4 +40,8 @@ public class BaseCollector {
         Gyro.Update();
         Intake.Update();
     }
+
+    public void Stop(){
+
+    }
 }

@@ -24,18 +24,26 @@ public class AutonomCollector extends BaseCollector {
         Odometry = new Odometry(this);
         Auto = new Automatic(this);
         _camera = new Camera(this);
+    }
+
+    @Override
+    public void Start() {
+        super.Start();
+
+        Odometry.Start();
+        _camera.Start();
 
         switch (_camera.GetPosition()) {
             case FORWARD: {
                 _route = new Runnable[]{
                         () -> {
-                            Auto.PIDMove(20, 0);
+                            Auto.PIDMove(-20, 0);
                         },
                         () -> {
-                            Auto.PIDMove(-5, 0);
+                            Auto.PIDMove(5, 0);
                         },
                         () ->{
-                          Auto.PIDMove(0, 60);
+                            Auto.PIDMove(0, 60);
                         }
                 };
 
@@ -70,14 +78,6 @@ public class AutonomCollector extends BaseCollector {
     }
 
     @Override
-    public void Start() {
-        super.Start();
-
-        Odometry.Start();
-        _camera.Start();
-    }
-
-    @Override
     public void Update() {
         super.Update();
         Odometry.Update();
@@ -95,5 +95,10 @@ public class AutonomCollector extends BaseCollector {
             } else
                 Driver.Stop();
         }
+    }
+
+    @Override
+    public void Stop() {
+        _camera.Stop();
     }
 }

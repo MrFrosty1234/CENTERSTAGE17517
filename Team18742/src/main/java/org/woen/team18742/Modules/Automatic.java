@@ -66,7 +66,7 @@ public class Automatic {
     private double _movedTargetX = 0, _movedTargetY = 0;
 
     public boolean isMovedEnd() {
-        return GetDistance(_movedTargetX, _movedTargetY) > 2;
+        return _pidForward.Err < 2 && _pidSide.Err < 2;
     }
 
     public void Update() {
