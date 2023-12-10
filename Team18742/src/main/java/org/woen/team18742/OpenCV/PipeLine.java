@@ -1,6 +1,5 @@
 package org.woen.team18742.OpenCV;
 
-
 import static org.opencv.core.Core.*;
 import static org.opencv.imgproc.Imgproc.*;
 

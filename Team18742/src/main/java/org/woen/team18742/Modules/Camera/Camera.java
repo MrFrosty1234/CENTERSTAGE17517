@@ -20,19 +20,23 @@ public class Camera {
     TestVisionProcessor pipeLine = new TestVisionProcessor();
 
     public Camera(BaseCollector collector) {
-        _camera = collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1");
+        try {
+            _camera = collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1");
 
-        visionPortal = new VisionPortal.Builder()
-                .setCamera(_camera)
-                .addProcessor(pipeLine)
-                .build();
+            visionPortal = new VisionPortal.Builder()
+                    .setCamera(_camera)
+                    .addProcessor(pipeLine)
+                    .build();
+        } catch (Exception e) {
+            ToolTelemetry.AddLine("constructor" + e.getMessage());
+        }
 
-       // visionPortal.setProcessorEnabled(pipeLine, false);
+        // visionPortal.setProcessorEnabled(pipeLine, false);
     }
 
     private int Pose = 0;
 
-    private RobotPosition GetEnum(int val){
+    private RobotPosition GetEnum(int val) {
         switch (val) {
             case 1:
                 return RobotPosition.LEFT;
@@ -44,7 +48,7 @@ public class Camera {
     }
 
     public RobotPosition GetPosition() {
-        if(IsDebug)
+        if (IsDebug)
             return GetEnum(RobotPos);
 
         return GetEnum(Pose);
@@ -52,17 +56,29 @@ public class Camera {
 
     public void Start() {
         //  visionPortal.setProcessorEnabled(pipeLine, true);
-        Pose = pipeLine.pos;
-        ToolTelemetry.AddLine("camera = " + Pose);
+        try {
+            Pose = pipeLine.pos;
+            ToolTelemetry.AddLine("camera = " + Pose);
+        } catch (Exception e) {
+            ToolTelemetry.AddLine("start" + e.getMessage());
+        }
     }
 
-    public void Stop(){
-        visionPortal.close();
+    public void Stop() {
+        try {
+            visionPortal.close();
+        } catch (Exception e) {
+            ToolTelemetry.AddLine("stop" + e.getMessage());
+        }
     }
 
     public void Update() {
-        Pose = pipeLine.pos;
+        try {
+            Pose = pipeLine.pos;
 
-        ToolTelemetry.AddLine("camera = " + Pose);
+            ToolTelemetry.AddLine("camera = " + Pose);
+        }catch(Exception e){
+            ToolTelemetry.AddLine("update" + e.getMessage());
+        }
     }
 }
