@@ -39,9 +39,9 @@ public class Manual {
 
         boolean A = _collector.CommandCode.gamepad1.square;
         boolean X = false;
-        boolean brushRevers = _collector.CommandCode.gamepad1.dpad_left;
         boolean liftUp = _collector.CommandCode.gamepad1.dpad_up;
         boolean liftDown = _collector.CommandCode.gamepad1.dpad_down;
+        boolean brushRevers = _collector.CommandCode.gamepad1.dpad_left;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
         boolean clamp = _collector.CommandCode.gamepad1.cross;
         boolean perevert = _collector.CommandCode.gamepad1.circle;
@@ -71,6 +71,9 @@ public class Manual {
             if (clamp && !_clampOld) {
                 _isBrushOn = !_isBrushOn;
                 _brushReverseOn = false;
+
+                _collector.CommandCode.gamepad1.rumble(50);
+
                 _collector.Intake.intakePowerWithDefense(_isBrushOn);
             } else if(brushRevers && !_brushReversOld){
                 _isBrushOn = false;
