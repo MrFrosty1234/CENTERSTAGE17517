@@ -1,8 +1,16 @@
 package org.woen.team18742.OpenCV;
 
-
-import static org.opencv.core.Core.*;
-import static org.opencv.imgproc.Imgproc.*;
+import static org.opencv.core.Core.inRange;
+import static org.opencv.imgproc.Imgproc.COLOR_RGB2HSV;
+import static org.opencv.imgproc.Imgproc.MORPH_ERODE;
+import static org.opencv.imgproc.Imgproc.MORPH_RECT;
+import static org.opencv.imgproc.Imgproc.blur;
+import static org.opencv.imgproc.Imgproc.boundingRect;
+import static org.opencv.imgproc.Imgproc.cvtColor;
+import static org.opencv.imgproc.Imgproc.dilate;
+import static org.opencv.imgproc.Imgproc.erode;
+import static org.opencv.imgproc.Imgproc.getStructuringElement;
+import static org.opencv.imgproc.Imgproc.resize;
 
 import android.graphics.Canvas;
 
@@ -13,8 +21,10 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 
 public class PipeLine implements VisionProcessor {
+
     double x = 640;
     double y = 480;
     double r1 = 5;
@@ -25,8 +35,8 @@ public class PipeLine implements VisionProcessor {
     double b2 = 296;
     Mat img_range_red = new Mat();
     Mat img_range_blue = new Mat();
-    public double hRedDown = 10;
-    public double cRedDown = 50;
+    public double hRedDown = 4;
+    public double cRedDown = 127.7;
     public double vRedDowm = 154.4;
     public double hRedUp = 30;
     public double cRedUp = 255;
@@ -48,6 +58,8 @@ public class PipeLine implements VisionProcessor {
     double centerOfRectX = 0;
     double centerOfRectY = 0;
     public int pos = 0;
+
+    public int ksize = 13;
     public boolean team = true;
 
     public void init(int width, int height, CameraCalibration calibration) {
@@ -57,20 +69,25 @@ public class PipeLine implements VisionProcessor {
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
         //
+
         cvtColor(frame, frame, COLOR_RGB2HSV);//конвертация в хсв
         resize(frame, frame, new Size(x, y));// установка разрешения
 
         blur(frame, frame, new Size(10, 10));//размытие для компенсации шумов с камеры
         // можно иф для установки цвета команды и только 1 инрейндж
-            inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
+        inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
 
-            //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
-            //inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
+        //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
+        inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
 
 
-        Core.bitwise_or(img_range_red, img_range_red, frame);//объединяем два инрейнджа
 
-        Rect boundingRect = boundingRect(img_range_red);//boudingRect рисуем прямоугольник
+        Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
+
+        erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Сжать
+        dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Раздуть
+
+        Rect boundingRect = boundingRect(frame);//boudingRect рисуем прямоугольник
 
         centerOfRectX = boundingRect.x + boundingRect.width / 2.0;//координаты центра вычисляем
         centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
