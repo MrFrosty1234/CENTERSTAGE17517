@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.woen.team18742.Lift.LiftPose;
 import org.woen.team18742.Modules.Automatic;
 import org.woen.team18742.Modules.Camera.Camera;
+import org.woen.team18742.Modules.Camera.RobotPosition;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Odometry.Odometry;
 
@@ -23,7 +24,7 @@ public class AutonomCollector extends BaseCollector {
 
         Odometry = new Odometry(this);
         Auto = new Automatic(this);
-        _camera = new Camera(this);
+        //_camera = new Camera(this);
     }
 
     @Override
@@ -31,19 +32,22 @@ public class AutonomCollector extends BaseCollector {
         super.Start();
 
         Odometry.Start();
-        _camera.Start();
+        //_camera.Start();
 
-        switch (_camera.GetPosition()) {
+        switch (RobotPosition.FORWARD) {
             case FORWARD: {
                 _route = new Runnable[]{
                         () -> {
-                            Auto.PIDMove(-20, 0);
+                            Auto.PIDMove(-30, 0);
                         },
                         () -> {
-                            Auto.PIDMove(5, 0);
-                        },
-                        () ->{
                             Auto.PIDMove(0, 60);
+                        },
+                        () -> {
+                            Auto.PIDMove(30, 0);
+                        },
+                        () -> {
+                            Auto.PIDMove(0, -60);
                         }
                 };
 
@@ -84,7 +88,7 @@ public class AutonomCollector extends BaseCollector {
 
         Auto.Update();
 
-        _camera.Update();
+        //_camera.Update();
 
         if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
             if (_currentRouteAction < _route.length) {

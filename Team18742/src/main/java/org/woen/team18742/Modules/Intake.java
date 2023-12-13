@@ -45,7 +45,7 @@ public class Intake {
             servopere.setPosition(servoperevorot);
         } else {
             if(_collector.Lift.isDown())
-                servopere.setPosition(servoperevorotnazad));
+                servopere.setPosition(servoperevorotnazad);
         }
     }
 

@@ -5,8 +5,10 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 import org.woen.team18742.Collectors.AutonomCollector;
+import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Odometry.Odometry;
 import org.woen.team18742.Tools.PID;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 public class Automatic {
     private AutonomCollector _collector;
@@ -17,14 +19,17 @@ public class Automatic {
         _odometry = collector.Odometry;
     }
 
-    private PID _pidForward = new PID(0.8, 1, 1, 1), _pidSide = new PID(0.8, 1, 1, 1);
+    private PID _pidForward = new PID(0.2, 0, 0, 1), _pidSide = new PID(0.2, 0, 0, 1);
 
     public void PIDMove(double forward, double side) {
-        _movedTargetX = _odometry.X + forward;
-        _movedTargetY = _odometry.Y + side;
+        _movedTargetX = _movedTargetX + forward;
+        _movedTargetY = _movedTargetY + side;
 
         _pidForward.Reset();
         _pidSide.Reset();
+
+        _pidForward.Update(forward);
+        _pidSide.Update(side);
     }
 
     double fixangle(double degrees) {
@@ -48,13 +53,11 @@ public class Automatic {
         _collector.Driver.Stop();
     }
 
-    public void SetSpeedWorldCoords(double speedForward, double speedSide) {
-        speedForward = -speedForward;
+    public void SetSpeedWorldCoords(double speedForward, double speedSide, double rotate) {
+        double x = cos(_collector.Gyro.GetRadians()) * speedForward - sin(_collector.Gyro.GetRadians()) * speedSide,
+                y = sin(_collector.Gyro.GetRadians()) * speedForward + cos(_collector.Gyro.GetRadians()) * speedSide;
 
-        double x = cos(-_collector.Gyro.GetRadians()) * speedForward - sin(-_collector.Gyro.GetRadians()) * speedSide,
-                y = sin(-_collector.Gyro.GetRadians()) * speedForward + cos(-_collector.Gyro.GetRadians()) * speedSide;
-
-        _collector.Driver.DriveDirection(x, y, 0);
+        _collector.Driver.DriveDirection(x, y, rotate);
     }
 
     private double GetDistance(double x, double y) {
@@ -66,13 +69,17 @@ public class Automatic {
     private double _movedTargetX = 0, _movedTargetY = 0;
 
     public boolean isMovedEnd() {
-        return _pidForward.Err < 2 && _pidSide.Err < 2;
+        return Math.abs(_pidForward.Err) < 2d && Math.abs(_pidSide.Err) < 2d;
     }
 
     public void Update() {
+        double UForward = _pidForward.Update(_movedTargetX - _odometry.X), uSide = _pidSide.Update(_movedTargetY - _odometry.Y);
+
         if (isMovedEnd())
             _collector.Driver.Stop();
         else
-            SetSpeedWorldCoords(_pidForward.Update(_odometry.X - _movedTargetX), _pidSide.Update(_odometry.Y - _movedTargetY));
+            SetSpeedWorldCoords(UForward,  uSide, 0);
+
+        ToolTelemetry.AddLine( "Autonom:" + _pidForward.Err + " " + _pidSide.Err);
     }
 }
