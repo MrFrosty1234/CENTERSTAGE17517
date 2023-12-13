@@ -37,14 +37,15 @@ public class Intake {
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public static double servoperevorotnazad = 0.16;//16
-    public static final double servoperevorot = 0.765;
+    public static double servoperevorotnazad = 0.765;
+    public static final double servoperevorot = 0.16;
 
-    public void setperevorotik(boolean perevert) {
-        if (perevert) {
-            servopere.setPosition(servoperevorotnazad);
-        } else {
+    public void setperevorotik() {
+        if (_collector.Lift.isUp()) {
             servopere.setPosition(servoperevorot);
+        } else {
+            if(_collector.Lift.isDown())
+                servopere.setPosition(servoperevorotnazad));
         }
     }
 
@@ -79,6 +80,7 @@ public class Intake {
     public void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
         double speed = 1.00;
         intakePowerWithDefense(brush1, speed);
+
     }
 
     public static double getvolteges = 1;
@@ -154,7 +156,7 @@ public class Intake {
             isPixelLocated = false;
         }
 
-
+        setperevorotik();
 
         ToolTelemetry.AddLine(pixelSensor1.getVoltage() + " " + pixelSensor2.getVoltage());
         ToolTelemetry.AddLine(pixelDetected()+"");
