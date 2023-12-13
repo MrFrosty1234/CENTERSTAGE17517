@@ -1,4 +1,4 @@
-package org.woen.team18742.Odometry;
+package org.woen.team18742.Modules.Odometry;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
@@ -40,7 +40,9 @@ public class CVOdometry {
     }
 
     public void Update() {
-        ArrayList<AprilTagDetection> detections = _aprilTagProcessor.getDetections(); 
+        ArrayList<AprilTagDetection> detections = _aprilTagProcessor.getDetections();
+
+        IsZero = true;
 
         if(detections.size() == 0){
             X = 0;
@@ -83,5 +85,10 @@ public class CVOdometry {
 
         X = xSum / detections.size();
         Y = ySum / detections.size();
+    }
+
+    public void Stop()
+    {
+        _visionPortal.close();
     }
 }

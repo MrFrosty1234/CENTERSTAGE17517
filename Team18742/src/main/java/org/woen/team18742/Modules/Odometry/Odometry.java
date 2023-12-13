@@ -1,4 +1,4 @@
-package org.woen.team18742.Odometry;
+package org.woen.team18742.Modules.Odometry;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -57,12 +57,10 @@ public class Odometry {
 
         double time = _time.seconds(), deltaTime = time - _previusTime;
 
-        if(_CVOdometry.IsZero) {
+        if (_CVOdometry.IsZero) {
             X = X + (_CVOdometry.X - _myX) * deltaTime / (_XCoef + deltaTime);
             Y = Y + (_CVOdometry.Y - _myY) * deltaTime / (_YCoef + deltaTime);
-        }
-        else
-        {
+        } else {
             X = _myX;
             Y = _myY;
         }
@@ -73,5 +71,9 @@ public class Odometry {
     public void Start() {
         _CVOdometry.Start();
         _previusTime = _time.seconds();
+    }
+
+    public void Stop() {
+        _CVOdometry.Stop();
     }
 }
