@@ -43,7 +43,6 @@ public class Manual {
         boolean liftDown = _collector.CommandCode.gamepad1.dpad_down;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
         boolean clamp = _collector.CommandCode.gamepad1.cross;
-        boolean perevert = _collector.CommandCode.gamepad1.circle;
         boolean zajat = _collector.CommandCode.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
 
         if(grip && !oldgrip) {
@@ -55,16 +54,6 @@ public class Manual {
             _collector.Intake.releaseGripper();
 
         oldgrip = grip;
-
-        if(!_collector.Lift.isUp()) {
-            recuiert = false;
-            _collector.Intake.setperevorotik(false);
-        }
-        else {
-            _collector.Intake.setperevorotik(recuiert);
-            if (perevert && !oldperevprot)
-                recuiert = !recuiert;
-        }
 
         if(_collector.Lift.isDown()){
             if (clamp && !_clampOld) {
@@ -98,7 +87,6 @@ public class Manual {
         }
 
         _clampOld = clamp;
-        oldperevprot = perevert;
         _XOld = X;
     }
 }
