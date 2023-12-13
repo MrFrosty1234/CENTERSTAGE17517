@@ -2,9 +2,14 @@ package org.woen.team18742.OpenCV;
 
 import static org.opencv.core.Core.inRange;
 import static org.opencv.imgproc.Imgproc.COLOR_RGB2HSV;
+import static org.opencv.imgproc.Imgproc.MORPH_ERODE;
+import static org.opencv.imgproc.Imgproc.MORPH_RECT;
 import static org.opencv.imgproc.Imgproc.blur;
 import static org.opencv.imgproc.Imgproc.boundingRect;
 import static org.opencv.imgproc.Imgproc.cvtColor;
+import static org.opencv.imgproc.Imgproc.dilate;
+import static org.opencv.imgproc.Imgproc.erode;
+import static org.opencv.imgproc.Imgproc.getStructuringElement;
 import static org.opencv.imgproc.Imgproc.resize;
 
 import android.graphics.Canvas;
@@ -53,6 +58,8 @@ public class TestVisionProcessor implements VisionProcessor {
     double centerOfRectX = 0;
     double centerOfRectY = 0;
     public int pos = 0;
+
+    public int ksize = 13;
     public boolean team = true;
 
     public void init(int width, int height, CameraCalibration calibration) {
@@ -74,7 +81,11 @@ public class TestVisionProcessor implements VisionProcessor {
         inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
 
 
+
         Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
+
+        erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Сжать
+        dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Раздуть
 
         Rect boundingRect = boundingRect(frame);//boudingRect рисуем прямоугольник
 
