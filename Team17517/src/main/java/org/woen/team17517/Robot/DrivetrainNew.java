@@ -63,8 +63,8 @@ public class DrivetrainNew implements RobotModule{
 
      public void update() {
         if (autoMode) {
-            double x = robot.updateCameraAndOdometry.coords[0];
-            double y = robot.updateCameraAndOdometry.coords[1];
+            double x = robot.odometry.y ;
+            double y = robot.odometry.x;
             double h = robot.odometry.heading;
             errX = targetX - x;
             errY = targetY - y;
@@ -100,6 +100,11 @@ public class DrivetrainNew implements RobotModule{
             robot.driveTrainVelocityControl.vector.y = Y;
         }
     }
+    public void speedcontrol(){
+
+    }
+
+
      public boolean isAtPosition() {
         if((errX < minx) && (errY <miny) && (errH < minh)){
             return true;
