@@ -5,7 +5,7 @@ import static java.lang.Math.signum;
 public class PID {
     private double _pCoef, _dCoef, _iCoef, _limit;
     private double _integrall = 0;
-    public double ErrOld = 0;
+    private double _errOld = 0;
     public double Err = 0;
 
     public PID(double pKoef, double iKoef, double dKoef, double limit) {
@@ -17,7 +17,7 @@ public class PID {
 
     public void Reset() {
         _integrall = 0;
-        ErrOld = 0;
+        _errOld = 0;
         Err = 0;
     }
     
@@ -37,11 +37,13 @@ public class PID {
         if(Math.abs(_integrall) >= _limit)
             _integrall = signum(_integrall) * _limit;
 
-        double u = error * _pCoef + _integrall * _iCoef + (error - ErrOld) * _dCoef;
+        double ingeralErr = _integrall * _iCoef;
+
+        double u = error * _pCoef + ingeralErr + (ingeralErr - _errOld) * _dCoef;
 
         Err = error;
 
-        ErrOld = error;
+        _errOld = ingeralErr;
 
         return u;
     }
