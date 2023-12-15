@@ -18,6 +18,7 @@ public class AutonomBetaUniversal extends LinearOpMode {
     Camera camera;
     VisionPortal visionPortal;
     PipeLine pipeLine;
+
     public void runOpMode() {
 
         robot = new UltRobot(this);
@@ -29,52 +30,62 @@ public class AutonomBetaUniversal extends LinearOpMode {
         waitForStart();
         robot.grabber.closeGraber();
         Runnable[] actions = {
-                ()->{if(positionEllment == 1)
-                    robot.driveTrain.moveField(60,-60,0);
-                    if(positionEllment == 2)
-                        robot.driveTrain.moveField(60,0,0);
-                    if(positionEllment == 3)
-                        robot.driveTrain.moveField(60,60, 0);
-                    },
-                ()->{
-                    robot.driveTrain.moveField(60,60,90);
+                () -> {
+                    if (positionEllment == 1)
+                        robot.driveTrain.moveField(60, -60, 0);
+                    if (positionEllment == 2)
+                        robot.driveTrain.moveField(60, 0, 0);
+                    if (positionEllment == 3)
+                        robot.driveTrain.moveField(60, 60, 0);
                 },
-                ()-> {
-                    robot.driveTrain.moveField(60,200,90);
+                () -> {
+                    robot.driveTrain.moveField(60, 60, 90);
+                },
+                () -> {
+                    robot.driveTrain.moveField(60, 200, 90);
 
                 },
-                ()->{
-                    robot.driveTrain.moveField(60,300,90);
+                () -> {
+                    robot.driveTrain.moveField(60, 300, 90);
                 },
-                ()->{
-                    robot.driveTrain.moveField(30,300,90);
+                () -> {
+                    robot.driveTrain.moveField(30, 300, 90);
                 },
-                ()-> {
-                    robot.driveTrain.moveField(30,350,90);
+                () -> {
+                    robot.driveTrain.moveField(30, 350, 90);
                 }
         };
         Runnable[] liftAndPixels = {
-                ()->{
+                () -> {
                     robot.grabber.powerPixelMotor(-1);
+                },
+                () -> {
                     robot.timer.getTimeForTimer(500);
+                },
+                () -> {
                     robot.grabber.powerPixelMotor(0);
                 },
-                ()->{
+                () -> {
                     robot.lift.liftPosition = Lift.LiftPosition.UP;
-                    robot.grabber.perekidStart();
-                    robot.timer.getTimeForTimer(500);
-                    robot.grabber.openGraber();
-                    robot.timer.getTimeForTimer(500);
-                    robot.grabber.perekidFinish();
                 },
-        };
-        Runnable[] allTasks = {
-                ()->{
-                    robot.updateWhilePositionFalse(actions);
-                    robot.updateWhilePositionFalse(liftAndPixels);
+                () -> {
+                    robot.grabber.perekidStart();
+                },
+                () -> {
+                    robot.timer.getTimeForTimer(500);
+                },
+                () -> {
+                    robot.grabber.openGraber();
+                },
+                () -> {
+                    robot.timer.getTimeForTimer(500);
+                },
+                () -> {
+                    robot.grabber.perekidFinish();
                 }
         };
 
-
+        robot.updateWhilePositionFalse(actions);
+        robot.updateWhilePositionFalse(liftAndPixels);
     }
 }
