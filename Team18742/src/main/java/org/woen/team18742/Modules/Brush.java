@@ -55,4 +55,10 @@ public class Brush {
         intakePowerWithDefense(brush1, speed);
 
     }
+
+    public void reversbrush(int speed){
+        brushMotor.setPower(speed);
+
+    }
+
 }
