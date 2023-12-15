@@ -1,8 +1,11 @@
-package org.woen.team17517.Robot;
+package org.woen.team17517.Robot.OpenCV;
 
 import static java.lang.Math.sqrt;
 
-public class UpdateCameraAndOdometry implements RobotModule{
+import org.woen.team17517.Robot.RobotModule;
+import org.woen.team17517.Robot.UltRobot;
+
+public class UpdateCameraAndOdometry implements RobotModule {
 
     UltRobot robot;
 
@@ -24,9 +27,8 @@ public class UpdateCameraAndOdometry implements RobotModule{
         robot.testAprilTagPipeline.visionPortalWork();
         double xVector = robot.testAprilTagPipeline.rawTagPoseVector.get(0);
         double yVector = robot.testAprilTagPipeline.rawTagPoseVector.get(1);
-        double zVector = robot.testAprilTagPipeline.rawTagPoseVector.get(2);
 
-        if (sqrt(xVector * xVector + yVector * yVector + zVector * zVector) < cameraToOdometrySafeEncs) {
+        if (sqrt(xVector * xVector + yVector * yVector) < cameraToOdometrySafeEncs) {
             preority = false;
             coords[0] = xVector;
             coords[1] = yVector;

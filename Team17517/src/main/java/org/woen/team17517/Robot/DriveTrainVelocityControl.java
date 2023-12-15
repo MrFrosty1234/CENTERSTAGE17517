@@ -13,35 +13,44 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 public class DriveTrainVelocityControl implements RobotModule{
     UltRobot robot;
     private double voltage;
+
     public static double kdX;
-    public static double kiX;
-    public static double kpX;
+    public static double kiX = 0.025;
+    public static double kpX = 0.045;
+
     public static double kdRat;
     public static double kiRat;
     public static double kpRat;
+
     public static double kdY;
-    public static double kiY;
-    public static double kpY;
-    private static double ksRat = 1d/2400d;
-    private static double ksY = 1d/2400d;
-    private static double ksX = 1d/2400d;
-    private static double kSlide = 0.85;
-    private static double encRatConstant;
-    private  final double  maxRobotSpeed = diameter*PI/0.2;
-    private final double maxCircleRobotSpeed = Math.toDegrees(maxRobotSpeed/trackLength);
+    public static double kiY =0.025;
+    public static double kpY = 0.45;
+
     private PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX);
     private PIDMethod speedRat = new PIDMethod(kpRat,kiRat,kdRat,ksY);
     private PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat);
+
+    public static double ksRat = 1d/2400d;
+    public static double ksY = 1d/2400d;
+    public static double ksX = 1d/2400d;
+    public static double kSlide = 0.85;
+
+    private static double encRatConstant;
+    public  final double maxRobotSpeed = diameter*PI/0.2;
+    public final double maxCircleRobotSpeed = Math.toDegrees(maxRobotSpeed/trackLength);
+
     public double targetH = 0;
+    public Vector2D vector = new Vector2D(0,0);
+    public double targetAngle;
+
     public double yEnc;
     public double xEnc;
-    public double targetAngle;
     public double ratEnc;
-    public Vector2D vector = new Vector2D(0,0);
-    private final DcMotorEx left_front_drive;
-    private final DcMotorEx left_back_drive;
-    private final DcMotorEx right_front_drive;
-    private final DcMotorEx right_back_drive;
+
+    public final DcMotorEx left_front_drive;
+    public final DcMotorEx left_back_drive;
+    public final DcMotorEx right_front_drive;
+    public final DcMotorEx right_back_drive;
 
     public DriveTrainVelocityControl(UltRobot robot)
     {
@@ -49,7 +58,7 @@ public class DriveTrainVelocityControl implements RobotModule{
         this.robot = robot;
 
         left_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_front_drive");
-        left_back_drive =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_back_drive ");
+        left_back_drive =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_back_drive");
 
         right_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
         right_back_drive =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_back_drive");
@@ -81,12 +90,12 @@ public class DriveTrainVelocityControl implements RobotModule{
 
     public void  encUpdate()
     {
-        this.yEnc = (left_back_drive.getVelocity()+ left_front_drive.getVelocity()+
-                right_front_drive.getVelocity()+ right_back_drive.getVelocity())/4.0;
+        this.yEnc = (left_back_drive.getVelocity()+ 0*left_front_drive.getVelocity()+
+                right_front_drive.getVelocity()*0+ right_back_drive.getVelocity())/2.0;
         this.xEnc = ((-left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
-                right_front_drive.getVelocity()+ right_back_drive.getVelocity())/4.0)*kSlide;
-        this.ratEnc = (left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
-                right_front_drive.getVelocity()- right_back_drive.getVelocity())/4.0;
+                0*right_front_drive.getVelocity()+ 0*right_back_drive.getVelocity())/2.0)*kSlide;
+        this.ratEnc = (left_back_drive.getVelocity()*0+ left_front_drive.getVelocity()-
+                right_front_drive.getVelocity()*0 - right_back_drive.getVelocity())/2.0;
     }
     private static double diameter = 0.098;
     private static double encTransmissionCoificent = 1d/20d;

@@ -13,7 +13,6 @@ public class Grabber implements RobotModule{
     public DcMotorEx pixelMotor;
     // AnalogInput pixelSensorRight;
     // AnalogInput pixelSensorLeft;
-    public Servo pixelLeftServo;
     public Servo pixelGrabServo;
     public Servo progibServo;
     public static double voltage;
@@ -90,26 +89,38 @@ public class Grabber implements RobotModule{
             targetPower = 0;
 
     }
+    public void openGraber(){
+        pixelGrabServo.setPosition(grabberClose);
+    }
+    public void closeGraber(){
+        pixelGrabServo.setPosition(grabberOpen);
+    }
    public void positionGrabber(){
         if(grabber == 0){
-            pixelGrabServo.setPosition(grabberClose);
+            openGraber();
             grabber = 1;
         }
         else{
             if(grabber == 1){
-                pixelGrabServo.setPosition(grabberOpen);
+               closeGraber();
                 grabber = 0;
             }
         }
     }
+    public void perekidStart(){
+        robot.grabber.progibServo.setPosition(perekidStart);
+    }
+    public void perekidFinish(){
+        robot.grabber.progibServo.setPosition(perekidFinish);
+    }
     public void positionPerekid(){
         if(perekid == 0){
-            robot.grabber.progibServo.setPosition(perekidStart);
+            perekidStart();
             perekid = 1;
         }
         else {
             if (perekid == 1) {
-                robot.grabber.progibServo.setPosition(perekidFinish);
+               perekidFinish();
                 perekid = 0;
             }
         }

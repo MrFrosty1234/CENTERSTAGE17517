@@ -4,14 +4,15 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Lift.LiftPose;
+import org.woen.team18742.Modules.Lift.LiftPose;
+
 @Config
 public class Manual {
-    private BaseCollector _collector;
+    private final BaseCollector _collector;
 
-    private boolean _clampOld = false, _isBrushOn = false, _brushReversOld = false;
-    private boolean _XOld = false, _clampOpen = false, _brushReverseOn = false;
-    private boolean recuiert = false;
+    private boolean _isBrushOn = false, _brushReversOld = false;
+    private boolean _brushReverseOn = false;
+    private boolean _brushOld = false;
     private boolean ferty = false;
     public static double servoplaneOtkrit = 0.5;
     public static double servoplaneneOtkrit = 0.07;
@@ -29,7 +30,6 @@ public class Manual {
     }
 
     boolean oldgrip;
-    boolean oldperevprot;
 
     public void Update() {
         _collector.Driver.DriveDirection(
@@ -38,13 +38,11 @@ public class Manual {
                 _collector.CommandCode.gamepad1.right_stick_x);
 
         boolean A = _collector.CommandCode.gamepad1.square;
-        boolean X = false;
         boolean liftUp = _collector.CommandCode.gamepad1.dpad_up;
         boolean liftDown = _collector.CommandCode.gamepad1.dpad_down;
         boolean brushRevers = _collector.CommandCode.gamepad1.dpad_left;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
-        boolean clamp = _collector.CommandCode.gamepad1.cross;
-        boolean perevert = _collector.CommandCode.gamepad1.circle;
+        boolean brush = _collector.CommandCode.gamepad1.cross;
         boolean zajat = _collector.CommandCode.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
 
         if(grip && !oldgrip) {
@@ -57,26 +55,14 @@ public class Manual {
 
         oldgrip = grip;
 
-        if(!_collector.Lift.isUp()) {
-            recuiert = false;
-            _collector.Intake.setperevorotik(false);
-        }
-        else {
-            _collector.Intake.setperevorotik(recuiert);
-            if (perevert && !oldperevprot)
-                recuiert = !recuiert;
-        }
-
         if(_collector.Lift.isDown()){
-            if (clamp && !_clampOld) {
-                _isBrushOn = !_isBrushOn;
+            if (brush && !_brushOld) {
                 _brushReverseOn = false;
-
-                _collector.CommandCode.gamepad1.rumble(50);
-
+                _isBrushOn = !_isBrushOn;
                 _collector.Intake.intakePowerWithDefense(_isBrushOn);
             } else if(brushRevers && !_brushReversOld){
                 _isBrushOn = false;
+                _collector.Intake.intakePowerWithDefense(_isBrushOn);
                 _brushReverseOn = !_brushReverseOn;
                 _collector.Intake.reversbrush(_brushReverseOn ? -1 : 0);
             }
@@ -95,23 +81,16 @@ public class Manual {
             _servoPlane.setPosition(servoplaneneOtkrit);
         }
         if (liftUp) {
-            _clampOpen = true;
-            _collector.Intake.setClamp(true);
-                _collector.Lift.SetLiftPose(LiftPose.UP);
+            //_collector.Intake.setClamp(true);
+            _collector.Lift.SetLiftPose(LiftPose.UP);
         }
 
         if(liftDown) {
             _collector.Lift.SetLiftPose(LiftPose.DOWN);
         }
 
-        if(X && !_XOld){
-            _clampOpen = !_clampOpen;
-            _collector.Intake.setClamp(_clampOpen);
-        }
+        _brushOld = brush;
 
-        _clampOld = clamp;
-        oldperevprot = perevert;
-        _XOld = X;
         _brushReversOld = brushRevers;
     }
 }
