@@ -27,8 +27,8 @@ public class DriveTrainVelocityControl implements RobotModule{
     private static double ksX = 1d/2400d;
     private static double kSlide = 0.85;
     private static double encRatConstant;
-    private  final double  maxRobotSpeed = diameter*PI/0.2;
-    private final double maxCircleRobotSpeed = Math.toDegrees(maxRobotSpeed/trackLength);
+    public  final double maxRobotSpeed = diameter*PI/0.2;
+    public final double maxCircleRobotSpeed = Math.toDegrees(maxRobotSpeed/trackLength);
     private PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX);
     private PIDMethod speedRat = new PIDMethod(kpRat,kiRat,kdRat,ksY);
     private PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat);

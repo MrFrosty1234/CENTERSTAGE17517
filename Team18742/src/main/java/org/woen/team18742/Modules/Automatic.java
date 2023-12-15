@@ -5,7 +5,7 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 import org.woen.team18742.Collectors.AutonomCollector;
-import org.woen.team18742.Odometry.Odometry;
+import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.PID;
 
 public class Automatic {

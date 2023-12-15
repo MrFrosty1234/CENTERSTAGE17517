@@ -97,7 +97,7 @@ public class Manual {
         if (liftUp) {
             _clampOpen = true;
             _collector.Intake.setClamp(true);
-            _collector.Lift.SetLiftPose(LiftPose.UP);
+                _collector.Lift.SetLiftPose(LiftPose.UP);
         }
 
         if(liftDown) {

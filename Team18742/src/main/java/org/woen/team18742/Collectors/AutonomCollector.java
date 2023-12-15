@@ -3,11 +3,11 @@ package org.woen.team18742.Collectors;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team18742.Modules.Automatic;
-import org.woen.team18742.Odometry.Odometry;
+import org.woen.team18742.Modules.Odometry.Odometry;
 
 public class AutonomCollector extends BaseCollector {
     public Automatic Auto;
-    public org.woen.team18742.Odometry.Odometry Odometry;
+    public org.woen.team18742.Modules.Odometry.Odometry Odometry;
 
     private Runnable _route[] = new Runnable[]{
             () -> {
