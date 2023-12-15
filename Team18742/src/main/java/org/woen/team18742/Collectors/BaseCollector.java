@@ -24,7 +24,6 @@ public class BaseCollector {
 
         Lift = new Lift(this);
         Time = new ElapsedTime();
-
         Gyro = new Gyroscope(this);
         Driver = new DriverTrain(this);
         Intake = new Intake(this);
