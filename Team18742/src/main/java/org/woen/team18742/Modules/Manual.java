@@ -4,14 +4,15 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Lift.LiftPose;
+
 @Config
 public class Manual {
-    private BaseCollector _collector;
+    private final BaseCollector _collector;
 
-    private boolean _clampOld = false, _isBrushOn = false, _brushReversOld = false;
-    private boolean _XOld = false, _clampOpen = false, _brushReverseOn = false;
+    private boolean _isBrushOn = false, _brushReversOld = false;
+    private boolean _brushReverseOn = false;
     private boolean _brushOld = false;
-    private boolean recuiert = false;
     private boolean ferty = false;
     public static double servoplaneOtkrit = 0.5;
     public static double servoplaneneOtkrit = 0.07;
@@ -56,8 +57,14 @@ public class Manual {
 
         if(_collector.Lift.isDown()){
             if (brush && !_brushOld) {
+                _brushReverseOn = false;
                 _isBrushOn = !_isBrushOn;
                 _collector.Intake.intakePowerWithDefense(_isBrushOn);
+            } else if(brushRevers && !_brushReversOld){
+                _isBrushOn = false;
+                _collector.Intake.intakePowerWithDefense(_isBrushOn);
+                _brushReverseOn = !_brushReverseOn;
+                _collector.Intake.reversbrush(_brushReverseOn ? -1 : 0);
             }
         }
         else

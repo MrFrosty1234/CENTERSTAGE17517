@@ -126,7 +126,7 @@ public class Intake {
     ElapsedTime pixelTimer = new ElapsedTime();
     double pixelTimeconst = 500;
 
-    public boolean pixelDetected() {
+    public boolean pixelDetected(){
        // return pixelSensor1.getVoltage() <= pixelSensorvoltage && pixelSensor2.getVoltage() <= pixelSensorvoltage;
       if(pixelSensor1.getVoltage() >= pixelSensorvoltage )//|| pixelSensor2.getVoltage() >= pixelSensorvoltage)
            pixelTimer.reset();
