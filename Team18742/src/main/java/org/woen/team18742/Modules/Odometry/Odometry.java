@@ -79,4 +79,8 @@ public class Odometry {
         _CVOdometry.Start();
         _previusTime = _time.seconds();
     }
+
+    public void Stop(){
+        _CVOdometry.Stop();
+    }
 }

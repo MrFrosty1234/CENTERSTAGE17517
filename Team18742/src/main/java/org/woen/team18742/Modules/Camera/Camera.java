@@ -1,5 +1,6 @@
 package org.woen.team18742.Modules.Camera;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -14,27 +15,21 @@ import org.woen.team18742.Tools.ToolTelemetry;
 public class Camera {
     private CameraName _camera;
     public static boolean IsDebug = false;
-    public static int RobotPos;
+    public static int RobotPos = 2;
 
     VisionPortal visionPortal;
-    TestVisionProcessor pipeLine = new TestVisionProcessor();
+    PipeLine pipeLine = new PipeLine();
 
     public Camera(BaseCollector collector) {
-        try {
-            _camera = collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1");
+        _camera = collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1");
 
-            visionPortal = new VisionPortal.Builder()
-                    .setCamera(_camera)
-                    .addProcessor(pipeLine)
-                    .build();
-        } catch (Exception e) {
-            ToolTelemetry.AddLine("constructor" + e.getMessage());
-        }
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(_camera)
+                .addProcessor(pipeLine)
+                .build();
 
-        // visionPortal.setProcessorEnabled(pipeLine, false);
+        FtcDashboard.getInstance().startCameraStream(pipeLine,10);
     }
-
-    private int Pose = 0;
 
     private RobotPosition GetEnum(int val) {
         switch (val) {
@@ -51,34 +46,10 @@ public class Camera {
         if (IsDebug)
             return GetEnum(RobotPos);
 
-        return GetEnum(Pose);
-    }
-
-    public void Start() {
-        //  visionPortal.setProcessorEnabled(pipeLine, true);
-        try {
-            Pose = pipeLine.pos;
-            ToolTelemetry.AddLine("camera = " + Pose);
-        } catch (Exception e) {
-            ToolTelemetry.AddLine("start" + e.getMessage());
-        }
+        return GetEnum(pipeLine.pos.get());
     }
 
     public void Stop() {
-        try {
-            visionPortal.close();
-        } catch (Exception e) {
-            ToolTelemetry.AddLine("stop" + e.getMessage());
-        }
-    }
-
-    public void Update() {
-        try {
-            Pose = pipeLine.pos;
-
-            ToolTelemetry.AddLine("camera = " + Pose);
-        }catch(Exception e){
-            ToolTelemetry.AddLine("update" + e.getMessage());
-        }
+        visionPortal.close();
     }
 }

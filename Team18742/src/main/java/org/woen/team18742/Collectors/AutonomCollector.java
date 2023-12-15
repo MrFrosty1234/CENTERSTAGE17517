@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.woen.team18742.Modules.Automatic;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.RobotPosition;
+import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Odometry.Odometry;
 
 public class AutonomCollector extends BaseCollector {
@@ -22,7 +23,7 @@ public class AutonomCollector extends BaseCollector {
 
         Odometry = new Odometry(this);
         Auto = new Automatic(this);
-        //_camera = new Camera(this);
+        _camera = new Camera(this);
     }
 
     @Override
@@ -30,22 +31,28 @@ public class AutonomCollector extends BaseCollector {
         super.Start();
 
         Odometry.Start();
-        //_camera.Start();
 
-        switch (RobotPosition.FORWARD) {
+        switch (_camera.GetPosition()) {
             case FORWARD: {
                 _route = new Runnable[]{
                         () -> {
                             Auto.PIDMove(-30, 0);
+
+                            _isPixelWait = true;
+
+                            Intake.intakePowerWithDefense(true);
                         },
                         () -> {
+                            Lift.SetLiftPose(LiftPose.UP);
                             Auto.PIDMove(0, 60);
                         },
                         () -> {
                             Auto.PIDMove(30, 0);
+                            Intake.setClamp(false);
                         },
                         () -> {
                             Auto.PIDMove(0, -60);
+                            Lift.SetLiftPose(LiftPose.DOWN);
                         }
                 };
 
@@ -86,7 +93,7 @@ public class AutonomCollector extends BaseCollector {
 
         Auto.Update();
 
-        //_camera.Update();
+        _camera.GetPosition();
 
         if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
             if (_currentRouteAction < _route.length) {
@@ -102,5 +109,6 @@ public class AutonomCollector extends BaseCollector {
     @Override
     public void Stop() {
         _camera.Stop();
+        Odometry.Stop();
     }
 }
