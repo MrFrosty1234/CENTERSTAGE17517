@@ -4,75 +4,68 @@ import static java.lang.Math.abs;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.PID;
+import org.woen.team18742.Tools.ToolTelemetry;
 
+@Config
 public class Automatic {
     private AutonomCollector _collector;
     private Odometry _odometry;
+    public static double PidForwardP = 0.2, PidForwardI = 0, PidForwardD = 0;
+    public static double PidSideP = 0.2, PidSideI = 0, PidSideD = 0;
+    public static double PidRotateP = 0.02, PidRotateI = 0, PidRotateD = 0;
 
     public Automatic(AutonomCollector collector) {
         _collector = collector;
         _odometry = collector.Odometry;
     }
 
-    private PID _pidForward = new PID(0.8, 1, 1, 1), _pidSide = new PID(0.8, 1, 1, 1);
+    private PID _pidForward = new PID(PidForwardP, PidForwardI, PidForwardD, 1), _pidSide = new PID(PidSideP, PidSideI, PidSideD, 1), _pidTurn = new PID(PidRotateP, PidRotateI, PidRotateD, 1);
 
     public void PIDMove(double forward, double side) {
-        _movedTargetX = _odometry.X + forward;
-        _movedTargetY = _odometry.Y + side;
+        _movedTargetX = _movedTargetX + forward;
+        _movedTargetY = _movedTargetY + side;
 
         _pidForward.Reset();
         _pidSide.Reset();
+
+        _pidForward.Update(forward);
+        _pidSide.Update(side);
     }
 
-    double fixangle(double degrees) {
-        while (degrees > 180)
-            degrees = degrees - 360;
-        while (degrees < -180)
-            degrees = degrees + 360;
-        return degrees;
+    public void PIDMove(double forward, double side, double rotation){
+        PIDMove(forward, side);
+        TurnGyro(rotation);
     }
 
-    private void turnGyro(double degrees) {
-        PID pidTurn = new PID(1, 1, 1, 1);
-        do {
-            double angleError = _collector.Gyro.GetDegrees() - degrees;
-            angleError = fixangle(angleError);
-            _collector.Driver.DriveDirection(0, 0, pidTurn.Update(angleError));
+    public void TurnGyro(double degrees) {
+        _pidTurn.Reset();
 
-            _collector.Gyro.Update();
-            _odometry.Update();
-        } while (_collector.CommandCode.opModeIsActive() && abs(pidTurn.Err) > 2);
-        _collector.Driver.Stop();
+        _turnTarget = degrees;
+
+        _pidTurn.Update(_turnTarget);
     }
 
-    public void SetSpeedWorldCoords(double speedForward, double speedSide) {
-        speedForward = -speedForward;
-
-        double x = cos(-_collector.Gyro.GetRadians()) * speedForward - sin(-_collector.Gyro.GetRadians()) * speedSide,
-                y = sin(-_collector.Gyro.GetRadians()) * speedForward + cos(-_collector.Gyro.GetRadians()) * speedSide;
-
-        _collector.Driver.DriveDirection(x, y, 0);
-    }
-
-    private double GetDistance(double x, double y) {
-        double difX = _odometry.X - x, difY = _odometry.Y - y;
-
-        return Math.sqrt(difX * difX + difY * difY);
-    }
-
-    private double _movedTargetX = 0, _movedTargetY = 0;
+    private double _movedTargetX = 0, _movedTargetY = 0, _turnTarget = 0;
 
     public boolean isMovedEnd() {
-        return GetDistance(_movedTargetX, _movedTargetY) > 2;
+        return Math.abs(_pidForward.Err) < 2d && Math.abs(_pidSide.Err) < 2d && Math.abs(_pidTurn.Err) < 8d;
     }
 
     public void Update() {
-        if (isMovedEnd())
-            _collector.Driver.Stop();
-        else
-            SetSpeedWorldCoords(_pidForward.Update(_odometry.X - _movedTargetX), _pidSide.Update(_odometry.Y - _movedTargetY));
+        _pidForward.UpdateCoefs(PidForwardP, PidForwardI, PidForwardD);
+        _pidSide.UpdateCoefs(PidSideP, PidSideI, PidSideD);
+        _pidTurn.UpdateCoefs(PidRotateP, PidRotateI, PidRotateD);
+
+        double UForward = _pidForward.Update(_movedTargetX - _odometry.X), uSide = _pidSide.Update(_movedTargetY - _odometry.Y), uTurn = _pidTurn.Update(_collector.Gyro.GetDegrees() - _turnTarget);
+
+        _collector.Driver.SetSpeedWorldCoords(UForward,  uSide, uTurn);
+
+        ToolTelemetry.AddLine( "Autonom:" + _pidForward.Err + " " + _pidSide.Err + " " + _pidTurn.Err);
+        ToolTelemetry.AddValDash("turn err", _pidTurn.Err);
     }
 }

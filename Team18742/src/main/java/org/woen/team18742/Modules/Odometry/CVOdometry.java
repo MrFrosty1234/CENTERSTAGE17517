@@ -53,7 +53,7 @@ public class CVOdometry {
             return;
         }
 
-        IsZero = false;
+        IsZero = true;
 
         double xSum = 0, ySum = 0;
 
