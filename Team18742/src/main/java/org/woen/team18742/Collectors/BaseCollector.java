@@ -3,6 +3,7 @@ package org.woen.team18742.Collectors;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.woen.team18742.Modules.Brush;
 import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Intake;
@@ -16,6 +17,7 @@ public class BaseCollector {
     public org.woen.team18742.Modules.Lift.Lift Lift;
     public org.woen.team18742.Modules.Intake Intake;
     public ElapsedTime Time;
+    public Brush Brush;
 
     public BaseCollector(LinearOpMode commandCode){
         CommandCode = commandCode;
@@ -24,6 +26,7 @@ public class BaseCollector {
 
         Time = new ElapsedTime();
         Lift = new Lift(this);
+        Brush = new Brush(this);
         Gyro = new Gyroscope(this);
         Driver = new DriverTrain(this);
         Intake = new Intake(this);

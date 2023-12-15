@@ -76,36 +76,6 @@ public class Intake {
         }
     }
 
-    public void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
-        double speed = 1.00;
-        intakePowerWithDefense(brush1, speed);
-
-    }
-
-    public static double getvolteges = 1;
-    public static double timesxz = 1500;
-    public static double times1 = 3000;
-
-    public void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
-        if (brush1) {
-            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= getvolteges && flagdefense) {
-                elapsedTime.reset();
-            }
-            if (elapsedTime.milliseconds() >= timesxz && flagdefense) {
-                flagdefense = false;
-            }
-            if (elapsedTime.milliseconds() >= times1 && !flagdefense) {
-                flagdefense = true;
-            }
-            if (!flagdefense) {
-                brushMotor.setPower(-speed);
-            } else {
-                brushMotor.setPower(speed);
-            }
-        } else {
-            brushMotor.setPower(0);
-        }
-    }
 
     public static double servoClamp = 0.44;
     public static double servoClampreturn = 0.1;

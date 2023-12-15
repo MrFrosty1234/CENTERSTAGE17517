@@ -55,13 +55,13 @@ public class Manual {
         if(_collector.Lift.isDown()){
             if (brush && !_brushOld) {
                 _isBrushOn = !_isBrushOn;
-                _collector.Intake.intakePowerWithDefense(_isBrushOn);
+                _collector.Brush.intakePowerWithDefense(_isBrushOn);
             }
         }
         else
         {
             _isBrushOn = false;
-            _collector.Intake.intakePowerWithDefense(_isBrushOn);
+            _collector.Brush.intakePowerWithDefense(_isBrushOn);
         }
 
         if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000))
