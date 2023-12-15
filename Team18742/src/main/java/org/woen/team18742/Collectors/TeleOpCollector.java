@@ -23,6 +23,5 @@ public class TeleOpCollector extends BaseCollector {
     public void Update() {
         super.Update();
         Manual.Update();
-        Lift.Update();
     }
 }

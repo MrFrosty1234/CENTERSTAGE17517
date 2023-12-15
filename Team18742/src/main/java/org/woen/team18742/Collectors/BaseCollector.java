@@ -3,18 +3,17 @@ package org.woen.team18742.Collectors;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Intake;
-import org.woen.team18742.Lift.Lift;
+import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 public class BaseCollector {
     public LinearOpMode CommandCode;
     public Gyroscope Gyro;
     public DriverTrain Driver;
-    public org.woen.team18742.Lift.Lift Lift;
+    public org.woen.team18742.Modules.Lift.Lift Lift;
     public org.woen.team18742.Modules.Intake Intake;
     public ElapsedTime Time;
 
@@ -37,6 +36,7 @@ public class BaseCollector {
     }
 
     public void Update(){
+        Lift.Update();
         Gyro.Update();
         Intake.Update();
     }

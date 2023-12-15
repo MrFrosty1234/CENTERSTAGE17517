@@ -4,13 +4,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Lift.LiftPose;
+import org.woen.team18742.Modules.Lift.LiftPose;
 @Config
 public class Manual {
     private BaseCollector _collector;
 
-    private boolean _clampOld = false, _isBrushOn = false;
-    private boolean _XOld = false, _clampOpen = false;
+    private boolean _brushOld = false, _isBrushOn = false;
     private boolean recuiert = false;
     private boolean ferty = false;
     public static double servoplaneOtkrit = 0.08;
@@ -29,7 +28,6 @@ public class Manual {
     }
 
     boolean oldgrip;
-    boolean oldperevprot;
 
     public void Update() {
         _collector.Driver.DriveDirection(
@@ -38,11 +36,10 @@ public class Manual {
                 _collector.CommandCode.gamepad1.right_stick_x);
 
         boolean A = _collector.CommandCode.gamepad1.square;
-        boolean X = false;
         boolean liftUp = _collector.CommandCode.gamepad1.dpad_up;
         boolean liftDown = _collector.CommandCode.gamepad1.dpad_down;
         boolean grip = _collector.CommandCode.gamepad1.triangle;
-        boolean clamp = _collector.CommandCode.gamepad1.cross;
+        boolean brush = _collector.CommandCode.gamepad1.cross;
         boolean zajat = _collector.CommandCode.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
 
         if(grip && !oldgrip) {
@@ -56,7 +53,7 @@ public class Manual {
         oldgrip = grip;
 
         if(_collector.Lift.isDown()){
-            if (clamp && !_clampOld) {
+            if (brush && !_brushOld) {
                 _isBrushOn = !_isBrushOn;
                 _collector.Intake.intakePowerWithDefense(_isBrushOn);
             }
@@ -73,20 +70,13 @@ public class Manual {
             _servoPlane.setPosition(servoplaneneOtkrit);
         }
         if (liftUp) {
-            _clampOpen = true;
-            _collector.Intake.setClamp(true);
+            //_collector.Intake.setClamp(true);
             _collector.Lift.SetLiftPose(LiftPose.UP);
         }
 
         if(liftDown)
             _collector.Lift.SetLiftPose(LiftPose.DOWN);
 
-        if(X && !_XOld){
-            _clampOpen = !_clampOpen;
-            _collector.Intake.setClamp(_clampOpen);
-        }
-
-        _clampOld = clamp;
-        _XOld = X;
+        _brushOld = brush;
     }
 }
