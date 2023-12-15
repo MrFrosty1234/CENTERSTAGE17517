@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.OpenCV.PipeLine;
 import org.woen.team18742.OpenCV.TestVisionProcessor;
@@ -20,15 +21,20 @@ public class Camera {
     VisionPortal visionPortal;
     PipeLine pipeLine = new PipeLine();
 
+    public VisionProcessor odometryProcessor;
+
     public Camera(BaseCollector collector) {
         _camera = collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1");
 
+        FtcDashboard.getInstance().startCameraStream(pipeLine,10);
+    }
+
+    public void Build(){
         visionPortal = new VisionPortal.Builder()
                 .setCamera(_camera)
                 .addProcessor(pipeLine)
+                .addProcessor(odometryProcessor)
                 .build();
-
-        FtcDashboard.getInstance().startCameraStream(pipeLine,10);
     }
 
     private RobotPosition GetEnum(int val) {

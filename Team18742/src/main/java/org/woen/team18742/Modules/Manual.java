@@ -59,20 +59,20 @@ public class Manual {
             if (brush && !_brushOld) {
                 _brushReverseOn = false;
                 _isBrushOn = !_isBrushOn;
-                _collector.Intake.intakePowerWithDefense(_isBrushOn);
+                _collector.Brush.intakePowerWithDefense(_isBrushOn);
             } else if(brushRevers && !_brushReversOld){
                 _isBrushOn = false;
-                _collector.Intake.intakePowerWithDefense(_isBrushOn);
+                _collector.Brush.intakePowerWithDefense(_isBrushOn);
                 _brushReverseOn = !_brushReverseOn;
-                _collector.Intake.reversbrush(_brushReverseOn ? -1 : 0);
+                _collector.Brush.reversbrush(_brushReverseOn ? -1 : 0);
             }
         }
         else
         {
-            _collector.Intake.reversbrush(0);
+            _collector.Brush.reversbrush(0);
             _isBrushOn = false;
             _brushReverseOn = false;
-            _collector.Intake.intakePowerWithDefense(_isBrushOn);
+            _collector.Brush.intakePowerWithDefense(_isBrushOn);
         }
 
         if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000))

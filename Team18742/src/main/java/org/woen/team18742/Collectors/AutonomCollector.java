@@ -11,7 +11,7 @@ import org.woen.team18742.Modules.Odometry.Odometry;
 public class AutonomCollector extends BaseCollector {
     public Automatic Auto;
     public org.woen.team18742.Modules.Odometry.Odometry Odometry;
-    private Camera _camera;
+    public Camera Camera;
 
     private Runnable _route[];
 
@@ -21,9 +21,10 @@ public class AutonomCollector extends BaseCollector {
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
 
+        Camera = new Camera(this);
         Odometry = new Odometry(this);
         Auto = new Automatic(this);
-        _camera = new Camera(this);
+        Camera.Build();
     }
 
     @Override
@@ -32,7 +33,7 @@ public class AutonomCollector extends BaseCollector {
 
         Odometry.Start();
 
-        switch (_camera.GetPosition()) {
+        switch (Camera.GetPosition()) {
             case FORWARD: {
                 _route = new Runnable[]{
                         () -> {
@@ -40,7 +41,7 @@ public class AutonomCollector extends BaseCollector {
 
                             _isPixelWait = true;
 
-                            Intake.intakePowerWithDefense(true);
+                            Brush.intakePowerWithDefense(true);
                         },
                         () -> {
                             Lift.SetLiftPose(LiftPose.UP);
@@ -93,12 +94,12 @@ public class AutonomCollector extends BaseCollector {
 
         Auto.Update();
 
-        _camera.GetPosition();
+        Camera.GetPosition();
 
         if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
             if (_currentRouteAction < _route.length) {
                 _isPixelWait = false;
-                _route[_currentRouteAction].run();
+                //_route[_currentRouteAction].run();
 
                 _currentRouteAction++;
             } else
@@ -108,7 +109,6 @@ public class AutonomCollector extends BaseCollector {
 
     @Override
     public void Stop() {
-        _camera.Stop();
-        Odometry.Stop();
+        Camera.Stop();
     }
 }

@@ -15,7 +15,6 @@ import org.woen.team18742.Tools.ToolTelemetry;
 @Config
 public class Intake {
     private Servo servopere;
-    private DcMotorEx brushMotor; // ц
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
@@ -44,7 +43,6 @@ public class Intake {
         }
     }
 
-    double speed;
     public static double servoGripperreturn = 0.43;
     public static double servoGripper = 0.221;
 
@@ -52,24 +50,11 @@ public class Intake {
 
     public void setGripper(boolean grip) {
         if (grip) {
-            speed = -1;
             gripper.setPosition(servoGripper);
         } else {
-            speed = 1;
             gripper.setPosition(servoGripperreturn);
         }
         gripped = grip;
-    }
-
-    private void intakePower(boolean brush) {
-        if (brush) {
-            speed = 1;
-            brushMotor.setPower(speed);
-            inableIntake = brush;
-        } else {
-            speed = 0;
-            brushMotor.setPower(speed);
-        }
     }
 
     public static double servoClamp = 0.44;
@@ -108,14 +93,14 @@ public class Intake {
         if (pixelDetected()) {
             setGripper(true);
             setClamp(clampTimer.milliseconds() < clampTimerconst && _collector.Lift.isDown());
-            intakePower(false);
+            _collector.Brush.intakePowerWithDefense(false);
 
             isPixelLocated = true;
         } else {
             clampTimer.reset();
             setClamp(!gripped && _collector.Lift.isDown());
             if (inableIntake)
-                intakePower(true);
+                _collector.Brush.intakePowerWithDefense(true);
 
             isPixelLocated = false;
         }

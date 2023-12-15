@@ -17,6 +17,8 @@ public class Brush {
     public static double timesxz = 1500;
     public static double times1 = 3000;
 
+    double speed;
+
     ElapsedTime elapsedTime = new ElapsedTime();
 
     private BaseCollector _collector;
@@ -61,4 +63,13 @@ public class Brush {
 
     }
 
+    private void intakePower(boolean brush) {
+        if (brush) {
+            speed = 1;
+            brushMotor.setPower(speed);
+        } else {
+            speed = 0;
+            brushMotor.setPower(speed);
+        }
+    }
 }

@@ -11,32 +11,19 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseRaw;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.woen.team18742.Modules.Camera.Camera;
 
 import java.util.ArrayList;
 
 public class CVOdometry {
     private AprilTagProcessor _aprilTagProcessor;
-    private VisionPortal _visionPortal;
 
     public double X, Y;
     public boolean IsZero = false;
 
-    public CVOdometry(WebcamName webcamName) {
-        _aprilTagProcessor = new AprilTagProcessor.Builder()
-                .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
-                .setDrawAxes(true)
-                .build();
-
-        _visionPortal = new VisionPortal.Builder()
-                .setCamera(webcamName)
-                .addProcessor(_aprilTagProcessor)
-                .build();
-
-        _visionPortal.setProcessorEnabled(_aprilTagProcessor, false);
-    }
-
-    public void Start() {
-        _visionPortal.setProcessorEnabled(_aprilTagProcessor, true);
+    public CVOdometry(Camera camera) {
+        _aprilTagProcessor = new AprilTagProcessor.Builder().setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES).setDrawAxes(true).build();
+        camera.odometryProcessor = _aprilTagProcessor;
     }
 
     public void Update() {
@@ -85,10 +72,5 @@ public class CVOdometry {
 
         X = xSum / detections.size();
         Y = ySum / detections.size();
-    }
-
-    public void Stop()
-    {
-        _visionPortal.close();
     }
 }
