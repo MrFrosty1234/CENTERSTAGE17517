@@ -1,6 +1,5 @@
 package org.woen.team18742.OpenCV;
 
-
 import static org.opencv.core.Core.*;
 import static org.opencv.imgproc.Imgproc.*;
 
@@ -14,7 +13,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 
-class VisionPipeLine implements VisionProcessor {
+public class PipeLine implements VisionProcessor {
     double x = 640;
     double y = 480;
     double r1 = 5;
@@ -48,6 +47,8 @@ class VisionPipeLine implements VisionProcessor {
     double centerOfRectX = 0;
     double centerOfRectY = 0;
     public int pos = 0;
+
+    public int ksize = 13;
     public boolean team = true;
 
     public void init(int width, int height, CameraCalibration calibration) {
@@ -63,13 +64,17 @@ class VisionPipeLine implements VisionProcessor {
 
         blur(frame, frame, new Size(10, 10));//размытие для компенсации шумов с камеры
         // можно иф для установки цвета команды и только 1 инрейндж
-            inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
+        inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
 
-            //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
-            inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
+        //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
+        inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
 
 
-        Core.bitwise_or(img_range_blue, img_range_blue, frame);//объединяем два инрейнджа
+
+        Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
+
+        erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Сжать
+        dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Раздуть
 
         Rect boundingRect = boundingRect(frame);//boudingRect рисуем прямоугольник
 
