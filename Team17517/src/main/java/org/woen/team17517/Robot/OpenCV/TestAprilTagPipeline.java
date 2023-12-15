@@ -20,7 +20,7 @@ import org.woen.team17517.Robot.UltRobot;
 
 import java.util.List;
 
-@TeleOp(name = "AprilTag pipeline")
+
 public class TestAprilTagPipeline {
 
     private AprilTagProcessor aprilTagPipeline;
@@ -33,7 +33,7 @@ public class TestAprilTagPipeline {
     public VectorF fieldCameraPos;
     public double x;
     public double y;
-    public double z;
+    public double z;    
     public VectorF rawTagPoseVector;
 
     public TestAprilTagPipeline(UltRobot robot) {
