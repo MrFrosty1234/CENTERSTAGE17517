@@ -22,8 +22,8 @@ public class BaseCollector {
 
         ToolTelemetry.SetTelemetry(CommandCode.telemetry);
 
-        Lift = new Lift(this);
         Time = new ElapsedTime();
+        Lift = new Lift(this);
         Gyro = new Gyroscope(this);
         Driver = new DriverTrain(this);
         Intake = new Intake(this);
@@ -32,12 +32,15 @@ public class BaseCollector {
     public void Start(){
         Time.reset();
         Lift.Start();
+        Driver.ResetIncoder();
     }
 
     public void Update(){
         Lift.Update();
         Gyro.Update();
         Intake.Update();
+
+        ToolTelemetry.Update();
     }
 
     public void Stop(){
