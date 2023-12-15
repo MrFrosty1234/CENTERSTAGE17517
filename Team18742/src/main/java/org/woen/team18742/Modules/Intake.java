@@ -124,16 +124,16 @@ public class Intake {
     double pixelTimeconst = 500;
 
     public boolean pixelDetected() {
-       // return pixelSensor1.getVoltage() <= pixelSensorvoltage && pixelSensor2.getVoltage() <= pixelSensorvoltage;
-      if(pixelSensor1.getVoltage() >= pixelSensorvoltage || pixelSensor2.getVoltage() >= pixelSensorvoltage)
-           pixelTimer.reset();
+        // return pixelSensor1.getVoltage() <= pixelSensorvoltage && pixelSensor2.getVoltage() <= pixelSensorvoltage;
+        if (pixelSensor1.getVoltage() >= pixelSensorvoltage || pixelSensor2.getVoltage() >= pixelSensorvoltage)
+            pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
 
     ElapsedTime clampTimer = new ElapsedTime();
     double clampTimerconst = 1000;
 
-    void releaseGripper(){
+    void releaseGripper() {
         setGripper(false);
         clampTimer.reset();
     }
@@ -159,7 +159,7 @@ public class Intake {
         setperevorotik();
 
         ToolTelemetry.AddLine(pixelSensor1.getVoltage() + " " + pixelSensor2.getVoltage());
-        ToolTelemetry.AddLine(pixelDetected()+"");
+        ToolTelemetry.AddLine(pixelDetected() + "");
     }
 }
 
