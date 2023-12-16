@@ -7,38 +7,58 @@ import com.acmerobotics.dashboard.config.Config;
 public  class PIDMethod {
 
     public PIDMethod(double kp, double ki, double kd){
-            setCoefficent(kp, ki, kd,0);
+            setCoefficent(kp, ki, kd,0,Double.POSITIVE_INFINITY);
     }
-    public PIDMethod(double kp, double ki, double kd, double ks){
-        setCoefficent(kp,ki,kd,ks);
+    public PIDMethod(double kp, double ki, double kd, double ks,Double maxI){
+        setCoefficent(kp,ki,kd,ks,maxI);
 
     }
-    double kp,kd,ki,ks = 1;
-    public void setCoefficent(double kp, double ki, double kd, double ks){
+    double kp,kd,ki,ks = 0;
+    Double maxI = Double.POSITIVE_INFINITY;
+    public void setCoefficent(double kp, double ki, double kd, double ks,Double maxI){
 
         this.kp = kp;
         this.ki = ki;
         this.kd = kd;
         this.ks = ks;
+        this.maxI = maxI;
+
 
     }
-    double time = System.currentTimeMillis();
-    double I,D,P,C,lastWrong = 0;
+    double timeOld = System.nanoTime();
+    Double deltaTime = null;
+    double lastWrong = 0;
+    private double P = 0;
+    private double D =0;
+    private double I = 0;
+    private double C = 0;
+    public double getI(){
+        return I;
+    }
     public double PID(double target,double voltage,double enc,double ks) {
-        double time1 = System.currentTimeMillis() / 1000.0-time;
         double wrong = target - enc;
         P = kp * wrong;
+        if (deltaTime != null) {
+            I = I + wrong * deltaTime * ki;
 
-        I += wrong * time1 * ki;
-
-        D = ((wrong - lastWrong) / time1) * kd;
-
+            D = ((wrong - lastWrong) / deltaTime) * kd;
+        }else{
+            I = 0;
+            D = 0;
+        }
         lastWrong = wrong;
 
         C = 12/voltage;
-
+        if(I>maxI){
+            I = maxI;
+        }
+        if(I<-maxI){
+            I = -maxI;
+        }
         double PID = (I + D + P)*C+target*ks;
-
+        double timeNow = (double) System.nanoTime() / 1_000_000d;
+        deltaTime = Double.valueOf(timeNow - timeOld);
+        timeOld = timeNow;
         return PID;
 
 

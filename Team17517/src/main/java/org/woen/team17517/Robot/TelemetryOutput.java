@@ -57,7 +57,23 @@ public class TelemetryOutput implements RobotModule{
             robot.linearOpMode.telemetry.addData("SpeedX", robot.driveTrainVelocityControl.xEnc);
             robot.linearOpMode.telemetry.addData("SpeedY", robot.driveTrainVelocityControl.yEnc);
             robot.linearOpMode.telemetry.addData("SpeedRat", robot.driveTrainVelocityControl.ratEnc);
+            robot.linearOpMode.telemetry.addData("powerY", robot.driveTrainVelocityControl. velY);
+            robot.linearOpMode.telemetry.addData("lb", robot.driveTrainVelocityControl.left_back_drive.getCurrentPosition());
+            robot.linearOpMode.telemetry.addData("lf", robot.driveTrainVelocityControl.left_front_drive.getCurrentPosition());
+            robot.linearOpMode.telemetry.addData("rb", robot.driveTrainVelocityControl.right_back_drive.getCurrentPosition());
+            robot.linearOpMode.telemetry.addData("rf", robot.driveTrainVelocityControl.right_front_drive.getCurrentPosition());
+            /*robot.linearOpMode.telemetry.addData("PY",robot.driveTrainVelocityControl.getYPID()[0]).
+                    addData("IY",robot.driveTrainVelocityControl.getYPID()[1]).
+                    addData("YD",robot.driveTrainVelocityControl.getYPID()[2]);
+            robot.linearOpMode.telemetry.addData("PX",robot.driveTrainVelocityControl.getXPID()[0]).
+                    addData("XI",robot.driveTrainVelocityControl.getXPID()[1]).
+                    addData("XD",robot.driveTrainVelocityControl.getXPID()[2]);
+
+            //robot.linearOpMode.telemetry.addData("PidRat",robot.driveTrainVelocityControl.getRatPID().toString());
+             */
+            robot.linearOpMode.telemetry.addData("IY",robot.driveTrainVelocityControl.speedY.getI());
         }
+
         if(odometryAndCamera){
             robot.linearOpMode.telemetry.addLine("Camera position:")
                     .addData("x", robot.testAprilTagPipeline.fieldCameraPos.get(0))
