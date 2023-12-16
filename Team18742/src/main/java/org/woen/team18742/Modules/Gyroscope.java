@@ -5,12 +5,13 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Devices;
 
 public class Gyroscope {
-    private IMU _imu;
+    private final IMU _imu;
 
     public Gyroscope(BaseCollector collector){
-        _imu = collector.CommandCode.hardwareMap.get(IMU.class, "imu");
+        _imu = Devices.IMU;
         _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP)));
         Reset();
     }

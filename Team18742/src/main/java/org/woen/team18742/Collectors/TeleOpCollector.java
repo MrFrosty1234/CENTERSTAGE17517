@@ -2,7 +2,6 @@ package org.woen.team18742.Collectors;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manual;
 
 public class TeleOpCollector extends BaseCollector {

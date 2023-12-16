@@ -3,22 +3,23 @@ package org.woen.team18742.Modules.Odometry;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Tools.ToolTelemetry;
 
+@Config
 public class Odometry {
-    public double X = 0, Y = 0;
-    private double _myX, _myY;
+    public double X = 101, Y = 0;
     private DriverTrain _driverTrain;
     private Gyroscope _gyro;
-    private final double _YCoef = 0.9;
-    private final double _XCoef = 0.9;
+    public static double YCoef = 0.9;
+    public static double XCoef = 0.9;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
 
     private double _previusTime;
@@ -29,10 +30,14 @@ public class Odometry {
 
     public Odometry(BaseCollector collector) {
         _time = collector.Time;
-        _CVOdometry = new CVOdometry(collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1"));
+        _CVOdometry = new CVOdometry();
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
         _telemetry = collector.CommandCode.telemetry;
+    }
+
+    public VisionProcessor GetProcessor(){
+        return _CVOdometry.GetProcessor();
     }
 
     public void Update() {
@@ -48,10 +53,10 @@ public class Odometry {
         double deltaX = deltaLfd + deltaLbd + deltaRfd + deltaRbd;
         double deltaY = -deltaLfd + deltaLbd + deltaRfd - deltaRbd;
 
-        deltaY = deltaY * 0.85602812451;
+        deltaY = deltaY * 0.8;
 
-        _myX += deltaX * cos(_gyro.GetRadians()) + deltaY * sin(_gyro.GetRadians());
-        _myY += -deltaX * sin(_gyro.GetRadians()) + deltaY * cos(_gyro.GetRadians());
+        X += deltaX * cos(_gyro.GetRadians()) + deltaY * sin(_gyro.GetRadians());
+        Y += -deltaX * sin(_gyro.GetRadians()) + deltaY * cos(_gyro.GetRadians());
 
         _leftForwardDrive = lfd;
         _leftBackDrive = lbd;
@@ -63,24 +68,16 @@ public class Odometry {
         double time = _time.seconds(), deltaTime = time - _previusTime;
 
         if(!_CVOdometry.IsZero) {
-            X = X + (_CVOdometry.X - _myX) * deltaTime / (_XCoef + deltaTime);
-            Y = Y + (_CVOdometry.Y - _myY) * deltaTime / (_YCoef + deltaTime);
-        }
-        else
-        {
-            X = _myX;
-            Y = _myY;
+            X += (_CVOdometry.X - X) * (deltaTime / (XCoef + deltaTime));
+            Y += (_CVOdometry.Y - Y) * (deltaTime / (YCoef + deltaTime));
         }
 
         _previusTime = time;
+
+        ToolTelemetry.DrawCircle(X, Y, 10, "#FFFFFF");
     }
 
     public void Start() {
-        _CVOdometry.Start();
         _previusTime = _time.seconds();
-    }
-
-    public void Stop(){
-        _CVOdometry.Stop();
     }
 }
