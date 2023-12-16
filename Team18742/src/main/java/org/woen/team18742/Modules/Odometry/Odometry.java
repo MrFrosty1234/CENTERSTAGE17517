@@ -3,6 +3,7 @@ package org.woen.team18742.Modules.Odometry;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -12,13 +13,13 @@ import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Tools.ToolTelemetry;
 
+@Config
 public class Odometry {
-    public double X = 120, Y = -115;
-    private double _encoderOdometryX, _encoderOdometryY;
+    public double X = 101, Y = 0;
     private DriverTrain _driverTrain;
     private Gyroscope _gyro;
-    private final double _YCoef = 0.9;
-    private final double _XCoef = 0.9;
+    public static double YCoef = 0.9;
+    public static double XCoef = 0.9;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
 
     private double _previusTime;
@@ -52,7 +53,7 @@ public class Odometry {
         double deltaX = deltaLfd + deltaLbd + deltaRfd + deltaRbd;
         double deltaY = -deltaLfd + deltaLbd + deltaRfd - deltaRbd;
 
-        deltaY = deltaY * 0.85602812451;
+        deltaY = deltaY * 0.8;
 
         X += deltaX * cos(_gyro.GetRadians()) + deltaY * sin(_gyro.GetRadians());
         Y += -deltaX * sin(_gyro.GetRadians()) + deltaY * cos(_gyro.GetRadians());
@@ -67,10 +68,10 @@ public class Odometry {
         double time = _time.seconds(), deltaTime = time - _previusTime;
 
         if(!_CVOdometry.IsZero) {
-            X += (_CVOdometry.X - X) * (deltaTime / (_XCoef + deltaTime));
+            X += (_CVOdometry.X - X) * (deltaTime / (XCoef + deltaTime));
+            Y += (_CVOdometry.Y - Y) * (deltaTime / (YCoef + deltaTime));
         }
 
-        Y += (_CVOdometry.Y - Y) * (deltaTime / (_YCoef + deltaTime));
         _previusTime = time;
 
         ToolTelemetry.DrawCircle(X, Y, 10, "#FFFFFF");
@@ -78,6 +79,5 @@ public class Odometry {
 
     public void Start() {
         _previusTime = _time.seconds();
-        _CVOdometry.Start();
     }
 }

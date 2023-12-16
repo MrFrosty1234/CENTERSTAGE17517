@@ -48,7 +48,7 @@ public class Automatic {
         _pidTurn.Update(_turnTarget);
     }
 
-    private double _movedTargetX = 0, _movedTargetY = 0, _turnTarget = 0;
+    private double _movedTargetX = 101, _movedTargetY = 0, _turnTarget = 0;
 
     public boolean isMovedEnd() {
         return Math.abs(_pidForward.Err) < 2d && Math.abs(_pidSide.Err) < 2d && Math.abs(_pidTurn.Err) < 8d;
