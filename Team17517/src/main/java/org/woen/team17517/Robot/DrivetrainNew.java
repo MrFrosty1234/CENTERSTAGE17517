@@ -83,15 +83,13 @@ public class DrivetrainNew implements RobotModule{
 
 
             if (abs(H)> maxspeedr){
-                H = signum(H)*maxspeedr;
-            }
+                H = signum(H)*maxspeedr;            }
             if (abs(X)> maxspeedl){
                 X = signum(X)*maxspeedl;
             }
             if (abs(Y)> maxspeedl){
                 Y = signum(Y)*maxspeedl;
             }
-
 
 
 

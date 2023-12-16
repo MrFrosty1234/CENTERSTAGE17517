@@ -45,25 +45,7 @@ public class AutonomCollector extends BaseCollector {
         switch (Camera.GetPosition()) {
             case FORWARD: {
                 _route = new Runnable[]{
-                        () -> {
-                            Auto.PIDMove(-30, 0);
-
-                            _isPixelWait = true;
-
-                            Brush.intakePowerWithDefense(true);
-                        },
-                        () -> {
-                            Lift.SetLiftPose(LiftPose.UP);
-                            Auto.PIDMove(0, 60);
-                        },
-                        () -> {
-                            Auto.PIDMove(30, 0);
-                            Intake.setClamp(false);
-                        },
-                        () -> {
-                            Auto.PIDMove(0, -60);
-                            Lift.SetLiftPose(LiftPose.DOWN);
-                        }
+                        () -> Auto.TurnGyro(0)
                 };
 
                 break;
@@ -100,11 +82,10 @@ public class AutonomCollector extends BaseCollector {
         if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
             if (_currentRouteAction < _route.length) {
                 _isPixelWait = false;
-                //_route[_currentRouteAction].run();
+                _route[_currentRouteAction].run();
 
                 _currentRouteAction++;
-            } else
-                Driver.Stop();
+            }
         }
     }
 

@@ -75,8 +75,8 @@ public class DriveTrain{
         right_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_back_drive");
         left_front_drive.setDirection(DcMotor.Direction.FORWARD);
         left_back_drive.setDirection(DcMotor.Direction.REVERSE);
-        right_front_drive.setDirection(DcMotor.Direction.REVERSE);
-        right_back_drive.setDirection(DcMotor.Direction.FORWARD);
+        right_front_drive.setDirection(DcMotor.Direction.FORWARD);
+        right_back_drive.setDirection(DcMotor.Direction.REVERSE);
         left_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

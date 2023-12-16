@@ -35,7 +35,7 @@ public class PidRegulator { //TODO Feedforward
         double ud = (err - errold) * kD / (time - told);
         errold = err;
         told = time;
-       double u = up + ud + ui;
+        double u = up + ud + ui;
         return u;
     }
 

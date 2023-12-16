@@ -8,7 +8,7 @@ import org.woen.team18742.OpenCV.PipeLine;
 
 @Config
 public class Camera {
-    public static boolean IsDebug = false;
+    public static boolean IsDebug = true;
     public static int RobotPos = 2;
     PipeLine pipeLine = new PipeLine();
 

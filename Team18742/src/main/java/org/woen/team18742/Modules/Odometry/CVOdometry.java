@@ -20,12 +20,8 @@ import java.util.ArrayList;
 public class CVOdometry {
     private AprilTagProcessor  _aprilTagProcessor = null;
 
-    public double X, Y;
+    public double X = 101, Y = 0;
     public boolean IsZero = true;
-
-    public void Start(){
-        Update();
-    }
 
     public VisionProcessor GetProcessor(){
         _aprilTagProcessor = new AprilTagProcessor.Builder().setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES).setDrawAxes(true).build();
