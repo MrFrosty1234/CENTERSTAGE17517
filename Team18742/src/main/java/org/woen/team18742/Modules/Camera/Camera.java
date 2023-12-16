@@ -2,16 +2,17 @@ package org.woen.team18742.Modules.Camera;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.OpenCV.PipeLine;
 
 @Config
 public class Camera {
-    public static boolean IsDebug = false;
+    public static boolean IsDebug = true;
     public static int RobotPos = 2;
     PipeLine pipeLine = new PipeLine();
 
-    public VisionProcessor GetProcessor() {
+    public CameraStreamSource GetProcessor() {
         return pipeLine;
     }
 

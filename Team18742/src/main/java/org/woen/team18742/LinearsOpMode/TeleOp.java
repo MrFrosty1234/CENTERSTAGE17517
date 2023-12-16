@@ -18,7 +18,6 @@ public class TeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             _collector.Update();
-            telemetry.update();
         }
     }
 }
