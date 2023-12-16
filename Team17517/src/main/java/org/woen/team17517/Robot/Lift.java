@@ -19,7 +19,7 @@ public class Lift implements RobotModule {
     public double power = 0;
     public LiftPosition liftPosition = LiftPosition.ZERO;
     public LiftMode liftMode = LiftMode.AUTO;
-    double err1 = 0;
+    double  err1 = 0;
     UltRobot robot;
     int liftOffset= 0;
     private final PidRegulator PIDZL1 = new PidRegulator(kP, kI, kD);
