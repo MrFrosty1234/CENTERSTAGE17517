@@ -15,11 +15,14 @@ public class TelemetryOutput implements RobotModule{
     public static boolean velocity = false;
     public static boolean odometryAndCamera = false;
     public static boolean ftcMap = true;
+    double dlin =40;
+    double shir =40;
+
 
     public double [] rectXPoints = new double[2];
     public double [] rectYPoints = new double[2];
 
-    TelemetryPacket packet;
+    TelemetryPacket packet = new TelemetryPacket();
     public TelemetryOutput(UltRobot robot){
         this.robot = robot;
         robot.linearOpMode.telemetry = new MultipleTelemetry(robot.linearOpMode.telemetry,FtcDashboard.getInstance().getTelemetry());
@@ -31,10 +34,7 @@ public class TelemetryOutput implements RobotModule{
     }
 
     public void update(){
-        rectXPoints [0] = robot.odometry.x + 20;
-        rectXPoints [1] = robot.odometry.x - 20;
-        rectYPoints [0] = robot.odometry.y + 20;
-        rectYPoints [1] = robot.odometry.y - 20;
+
         if(lift) {
             robot.linearOpMode.telemetry.addData("liftEncs", robot.lift.liftMotor.getCurrentPosition());
             robot.linearOpMode.telemetry.addData("target",robot.lift.liftPosition.value);
@@ -75,8 +75,21 @@ public class TelemetryOutput implements RobotModule{
                     .addData("z", robot.testAprilTagPipeline.fieldCameraPos.get(2));
         }
         if(ftcMap){
-            packet.fieldOverlay()
-                    .drawImage("/dash/ftc.jpg", 24, 24, 48, 48);
+            packet = new TelemetryPacket();
+            double dlin =40;
+            double shir =40;
+/*
+            packet.fieldOverlay().fillPolygon()
+            Vector2D vector2D = new Vector2D(robot.odometry.x,robot.odometry.y);
+            Vector2D vectordlin = new Vector2D(dlin/2, shir/2);
+            Vector2D rotatedVector = vector2D.vectorRat(robot.odometry.heading);
+            double vectorvivad1 = rotatedVector + vectordlin;
+            Vector2D vectorvivad = vector2D.vectorRat( vectorvivad1);*/
+
+            rectXPoints [0] = robot.odometry.x + 20;
+            rectXPoints [1] = robot.odometry.x - 20;
+            rectYPoints [0] = robot.odometry.y + 20;
+            rectYPoints [1] = robot.odometry.y - 20;
             packet.fieldOverlay().fillPolygon(rectXPoints, rectYPoints);
         }
          robot.linearOpMode.telemetry.update();
