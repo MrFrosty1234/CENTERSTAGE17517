@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Grabber implements RobotModule{
     UltRobot robot;
     public DcMotorEx pixelMotor;
+    // AnalogInput pixelSensorRight;
+    // AnalogInput pixelSensorLeft;
     public Servo pixelGrabServo;
     public Servo progibServo;
     public static double voltage;
@@ -36,8 +38,11 @@ public class Grabber implements RobotModule{
         moveTimer.reset();
         this.robot = robot;
 
+        // pixelSensorLeft = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageLeft");
+        //pixelSensorRight = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageRight");
         progibServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServo");
         pixelMotor = (DcMotorEx) this.robot.linearOpMode.hardwareMap.dcMotor.get("pixelMotor");
+       // pixelLeftServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoLeft");
         pixelGrabServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
     }
 
@@ -47,11 +52,7 @@ public class Grabber implements RobotModule{
 
     @Override
     public boolean isAtPosition() {
-        if(moveTimer.time() < 0.5){
-           return false;
-        }
-        else
-            return true;
+        return true;
     }
 
     public void update() {
