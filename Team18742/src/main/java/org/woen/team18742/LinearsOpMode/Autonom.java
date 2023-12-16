@@ -20,7 +20,6 @@ public class Autonom extends LinearOpMode {
 
         while (opModeIsActive()) {
             _collector.Update();
-            telemetry.update();
         }
 
         _collector.Stop();

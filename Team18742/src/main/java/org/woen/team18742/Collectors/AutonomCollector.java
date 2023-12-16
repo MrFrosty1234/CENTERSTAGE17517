@@ -2,12 +2,14 @@ package org.woen.team18742.Collectors;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Modules.Automatic;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.VisionPortalHandler;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Odometry.Odometry;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 public class AutonomCollector extends BaseCollector {
     public Automatic Auto;
@@ -27,7 +29,11 @@ public class AutonomCollector extends BaseCollector {
         Odometry = new Odometry(this);
         Auto = new Automatic(this);
 
-        _visionHandler = new VisionPortalHandler(new VisionProcessor[]{Camera.GetProcessor(), Odometry.GetProcessor()});
+        CameraStreamSource v = Camera.GetProcessor();
+
+        _visionHandler = new VisionPortalHandler(new VisionProcessor[]{Odometry.GetProcessor(), (VisionProcessor) v});
+
+        _visionHandler.StartDashBoardVid(v);
     }
 
     @Override
@@ -89,7 +95,7 @@ public class AutonomCollector extends BaseCollector {
 
         Auto.Update();
 
-        Camera.GetPosition();
+        ToolTelemetry.AddLine("camera = " + Camera.GetPosition());
 
         if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
             if (_currentRouteAction < _route.length) {
