@@ -8,11 +8,10 @@ import org.woen.team18742.Collectors.BaseCollector;
 
 @Autonomous
 public class Autonom extends LinearOpMode {
-    private BaseCollector _collector;
 
     @Override
     public void runOpMode() {
-        _collector = new AutonomCollector(this);
+        BaseCollector _collector = new AutonomCollector(this);
 
         waitForStart();
         resetRuntime();

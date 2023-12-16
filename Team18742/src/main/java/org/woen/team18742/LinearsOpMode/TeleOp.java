@@ -6,11 +6,10 @@ import org.woen.team18742.Collectors.TeleOpCollector;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOp extends LinearOpMode {
-    private TeleOpCollector _collector;
 
     @Override
     public void runOpMode() {
-        _collector = new TeleOpCollector(this);
+        TeleOpCollector _collector = new TeleOpCollector(this);
 
         waitForStart();
         resetRuntime();

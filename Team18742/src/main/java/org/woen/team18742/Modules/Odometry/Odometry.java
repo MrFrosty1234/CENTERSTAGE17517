@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.DriverTrain;
@@ -28,12 +29,16 @@ public class Odometry {
     private ElapsedTime _time;
     private CVOdometry _CVOdometry;
 
-    public Odometry(AutonomCollector collector) {
+    public Odometry(BaseCollector collector) {
         _time = collector.Time;
-        _CVOdometry = new CVOdometry(collector.Camera);
+        _CVOdometry = new CVOdometry();
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
         _telemetry = collector.CommandCode.telemetry;
+    }
+
+    public VisionProcessor GetProcessor(){
+        return _CVOdometry.GetProcessor();
     }
 
     public void Update() {

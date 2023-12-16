@@ -2,9 +2,10 @@ package org.woen.team18742.Collectors;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Modules.Automatic;
 import org.woen.team18742.Modules.Camera.Camera;
-import org.woen.team18742.Modules.Camera.RobotPosition;
+import org.woen.team18742.Modules.Camera.VisionPortalHandler;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Odometry.Odometry;
 
@@ -12,8 +13,9 @@ public class AutonomCollector extends BaseCollector {
     public Automatic Auto;
     public org.woen.team18742.Modules.Odometry.Odometry Odometry;
     public Camera Camera;
+    private final VisionPortalHandler _visionHandler;
 
-    private Runnable _route[];
+    private Runnable[] _route;
 
     private int _currentRouteAction = 0;
     private boolean _isPixelWait = false;
@@ -21,10 +23,11 @@ public class AutonomCollector extends BaseCollector {
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
 
-        Camera = new Camera(this);
+        Camera = new Camera();
         Odometry = new Odometry(this);
         Auto = new Automatic(this);
-        Camera.Build();
+
+        _visionHandler = new VisionPortalHandler(new VisionProcessor[]{Camera.GetProcessor(), Odometry.GetProcessor()});
     }
 
     @Override
@@ -62,12 +65,8 @@ public class AutonomCollector extends BaseCollector {
 
             case RIGHT: {
                 _route = new Runnable[]{
-                        () -> {
-                            Auto.PIDMove(80, 5);
-                        },
-                        ()->{
-                            Auto.PIDMove(-10, 60);
-                        }
+                        () -> Auto.PIDMove(80, 5),
+                        ()-> Auto.PIDMove(-10, 60)
                 };
 
                 break;
@@ -75,12 +74,8 @@ public class AutonomCollector extends BaseCollector {
 
             default: {
                 _route = new Runnable[]{
-                        () -> {
-                            Auto.PIDMove(60, 0);
-                        },
-                        () -> {
-                            Auto.PIDMove(-10, 60);
-                        }
+                        () -> Auto.PIDMove(60, 0),
+                        () -> Auto.PIDMove(-10, 60)
                 };
                 break;
             }
@@ -109,6 +104,6 @@ public class AutonomCollector extends BaseCollector {
 
     @Override
     public void Stop() {
-        Camera.Stop();
+        _visionHandler.Stop();
     }
 }

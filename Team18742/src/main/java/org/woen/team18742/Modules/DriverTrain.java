@@ -8,27 +8,31 @@ import static java.lang.Math.sin;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Devices;
 
 public class DriverTrain {
-    private DcMotor _leftForwardDrive = null;
-    private DcMotor _rightForwardDrive = null;
-    private DcMotor _leftBackDrive = null;
-    private DcMotor _rightBackDrive = null;
+    private final DcMotor _leftForwardDrive;
+    private final DcMotor _rightForwardDrive;
+    private final DcMotor _leftBackDrive;
+    private final DcMotor _rightBackDrive;
 
     private final double diametr = 9.8, encoderconstat = 1440;
-    private Gyroscope _gyro;
+    private final Gyroscope _gyro;
 
     public DriverTrain(BaseCollector collector) {
         _gyro = collector.Gyro;
 
-        _leftForwardDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "leftmotor");
-        _rightForwardDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "rightmotor");
-        _leftBackDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "leftbackmotor");
-        _rightBackDrive = collector.CommandCode.hardwareMap.get(DcMotor.class, "rightbackmotor");
+        _leftForwardDrive = Devices.LeftForwardDrive;
+        _rightBackDrive = Devices.RightBackDrive;
+        _rightForwardDrive = Devices.RightForwardDrive;
+        _leftBackDrive = Devices.LeftBackDrive;
+
+
         _leftForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         _rightForwardDrive.setDirection(REVERSE);
         _rightBackDrive.setDirection(REVERSE);
 

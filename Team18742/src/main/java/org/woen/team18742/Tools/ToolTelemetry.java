@@ -6,22 +6,21 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ToolTelemetry {
-    private static Telemetry _telemetry, _dashTelemetry;
+    private static MultipleTelemetry _telemetry;
 
     public static void SetTelemetry(Telemetry telemetry) {
-        _telemetry = telemetry;
-        _dashTelemetry = FtcDashboard.getInstance().getTelemetry();
+        _telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     public static void Update(){
-        _dashTelemetry.update();
+        _telemetry.update();
     }
 
     public static void AddLine(String str) {
         _telemetry.addLine(str);
     }
 
-    public static void AddValDash(String name, Object val) {
-        _dashTelemetry.addData(name, val);
+    public static void AddVal(String name, Object val) {
+        _telemetry.addData(name, val);
     }
 }

@@ -1,9 +1,5 @@
 package org.woen.team18742.Modules;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-
 import com.acmerobotics.dashboard.config.Config;
 
 import org.woen.team18742.Collectors.AutonomCollector;
@@ -13,8 +9,8 @@ import org.woen.team18742.Tools.ToolTelemetry;
 
 @Config
 public class Automatic {
-    private AutonomCollector _collector;
-    private Odometry _odometry;
+    private final AutonomCollector _collector;
+    private final Odometry _odometry;
     public static double PidForwardP = 0.2, PidForwardI = 0, PidForwardD = 0;
     public static double PidSideP = 0.2, PidSideI = 0, PidSideD = 0;
     public static double PidRotateP = 0.02, PidRotateI = 0, PidRotateD = 0;
@@ -24,7 +20,9 @@ public class Automatic {
         _odometry = collector.Odometry;
     }
 
-    private PID _pidForward = new PID(PidForwardP, PidForwardI, PidForwardD, 1), _pidSide = new PID(PidSideP, PidSideI, PidSideD, 1), _pidTurn = new PID(PidRotateP, PidRotateI, PidRotateD, 1);
+    private final PID _pidForward = new PID(PidForwardP, PidForwardI, PidForwardD, 1);
+    private final PID _pidSide = new PID(PidSideP, PidSideI, PidSideD, 1);
+    private final PID _pidTurn = new PID(PidRotateP, PidRotateI, PidRotateD, 1);
 
     public void PIDMove(double forward, double side) {
         _movedTargetX = _movedTargetX + forward;
@@ -66,6 +64,6 @@ public class Automatic {
         _collector.Driver.SetSpeedWorldCoords(UForward,  uSide, uTurn);
 
         ToolTelemetry.AddLine( "Autonom:" + _pidForward.Err + " " + _pidSide.Err + " " + _pidTurn.Err);
-        ToolTelemetry.AddValDash("turn err", _pidTurn.Err);
+        ToolTelemetry.AddVal("turn err", _pidTurn.Err);
     }
 }
