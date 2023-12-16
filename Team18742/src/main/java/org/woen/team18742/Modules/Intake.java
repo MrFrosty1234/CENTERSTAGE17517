@@ -33,7 +33,7 @@ public class Intake {
     }
 
     public static double servoperevorotnazad = 0.765;
-    public static final double servoperevorot = 0.16;
+    public static final double servoperevorot = 0.20;
 
     public void setperevorotik() {
         if (_collector.Lift.isUp()) {
@@ -43,8 +43,8 @@ public class Intake {
         }
     }
 
-    public static double servoGripperreturn = 0.43;
-    public static double servoGripper = 0.221;
+    public static double servoGripperreturn = 0.2;
+    public static double servoGripper = 0;
 
     private boolean gripped = false;
 
