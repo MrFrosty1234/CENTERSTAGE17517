@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Devices;
 
 public class Lift {
     private final DcMotor _liftM1;
@@ -13,9 +14,10 @@ public class Lift {
     private boolean _ending1State = false, _ending2State = false;
 
     public Lift(BaseCollector collector) {
-        _ending1 = collector.CommandCode.hardwareMap.get(DigitalChannel.class, "ending1");
-        _ending2 = collector.CommandCode.hardwareMap.get(DigitalChannel.class, "ending2");
-        _liftM1 = collector.CommandCode.hardwareMap.get(DcMotor.class, "liftmotor");
+        _ending1 = Devices.Ending1;
+        _ending2 = Devices.Ending2;
+
+        _liftM1 = Devices.LiftMotor;
         _liftM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         _liftM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -1,40 +1,19 @@
 package org.woen.team18742.Modules.Camera;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.vision.VisionProcessor;
-import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.OpenCV.PipeLine;
-import org.woen.team18742.OpenCV.TestVisionProcessor;
-import org.woen.team18742.Tools.ToolTelemetry;
 
 @Config
 public class Camera {
-    private CameraName _camera;
-    public static boolean IsDebug = false;
+    public static boolean IsDebug = true;
     public static int RobotPos = 2;
-
-    VisionPortal visionPortal;
     PipeLine pipeLine = new PipeLine();
 
-    public VisionProcessor odometryProcessor;
-
-    public Camera(BaseCollector collector) {
-        _camera = collector.CommandCode.hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        FtcDashboard.getInstance().startCameraStream(pipeLine,10);
-    }
-
-    public void Build(){
-        visionPortal = new VisionPortal.Builder()
-                .setCamera(_camera)
-                .addProcessor(pipeLine)
-                .addProcessor(odometryProcessor)
-                .build();
+    public CameraStreamSource GetProcessor() {
+        return pipeLine;
     }
 
     private RobotPosition GetEnum(int val) {
@@ -53,9 +32,5 @@ public class Camera {
             return GetEnum(RobotPos);
 
         return GetEnum(pipeLine.pos.get());
-    }
-
-    public void Stop() {
-        visionPortal.close();
     }
 }

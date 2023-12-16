@@ -28,11 +28,11 @@ public class ConfigVelocityOpMode extends LinearOpMode {
     @Override
     public void runOpMode(){
         robot = new UltRobot(this);
-        /*left_front_drive = hardwareMap.get(DcMotorEx.class, "left_front_drive");
+        left_front_drive = hardwareMap.get(DcMotorEx.class, "left_front_drive");
         left_back_drive =  hardwareMap.get(DcMotorEx.class, "left_back_drive");
 
         right_front_drive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
-        right_back_drive =  hardwareMap.get(DcMotorEx.class, "right_back_drive");
+        right_back_drive =  hardwareMap.get(DcMotorEx.class, "right_back_drive");/*
         left_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         left_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -50,11 +50,11 @@ public class ConfigVelocityOpMode extends LinearOpMode {
             double leftStickY = -gamepad1.left_stick_y;
             double rightStickX = gamepad1.right_stick_x;
 
-            /*left_front_drive.setPower(lf);
-            left_back_drive.setPower(lb);
-            right_front_drive.setPower(rf);
-            right_back_drive.setPower(rb);
-
+            //left_front_drive.setPower(lf);
+            //left_back_drive.setPower(lb);
+            //right_front_drive.setPower(rf);
+            //right_back_drive.setPower(rb);
+/*
             telemetry.addData("lf",left_front_drive.getCurrentPosition());
             telemetry.addData("lb",left_back_drive.getCurrentPosition());
             telemetry.addData("rf",right_front_drive.getCurrentPosition());
@@ -65,7 +65,6 @@ public class ConfigVelocityOpMode extends LinearOpMode {
             robot.driveTrainVelocityControl.targetH = h;
             robot.driveTrainVelocityControl.vector.y = y;
             robot.driveTrainVelocityControl.vector.x = x;
-
             robot.allUpdate();
 
         }

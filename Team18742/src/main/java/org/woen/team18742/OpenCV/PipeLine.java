@@ -57,7 +57,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     double x3Start = x * 0.6;
     double centerOfRectX = 0;
     double centerOfRectY = 0;
-    public AtomicInteger pos = new AtomicInteger();
+    public AtomicInteger pos = new AtomicInteger(2);
 
     public int ksize = 13;
     public boolean team = true;

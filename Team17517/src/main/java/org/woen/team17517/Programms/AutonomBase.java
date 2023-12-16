@@ -2,25 +2,45 @@ package org.woen.team17517.Programms;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.woen.team17517.Robot.UltRobot;
 
+@Autonomous
+public class AutonomBase extends LinearOpMode {
+    DcMotor left_front_drive;
+    DcMotor left_back_drive;
 
-abstract public class AutonomBase extends LinearOpMode {
+    DcMotor right_front_drive;
+    DcMotor right_back_drive;
     UltRobot robot;
-    TelemetryPacket telemetryPacket;
-
     @Override
     public void runOpMode() {
-
         robot = new UltRobot(this);
-        telemetryPacket = new TelemetryPacket();
-        telemetryPacket.fieldOverlay().strokeLine(0, 0, 141.3 / 2.54, 21.9 / 2.54);
-        FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
+        left_front_drive = robot.linearOpMode.hardwareMap.dcMotor.get("left_front_drive");
+        left_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("left_back_drive");
+        right_front_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_front_drive");
+        right_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_back_drive");
+
+        right_front_drive.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_back_drive.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+
         waitForStart();
-        main();
+        left_front_drive.setPower(1);
+        left_back_drive.setPower(1);
+        right_front_drive.setPower(1);
+        right_back_drive.setPower(1);
+        sleep(800);
+        left_front_drive.setPower(0);
+        left_back_drive.setPower(0);
+        right_front_drive.setPower(0);
+        right_back_drive.setPower(0);
+
     }
 
-    abstract public void main();
 }

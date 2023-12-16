@@ -3,7 +3,10 @@ package org.woen.team18742.Tools;
 import static java.lang.Math.signum;
 
 public class PID {
-    private double _pCoef, _dCoef, _iCoef, _limit;
+    private double _pCoef;
+    private double _dCoef;
+    private double _iCoef;
+    private final double _limit;
     private double _integrall = 0;
     private double _errOld = 0;
     public double Err = 0;
@@ -37,13 +40,11 @@ public class PID {
         if(Math.abs(_integrall) >= _limit)
             _integrall = signum(_integrall) * _limit;
 
-        double ingeralErr = _integrall * _iCoef;
-
-        double u = error * _pCoef + ingeralErr + (ingeralErr - _errOld) * _dCoef;
+        double u = error * _pCoef + _integrall * _iCoef + (error - _errOld) * _dCoef;
 
         Err = error;
 
-        _errOld = ingeralErr;
+        _errOld = error;
 
         return u;
     }

@@ -7,10 +7,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Devices;
 
 @Config
 public class Brush {
-    private DcMotorEx brushMotor;
+    private final DcMotorEx brushMotor;
     private boolean flagdefense = true;
 
     public static double getvolteges = 1;
@@ -20,13 +21,8 @@ public class Brush {
     double speed;
 
     ElapsedTime elapsedTime = new ElapsedTime();
-
-    private BaseCollector _collector;
-
     public Brush(BaseCollector collector){
-        _collector = collector;
-
-        brushMotor = _collector.CommandCode.hardwareMap.get(DcMotorEx.class, "brushMotor");
+        brushMotor = Devices.BrushMotor;
 
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }

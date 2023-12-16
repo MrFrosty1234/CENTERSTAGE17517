@@ -14,25 +14,28 @@ public class DriveTrainVelocityControl implements RobotModule{
     UltRobot robot;
     private double voltage;
 
-    public static double kdX;
-    public static double kiX = 0.025;
-    public static double kpX = 0.045;
+    public static double kdX = 0;
+    public static double kiX = 0.000_000_1;
+    public static double kpX = 0.0003;
 
-    public static double kdRat;
-    public static double kiRat;
-    public static double kpRat;
+    public static double kdRat = 0;
+    public static double kiRat = 0.000_000_1;
+    public static double kpRat = 0.0003;
 
-    public static double kdY;
-    public static double kiY =0.025;
-    public static double kpY = 0.45;
+    public static double kdY  = 0;
+    public static double kiY =0.000_000_1;
+    public static double kpY = 0.0003;
 
-    private PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX);
-    private PIDMethod speedRat = new PIDMethod(kpRat,kiRat,kdRat,ksY);
-    private PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat);
+    public static  double maxIY = 0.2;
+    public static  double maxIRat = 0.2;
+    public static  double maxIX = 0.2;
 
-    public static double ksRat = 1d/2400d;
-    public static double ksY = 1d/2400d;
-    public static double ksX = 1d/2400d;
+    public PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX,maxIX);
+    public PIDMethod speedRat = new PIDMethod(kpRat,kiRat,kdRat,ksY,maxIY);
+    public PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat,maxIRat);
+    public static double ksRat = 0.000479;
+    public static double ksY = 0.0004;
+    public static double ksX = 0.00045;
     public static double kSlide = 0.85;
 
     private static double encRatConstant;
@@ -63,7 +66,7 @@ public class DriveTrainVelocityControl implements RobotModule{
         right_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
         right_back_drive =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_back_drive");
 
-        voltage = robot.voltageSensorPoint.getVol();
+        voltage = 12;
 
         reset();
     }
@@ -99,7 +102,7 @@ public class DriveTrainVelocityControl implements RobotModule{
     }
     private static double diameter = 0.098;
     private static double encTransmissionCoificent = 1d/20d;
-    private static double encCleanConst = 24;
+    private static double encCleanConst = 24.0;
     private static double trackLength = 27d/2d;
     private static double encConstant = Math.PI*diameter/(encCleanConst/encTransmissionCoificent);
     public double smToEnc(double target)
@@ -113,18 +116,18 @@ public class DriveTrainVelocityControl implements RobotModule{
     }
     public double velocityMoveRat(double target)
     {
-        double degreesRat = smToDegrees(encToSm(ratEnc));
+        double degreesRat = ratEnc;//smToDegrees(encToSm(ratEnc));
         return speedRat.PID(target,this.voltage,degreesRat,ksRat);
     }
     public double velocityMoveX(double target)
     {
-        double xEncSm = encToSm(xEnc);
-        return speedY.PID(target,this.voltage,xEncSm,ksX);
+        double xEncSm = xEnc;//encToSm(xEnc);
+        return speedX.PID(target,this.voltage,xEncSm,ksX);
     }
     public double velocityMoveY(double target)
     {
-        double yEncSm = encToSm(yEnc);
-        return speedX.PID(target,this.voltage,yEncSm,ksY);
+        double yEncSm = yEnc;//encToSm(yEnc);
+        return speedY.PID(target,this.voltage,yEncSm,ksY);
     }
     public double setProcentSpeed(double target){
         return maxRobotSpeed*target;
@@ -152,16 +155,22 @@ public class DriveTrainVelocityControl implements RobotModule{
         return true;
     }
 
+    public double velRat = 0;
+    public double velX = 0;
+    public double velY = 0;
+
     public void update() {
         encUpdate();
+        this.voltage = robot.voltageSensorPoint.getVol();
 
-        this.speedRat.setCoefficent(kpRat,kiRat,kdRat,ksRat);
-        this.speedX.setCoefficent(kpX,kiX,kdX,ksX);
-        this.speedY.setCoefficent(kpY,kiY,kdY,ksY);
+        this.speedRat.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);
+        this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX);
+        this.speedY.setCoefficent(kpY,kiY,kdY,ksY,maxIY);
 
-        double velRat = velocityMoveRat(targetH);
-        double velX = velocityMoveX(vector.x);
-        double velY = velocityMoveY(vector.y);
+
+        velRat = velocityMoveRat(targetH);
+        velX = velocityMoveX(vector.x);
+        velY = velocityMoveY(vector.y);
 
         left_front_drive.setPower(velX + velY + velRat);
         right_front_drive.setPower(-velX + velY - velRat);

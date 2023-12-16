@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Config
@@ -24,12 +25,11 @@ public class Intake {
 
     public Intake(BaseCollector collector) {
         _collector = collector;
-        pixelSensor1 = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "pixelSensor1");
-        pixelSensor2 = _collector.CommandCode.hardwareMap.get(AnalogInput.class, "pixelSensor2");
-        gripper = _collector.CommandCode.hardwareMap.get(Servo.class, "gripok");
-        clamp = _collector.CommandCode.hardwareMap.get(Servo.class, "gripokiu");
-        servopere = _collector.CommandCode.hardwareMap.get(Servo.class, "perevert");
-
+        pixelSensor1 = Devices.PixelSensor1;
+        pixelSensor2 = Devices.PixelSensor2;
+        gripper = Devices.Gripper;
+        clamp = Devices.Clamp;
+        servopere = Devices.Servopere;
     }
 
     public static double servoperevorotnazad = 0.765;
@@ -72,8 +72,7 @@ public class Intake {
     ElapsedTime pixelTimer = new ElapsedTime();
     double pixelTimeconst = 500;
 
-    public boolean pixelDetected(){
-       // return pixelSensor1.getVoltage() <= pixelSensorvoltage && pixelSensor2.getVoltage() <= pixelSensorvoltage;
+    public boolean pixelDetected() {
       if(pixelSensor1.getVoltage() >= pixelSensorvoltage )//|| pixelSensor2.getVoltage() >= pixelSensorvoltage)
            pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;

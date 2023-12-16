@@ -8,6 +8,7 @@ import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
+import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 public class BaseCollector {
@@ -22,6 +23,7 @@ public class BaseCollector {
     public BaseCollector(LinearOpMode commandCode){
         CommandCode = commandCode;
 
+        Devices.Init(commandCode.hardwareMap);
         ToolTelemetry.SetTelemetry(CommandCode.telemetry);
 
         Time = new ElapsedTime();
