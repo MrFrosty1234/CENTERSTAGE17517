@@ -1,5 +1,6 @@
 package org.woen.team18742.Collectors;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
@@ -11,7 +12,9 @@ import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.ToolTelemetry;
 
+@Config
 public class AutonomCollector extends BaseCollector {
+    public static boolean IsAutonomEnable = true;
     public Automatic Auto;
     public org.woen.team18742.Modules.Odometry.Odometry Odometry;
     public Camera Camera;
@@ -54,7 +57,7 @@ public class AutonomCollector extends BaseCollector {
             case RIGHT: {
                 _route = new Runnable[]{
                         () -> Auto.PIDMove(80, 5),
-                        ()-> Auto.PIDMove(-10, 60)
+                        () -> Auto.PIDMove(-10, 60)
                 };
 
                 break;
@@ -75,16 +78,18 @@ public class AutonomCollector extends BaseCollector {
         super.Update();
         Odometry.Update();
 
-        Auto.Update();
-
         ToolTelemetry.AddLine("camera = " + Camera.GetPosition());
 
-        if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
-            if (_currentRouteAction < _route.length) {
-                _isPixelWait = false;
-                _route[_currentRouteAction].run();
+        if (IsAutonomEnable) {
+            Auto.Update();
 
-                _currentRouteAction++;
+            if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
+                if (_currentRouteAction < _route.length) {
+                    _isPixelWait = false;
+                    _route[_currentRouteAction].run();
+
+                    _currentRouteAction++;
+                }
             }
         }
     }
