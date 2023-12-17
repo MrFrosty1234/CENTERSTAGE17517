@@ -12,7 +12,7 @@ import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 public class BaseCollector {
-    public LinearOpMode CommandCode;
+    public LinearOpMode Robot;
     public Gyroscope Gyro;
     public DriverTrain Driver;
     public org.woen.team18742.Modules.Lift.Lift Lift;
@@ -20,11 +20,11 @@ public class BaseCollector {
     public ElapsedTime Time;
     public Brush Brush;
 
-    public BaseCollector(LinearOpMode commandCode){
-        CommandCode = commandCode;
+    public BaseCollector(LinearOpMode robot){
+        Robot = robot;
 
-        Devices.Init(commandCode.hardwareMap);
-        ToolTelemetry.SetTelemetry(CommandCode.telemetry);
+        Devices.Init(robot.hardwareMap);
+        ToolTelemetry.SetTelemetry(Robot.telemetry);
 
         Time = new ElapsedTime();
         Lift = new Lift(this);

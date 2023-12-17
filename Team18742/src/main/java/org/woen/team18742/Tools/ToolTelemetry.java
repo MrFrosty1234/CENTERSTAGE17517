@@ -38,4 +38,7 @@ public class ToolTelemetry {
         _telemetry.addData(name, val);
         _packet.put(name, val);
     }
+    public static void AddDashboardValue(String name, Object value){
+        _telemetry.addData(name, value);
+    }
 }

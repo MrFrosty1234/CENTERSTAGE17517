@@ -6,7 +6,6 @@ import static java.lang.Math.sin;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.DriverTrain;
@@ -16,24 +15,22 @@ import org.woen.team18742.Tools.ToolTelemetry;
 @Config
 public class Odometry {
     public double X = 101, Y = 0;
-    private DriverTrain _driverTrain;
-    private Gyroscope _gyro;
+    private final DriverTrain _driverTrain;
+    private final Gyroscope _gyro;
     public static double YCoef = 0.9;
     public static double XCoef = 0.9;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
 
     private double _previusTime;
 
-    private Telemetry _telemetry;
-    private ElapsedTime _time;
-    private CVOdometry _CVOdometry;
+    private final ElapsedTime _time;
+    private final CVOdometry _CVOdometry;
 
     public Odometry(BaseCollector collector) {
         _time = collector.Time;
         _CVOdometry = new CVOdometry();
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
-        _telemetry = collector.CommandCode.telemetry;
     }
 
     public VisionProcessor GetProcessor(){

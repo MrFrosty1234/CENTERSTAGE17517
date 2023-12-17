@@ -22,7 +22,7 @@ public class Manual {
 
     public Manual(BaseCollector collector) {
         _collector = collector;
-        _servoPlane = _collector.CommandCode.hardwareMap.get(Servo.class, "servoPlane");
+        _servoPlane = _collector.Robot.hardwareMap.get(Servo.class, "servoPlane");
     }
 
     public void Start() {
@@ -33,18 +33,18 @@ public class Manual {
 
     public void Update() {
         _collector.Driver.DriveDirection(
-                _collector.CommandCode.gamepad1.left_stick_y,
-                _collector.CommandCode.gamepad1.left_stick_x,
-                _collector.CommandCode.gamepad1.right_stick_x);
+                _collector.Robot.gamepad1.left_stick_y,
+                _collector.Robot.gamepad1.left_stick_x,
+                _collector.Robot.gamepad1.right_stick_x);
 
-        boolean A = _collector.CommandCode.gamepad1.square;
-        boolean liftUp = _collector.CommandCode.gamepad1.dpad_up;
-        boolean liftDown = _collector.CommandCode.gamepad1.dpad_down;
-        boolean brushRevers = _collector.CommandCode.gamepad1.dpad_left;
-        boolean grip = _collector.CommandCode.gamepad1.triangle;
-        boolean brush = _collector.CommandCode.gamepad1.cross;
-        boolean zajat = _collector.CommandCode.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
-        boolean average = _collector.CommandCode.gamepad1.dpad_right;
+        boolean A = _collector.Robot.gamepad1.square;
+        boolean liftUp = _collector.Robot.gamepad1.dpad_up;
+        boolean liftDown = _collector.Robot.gamepad1.dpad_down;
+        boolean brushRevers = _collector.Robot.gamepad1.dpad_left;
+        boolean grip = _collector.Robot.gamepad1.triangle;
+        boolean brush = _collector.Robot.gamepad1.cross;
+        boolean zajat = _collector.Robot.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
+        boolean average = _collector.Robot.gamepad1.dpad_right;
 
         if(grip && !oldgrip) {
             ferty = !ferty;

@@ -59,9 +59,8 @@ public class Automatic {
         _pidSide.UpdateCoefs(PidSideP, PidSideI, PidSideD);
         _pidTurn.UpdateCoefs(PidRotateP, PidRotateI, PidRotateD);
 
-        double UForward = _pidForward.Update(_movedTargetX - _odometry.X), uSide = _pidSide.Update(_movedTargetY - _odometry.Y), uTurn = _pidTurn.Update(_collector.Gyro.GetDegrees() - _turnTarget);
-
-        _collector.Driver.SetSpeedWorldCoords(UForward,  uSide, uTurn);
+        _collector.Driver.SetSpeedWorldCoords(_pidForward.Update(_movedTargetX - _odometry.X),
+                _pidSide.Update(_movedTargetY - _odometry.Y), _pidTurn.Update(_collector.Gyro.GetDegrees() - _turnTarget));
 
         ToolTelemetry.AddLine( "Autonom:" + _pidForward.Err + " " + _pidSide.Err + " " + _pidTurn.Err);
         ToolTelemetry.AddVal("turn err", _pidTurn.Err);
