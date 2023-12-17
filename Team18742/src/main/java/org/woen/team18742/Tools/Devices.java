@@ -15,6 +15,8 @@ public class Devices {
 
     public static DcMotor LeftForwardDrive, LeftBackDrive, RightForwardDrive, RightBackDrive;
 
+    public static DcMotor OdometrX, OdometrY;
+
     public static DcMotor LiftMotor;
 
     public static DcMotorEx BrushMotor;
@@ -36,6 +38,9 @@ public class Devices {
         RightForwardDrive = map.get(DcMotor.class, "rightmotor");
         LeftBackDrive = map.get(DcMotor.class, "leftbackmotor");
         RightBackDrive = map.get(DcMotor.class, "rightbackmotor");
+
+        //OdometrX = map.get(DcMotor.class, "OdomtrX");
+        //OdometrY = map.get(DcMotor.class, "OdomtrY");
 
         LiftMotor = map.get(DcMotor.class, "liftmotor");
 
