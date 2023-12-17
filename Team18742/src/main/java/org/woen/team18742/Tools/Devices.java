@@ -1,5 +1,6 @@
 package org.woen.team18742.Tools;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,6 +10,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
+import java.util.List;
 
 public class Devices {
     private static HardwareMap _hardwareDevices;
@@ -29,6 +32,8 @@ public class Devices {
 
     public static AnalogInput PixelSensor1, PixelSensor2;
     public static Servo Gripper, Clamp, Servopere;
+
+    public static List<LynxModule> Hubs;
 
     public static void Init(HardwareMap map){
         if(_hardwareDevices != null)
@@ -59,6 +64,8 @@ public class Devices {
         Gripper = map.get(Servo.class, "gripok");
         Clamp = map.get(Servo.class, "gripokiu");
         Servopere = map.get(Servo.class, "perevert");
+
+        Hubs = map.getAll(LynxModule.class);
 
         _hardwareDevices = map;
     }

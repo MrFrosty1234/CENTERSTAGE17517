@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Modules.Brush;
+import org.woen.team18742.Modules.Cachinger;
 import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Intake;
@@ -20,6 +21,7 @@ public class BaseCollector {
     public org.woen.team18742.Modules.Intake Intake;
     public ElapsedTime Time;
     public Brush Brush;
+    private Cachinger _cachinger;
     public OdometrsHandler Odometrs;
 
     public BaseCollector(LinearOpMode robot){
@@ -28,6 +30,7 @@ public class BaseCollector {
         Devices.Init(robot.hardwareMap);
         ToolTelemetry.SetTelemetry(Robot.telemetry);
 
+        _cachinger = new Cachinger();
         Time = new ElapsedTime();
         Lift = new Lift(this);
         Brush = new Brush(this);
@@ -46,6 +49,7 @@ public class BaseCollector {
     }
 
     public void Update(){
+        _cachinger.Update();
         Lift.Update();
         Gyro.Update();
         Intake.Update();
@@ -53,7 +57,5 @@ public class BaseCollector {
         ToolTelemetry.Update();
     }
 
-    public void Stop(){
-
-    }
+    public void Stop(){}
 }
