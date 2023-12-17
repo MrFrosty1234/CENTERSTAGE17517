@@ -44,6 +44,7 @@ public class Manual {
         boolean grip = _collector.CommandCode.gamepad1.triangle;
         boolean brush = _collector.CommandCode.gamepad1.cross;
         boolean zajat = _collector.CommandCode.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
+        boolean average = _collector.CommandCode.gamepad1.dpad_right;
 
         if(grip && !oldgrip) {
             ferty = !ferty;
@@ -88,6 +89,9 @@ public class Manual {
         if(liftDown) {
             _collector.Lift.SetLiftPose(LiftPose.DOWN);
         }
+
+        if(average)
+            _collector.Lift.SetLiftPose(LiftPose.AVERAGE);
 
         _brushOld = brush;
 
