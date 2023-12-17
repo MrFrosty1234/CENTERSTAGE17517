@@ -14,23 +14,22 @@ public class Lift implements RobotModule {
     public static double kI = 0;
     public static double kD = 0;
     public DcMotor liftMotor;
-    public DigitalChannel buttonUp;
-    public DigitalChannel buttonDown;
-    public double power = 0;
+    //public DigitalChannel buttonUp;
+    //public DigitalChannel buttonDown;
+    private double power = 0;
     public LiftPosition liftPosition = LiftPosition.ZERO;
     public LiftMode liftMode = LiftMode.AUTO;
-    double err1 = 0;
+    double  err1 = 0;
     UltRobot robot;
     int liftOffset= 0;
     private final PidRegulator PIDZL1 = new PidRegulator(kP, kI, kD);
     public boolean liftPos = true;
     public Lift(UltRobot robot) {
         this.robot = robot;
-
         liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor");
         liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //buttonUp.setMode(DigitalChannel.Mode.INPUT);
+       // buttonUp.setMode(DigitalChannel.Mode.INPUT);
        // buttonDown.setMode(DigitalChannel.Mode.INPUT);
     }
 
@@ -39,6 +38,9 @@ public class Lift implements RobotModule {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public void setPower(double power){
+        this.power = power;
+    }
     public void setPowers(double x) {
         liftMotor.setPower(x);
     }
@@ -49,7 +51,7 @@ public class Lift implements RobotModule {
     }
 
 
-    public void setPowersLimit(double x) {
+    private void setPowersLimit(double x) {
         int pos = getPosition();
         if (x > 0) {
             if (pos > LiftPosition.UP.value) {
@@ -75,11 +77,11 @@ public class Lift implements RobotModule {
         switch (liftMode) {
             case AUTO: {
                     double target1 = liftPosition.value;
-                    double l = getPosition();
-                    err1 = target1 - l;
+                    double position = getPosition();
+                    err1 = target1 - position;
                     double poweryl1 = 0.2 + PIDZL1.update(err1);
                     liftMotor.setPower(Range.clip(poweryl1, -0.1, 0.7));
-                    if(abs(l) > 50)
+                    if(abs(position) > 50)
                         liftPos = false;
                     else
                         liftPos = true;

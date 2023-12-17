@@ -3,6 +3,7 @@ package org.woen.team17517.Robot;
 import static org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit.AMPS;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,13 +12,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Grabber implements RobotModule{
     UltRobot robot;
     public DcMotorEx pixelMotor;
+    AnalogInput pixelSensorRight;
+    AnalogInput pixelSensorLeft;
     public Servo pixelGrabServo;
     public Servo progibServo;
     public static double voltage;
     double pixelsCount = 0;
     double pixelsCountOld = 0;
     double targetPower = 1;
+    public double pixelLeftSensorVoltage = pixelSensorLeft.getVoltage();
+    public double pixelRightSensorVoltage = pixelSensorRight.getVoltage();
+    public boolean pixelIn = false;
+    public boolean positionGrabber = false;
 
+    GrabberMode grabberMode = GrabberMode.FULLPROTECTION;
+    PixelsPosition pixelsPosition = PixelsPosition.AUTONOM;
     int perekid = 0;
     int grabber = 0;
 
@@ -36,6 +45,8 @@ public class Grabber implements RobotModule{
         moveTimer.reset();
         this.robot = robot;
 
+        pixelSensorLeft = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageLeft");
+        pixelSensorRight = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageRight");
         progibServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServo");
         pixelMotor = (DcMotorEx) this.robot.linearOpMode.hardwareMap.dcMotor.get("pixelMotor");
         pixelGrabServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
@@ -47,38 +58,75 @@ public class Grabber implements RobotModule{
 
     @Override
     public boolean isAtPosition() {
-        if(moveTimer.time() < 0.5){
-           return false;
-        }
-        else
-            return true;
+        return true;
+    }
+    public void graberToClose(){
+        positionGrabber = false;
     }
 
-    public void update() {
+    public void graberToOpen(){
+        positionGrabber = true;
+    }
+    public void update(){
         double motorCurrent = pixelMotor.getCurrent(AMPS);
-        if (moveTimer.time() < 0.5) {
-            moveTimer.reset();
-            protectTimer.reset();
-        }
-        if (motorCurrent < 1) {
-            ampsProtection = false;
-            protectorIteration = false;
-        } else {
-            ampsProtection = true;
-            protectorIteration = true;
-        }
-        if (ampsProtection && protectTimer.time() < 1 && protectorIteration) {
-            pixelMotor.setPower(-1);
-            protectorIteration = false;
-        }
 
-        pixelsCountOld = pixelsCount;
-        // if ((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
-        //     pixelMotor.setPower(targetPower);
-        //   robot.lift.liftPos = !robot.lift.liftPos;
-        //} else
-        //   pixelMotor.setPower(0);
-        robot.linearOpMode.telemetry.addData("motorCurrent", motorCurrent);
+        switch (grabberMode) {
+            case FULLPROTECTION:{
+
+                if (moveTimer.time() < 0.5) {
+                    moveTimer.reset();
+                    protectTimer.reset();
+                }
+                if (motorCurrent < 1) {
+                    ampsProtection = false;
+                    protectorIteration = false;
+                } else {
+                    ampsProtection = true;
+                    protectorIteration = true;
+                }
+                if (ampsProtection && protectTimer.time() < 1 && protectorIteration) {
+                    pixelMotor.setPower(-1);
+                    protectorIteration = false;
+                }
+
+                pixelsCountOld = pixelsCount;
+                if ((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
+                    pixelMotor.setPower(targetPower);
+                    robot.lift.liftPos = !robot.lift.liftPos;
+                } else
+                    pixelMotor.setPower(0);
+                    robot.linearOpMode.telemetry.addData("motorCurrent", motorCurrent);
+                if ((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
+                    pixelMotor.setPower(targetPower);
+                    robot.lift.liftPos = !robot.lift.liftPos;
+                } else
+                    pixelMotor.setPower(0);
+                robot.linearOpMode.telemetry.addData("motorCurrent", motorCurrent);
+
+            }
+            case MANUALMODE: {
+
+            }
+
+
+            switch (pixelsPosition){
+                case AUTONOM:{
+                    if(pixelRightSensorVoltage > 1 && pixelLeftSensorVoltage > 1 && positionGrabber) {
+                        closeGraber();
+                    }
+                    if(!positionGrabber){
+                        openGraber();
+                    }
+                }
+                case MANUAL:{
+                     if(positionGrabber)
+                         closeGraber();
+                     if(!positionGrabber)
+                         openGraber();
+                }
+            }
+
+        }
     }
 
     public void enable(boolean motorPowerControll) {
@@ -88,6 +136,7 @@ public class Grabber implements RobotModule{
             targetPower = 0;
 
     }
+
     public void openGraber(){
         pixelGrabServo.setPosition(grabberClose);
     }
@@ -123,5 +172,24 @@ public class Grabber implements RobotModule{
                 perekid = 0;
             }
         }
+    }
+
+
+
+
+    public boolean pixelЕxamination(){
+        if (pixelLeftSensorVoltage > 1 && pixelRightSensorVoltage > 1){
+            pixelIn = true;
+        }
+        else {
+            pixelIn = false;
+        }
+        return pixelIn;
+    }
+    public enum GrabberMode {
+        FULLPROTECTION, NOTFULLPROTECTION, MANUALMODE;
+    }
+    public enum PixelsPosition {
+        AUTONOM, MANUAL;
     }
 }
