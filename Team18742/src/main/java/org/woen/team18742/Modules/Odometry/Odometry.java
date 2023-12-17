@@ -9,19 +9,18 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
+import org.woen.team18742.Modules.OdometrsHandler;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Config
 public class Odometry {
     public static boolean IsOdometr = false;
-    public static double RadiusOdometr = 5; //random number
-    private double _oldRotate = 0, _oldOdometrX, _oldOdometrY;
-    private DcMotor _odometrX, _odometrY;
-    private final double _diametrOdometr = 4.8, _encoderconstatOdometr = 1440;
+    private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY;
 
     public double X = 101, Y = 0;
     private final DriverTrain _driverTrain;
@@ -34,14 +33,14 @@ public class Odometry {
 
     private final ElapsedTime _time;
     private final CVOdometry _CVOdometry;
+    private final OdometrsHandler _odometrs;
 
     public Odometry(BaseCollector collector) {
         _time = collector.Time;
         _CVOdometry = new CVOdometry();
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
-        _odometrX = Devices.OdometrX;
-        _odometrY = Devices.OdometrY;
+        _odometrs = collector.Odometrs;
     }
 
     public VisionProcessor GetProcessor(){
@@ -51,16 +50,18 @@ public class Odometry {
     public void Update() {
         double time = _time.seconds(), deltaTime = time - _previusTime;
 
+        double deltaX, deltaY;
+
         if(IsOdometr){
             double deltaRotate = _gyro.GetRadians() - _oldRotate;
 
-            double odometrX = _odometrX.getCurrentPosition();
-            double odometrY = _odometrY.getCurrentPosition();
+            double odometrXLeft = _odometrs.GetOdometrXLeft(), odometrY = _odometrs.GetOdometrY(), odometrXRight = _odometrs.GetOdometrXRigth();
 
-            X += ((odometrX - _oldOdometrX) / _encoderconstatOdometr * PI * _diametrOdometr) - RadiusOdometr * deltaRotate;
-            Y += ((odometrY - _oldOdometrY) / _encoderconstatOdometr * PI * _diametrOdometr) - RadiusOdometr * deltaRotate;
+            deltaX = (odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
+            deltaY = (odometrY - _oldOdometrY) - OdometrsHandler.RadiusOdometr * deltaRotate;
 
-            _oldOdometrX = odometrX;
+            _oldOdometrXLeft = odometrXLeft;
+            _oldOdometrXRight = odometrXRight;
             _oldOdometrY = odometrY;
 
             _oldRotate = _gyro.GetRadians();
@@ -71,23 +72,21 @@ public class Odometry {
             double rfd = _driverTrain.GetRightForwardIncoder();
             double rbd = _driverTrain.GetRightBackIncoder();
 
-            ToolTelemetry.AddLine("OdometryX = " + X + " OdometryY = " + Y);
-
             double deltaLfd = lfd - _leftForwardDrive, deltaLbd = lbd - _leftBackDrive, deltaRfd = rfd - _rightForwardDrive, deltaRbd = rbd - _rightBackDrive;
 
-            double deltaX = deltaLfd + deltaLbd + deltaRfd + deltaRbd;
-            double deltaY = -deltaLfd + deltaLbd + deltaRfd - deltaRbd;
+            deltaX = deltaLfd + deltaLbd + deltaRfd + deltaRbd;
+            deltaY = -deltaLfd + deltaLbd + deltaRfd - deltaRbd;
 
             deltaY = deltaY * 0.8;
-
-            X += deltaX * cos(_gyro.GetRadians()) + deltaY * sin(_gyro.GetRadians());
-            Y += -deltaX * sin(_gyro.GetRadians()) + deltaY * cos(_gyro.GetRadians());
 
             _leftForwardDrive = lfd;
             _leftBackDrive = lbd;
             _rightBackDrive = rbd;
             _rightForwardDrive = rfd;
         }
+
+        X += deltaX * cos(_gyro.GetRadians()) + deltaY * sin(_gyro.GetRadians());
+        Y += -deltaX * sin(_gyro.GetRadians()) + deltaY * cos(_gyro.GetRadians());
 
         _CVOdometry.Update();
 
@@ -99,15 +98,10 @@ public class Odometry {
         _previusTime = time;
 
         ToolTelemetry.DrawCircle(X, Y, 10, "#FFFFFF");
+        ToolTelemetry.AddLine("OdometryX = " + X + " OdometryY = " + Y);
     }
 
     public void Start() {
         _previusTime = _time.seconds();
-
-        _odometrX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _odometrX.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        _odometrY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _odometrY.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

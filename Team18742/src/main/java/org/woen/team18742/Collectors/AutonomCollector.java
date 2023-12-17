@@ -9,6 +9,7 @@ import org.woen.team18742.Modules.Automatic;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.VisionPortalHandler;
 import org.woen.team18742.Modules.Lift.LiftPose;
+import org.woen.team18742.Modules.OdometrsHandler;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.ToolTelemetry;
 
