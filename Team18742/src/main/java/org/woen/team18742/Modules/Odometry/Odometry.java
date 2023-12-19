@@ -15,6 +15,7 @@ import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.OdometrsHandler;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.MedianFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Config
@@ -28,15 +29,12 @@ public class Odometry {
     public static double YCoef = 0.9;
     public static double XCoef = 0.9;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
-
-    private double _previusTime;
-
-    private final ElapsedTime _time;
     private final CVOdometry _CVOdometry;
     private final OdometrsHandler _odometrs;
 
+    private final MedianFilter _filterX = new MedianFilter(XCoef), _filterY = new MedianFilter(YCoef);
+
     public Odometry(BaseCollector collector) {
-        _time = collector.Time;
         _CVOdometry = new CVOdometry();
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
@@ -48,7 +46,8 @@ public class Odometry {
     }
 
     public void Update() {
-        double time = _time.seconds(), deltaTime = time - _previusTime;
+        _filterX.UpdateCoef(XCoef);
+        _filterY.UpdateCoef(YCoef);
 
         double deltaX, deltaY;
 
@@ -91,17 +90,19 @@ public class Odometry {
         _CVOdometry.Update();
 
         if(!_CVOdometry.IsZero) {
-            X += (_CVOdometry.X - X) * (deltaTime / (XCoef + deltaTime));
-            Y += (_CVOdometry.Y - Y) * (deltaTime / (YCoef + deltaTime));
-        }
+            //X += (_CVOdometry.X - X) * (deltaTime / (XCoef + deltaTime));
+            //Y += (_CVOdometry.Y - Y) * (deltaTime / (YCoef + deltaTime));
 
-        _previusTime = time;
+            X = _filterX.Update(X, _CVOdometry.X);
+            Y = _filterY.Update(Y, _CVOdometry.Y);
+        }
 
         ToolTelemetry.DrawCircle(X, Y, 10, "#FFFFFF");
         ToolTelemetry.AddLine("OdometryX = " + X + " OdometryY = " + Y);
     }
 
-    public void Start() {
-        _previusTime = _time.seconds();
+    public void Start(){
+        _filterX.Reset();
+        _filterY.Reset();
     }
 }

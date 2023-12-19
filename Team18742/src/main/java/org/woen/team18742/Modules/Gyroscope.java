@@ -8,17 +8,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.MedianFilter;
 
 @Config
 public class Gyroscope {
     private final IMU _imu;
     private final OdometrsHandler _odometrs;
     public static boolean IsMerger = false;
-    private final ElapsedTime _time;
     public static double MergerCoef = 0.9;
+    private MedianFilter _filter = new MedianFilter(MergerCoef);
 
     public Gyroscope(BaseCollector collector) {
-        _time = collector.Time;
         _imu = Devices.IMU;
         _odometrs = collector.Odometrs;
         _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP)));
@@ -32,9 +32,11 @@ public class Gyroscope {
         return _degree;
     }
 
-    private double _degree, _radians, _odometrDegree, _odometrRadians, _oldTime;
+    private double _degree, _radians, _odometrDegree, _odometrRadians;
 
     public void Update() {
+        _filter.UpdateCoef(MergerCoef);
+
         _degree = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         _radians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
@@ -42,16 +44,13 @@ public class Gyroscope {
             _odometrRadians = (_odometrs.GetOdometrXLeft() - _odometrs.GetOdometrXRigth()) / 2 / OdometrsHandler.RadiusOdometr;
             _odometrDegree = Math.toDegrees(_odometrRadians);
 
-            double deltaTime = _time.seconds() - _oldTime;
-
-            _radians += (_odometrRadians - _radians) * (deltaTime / (MergerCoef + deltaTime));
+            _radians = _filter.Update(_radians, _odometrRadians);
             _degree = Math.toDegrees(_radians);
         }
-
-        _oldTime = _time.seconds();
     }
 
     public void Reset() {
         _imu.resetYaw();
+        _filter.Reset();
     }
 }
