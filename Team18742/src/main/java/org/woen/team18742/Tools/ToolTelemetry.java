@@ -25,8 +25,8 @@ public class ToolTelemetry {
         _packet = new TelemetryPacket();
     }
 
-    public static void DrawCircle(double x, double y, double radius, String color){
-        _packet.fieldOverlay().fillCircle(x,y,radius);
+    public static void DrawCircle(Vector2 pos, double radius, String color){
+        _packet.fieldOverlay().fillCircle(pos.X,pos.Y,radius);
     }
 
     public static void AddLine(String str) {

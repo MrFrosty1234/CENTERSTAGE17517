@@ -14,13 +14,14 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagPoseRaw;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Tools.ToolTelemetry;
+import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
 
 public class CVOdometry {
     private AprilTagProcessor  _aprilTagProcessor = null;
 
-    public double X = 101, Y = 0;
+    public Vector2 Position = new Vector2();
     public boolean IsZero = true;
 
     public VisionProcessor GetProcessor(){
@@ -33,8 +34,8 @@ public class CVOdometry {
         ArrayList<AprilTagDetection> detections = _aprilTagProcessor.getDetections();
 
         if(detections.size() == 0){
-            X = 0;
-            Y = 0;
+            Position.X = 0;
+            Position.Y = 0;
 
             IsZero = true;
 
@@ -71,10 +72,10 @@ public class CVOdometry {
             }
         }
 
-        X = xSum / detections.size();
-        Y = -ySum / detections.size();
+        Position.X = xSum / detections.size();
+        Position.Y = -ySum / detections.size();
 
-        ToolTelemetry.AddLine("CVOdometry = " + X + " " + Y);
-        ToolTelemetry.DrawCircle(X, Y, 10, "#FFFFFF");
+        ToolTelemetry.AddLine("CVOdometry = " + Position.getString());
+        ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
     }
 }

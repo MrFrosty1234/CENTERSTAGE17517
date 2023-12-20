@@ -10,6 +10,7 @@ import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.VisionPortalHandler;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.ToolTelemetry;
+import org.woen.team18742.Tools.Vector2;
 
 @Config
 public class AutonomCollector extends BaseCollector {
@@ -55,8 +56,8 @@ public class AutonomCollector extends BaseCollector {
 
             case RIGHT: {
                 _route = new Runnable[]{
-                        () -> Auto.PIDMove(80, 5),
-                        () -> Auto.PIDMove(-10, 60)
+                        () -> Auto.PIDMove(new Vector2(80, 5)),
+                        () -> Auto.PIDMove(new Vector2(-10, 60))
                 };
 
                 break;
@@ -64,8 +65,8 @@ public class AutonomCollector extends BaseCollector {
 
             default: {
                 _route = new Runnable[]{
-                        () -> Auto.PIDMove(60, 0),
-                        () -> Auto.PIDMove(-10, 60)
+                        () -> Auto.PIDMove(new Vector2(60, 0)),
+                        () -> Auto.PIDMove(new Vector2(-10, 60))
                 };
                 break;
             }

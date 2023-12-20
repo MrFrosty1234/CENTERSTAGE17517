@@ -1,0 +1,36 @@
+package org.woen.team18742.Tools;
+
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
+public class Vector2 {
+    public double X;
+    public double Y;
+
+    public Vector2(){
+        X = 0;
+        Y = 0;
+    }
+
+    public Vector2(double x, double y){
+        X = x;
+        Y = y;
+    }
+
+    public double Abs(){
+        return sqrt(X * X + Y * Y);
+    }
+
+    public static Vector2 Plus(Vector2 vec1, Vector2 vec2){
+        return new Vector2(vec1.X + vec2.X, vec1.Y + vec2.Y);
+    }
+
+    public Vector2 Turn(double rotate){
+        return new Vector2(cos(rotate) * X - sin(rotate) * Y, sin(rotate) * X + cos(rotate) * Y);
+    }
+
+    public String getString(){
+        return "X = " + X + "Y = " + Y;
+    }
+}

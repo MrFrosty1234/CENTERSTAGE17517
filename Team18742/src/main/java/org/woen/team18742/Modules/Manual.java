@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Lift.LiftPose;
+import org.woen.team18742.Tools.Vector2;
 
 @Config
 public class Manual {
@@ -33,8 +34,8 @@ public class Manual {
 
     public void Update() {
         _collector.Driver.DriveDirection(
-                _collector.Robot.gamepad1.left_stick_y,
-                _collector.Robot.gamepad1.left_stick_x,
+                new Vector2(_collector.Robot.gamepad1.left_stick_y,
+                _collector.Robot.gamepad1.left_stick_x),
                 _collector.Robot.gamepad1.right_stick_x);
 
         boolean A = _collector.Robot.gamepad1.square;

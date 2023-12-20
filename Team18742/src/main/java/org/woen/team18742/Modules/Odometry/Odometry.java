@@ -17,13 +17,14 @@ import org.woen.team18742.Modules.OdometrsHandler;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.MedianFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
+import org.woen.team18742.Tools.Vector2;
 
 @Config
 public class Odometry {
     public static boolean IsOdometr = false;
     private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY;
 
-    public double X = 101, Y = 0;
+    public Vector2 Position = new Vector2();
     private final DriverTrain _driverTrain;
     private final Gyroscope _gyro;
     public static double YCoef = 0.9;
@@ -84,8 +85,8 @@ public class Odometry {
             _rightForwardDrive = rfd;
         }
 
-        X += deltaX * cos(_gyro.GetRadians()) + deltaY * sin(_gyro.GetRadians());
-        Y += -deltaX * sin(_gyro.GetRadians()) + deltaY * cos(_gyro.GetRadians());
+        Position.X += deltaX * cos(_gyro.GetRadians()) + deltaY * sin(_gyro.GetRadians());
+        Position.Y += -deltaX * sin(_gyro.GetRadians()) + deltaY * cos(_gyro.GetRadians());
 
         _CVOdometry.Update();
 
@@ -93,12 +94,12 @@ public class Odometry {
             //X += (_CVOdometry.X - X) * (deltaTime / (XCoef + deltaTime));
             //Y += (_CVOdometry.Y - Y) * (deltaTime / (YCoef + deltaTime));
 
-            X = _filterX.Update(X, _CVOdometry.X);
-            Y = _filterY.Update(Y, _CVOdometry.Y);
+            Position.X = _filterX.Update(Position.X, _CVOdometry.Position.X);
+            Position.Y = _filterY.Update(Position.Y, _CVOdometry.Position.Y);
         }
 
-        ToolTelemetry.DrawCircle(X, Y, 10, "#FFFFFF");
-        ToolTelemetry.AddLine("OdometryX = " + X + " OdometryY = " + Y);
+        ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
+        ToolTelemetry.AddLine("OdometryX :" + Position.getString());
     }
 
     public void Start(){
