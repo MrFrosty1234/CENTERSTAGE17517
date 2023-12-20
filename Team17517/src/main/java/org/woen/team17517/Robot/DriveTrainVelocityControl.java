@@ -1,13 +1,12 @@
 package org.woen.team17517.Robot;
 
 import static java.lang.Math.PI;
-import static java.lang.Math.abs;
-import static java.lang.Math.max;
-import static java.lang.Math.signum;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Config
 public class DriveTrainVelocityControl implements RobotModule{
@@ -30,30 +29,69 @@ public class DriveTrainVelocityControl implements RobotModule{
     public static  double maxIRat = 0.2;
     public static  double maxIX = 0.2;
 
-    public PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX,maxIX);
-    public PIDMethod speedRat = new PIDMethod(kpRat,kiRat,kdRat,ksY,maxIY);
-    public PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat,maxIRat);
+    private PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX,maxIX);
+    private PIDMethod speedH = new PIDMethod(kpRat,kiRat,kdRat,ksY,maxIY);
+    private PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat,maxIRat);
+    public Map<String, Double> getPIDX(){
+        HashMap<String, Double> pidX = new HashMap<>();
+        pidX.put("P",speedX.getP());
+        pidX.put("I",speedX.getI());
+        pidX.put("D",speedX.getD());
+        return pidX;
+    }
+    public  Map<String, Double> getPIDY(){
+        HashMap<String, Double> pidY = new HashMap<>();
+        pidY.put("P",speedY.getP());
+        pidY.put("I",speedY.getI());
+        pidY.put("D",speedY.getD());
+        return pidY;
+    }
+    public Map<String, Double> getPIDH(){
+        HashMap<String, Double> pidH = new HashMap<>();
+        pidH.put("P",speedH.getP());
+        pidH.put("I",speedH.getI());
+        pidH.put("D",speedH.getD());
+        return pidH;
+    }
+    public HashMap<String,Double> getEncoders(){
+        HashMap<String,Double> encoderMap = new HashMap<>();
+        encoderMap.put("xEnc",xEnc);
+        encoderMap.put("yEnc",yEnc);
+        encoderMap.put("hEnc",hEnc);
+        return encoderMap;
+    }
+    public HashMap<String, Double> getTargets(){
+        HashMap<String, Double> targetsMap = new HashMap<>();
+        targetsMap.put("targetY",vector.getY());
+        targetsMap.put("targetX",vector.getX());
+        targetsMap.put("targetH",targetH);
+        return targetsMap;
+    }
+    public HashMap<String,Double> getPowers(){
+        HashMap<String,Double> powerMap = new HashMap<>();
+        powerMap.put("powerX",powerX);
+        powerMap.put("powerY",powerY);
+        powerMap.put("powerH",powerH);
+        return powerMap;
+    }
     public static double ksRat = 0.000479;
     public static double ksY = 0.0004;
     public static double ksX = 0.00045;
     public static double kSlide = 0.85;
 
-    private static double encRatConstant;
-    public  final double maxRobotSpeed = diameter*PI/0.2;
-    public final double maxCircleRobotSpeed = Math.toDegrees(maxRobotSpeed/trackLength);
+    private final double maxRobotSpeed = diameter*PI/0.2;
+    private final double maxCircleRobotSpeed = Math.toDegrees(maxRobotSpeed/trackLength);
 
-    public double targetH = 0;
-    public Vector2D vector = new Vector2D(0,0);
-    public double targetAngle;
+    private double targetH = 0;
+    private Vector2D vector = new Vector2D(0,0);
+    private  double yEnc;
+    private double xEnc;
+    private double hEnc;
 
-    public double yEnc;
-    public double xEnc;
-    public double ratEnc;
-
-    public final DcMotorEx left_front_drive;
-    public final DcMotorEx left_back_drive;
-    public final DcMotorEx right_front_drive;
-    public final DcMotorEx right_back_drive;
+    private final DcMotorEx left_front_drive;
+    private final DcMotorEx left_back_drive;
+    private final DcMotorEx right_front_drive;
+    private final DcMotorEx right_back_drive;
 
     public DriveTrainVelocityControl(UltRobot robot)
     {
@@ -70,7 +108,7 @@ public class DriveTrainVelocityControl implements RobotModule{
 
         reset();
     }
-    public void reset()
+    private void reset()
     {
         left_front_drive.setDirection(DcMotor.Direction.FORWARD);
         left_back_drive.setDirection(DcMotor.Direction.FORWARD);
@@ -91,13 +129,13 @@ public class DriveTrainVelocityControl implements RobotModule{
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void  encUpdate()
+    private void  encUpdate()
     {
         this.yEnc = (left_back_drive.getVelocity()+ 0*left_front_drive.getVelocity()+
                 right_front_drive.getVelocity()*0+ right_back_drive.getVelocity())/2.0;
         this.xEnc = ((-left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
                 0*right_front_drive.getVelocity()+ 0*right_back_drive.getVelocity())/2.0)*kSlide;
-        this.ratEnc = (left_back_drive.getVelocity()*0+ left_front_drive.getVelocity()-
+        this.hEnc = (left_back_drive.getVelocity()*0+ left_front_drive.getVelocity()-
                 right_front_drive.getVelocity()*0 - right_back_drive.getVelocity())/2.0;
     }
     private static double diameter = 0.098;
@@ -105,76 +143,79 @@ public class DriveTrainVelocityControl implements RobotModule{
     private static double encCleanConst = 24.0;
     private static double trackLength = 27d/2d;
     private static double encConstant = Math.PI*diameter/(encCleanConst/encTransmissionCoificent);
-    public double smToEnc(double target)
+    private double smToEnc(double target)
     {
         return target*encConstant;
     }
-    public double encToSm(double target){return  target/encConstant;}
-    public double smToDegrees(double sm)
+    private double encToSm(double target){return  target/encConstant;}
+    private double smToDegrees(double sm)
     {
         return Math.toDegrees(sm/trackLength);
     }
-    public double velocityMoveRat(double target)
+    private double moveRat(double target)
     {
-        double degreesRat = ratEnc;//smToDegrees(encToSm(ratEnc));
-        return speedRat.PID(target,this.voltage,degreesRat,ksRat);
+        double degreesRat = hEnc;
+        return speedH.PID(target,this.voltage,degreesRat,ksRat);
     }
-    public double velocityMoveX(double target)
+    private double moveX(double target)
     {
         double xEncSm = xEnc;//encToSm(xEnc);
         return speedX.PID(target,this.voltage,xEncSm,ksX);
     }
-    public double velocityMoveY(double target)
+    private double moveY(double target)
     {
-        double yEncSm = yEnc;//encToSm(yEnc);
+        double yEncSm = yEnc;
         return speedY.PID(target,this.voltage,yEncSm,ksY);
     }
     public double setProcentSpeed(double target){
         return maxRobotSpeed*target;
     }
-    public double setProcentSpeedCircle(double target){
+    public double setProcentSpeedCircle(double target)
+    {
         return target*maxCircleRobotSpeed;
     }
     public double getMetersPerSecondSpeed(double target)
     {
         return target/encConstant*encTransmissionCoificent*diameter*Math.PI;
     }
-    public void  velocityMoveRobotCord(Vector2D vector,double targetAngle){
-         this.vector.x = vector.x;
-         this.vector.y = vector.y;
+    public void moveRobotCord(Vector2D vector, double targetAngle){
+         this.vector.setCord(vector.getX(),vector.getY());
+         this.vector.setCord(vector.getX(),vector.getY());
          targetH = targetAngle;
     }
-    public void velocityMoveGlobalCord(Vector2D vector, double targetAngle){
-        this.targetH = targetAngle;
-        this.vector = vector.vectorRat(robot.odometry.heading);
-        this.vector.x =vector.x;
-        this.vector.y =vector.y;
+    public void moveRobotCord(double x, double y, double h){
+        this.vector.setCord(x,y);
+        targetH = h;
+    }
+    public void moveGlobalCord(Vector2D vector, double targetH){
+        vector.vectorRat(robot.odometry.heading);
+        this.vector.setCord(vector.getX(),vector.getY());
+        this.targetH = targetH;
     }
     @Override
     public boolean isAtPosition() {
         return true;
     }
 
-    public double velRat = 0;
-    public double velX = 0;
-    public double velY = 0;
-
+    private double powerH = 0;
+    private double powerX = 0;
+    private double powerY = 0;
     public void update() {
         encUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
 
-        this.speedRat.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);
+        this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);
         this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX);
         this.speedY.setCoefficent(kpY,kiY,kdY,ksY,maxIY);
 
 
-        velRat = velocityMoveRat(targetH);
-        velX = velocityMoveX(vector.x);
-        velY = velocityMoveY(vector.y);
+        powerH = moveRat(targetH);
+        powerX = moveX(vector.getX());
+        powerY = moveY(vector.getY());
 
-        left_front_drive.setPower(velX + velY + velRat);
-        right_front_drive.setPower(-velX + velY - velRat);
-        left_back_drive.setPower(-velX + velY + velRat);
-        right_back_drive.setPower(velX + velY - velRat);
+        left_front_drive.setPower(powerX + powerY + powerH);
+        right_front_drive.setPower(-powerX + powerY - powerH);
+        left_back_drive.setPower(-powerX + powerY + powerH);
+        right_back_drive.setPower(powerX + powerY - powerH);
     }
 }
