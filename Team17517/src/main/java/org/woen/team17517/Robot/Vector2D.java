@@ -6,8 +6,8 @@ import java.net.PortUnreachableException;
 
 public class Vector2D
 {
-    public double x;
-    public double y;
+    private double x;
+    private double y;
     public Vector2D(double x, double y){
         setCord(x,y);
     }
@@ -18,16 +18,23 @@ public class Vector2D
         this.x = x;
         this.y = y;
     }
+    public double getX(){
+        return x;
+    }
+    public double getY(){
+        return y;
+    }
     public double vectorRadius(double x, double y){
         return Math.sqrt(y*y+x*x);
     }
     public double vectorRadians(double x, double y){
         return Math.atan2(y,x);
     }
-    public static Vector2D vectorRadiusAndAngle(double radius, double angle){
-        return new Vector2D(cos(angle)*radius,sin(angle)*radius);
+    public void vectorRadiusAndAngle(double radius, double angle){
+         this.x = cos(angle)*radius;
+         this.y = sin(angle)*radius;
     }
-    public Vector2D vectorSum(Vector2D vector1, Vector2D vector2){
+    public static Vector2D vectorSum(Vector2D vector1, Vector2D vector2){
       return new Vector2D(vector1.x + vector2.x,vector1.y+ vector2.y);
     }
 
