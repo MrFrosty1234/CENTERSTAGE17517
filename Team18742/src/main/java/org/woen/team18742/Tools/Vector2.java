@@ -30,6 +30,10 @@ public class Vector2 {
         return new Vector2(cos(rotate) * X - sin(rotate) * Y, sin(rotate) * X + cos(rotate) * Y);
     }
 
+    public Vector2 copy(){
+        return new Vector2(X, Y);
+    }
+
     public String getString(){
         return "X = " + X + "Y = " + Y;
     }

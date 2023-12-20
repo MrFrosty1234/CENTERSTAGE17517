@@ -102,8 +102,10 @@ public class Odometry {
         ToolTelemetry.AddLine("OdometryX :" + Position.getString());
     }
 
-    public void Start(){
+    public void Start(Vector2 startPos){
         _filterX.Reset();
         _filterY.Reset();
+
+        Position = startPos.copy();
     }
 }

@@ -25,6 +25,8 @@ public class AutonomCollector extends BaseCollector {
     private int _currentRouteAction = 0;
     private boolean _isPixelWait = false;
 
+    private Vector2 _startPosition;
+
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
 
@@ -43,7 +45,8 @@ public class AutonomCollector extends BaseCollector {
     public void Start() {
         super.Start();
 
-        Odometry.Start();
+        Auto.Start(_startPosition);
+        Odometry.Start(_startPosition);
 
         switch (Camera.GetPosition()) {
             case FORWARD: {
@@ -92,6 +95,19 @@ public class AutonomCollector extends BaseCollector {
                 }
             }
         }
+    }
+
+    public void PreUpdate(){
+        _startPosition = new Vector2();
+
+        if(Robot.gamepad1.dpad_left)
+            _startPosition = new Vector2();
+        else if(Robot.gamepad1.dpad_right)
+            _startPosition = new Vector2();
+        else if(Robot.gamepad1.dpad_up)
+            _startPosition = new Vector2();
+        else if(Robot.gamepad1.dpad_down)
+            _startPosition = new Vector2();
     }
 
     @Override

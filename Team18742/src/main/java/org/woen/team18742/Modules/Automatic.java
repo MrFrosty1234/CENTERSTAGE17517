@@ -67,4 +67,8 @@ public class Automatic {
         ToolTelemetry.AddLine( "Autonom:" + _pidForward.Err + " " + _pidSide.Err + " " + _pidTurn.Err);
         ToolTelemetry.AddVal("turn err", _pidTurn.Err);
     }
+
+    public void Start(Vector2 startPos){
+        _targetPosition = startPos.copy();
+    }
 }
