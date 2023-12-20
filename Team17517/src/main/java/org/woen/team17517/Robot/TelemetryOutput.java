@@ -5,6 +5,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
+import java.util.HashMap;
+
 @Config
 public class TelemetryOutput implements RobotModule{
     UltRobot robot;
@@ -61,29 +63,19 @@ public class TelemetryOutput implements RobotModule{
             robot.linearOpMode.telemetry.addData("heading",robot.odometry.heading);
         }
         if(velocity){
-            robot.linearOpMode.telemetry.addData("TargetX", robot.driveTrainVelocityControl.vector.x);
-            robot.linearOpMode.telemetry.addData("TargetY",robot.driveTrainVelocityControl.vector.y);
-            robot.linearOpMode.telemetry.addData("TargetRat",robot.driveTrainVelocityControl.targetH);
-            robot.linearOpMode.telemetry.addData("SpeedX", robot.driveTrainVelocityControl.xEnc);
-            robot.linearOpMode.telemetry.addData("SpeedY", robot.driveTrainVelocityControl.yEnc);
-            robot.linearOpMode.telemetry.addData("SpeedRat", robot.driveTrainVelocityControl.ratEnc);
-            robot.linearOpMode.telemetry.addData("powerY", robot.driveTrainVelocityControl. velY);
-            robot.linearOpMode.telemetry.addData("lb", robot.driveTrainVelocityControl.left_back_drive.getCurrentPosition());
-            robot.linearOpMode.telemetry.addData("lf", robot.driveTrainVelocityControl.left_front_drive.getCurrentPosition());
-            robot.linearOpMode.telemetry.addData("rb", robot.driveTrainVelocityControl.right_back_drive.getCurrentPosition());
-            robot.linearOpMode.telemetry.addData("rf", robot.driveTrainVelocityControl.right_front_drive.getCurrentPosition());
-            /*robot.linearOpMode.telemetry.addData("PY",robot.driveTrainVelocityControl.getYPID()[0]).
-                    addData("IY",robot.driveTrainVelocityControl.getYPID()[1]).
-                    addData("YD",robot.driveTrainVelocityControl.getYPID()[2]);
-            robot.linearOpMode.telemetry.addData("PX",robot.driveTrainVelocityControl.getXPID()[0]).
-                    addData("XI",robot.driveTrainVelocityControl.getXPID()[1]).
-                    addData("XD",robot.driveTrainVelocityControl.getXPID()[2]);
-
-            //robot.linearOpMode.telemetry.addData("PidRat",robot.driveTrainVelocityControl.getRatPID().toString());
-             */
-            robot.linearOpMode.telemetry.addData("IY",robot.driveTrainVelocityControl.speedY.getI());
+            HashMap<String,Double> encoderMap = robot.driveTrainVelocityControl.getEncoders();
+            HashMap<String,Double> powerMap = robot.driveTrainVelocityControl.getPowers();
+            HashMap<String,Double> targetMap = robot.driveTrainVelocityControl.getTargets();
+            robot.linearOpMode.telemetry.addData("TargetY",targetMap.get("targetY"))
+                                        .addData("TargetX",targetMap.get("targetX"))
+                                        .addData("TargetH",targetMap.get("targetH"));
+            robot.linearOpMode.telemetry.addData("SpeedY",encoderMap.get("yEnc"))
+                                        .addData("SpeedX",encoderMap.get("xEnc"))
+                                        .addData("SpeedH",encoderMap.get("hEnc"));
+            robot.linearOpMode.telemetry.addData("powerY",powerMap.get("powerY"))
+                                        .addData("powerX",powerMap.get("powerX"))
+                                        .addData("powerH",powerMap.get("powerH"));
         }
-
         if(odometryAndCamera){
             robot.linearOpMode.telemetry.addLine("Camera position:")
                     .addData("x", robot.testAprilTagPipeline.fieldCameraPos.get(0))
@@ -94,13 +86,15 @@ public class TelemetryOutput implements RobotModule{
             packet = new TelemetryPacket();
             double dlin =40;
             double shir =40;
-/*
+
+            /*
             packet.fieldOverlay().fillPolygon()
             Vector2D vector2D = new Vector2D(robot.odometry.x,robot.odometry.y);
             Vector2D vectordlin = new Vector2D(dlin/2, shir/2);
             Vector2D rotatedVector = vector2D.vectorRat(robot.odometry.heading);
             double vectorvivad1 = rotatedVector + vectordlin;
-            Vector2D vectorvivad = vector2D.vectorRat( vectorvivad1);*/
+            Vector2D vectorvivad = vector2D.vectorRat( vectorvivad1);
+            */
 
             rectXPoints [0] = robot.odometry.x + 20;
             rectXPoints [1] = robot.odometry.x - 20;

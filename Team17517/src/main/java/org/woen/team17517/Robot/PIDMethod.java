@@ -13,7 +13,7 @@ public  class PIDMethod {
         setCoefficent(kp,ki,kd,ks,maxI);
 
     }
-    double kp,kd,ki,ks = 0;
+    private double kp,kd,ki,ks = 0;
     Double maxI = Double.POSITIVE_INFINITY;
     public void setCoefficent(double kp, double ki, double kd, double ks,Double maxI){
 
@@ -35,6 +35,9 @@ public  class PIDMethod {
     public double getI(){
         return I;
     }
+    public double getP(){return P;}
+    public double getD(){return D;}
+    public double getC(){return C;}
     public double PID(double target,double voltage,double enc,double ks) {
         double wrong = target - enc;
         P = kp * wrong;

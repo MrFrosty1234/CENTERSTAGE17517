@@ -11,9 +11,12 @@ public class Autonom extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        BaseCollector _collector = new AutonomCollector(this);
+        AutonomCollector _collector = new AutonomCollector(this);
 
-        waitForStart();
+        while(!isStarted()){
+            _collector.PreUpdate();
+        }
+
         resetRuntime();
 
         _collector.Start();

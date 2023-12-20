@@ -7,19 +7,22 @@ import static java.lang.Math.signum;
 
 public class DrivetrainNew implements RobotModule{
 
-    UltRobot robot = null;
+    UltRobot robot;
 
     boolean autoMode = false;
 
     public static double kPX = 1;
     public static double kDX = 0;
     public static double kIX = 0;
+
     public static double kPY = 1;
     public static double kDY = 0;
     public static double kIY = 0;
+
     public static double kPH = 1;
     public static double kDH = 0;
     public static double kIH = 0;
+
     public static double u_maxX = 0;
     public static double u_maxH = 0;
     public static double u_maxY = 0;
@@ -32,20 +35,19 @@ public class DrivetrainNew implements RobotModule{
     double errY = 0;
     double errH = 0;
 
-    public static double minx = 1;
-    public static double minh = 1;
-    public static double miny = 1;
+    public static double minX = 1;
+    public static double minH = 1;
+    public static double minY = 1;
 
     private static double diameter = 0.098;
     private static double trackLength = 27d/2d;
-    public double maxspeedl = diameter*PI/0.2;
-    public double maxspeedr = Math.toDegrees(maxspeedl/trackLength);;
+    public double maxSpeedL = diameter*PI/0.2;
+    public double maxSpeedR = Math.toDegrees(maxSpeedL /trackLength);;
 
 
     PidRegulator pidX = new PidRegulator(kPX, kIX, kDX, u_maxX);
     PidRegulator pidY = new PidRegulator(kPY, kIY, kDY, u_maxY);
     PidRegulator pidH = new PidRegulator(kPH, kIH, kDH, u_maxH);
-    // y heading (с англ. поворот)
 
     public void setTarget(double x, double y, double h) {
         targetX = x;
@@ -78,24 +80,22 @@ public class DrivetrainNew implements RobotModule{
                 errH = errH + 360;
             }
             double H = pidH.update(errH);
-            double X = pidH.update(errX);
-            double Y = pidH.update(errY);
+            double X = pidX.update(errX);
+            double Y = pidY.update(errY);
 
 
-            if (abs(H)> maxspeedr){
-                H = signum(H)*maxspeedr;            }
-            if (abs(X)> maxspeedl){
-                X = signum(X)*maxspeedl;
+            if (abs(H)> maxSpeedR){
+                H = signum(H)*maxSpeedR;            }
+            if (abs(X)> maxSpeedL){
+                X = signum(X)* maxSpeedL;
             }
-            if (abs(Y)> maxspeedl){
-                Y = signum(Y)*maxspeedl;
+            if (abs(Y)> maxSpeedL){
+                Y = signum(Y)* maxSpeedL;
             }
 
 
 
-            robot.driveTrainVelocityControl.targetH = H;
-            robot.driveTrainVelocityControl.vector.x = X;
-            robot.driveTrainVelocityControl.vector.y = Y;
+            robot.driveTrainVelocityControl.moveRobotCord(X, Y, H);
         }
     }
     public void speedcontrol(){
@@ -104,7 +104,7 @@ public class DrivetrainNew implements RobotModule{
 
 
      public boolean isAtPosition() {
-        if((errX < minx) && (errY <miny) && (errH < minh)){
+        if((errX < minX) && (errY < minY) && (errH < minH)){
             return true;
         }
         return false;

@@ -62,9 +62,7 @@ public class ConfigVelocityOpMode extends LinearOpMode {
 
             telemetry.update();
             */
-            robot.driveTrainVelocityControl.targetH = h;
-            robot.driveTrainVelocityControl.vector.y = y;
-            robot.driveTrainVelocityControl.vector.x = x;
+            robot.driveTrainVelocityControl.moveRobotCord(x,y,h);
             robot.allUpdate();
 
         }

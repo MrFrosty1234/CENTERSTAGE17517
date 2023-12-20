@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.Vector2;
 
 public class DriverTrain {
     private final DcMotor _leftForwardDrive;
@@ -39,11 +40,11 @@ public class DriverTrain {
         ResetIncoder();
     }
 
-    public void DriveDirection(double forward, double side, double rotate){
-       _leftForwardDrive.setPower(forward - side + rotate);
-       _rightBackDrive.setPower(forward - side - rotate);
-       _leftBackDrive.setPower(forward + side + rotate);
-       _rightForwardDrive.setPower(forward + side - rotate);
+    public void DriveDirection(Vector2 speed, double rotate){
+       _leftForwardDrive.setPower(speed.X - speed.Y + rotate);
+       _rightBackDrive.setPower(speed.X - speed.Y - rotate);
+       _leftBackDrive.setPower(speed.X + speed.Y + rotate);
+       _rightForwardDrive.setPower(speed.X + speed.Y - rotate);
     }
 
     public void ResetIncoder() {
@@ -89,10 +90,7 @@ public class DriverTrain {
         _rightForwardDrive.setPower(0);
     }
 
-    public void SetSpeedWorldCoords(double speedForward, double speedSide, double rotate) {
-        double x = cos(_gyro.GetRadians()) * speedForward - sin(_gyro.GetRadians()) * speedSide,
-                y = sin(_gyro.GetRadians()) * speedForward + cos(_gyro.GetRadians()) * speedSide;
-
-        DriveDirection(x, y, rotate);
+    public void SetSpeedWorldCoords(Vector2 speed, double rotate) {
+        DriveDirection(speed.Turn(_gyro.GetRadians()), rotate);
     }
 }

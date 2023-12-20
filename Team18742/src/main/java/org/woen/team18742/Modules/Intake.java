@@ -36,7 +36,7 @@ public class Intake {
     public static final double servoperevorot = 0.20;
 
     public void setperevorotik() {
-        if (_collector.Lift.isUp()) {
+        if (_collector.Lift.isMoveAverage() || _collector.Lift.isAverage()) {
             servopere.setPosition(servoperevorot);
         } else {
                 servopere.setPosition(servoperevorotnazad);

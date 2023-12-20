@@ -14,11 +14,6 @@ public class TeleOpCollector extends BaseCollector {
     }
 
     @Override
-    public void Start(){
-        Manual.Start();
-    }
-
-    @Override
     public void Update() {
         super.Update();
         Manual.Update();
