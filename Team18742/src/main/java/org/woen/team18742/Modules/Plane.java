@@ -35,7 +35,7 @@ public class Plane {
     public void BezpolezniRailgunUp(double step)
     {
         pos += step;
-        pos %= 1;
+        pos = Math.min(1, pos);
 
         _servorailgun.setPosition(pos);
     }
@@ -44,8 +44,7 @@ public class Plane {
     {
         pos -= step;
 
-        if(pos <= 0)
-            pos = 0;
+        pos = Math.max(0, pos);
 
         _servorailgun.setPosition(pos);
     }

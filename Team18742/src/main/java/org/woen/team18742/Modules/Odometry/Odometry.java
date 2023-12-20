@@ -1,21 +1,16 @@
 package org.woen.team18742.Modules.Odometry;
 
-import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.vision.VisionProcessor;
-import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.OdometrsHandler;
-import org.woen.team18742.Tools.Devices;
-import org.woen.team18742.Tools.MedianFilter;
+import org.woen.team18742.Tools.ExponationFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
@@ -33,7 +28,7 @@ public class Odometry {
     private final CVOdometry _CVOdometry;
     private final OdometrsHandler _odometrs;
 
-    private final MedianFilter _filterX = new MedianFilter(XCoef), _filterY = new MedianFilter(YCoef);
+    private final ExponationFilter _filterX = new ExponationFilter(XCoef), _filterY = new ExponationFilter(YCoef);
 
     public Odometry(BaseCollector collector) {
         _CVOdometry = new CVOdometry();

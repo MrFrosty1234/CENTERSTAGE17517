@@ -62,7 +62,7 @@ public class Automatic {
 
         _collector.Driver.SetSpeedWorldCoords(
                 new Vector2(_pidForward.Update(_targetPosition.X - _odometry.Position.X), _pidSide.Update(_targetPosition.Y - _odometry.Position.Y)),
-                _pidTurn.Update(_collector.Gyro.GetDegrees() - _turnTarget));
+                _pidTurn.Update(Gyroscope.ChopAngele(_collector.Gyro.GetDegrees() - _turnTarget)));
 
         ToolTelemetry.AddLine( "Autonom:" + _pidForward.Err + " " + _pidSide.Err + " " + _pidTurn.Err);
         ToolTelemetry.AddVal("turn err", _pidTurn.Err);

@@ -9,6 +9,7 @@ import org.woen.team18742.Modules.Automatic;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.VisionPortalHandler;
 import org.woen.team18742.Modules.Odometry.Odometry;
+import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
@@ -25,7 +26,7 @@ public class AutonomCollector extends BaseCollector {
     private int _currentRouteAction = 0;
     private boolean _isPixelWait = false;
 
-    private Vector2 _startPosition;
+    private StartRobotPosition _startPosition = StartRobotPosition.BLUE_BACK;
 
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
@@ -45,8 +46,8 @@ public class AutonomCollector extends BaseCollector {
     public void Start() {
         super.Start();
 
-        Auto.Start(_startPosition);
-        Odometry.Start(_startPosition);
+        Auto.Start(_startPosition.Position);
+        Odometry.Start(_startPosition.Position);
 
         switch (Camera.GetPosition()) {
             case FORWARD: {
@@ -98,16 +99,14 @@ public class AutonomCollector extends BaseCollector {
     }
 
     public void PreUpdate(){
-        _startPosition = new Vector2();
-
         if(Robot.gamepad1.dpad_left)
-            _startPosition = new Vector2();
+            _startPosition = StartRobotPosition.BLUE_BACK;
         else if(Robot.gamepad1.dpad_right)
-            _startPosition = new Vector2();
+            _startPosition = StartRobotPosition.BLUE_FORWAD;
         else if(Robot.gamepad1.dpad_up)
-            _startPosition = new Vector2();
+            _startPosition = StartRobotPosition.RED_BACK;
         else if(Robot.gamepad1.dpad_down)
-            _startPosition = new Vector2();
+            _startPosition = StartRobotPosition.RED_FORWARD;
     }
 
     @Override

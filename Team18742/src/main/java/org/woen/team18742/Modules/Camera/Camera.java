@@ -3,7 +3,6 @@ package org.woen.team18742.Modules.Camera;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
-import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.OpenCV.PipeLine;
 
 @Config
@@ -16,18 +15,18 @@ public class Camera {
         return pipeLine;
     }
 
-    private RobotPosition GetEnum(int val) {
+    private CameraRobotPosition GetEnum(int val) {
         switch (val) {
             case 1:
-                return RobotPosition.LEFT;
+                return CameraRobotPosition.LEFT;
             case 2:
-                return RobotPosition.FORWARD;
+                return CameraRobotPosition.FORWARD;
             default:
-                return RobotPosition.RIGHT;
+                return CameraRobotPosition.RIGHT;
         }
     }
 
-    public RobotPosition GetPosition() {
+    public CameraRobotPosition GetPosition() {
         if (IsDebug)
             return GetEnum(RobotPos);
 
