@@ -31,7 +31,7 @@ public class Devices {
     public static IMU IMU;
 
     public static AnalogInput PixelSensor1, PixelSensor2;
-    public static Servo Gripper, Clamp, Servopere;
+    public static Servo Gripper, Clamp, Servopere, ServoPlane, ServoRailGun;
 
     public static List<LynxModule> Hubs;
 
@@ -56,6 +56,9 @@ public class Devices {
 
         Ending1 = map.get(DigitalChannel.class, "ending1");
         Ending2 = map.get(DigitalChannel.class, "ending2");
+
+        ServoPlane = map.get(Servo.class, "servoPlane");
+        ServoRailGun = map.get(Servo.class, "servoRailGun");
 
         IMU = map.get(IMU.class, "imu");
 

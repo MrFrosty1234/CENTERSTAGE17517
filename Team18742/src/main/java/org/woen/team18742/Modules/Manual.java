@@ -7,7 +7,6 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Tools.Vector2;
 
-@Config
 public class Manual {
     private final BaseCollector _collector;
 
@@ -15,19 +14,13 @@ public class Manual {
     private boolean _brushReverseOn = false;
     private boolean _brushOld = false;
     private boolean ferty = false;
-    public static double servoplaneOtkrit = 0.5;
-    public static double servoplaneneOtkrit = 0.07;
-    private Servo _servoPlane = null;
 
-    private long _origmillis;
+    private final Plane _plane;
 
     public Manual(BaseCollector collector) {
         _collector = collector;
-        _servoPlane = _collector.Robot.hardwareMap.get(Servo.class, "servoPlane");
-    }
 
-    public void Start() {
-        _origmillis = System.currentTimeMillis();
+        _plane = new Plane(_collector.Time);
     }
 
     boolean oldgrip;
@@ -46,6 +39,11 @@ public class Manual {
         boolean brush = _collector.Robot.gamepad1.cross;
         boolean zajat = _collector.Robot.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
         boolean average = _collector.Robot.gamepad1.dpad_right;
+        double railgunopen = _collector.Robot.gamepad1.left_trigger;
+        double railgunnoopen = _collector.Robot.gamepad1.right_trigger;
+
+        _plane.BezpolezniRailgunUp(railgunopen * 0.1);
+        _plane.BezpolezniRailgunDown(railgunnoopen * 0.1);
 
         if(grip && !oldgrip) {
             ferty = !ferty;
@@ -77,11 +75,11 @@ public class Manual {
             _collector.Brush.intakePowerWithDefense(_isBrushOn);
         }
 
-        if (A && (zajat || _collector.Time.milliseconds() - _origmillis > 90000))
-            _servoPlane.setPosition(servoplaneOtkrit);
-        else{
-            _servoPlane.setPosition(servoplaneneOtkrit);
-        }
+        if (A)
+            _plane.Launch(zajat);
+        else
+            _plane.DeLaunch();
+
         if (liftUp) {
             //_collector.Intake.setClamp(true);
             _collector.Lift.SetLiftPose(LiftPose.UP);
