@@ -11,11 +11,21 @@ public class PID {
     private double _errOld = 0;
     public double Err = 0;
 
+    private double _limitU = 0;
+
+    public PID(double pKoef, double iKoef, double dKoef, double limitU, double limit){
+        this(pKoef, iKoef, dKoef, limit);
+
+        _limitU = limitU;
+    }
+
     public PID(double pKoef, double iKoef, double dKoef, double limit) {
         _pCoef = pKoef;
         _iCoef = iKoef;
         _dCoef = dKoef;
         _limit = limit;
+
+        _limitU = 1;
     }
 
     public void Reset() {
@@ -46,6 +56,9 @@ public class PID {
 
         _errOld = error;
 
+        if(Math.abs(u) > _limitU){
+            return _limitU * Math.signum(u);
+        }
         return u;
     }
 }

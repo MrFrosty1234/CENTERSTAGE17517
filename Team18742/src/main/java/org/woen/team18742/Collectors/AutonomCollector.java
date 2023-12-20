@@ -1,5 +1,6 @@
 package org.woen.team18742.Collectors;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
@@ -7,11 +8,13 @@ import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Modules.Automatic;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.VisionPortalHandler;
-import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.ToolTelemetry;
+import org.woen.team18742.Tools.Vector2;
 
+@Config
 public class AutonomCollector extends BaseCollector {
+    public static boolean IsAutonomEnable = true;
     public Automatic Auto;
     public org.woen.team18742.Modules.Odometry.Odometry Odometry;
     public Camera Camera;
@@ -21,6 +24,8 @@ public class AutonomCollector extends BaseCollector {
 
     private int _currentRouteAction = 0;
     private boolean _isPixelWait = false;
+
+    private Vector2 _startPosition;
 
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
@@ -40,7 +45,8 @@ public class AutonomCollector extends BaseCollector {
     public void Start() {
         super.Start();
 
-        Odometry.Start();
+        Auto.Start(_startPosition);
+        Odometry.Start(_startPosition);
 
         switch (Camera.GetPosition()) {
             case FORWARD: {
@@ -53,8 +59,8 @@ public class AutonomCollector extends BaseCollector {
 
             case RIGHT: {
                 _route = new Runnable[]{
-                        () -> Auto.PIDMove(80, 5),
-                        ()-> Auto.PIDMove(-10, 60)
+                        () -> Auto.PIDMove(new Vector2(80, 5)),
+                        () -> Auto.PIDMove(new Vector2(-10, 60))
                 };
 
                 break;
@@ -62,8 +68,8 @@ public class AutonomCollector extends BaseCollector {
 
             default: {
                 _route = new Runnable[]{
-                        () -> Auto.PIDMove(60, 0),
-                        () -> Auto.PIDMove(-10, 60)
+                        () -> Auto.PIDMove(new Vector2(60, 0)),
+                        () -> Auto.PIDMove(new Vector2(-10, 60))
                 };
                 break;
             }
@@ -75,18 +81,33 @@ public class AutonomCollector extends BaseCollector {
         super.Update();
         Odometry.Update();
 
-        Auto.Update();
-
         ToolTelemetry.AddLine("camera = " + Camera.GetPosition());
 
-        if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
-            if (_currentRouteAction < _route.length) {
-                _isPixelWait = false;
-                _route[_currentRouteAction].run();
+        if (IsAutonomEnable) {
+            Auto.Update();
 
-                _currentRouteAction++;
+            if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
+                if (_currentRouteAction < _route.length) {
+                    _isPixelWait = false;
+                    _route[_currentRouteAction].run();
+
+                    _currentRouteAction++;
+                }
             }
         }
+    }
+
+    public void PreUpdate(){
+        _startPosition = new Vector2();
+
+        if(Robot.gamepad1.dpad_left)
+            _startPosition = new Vector2();
+        else if(Robot.gamepad1.dpad_right)
+            _startPosition = new Vector2();
+        else if(Robot.gamepad1.dpad_up)
+            _startPosition = new Vector2();
+        else if(Robot.gamepad1.dpad_down)
+            _startPosition = new Vector2();
     }
 
     @Override
