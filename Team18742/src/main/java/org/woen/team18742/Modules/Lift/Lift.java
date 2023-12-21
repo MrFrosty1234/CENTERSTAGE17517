@@ -77,7 +77,7 @@ public class Lift {
     }
 
     public void Start() {
-
+        _liftPid.Start();
     }
 
     private LiftPose _liftPose = LiftPose.DOWN;

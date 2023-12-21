@@ -14,7 +14,7 @@ public class Plane {
     public static double servoplaneOtkrit = 0.5;
     public static double servoplaneneOtkrit = 0.07;
     private final ElapsedTime _time;
-
+    private double _oldTime = 0;
     private double pos;
 
     public Plane(ElapsedTime time){
@@ -34,7 +34,7 @@ public class Plane {
 
     public void BezpolezniRailgunUp(double step)
     {
-        pos += step;
+        pos += step / (_time.milliseconds() - _oldTime);
         pos = Math.min(1, pos);
 
         _servorailgun.setPosition(pos);
@@ -42,10 +42,14 @@ public class Plane {
 
     public void BezpolezniRailgunDown(double step)
     {
-        pos -= step;
+        pos -= step / (_time.milliseconds() - _oldTime);
 
         pos = Math.max(0, pos);
 
         _servorailgun.setPosition(pos);
+    }
+
+    public void Update(){
+        _oldTime = _time.milliseconds();
     }
 }
