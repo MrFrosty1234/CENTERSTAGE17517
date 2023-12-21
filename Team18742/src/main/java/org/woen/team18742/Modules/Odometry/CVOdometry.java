@@ -1,5 +1,7 @@
 package org.woen.team18742.Modules.Odometry;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -20,6 +22,7 @@ import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
 
+@Config
 public class CVOdometry {
     private AprilTagProcessor  _aprilTagProcessor = null;
 
@@ -30,6 +33,8 @@ public class CVOdometry {
 
     private Vector2 _cameraPosition = new Vector2(CameraX, CameraY);
     private final Gyroscope _gyro;
+
+    public static float Accuracy = 130;
 
     public CVOdometry(BaseCollector collector){
         _gyro = collector.Gyro;
@@ -60,7 +65,7 @@ public class CVOdometry {
         int suitableDetections = 0;
 
         for (AprilTagDetection detection : detections) {
-            if (detection.rawPose != null && detection.decisionMargin > 130) {
+            if (detection.rawPose != null && detection.decisionMargin > Accuracy) {
                 // Считать позицию тэга относительно камеры и записать её в VectorF
                 AprilTagPoseRaw rawTagPose = detection.rawPose;
                 VectorF rawTagPoseVector = new VectorF(
