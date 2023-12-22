@@ -1,5 +1,7 @@
 package org.woen.team18742.Modules.Odometry;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -12,17 +14,31 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseRaw;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Camera.Camera;
+import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
 
+@Config
 public class CVOdometry {
     private AprilTagProcessor  _aprilTagProcessor = null;
 
     public Vector2 Position = new Vector2();
     public boolean IsZero = true;
+
+    public static double CameraX = 160.1, CameraY = 161.8;
+
+    private Vector2 _cameraPosition = new Vector2(CameraX, CameraY);
+    private final Gyroscope _gyro;
+
+    public static float Accuracy = 130;
+
+    public CVOdometry(BaseCollector collector){
+        _gyro = collector.Gyro;
+    }
 
     public VisionProcessor GetProcessor(){
         _aprilTagProcessor = new AprilTagProcessor.Builder().setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES).setDrawAxes(true).build();
@@ -31,12 +47,12 @@ public class CVOdometry {
     }
 
     public void Update() {
+        _cameraPosition.X = CameraX;
+        _cameraPosition.Y = CameraY;
+
         ArrayList<AprilTagDetection> detections = _aprilTagProcessor.getDetections();
 
         if(detections.size() == 0){
-            Position.X = 0;
-            Position.Y = 0;
-
             IsZero = true;
 
             return;
@@ -46,8 +62,10 @@ public class CVOdometry {
 
         double xSum = 0, ySum = 0;
 
+        int suitableDetections = 0;
+
         for (AprilTagDetection detection : detections) {
-            if (detection.rawPose != null) {
+            if (detection.rawPose != null && detection.decisionMargin > Accuracy) {
                 // Считать позицию тэга относительно камеры и записать её в VectorF
                 AprilTagPoseRaw rawTagPose = detection.rawPose;
                 VectorF rawTagPoseVector = new VectorF(
@@ -69,11 +87,15 @@ public class CVOdometry {
 
                 xSum += fieldCameraPos.get(0);
                 ySum += fieldCameraPos.get(1);
+
+                suitableDetections++;
             }
         }
 
-        Position.X = xSum / detections.size();
-        Position.Y = -ySum / detections.size();
+        Position.X = xSum / suitableDetections;
+        Position.Y = -ySum / suitableDetections;
+
+        Position = Vector2.Plus(Position, _cameraPosition.Turn(_gyro.GetRadians()));
 
         ToolTelemetry.AddLine("CVOdometry = " + Position.getString());
         ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");

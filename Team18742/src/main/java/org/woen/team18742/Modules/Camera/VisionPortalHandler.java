@@ -15,7 +15,7 @@ public class VisionPortalHandler {
     }
 
     public void StartDashBoardVid(CameraStreamSource source){
-     //   FtcDashboard.getInstance().startCameraStream(source, 10);
+        FtcDashboard.getInstance().startCameraStream(source, 10);
     }
 
     public void Stop(){

@@ -1,29 +1,29 @@
-package org.woen.team18742.OpenCV;
+package org.woen.team18742.Modules.Camera;
 
-import static org.opencv.core.Core.inRange;
-import static org.opencv.imgproc.Imgproc.COLOR_RGB2HSV;
-import static org.opencv.imgproc.Imgproc.MORPH_ERODE;
-import static org.opencv.imgproc.Imgproc.MORPH_RECT;
-import static org.opencv.imgproc.Imgproc.blur;
-import static org.opencv.imgproc.Imgproc.boundingRect;
-import static org.opencv.imgproc.Imgproc.cvtColor;
-import static org.opencv.imgproc.Imgproc.dilate;
-import static org.opencv.imgproc.Imgproc.erode;
-import static org.opencv.imgproc.Imgproc.getStructuringElement;
-import static org.opencv.imgproc.Imgproc.resize;
+import static org.opencv.core.Core.*;
+import static org.opencv.imgproc.Imgproc.*;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 
-public class TestVisionProcessor implements VisionProcessor {
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
+public class PipeLine implements VisionProcessor, CameraStreamSource {
+    public AtomicReference<Bitmap> LastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
 
     double x = 640;
     double y = 480;
@@ -57,17 +57,20 @@ public class TestVisionProcessor implements VisionProcessor {
     double x3Start = x * 0.6;
     double centerOfRectX = 0;
     double centerOfRectY = 0;
-    public int pos = 0;
+    public AtomicInteger pos = new AtomicInteger(2);
 
     public int ksize = 13;
     public boolean team = true;
 
     public void init(int width, int height, CameraCalibration calibration) {
-
+        LastFrame.set(Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565));
     }
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(frame, b);
+        LastFrame.set(b);
         //
 
         cvtColor(frame, frame, COLOR_RGB2HSV);//конвертация в хсв
@@ -93,13 +96,13 @@ public class TestVisionProcessor implements VisionProcessor {
         centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
 
         if (centerOfRectX < x1Finish && centerOfRectX > x1Start) {
-            pos = 1;
+            pos.set(1);
         }
         if (centerOfRectX < x2Finish && centerOfRectX > x2Start) {
-            pos = 2;
+            pos.set(2);
         }
         if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
-            pos = 3;
+            pos.set(3);
         }
 
         return frame;
@@ -108,5 +111,10 @@ public class TestVisionProcessor implements VisionProcessor {
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
 
+    }
+
+    @Override
+    public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
+        continuation.dispatch(bitmapConsumer -> bitmapConsumer.accept(LastFrame.get()));
     }
 }

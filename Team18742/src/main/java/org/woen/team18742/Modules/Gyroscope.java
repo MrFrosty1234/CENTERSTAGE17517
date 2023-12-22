@@ -48,7 +48,7 @@ public class Gyroscope {
 
             _odometrRadians = ChopAngele(_odometrRadians);
 
-            _radians = _filter.Update(_radians, _odometrRadians);
+            _radians = _filter.Update(ChopAngele(_odometrRadians - _radians), _radians);
             _degree = Math.toDegrees(_radians);
         }
     }

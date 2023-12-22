@@ -3,7 +3,6 @@ package org.woen.team18742.Modules.Camera;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
-import org.woen.team18742.OpenCV.PipeLine;
 
 @Config
 public class Camera {
