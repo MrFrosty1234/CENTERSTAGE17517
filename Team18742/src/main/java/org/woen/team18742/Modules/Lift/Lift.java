@@ -16,7 +16,7 @@ public class Lift {
 
     private boolean _ending1State = false, _ending2State = false;
 
-    public static double PCoef = 0.01, ICoef = 0.1, DCoef = 0;
+    public static double PCoef = 0.01, ICoef = 0.15, DCoef = 0;
 
     private final PID _liftPid = new PID(PCoef, ICoef, DCoef, 1, 1);
     private double _targetPoseDouble = 0;

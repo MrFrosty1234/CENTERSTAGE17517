@@ -29,7 +29,7 @@ public class CVOdometry {
     public Vector2 Position = new Vector2();
     public boolean IsZero = true;
 
-    public static double CameraX = 160.1, CameraY = 161.8;
+    public static double CameraX = 16.01, CameraY = 16.18;
 
     private Vector2 _cameraPosition = new Vector2(CameraX, CameraY);
     private final Gyroscope _gyro;
@@ -51,14 +51,6 @@ public class CVOdometry {
         _cameraPosition.Y = CameraY;
 
         ArrayList<AprilTagDetection> detections = _aprilTagProcessor.getDetections();
-
-        if(detections.size() == 0){
-            IsZero = true;
-
-            return;
-        }
-
-        IsZero = false;
 
         double xSum = 0, ySum = 0;
 
@@ -92,12 +84,20 @@ public class CVOdometry {
             }
         }
 
+        if(suitableDetections == 0){
+            IsZero = true;
+
+            return;
+        }
+
+        IsZero = false;
+
         Position.X = xSum / suitableDetections;
         Position.Y = -ySum / suitableDetections;
 
-        Position = Vector2.Plus(Position, _cameraPosition.Turn(_gyro.GetRadians()));
+        Position = Vector2.Minus(Position, _cameraPosition.Turn(_gyro.GetRadians()));
 
-        ToolTelemetry.AddLine("CVOdometry = " + Position.getString());
+        ToolTelemetry.AddLine("CVOdometry = " + Position);
         ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
     }
 }

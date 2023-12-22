@@ -20,7 +20,7 @@ public class Devices {
 
     public static DcMotor OdometrXLeft, OdometrY, OdometrXRight;
 
-    public static DcMotor LiftMotor;
+    public static DcMotor LiftMotor, LightingMotor;
 
     public static DcMotorEx BrushMotor;
 
@@ -44,13 +44,13 @@ public class Devices {
         LeftBackDrive = map.get(DcMotor.class, "leftbackmotor");
         RightBackDrive = map.get(DcMotor.class, "rightbackmotor");
 
-        //OdometrXLeft = map.get(DcMotor.class, "OdomtrXLeft");
-        //OdometrY = map.get(DcMotor.class, "OdomtrY");
-        //OdometrXRight = map.get(DcMotor.class, "OdomtrYXRight);
-
         LiftMotor = map.get(DcMotor.class, "liftmotor");
 
         BrushMotor = map.get(DcMotorEx.class, "brushMotor");
+
+        OdometrXLeft = map.get(DcMotor.class, "OdometrXLeft");
+        OdometrY = map.get(DcMotor.class, "OdometrY");
+        OdometrXRight = BrushMotor;
 
         Camera = map.get(WebcamName.class, "Webcam 1");
 
@@ -69,6 +69,8 @@ public class Devices {
         Servopere = map.get(Servo.class, "perevert");
 
         Hubs = map.getAll(LynxModule.class);
+
+        LiftMotor = OdometrXLeft;
 
         _hardwareDevices = map;
     }
