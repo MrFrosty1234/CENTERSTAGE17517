@@ -70,7 +70,7 @@ public class Devices {
 
         Hubs = map.getAll(LynxModule.class);
 
-        LiftMotor = OdometrXLeft;
+        LightingMotor = OdometrXLeft;
 
         _hardwareDevices = map;
     }

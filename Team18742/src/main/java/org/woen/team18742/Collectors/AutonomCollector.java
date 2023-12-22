@@ -49,6 +49,8 @@ public class AutonomCollector extends BaseCollector {
         Auto.Start(_startPosition.Position);
         Odometry.Start(_startPosition.Position);
 
+        Intake.PixelCenterGrip(true);
+
         switch (Camera.GetPosition()) {
             case FORWARD: {
                 _route = new Runnable[]{

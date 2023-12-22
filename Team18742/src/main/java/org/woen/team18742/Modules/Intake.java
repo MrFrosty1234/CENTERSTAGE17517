@@ -3,6 +3,7 @@ package org.woen.team18742.Modules;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -20,8 +21,9 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.187;//0.4
+    public static double pixelSensorvoltage = 0.187, PixelCenterOpen = 0;//0.4
     boolean inableIntake;
+    private final DcMotor _lighting;
 
     public Intake(BaseCollector collector) {
         _collector = collector;
@@ -30,6 +32,7 @@ public class Intake {
         gripper = Devices.Gripper;
         clamp = Devices.Clamp;
         servopere = Devices.Servopere;
+        _lighting = Devices.LightingMotor;
     }
 
     public static double servoperevorotnazad = 0.765;
@@ -95,6 +98,8 @@ public class Intake {
             _collector.Brush.intakePowerWithDefense(false);
 
             isPixelLocated = true;
+
+            _lighting.setPower(1);
         } else {
             clampTimer.reset();
             setClamp(!gripped && _collector.Lift.isDown());
@@ -102,12 +107,17 @@ public class Intake {
                 _collector.Brush.intakePowerWithDefense(true);
 
             isPixelLocated = false;
+            _lighting.setPower(0);
         }
 
         setperevorotik();
 
         ToolTelemetry.AddLine(pixelSensor1.getVoltage() + " " + pixelSensor2.getVoltage());
         ToolTelemetry.AddLine(pixelDetected() + "");
+    }
+
+    public void PixelCenterGrip(boolean gripped){
+        gripper.setPosition(gripped ? PixelCenterOpen : servoGripperreturn);
     }
 }
 
