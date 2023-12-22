@@ -94,7 +94,7 @@ public class Odometry {
         }
 
         ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
-        ToolTelemetry.AddLine("OdometryX :" + Position.getString());
+        ToolTelemetry.AddLine("OdometryX :" + Position);
     }
 
     public void Start(Vector2 startPos){
