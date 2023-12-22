@@ -6,6 +6,7 @@ import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.PID;
 import org.woen.team18742.Tools.ToolTelemetry;
+import org.woen.team18742.Tools.Vector2;
 
 @Config
 public class Automatic {
@@ -24,19 +25,18 @@ public class Automatic {
     private final PID _pidSide = new PID(PidSideP, PidSideI, PidSideD, 1);
     private final PID _pidTurn = new PID(PidRotateP, PidRotateI, PidRotateD, 1);
 
-    public void PIDMove(double forward, double side) {
-        _movedTargetX = _movedTargetX + forward;
-        _movedTargetY = _movedTargetY + side;
+    public void PIDMove(Vector2 moved) {
+        _targetPosition = Vector2.Plus(_targetPosition, moved);
 
         _pidForward.Reset();
         _pidSide.Reset();
 
-        _pidForward.Update(forward);
-        _pidSide.Update(side);
+        _pidForward.Update(moved.X);
+        _pidSide.Update(moved.Y);
     }
 
-    public void PIDMove(double forward, double side, double rotation){
-        PIDMove(forward, side);
+    public void PIDMove(Vector2 moved, double rotation){
+        PIDMove(moved);
         TurnGyro(rotation);
     }
 
@@ -48,7 +48,8 @@ public class Automatic {
         _pidTurn.Update(_turnTarget);
     }
 
-    private double _movedTargetX = 101, _movedTargetY = 0, _turnTarget = 0;
+    private double _turnTarget = 0;
+    private Vector2 _targetPosition = new Vector2();
 
     public boolean isMovedEnd() {
         return Math.abs(_pidForward.Err) < 2d && Math.abs(_pidSide.Err) < 2d && Math.abs(_pidTurn.Err) < 8d;
@@ -59,11 +60,19 @@ public class Automatic {
         _pidSide.UpdateCoefs(PidSideP, PidSideI, PidSideD);
         _pidTurn.UpdateCoefs(PidRotateP, PidRotateI, PidRotateD);
 
-        double UForward = _pidForward.Update(_movedTargetX - _odometry.X), uSide = _pidSide.Update(_movedTargetY - _odometry.Y), uTurn = _pidTurn.Update(_collector.Gyro.GetDegrees() - _turnTarget);
-
-        _collector.Driver.SetSpeedWorldCoords(UForward,  uSide, uTurn);
+        _collector.Driver.SetSpeedWorldCoords(
+                new Vector2(_pidForward.Update(_targetPosition.X - _odometry.Position.X), _pidSide.Update(_targetPosition.Y - _odometry.Position.Y)),
+                _pidTurn.Update(Gyroscope.ChopAngele(_collector.Gyro.GetDegrees() - _turnTarget)));
 
         ToolTelemetry.AddLine( "Autonom:" + _pidForward.Err + " " + _pidSide.Err + " " + _pidTurn.Err);
         ToolTelemetry.AddVal("turn err", _pidTurn.Err);
+    }
+
+    public void Start(Vector2 startPos){
+        _targetPosition = startPos.copy();
+
+        _pidSide.Start();
+        _pidForward.Start();
+        _pidTurn.Start();
     }
 }
