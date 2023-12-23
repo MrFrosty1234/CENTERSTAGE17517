@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
@@ -34,6 +35,7 @@ public class Devices {
     public static Servo Gripper, Clamp, Servopere, ServoPlane, ServoRailGun;
 
     public static List<LynxModule> Hubs;
+    public static VoltageSensor VoltageSensor;
 
     public static void Init(HardwareMap map){
         if(_hardwareDevices != null)
@@ -69,6 +71,8 @@ public class Devices {
         Servopere = map.get(Servo.class, "perevert");
 
         Hubs = map.getAll(LynxModule.class);
+
+        VoltageSensor = map.get(VoltageSensor.class, "Control Hub");
 
         LightingMotor = OdometrXLeft;
 
