@@ -1,4 +1,4 @@
-package org.woen.team17517.Programms;
+package org.woen.team17517.Programms.Autonomus;
 
 import android.icu.text.Transliterator;
 
@@ -18,7 +18,7 @@ import org.woen.team17517.Robot.UltRobot;
 
 import java.nio.Buffer;
 import java.util.HashMap;
-@TeleOp
+@Autonomous
 public class AutonomBaseClass extends LinearOpMode{
     UltRobot robot;
     DcMotor left_front_drive;
@@ -36,6 +36,8 @@ public class AutonomBaseClass extends LinearOpMode{
     Button dpadUpButton = new Button();
     boolean rightBumper = false;
     Button rightBumperButton   = new Button();
+    boolean rightTriger = false;
+    Button rigtTrigerButton = new Button();
 
     Camera camera;
     VisionPortal visionPortal;
@@ -55,6 +57,7 @@ public class AutonomBaseClass extends LinearOpMode{
             dpadLeft = gamepad1.dpad_left;
             dpadRight = gamepad1.dpad_right;
             rightBumper = gamepad1.right_bumper;
+            rightTriger = gamepad1.right_trigger > 0;
 
             if (dpadDownButton.update(dpadDown)){
                 startTeam = StartTeam.BlUE;
@@ -71,6 +74,7 @@ public class AutonomBaseClass extends LinearOpMode{
             if (rightBumperButton.update(rightBumper)){
                 timeToSleep += 1000;
             }
+
             telemetry.addData("Team",startTeam);
             telemetry.addData("Position",startPosition);
             telemetry.addData("Time to sleep", timeToSleep);
@@ -88,6 +92,23 @@ public class AutonomBaseClass extends LinearOpMode{
         RIGHT,
         LEFT
     }
+
+    public Runnable[] getBlueLeft() {
+        return blueLeft;
+    }
+
+    public Runnable[] getBlueRight() {
+        return blueRight;
+    }
+
+    public Runnable[] getRedLeft() {
+        return redLeft;
+    }
+
+    public Runnable[] getRedRight() {
+        return redRight;
+    }
+
     Runnable[] blueRight =  {
             () -> {
                 robot.driveTrain.moveField(60, -60, 0);
@@ -173,19 +194,19 @@ public class AutonomBaseClass extends LinearOpMode{
             case BlUE:
                 switch (startPosition){
                     case LEFT:
-                        robot.updateWhilePositionFalse(blueLeft);
+                        robot.updateWhilePositionFalse(getBlueLeft());
                         break;
                     case RIGHT:
-                        robot.updateWhilePositionFalse(blueRight);
+                        robot.updateWhilePositionFalse(getBlueRight());
                         break;
                 }
             case RED:
                 switch (startPosition) {
                     case LEFT:
-                        robot.updateWhilePositionFalse(redLeft);
+                        robot.updateWhilePositionFalse(getRedLeft());
                         break;
                     case RIGHT:
-                        robot.updateWhilePositionFalse(redRight);
+                        robot.updateWhilePositionFalse(getRedRight());
                         break;
                 }
         }

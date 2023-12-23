@@ -25,7 +25,7 @@ public class UltRobot {
     public Odometry odometry;
     public Timer timer;
     public RobotModule[] robotModules;
-    public  AutonomForBase autonomForBase;
+  //  public  AutonomForBase autonomForBase;
 
     private final List<LynxModule> revHubs;
 
@@ -44,7 +44,7 @@ public class UltRobot {
         testAprilTagPipeline = new TestAprilTagPipeline(this);
         odometry = new Odometry(this);
         drivetrainNew = new DrivetrainNew(this);
-        autonomForBase = new AutonomForBase(this);
+       // autonomForBase = new AutonomForBase(this);
         this.robotModules = new RobotModule[]{telemetryOutput, grabber, timer, voltageSensorPoint,
                 lift, driveTrainVelocityControl, gyro, lighting, odometry, drivetrainNew,/*updateCameraAndOdometry*/};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
@@ -58,7 +58,7 @@ public class UltRobot {
         return positionIndicator;
     }
     public void allUpdate() {
-        revHubs.forEach(LynxModule::clearBulkCache);
+        revHubs.forEach(it -> it.clearBulkCache());
         for(RobotModule robotModule: robotModules){
             robotModule.update();
         }
@@ -71,7 +71,7 @@ public class UltRobot {
 
             double oldTime = System.currentTimeMillis();
 
-            while(this.isAtPositionAll() || System.currentTimeMillis()-oldTime>5000){
+            while((this.isAtPositionAll() || System.currentTimeMillis()-oldTime>5000) && linearOpMode.opModeIsActive()){
                 allUpdate();
             }
 
