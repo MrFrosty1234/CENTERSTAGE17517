@@ -67,12 +67,6 @@ public class Lift {
         return _liftPose == LiftPose.UP && isATarget();
     }
     public boolean isAverage(){return  _liftPose == LiftPose.AVERAGE && isATarget();}
-    public boolean isMoveAverage(){
-        if(_liftPid.Err > 0)
-            return _liftMotor.getCurrentPosition() + 10 > LiftPose.AVERAGE.Pose;
-
-        return _liftMotor.getCurrentPosition() - 10 > LiftPose.AVERAGE.Pose;
-    }
 
     public void SetLiftPose(LiftPose pose) {
         _targetPoseDouble = pose.Pose;

@@ -39,7 +39,7 @@ public class Intake {
     public static double servoperevorot = 0.32;//0.5
 
     public void setperevorotik() {
-        if (_collector.Lift.isMoveAverage() || _collector.Lift.isAverage()) {
+        if (_collector.Lift.isUp() || _collector.Lift.isAverage()) {
             servopere.setPosition(servoperevorot);
         } else {
                 servopere.setPosition(servoperevorotnazad);
@@ -76,7 +76,7 @@ public class Intake {
     double pixelTimeconst = 500;
 
     public boolean pixelDetected() {
-      if(pixelSensor1.getVoltage() >= pixelSensorvoltage )//|| pixelSensor2.getVoltage() >= pixelSensorvoltage)
+      if(pixelSensor1.getVoltage() >= pixelSensorvoltage)
            pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
