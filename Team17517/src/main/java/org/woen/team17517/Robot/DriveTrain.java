@@ -181,8 +181,6 @@ public class DriveTrain{
                 powerz = moveTime / timeForAcceliration * powerz;
             }
             setPowersField(Range.clip(powerx, powerXMin, powerXMax), Range.clip(powery, powerYMin, powerYMax), Range.clip(powerz, powerHeadingMin, powerHeadingMax));
-            robot.linearOpMode.telemetry.addData("t", moveTime);
-            robot.linearOpMode.telemetry.update();
         }
         left_front_drive.setPower(0);
         left_back_drive.setPower(0);

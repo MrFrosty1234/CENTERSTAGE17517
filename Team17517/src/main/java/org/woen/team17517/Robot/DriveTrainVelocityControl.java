@@ -79,9 +79,6 @@ public class DriveTrainVelocityControl implements RobotModule{
     public static double ksX = 0.00045;
     public static double kSlide = 0.85;
 
-    private final double maxRobotSpeed = diameter*PI/0.2;
-    private final double maxCircleRobotSpeed = Math.toDegrees(maxRobotSpeed/trackLength);
-
     private double targetH = 0;
     private Vector2D vector = new Vector2D(0,0);
     private  double yEnc;
@@ -138,16 +135,19 @@ public class DriveTrainVelocityControl implements RobotModule{
         this.hEnc = (left_back_drive.getVelocity()*0+ left_front_drive.getVelocity()-
                 right_front_drive.getVelocity()*0 - right_back_drive.getVelocity())/2.0;
     }
-    private static double diameter = 0.098;
-    private static double encTransmissionCoificent = 1d/20d;
-    private static double encCleanConst = 24.0;
+    private static double diameter = 9.8;
+    private static double gearboxRatio = 1d/20d;
+    private static double encConstNoGearbox = 24.0;
     private static double trackLength = 27d/2d;
-    private static double encConstant = Math.PI*diameter/(encCleanConst/encTransmissionCoificent);
+    private static double encConstant = PI*diameter/(encConstNoGearbox / gearboxRatio);
+    private static double maxMotorRpm = 280.0;
+    private static double maxLinearSpeed = (maxMotorRpm / 60.0) * diameter * PI;
+    private final double maxAngularSpeed = Math.toDegrees(maxLinearSpeed/trackLength);
     private double smToEnc(double target)
     {
-        return target*encConstant;
+        return target/encConstant;
     }
-    private double encToSm(double target){return  target/encConstant;}
+    private double encToSm(double target){return  target*encConstant;}
     private double smToDegrees(double sm)
     {
         return Math.toDegrees(sm/trackLength);
@@ -167,16 +167,16 @@ public class DriveTrainVelocityControl implements RobotModule{
         double yEncSm = yEnc;
         return speedY.PID(target,this.voltage,yEncSm,ksY);
     }
-    public double setProcentSpeed(double target){
-        return maxRobotSpeed*target;
+    public double linearVelocityPercent(double target){
+        return smToEnc(maxLinearSpeed)*target;
     }
-    public double setProcentSpeedCircle(double target)
+    public double angularVelocityPercent(double target)
     {
-        return target*maxCircleRobotSpeed;
+        return target*smToDegrees(encToSm(maxAngularSpeed));
     }
     public double getMetersPerSecondSpeed(double target)
     {
-        return target/encConstant*encTransmissionCoificent*diameter*Math.PI;
+        return target/encConstant* gearboxRatio *diameter*Math.PI;
     }
     public void moveRobotCord(Vector2D vector, double targetAngle){
          this.vector.setCord(vector.getX(),vector.getY());

@@ -5,6 +5,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.util.HashMap;
 
 @Config
@@ -16,7 +18,7 @@ public class TelemetryOutput implements RobotModule{
     public static boolean odometry = false;
     public static boolean velocity = false;
     public static boolean odometryAndCamera = false;
-    public static boolean ftcMap = true;
+    public static boolean ftcMap = false;
     double dlin =40;
     double shir =40;
 
@@ -25,9 +27,12 @@ public class TelemetryOutput implements RobotModule{
     public double [] rectYPoints = new double[2];
 
     TelemetryPacket packet = new TelemetryPacket();
+    
+    private final Telemetry telemetry;
     public TelemetryOutput(UltRobot robot){
         this.robot = robot;
         robot.linearOpMode.telemetry = new MultipleTelemetry(robot.linearOpMode.telemetry,FtcDashboard.getInstance().getTelemetry());
+        telemetry = robot.linearOpMode.telemetry;
     }
 
     @Override
@@ -36,48 +41,47 @@ public class TelemetryOutput implements RobotModule{
     }
 
     public void update(){
-
         if(lift) {
-            robot.linearOpMode.telemetry.addData("liftEncs", robot.lift.liftMotor.getCurrentPosition());
-            robot.linearOpMode.telemetry.addData("target",robot.lift.liftPosition.value);
-            robot.linearOpMode.telemetry.addData("lift pos",robot.lift.liftPosition);
-            robot.linearOpMode.telemetry.addData("lift mode", robot.lift.liftMode);
+            telemetry.addData("liftEncs", robot.lift.liftMotor.getCurrentPosition());
+            telemetry.addData("target",robot.lift.targetPosition.value);
+            telemetry.addData("lift pos",robot.lift.targetPosition);
+            telemetry.addData("lift mode", robot.lift.liftMode);
         }
         if(driveTrain){
-            robot.linearOpMode.telemetry.addData("error X", robot.driveTrain.xError);
-            robot.linearOpMode.telemetry.addData("error Y", robot.driveTrain.yError);
-            robot.linearOpMode.telemetry.addData("error Heading", robot.driveTrain.headingError);
-            robot.linearOpMode.telemetry.addData("encoder left back",robot.driveTrain.left_back_drive.getCurrentPosition());
-            robot.linearOpMode.telemetry.addData("encoder right back",robot.driveTrain.right_back_drive.getCurrentPosition());
-            robot.linearOpMode.telemetry.addData("encoder left front", robot.driveTrain.left_front_drive.getCurrentPosition());
-            robot.linearOpMode.telemetry.addData("encoder right frony", robot.driveTrain.right_front_drive.getCurrentPosition());
+            telemetry.addData("error X", robot.driveTrain.xError);
+            telemetry.addData("error Y", robot.driveTrain.yError);
+            telemetry.addData("error Heading", robot.driveTrain.headingError);
+            telemetry.addData("encoder left back",robot.driveTrain.left_back_drive.getCurrentPosition());
+            telemetry.addData("encoder right back",robot.driveTrain.right_back_drive.getCurrentPosition());
+            telemetry.addData("encoder left front", robot.driveTrain.left_front_drive.getCurrentPosition());
+            telemetry.addData("encoder right front", robot.driveTrain.right_front_drive.getCurrentPosition());
         }
         if(grabber) {
-            robot.linearOpMode.telemetry.addData("pixels count",robot.grabber.pixelsCount);
-    //        robot.linearOpMode.telemetry.addData("pixelSensorLeft",robot.grabber.pixelSensorLeft);
-      //      robot.linearOpMode.telemetry.addData("pixelSensorRight",robot.grabber.pixelSensorRight);
+            telemetry.addData("pixels count",robot.grabber.pixelsCount);
+            telemetry.addData("pixelSensorLeft",robot.grabber.pixelSensorLeft);
+            telemetry.addData("pixelSensorRight",robot.grabber.pixelSensorRight);
         }
         if(odometry){
-            robot.linearOpMode.telemetry.addData("x",robot.odometry.x);
-            robot.linearOpMode.telemetry.addData("y",robot.odometry.y);
-            robot.linearOpMode.telemetry.addData("heading",robot.odometry.heading);
+            telemetry.addData("x",robot.odometry.x);
+            telemetry.addData("y",robot.odometry.y);
+            telemetry.addData("heading",robot.odometry.heading);
         }
         if(velocity){
             HashMap<String,Double> encoderMap = robot.driveTrainVelocityControl.getEncoders();
             HashMap<String,Double> powerMap = robot.driveTrainVelocityControl.getPowers();
             HashMap<String,Double> targetMap = robot.driveTrainVelocityControl.getTargets();
-            robot.linearOpMode.telemetry.addData("TargetY",targetMap.get("targetY"))
-                                        .addData("TargetX",targetMap.get("targetX"))
-                                        .addData("TargetH",targetMap.get("targetH"));
-            robot.linearOpMode.telemetry.addData("SpeedY",encoderMap.get("yEnc"))
-                                        .addData("SpeedX",encoderMap.get("xEnc"))
-                                        .addData("SpeedH",encoderMap.get("hEnc"));
-            robot.linearOpMode.telemetry.addData("powerY",powerMap.get("powerY"))
-                                        .addData("powerX",powerMap.get("powerX"))
-                                        .addData("powerH",powerMap.get("powerH"));
+            telemetry.addData("TargetY",targetMap.get("targetY"));
+            telemetry.addData("TargetX",targetMap.get("targetX"));
+            telemetry.addData("TargetH",targetMap.get("targetH"));
+            telemetry.addData("SpeedY",encoderMap.get("yEnc"));
+            telemetry.addData("SpeedX",encoderMap.get("xEnc"));
+            telemetry.addData("SpeedH",encoderMap.get("hEnc"));
+            telemetry.addData("powerY",powerMap.get("powerY"));
+            telemetry.addData("powerX",powerMap.get("powerX"));
+            telemetry.addData("powerH",powerMap.get("powerH"));
         }
         if(odometryAndCamera){
-            robot.linearOpMode.telemetry.addLine("Camera position:")
+            telemetry.addLine("Camera position:")
                     .addData("x", robot.testAprilTagPipeline.fieldCameraPos.get(0))
                     .addData("y", robot.testAprilTagPipeline.fieldCameraPos.get(1))
                     .addData("z", robot.testAprilTagPipeline.fieldCameraPos.get(2));
@@ -102,6 +106,6 @@ public class TelemetryOutput implements RobotModule{
             rectYPoints [1] = robot.odometry.y - 20;
             packet.fieldOverlay().fillPolygon(rectXPoints, rectYPoints);
         }
-         robot.linearOpMode.telemetry.update();
+        telemetry.update();
     }
 }
