@@ -18,4 +18,10 @@ public class TeleOpCollector extends BaseCollector {
         super.Update();
         Manual.Update();
     }
+
+    @Override
+    public void Start() {
+        super.Start();
+        Intake.setGripper(false);
+    }
 }

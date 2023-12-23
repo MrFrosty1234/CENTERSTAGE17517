@@ -26,6 +26,8 @@ public class Manual {
     boolean oldgrip;
 
     public void Update() {
+        _plane.Update();
+
         _collector.Driver.DriveDirection(
                 new Vector2(_collector.Robot.gamepad1.left_stick_y,
                 _collector.Robot.gamepad1.left_stick_x),
@@ -80,14 +82,11 @@ public class Manual {
         else
             _plane.DeLaunch();
 
-        if (liftUp) {
-            //_collector.Intake.setClamp(true);
+        if (liftUp)
             _collector.Lift.SetLiftPose(LiftPose.UP);
-        }
 
-        if(liftDown) {
+        if(liftDown)
             _collector.Lift.SetLiftPose(LiftPose.DOWN);
-        }
 
         if(average)
             _collector.Lift.SetLiftPose(LiftPose.AVERAGE);

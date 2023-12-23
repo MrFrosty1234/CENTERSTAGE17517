@@ -43,12 +43,12 @@ public class Gyroscope {
         _radians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
         if (IsMerger) {
-            _odometrRadians = (_odometrs.GetOdometrXLeft() - _odometrs.GetOdometrXRigth()) / 2 / OdometrsHandler.RadiusOdometr;
+            _odometrRadians = (_odometrs.GetOdometrXLeft() - _odometrs.GetOdometrXRigth()) / 2.0 / OdometrsHandler.RadiusOdometr;
             _odometrDegree = Math.toDegrees(_odometrRadians);
 
             _odometrRadians = ChopAngele(_odometrRadians);
 
-            _radians = _filter.Update(_radians, _odometrRadians);
+            _radians = _filter.Update(ChopAngele(_odometrRadians - _radians), _radians);
             _degree = Math.toDegrees(_radians);
         }
     }

@@ -95,7 +95,8 @@ public class Grabber implements RobotModule {
                 }
 
                 pixelsCountOld = pixelsCount;
-                if ((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
+
+                if((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
                     pixelMotor.setPower(targetPower);
                     robot.lift.liftPos = !robot.lift.liftPos;
                 } else

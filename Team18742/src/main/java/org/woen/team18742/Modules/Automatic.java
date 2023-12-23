@@ -70,5 +70,9 @@ public class Automatic {
 
     public void Start(Vector2 startPos){
         _targetPosition = startPos.copy();
+
+        _pidSide.Start();
+        _pidForward.Start();
+        _pidTurn.Start();
     }
 }

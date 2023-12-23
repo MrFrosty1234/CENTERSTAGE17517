@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.PID;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 @Config
 public class Lift {
@@ -16,7 +17,7 @@ public class Lift {
 
     private boolean _ending1State = false, _ending2State = false;
 
-    public static double PCoef = 0.01, ICoef = 0.1, DCoef = 0;
+    public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
 
     private final PID _liftPid = new PID(PCoef, ICoef, DCoef, 1, 1);
     private double _targetPoseDouble = 0;
@@ -49,8 +50,10 @@ public class Lift {
         
         _liftMotor.setPower(Math.max(_liftPid.Update(_targetPoseDouble - _liftMotor.getCurrentPosition()), 0.007));
 
-        if(_ending2State)
-            ResetLift();
+        ToolTelemetry.AddLine("Lift end1 = " + _ending1State + " end = " + _ending2State);
+
+        /*if(_ending2State)
+            ResetLift();*/
     }
 
     public boolean isATarget() {
@@ -77,7 +80,7 @@ public class Lift {
     }
 
     public void Start() {
-
+        _liftPid.Start();
     }
 
     private LiftPose _liftPose = LiftPose.DOWN;

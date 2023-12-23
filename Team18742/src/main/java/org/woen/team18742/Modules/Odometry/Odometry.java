@@ -31,7 +31,7 @@ public class Odometry {
     private final ExponationFilter _filterX = new ExponationFilter(XCoef), _filterY = new ExponationFilter(YCoef);
 
     public Odometry(BaseCollector collector) {
-        _CVOdometry = new CVOdometry();
+        _CVOdometry = new CVOdometry(collector);
         _driverTrain = collector.Driver;
         _gyro = collector.Gyro;
         _odometrs = collector.Odometrs;
@@ -94,7 +94,7 @@ public class Odometry {
         }
 
         ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
-        ToolTelemetry.AddLine("OdometryX :" + Position.getString());
+        ToolTelemetry.AddLine("OdometryX :" + Position);
     }
 
     public void Start(Vector2 startPos){

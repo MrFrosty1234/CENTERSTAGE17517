@@ -11,20 +11,19 @@ public class Plane {
     private final Servo _servoPlane;
 
     private final Servo _servorailgun;
-    public static double servoplaneOtkrit = 0.5;
-    public static double servoplaneneOtkrit = 0.07;
+    public static double servoplaneOtkrit = 0.07;
+    public static double servoplaneneOtkrit = 0.5;
     private final ElapsedTime _time;
-
+    private double _oldTime = 0;
     private double pos;
 
     public Plane(ElapsedTime time){
-
         _time = time;
         _servoPlane = Devices.ServoPlane;
         _servorailgun = Devices.ServoRailGun;
     }
     public void Launch(boolean debug){
-        if(_time.milliseconds() > 90000 || debug)
+        if(debug)
             _servoPlane.setPosition(servoplaneOtkrit);
     }
 
@@ -34,7 +33,7 @@ public class Plane {
 
     public void BezpolezniRailgunUp(double step)
     {
-        pos += step;
+        pos += step / (_time.milliseconds() - _oldTime);
         pos = Math.min(1, pos);
 
         _servorailgun.setPosition(pos);
@@ -42,10 +41,14 @@ public class Plane {
 
     public void BezpolezniRailgunDown(double step)
     {
-        pos -= step;
+        pos -= step / (_time.milliseconds() - _oldTime);
 
         pos = Math.max(0, pos);
 
         _servorailgun.setPosition(pos);
+    }
+
+    public void Update(){
+        _oldTime = _time.milliseconds();
     }
 }
