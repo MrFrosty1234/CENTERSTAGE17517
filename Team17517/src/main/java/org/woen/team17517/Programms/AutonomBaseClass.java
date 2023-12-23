@@ -23,29 +23,34 @@ public class AutonomBaseClass extends LinearOpMode{
     boolean dpadDown = gamepad1.dpad_down;
     boolean dpadRight = gamepad1.dpad_right;
     boolean dpadLeft = gamepad1.dpad_left;
+    boolean rightBumper = gamepad1.right_bumper;
     Button button = new Button();
     StartTeam startTeam = StartTeam.BlUE;
     StartPosition startPosition = StartPosition.RIGHT;
     @Override
-        public void waitForStart() {
-            while (!isStarted()) {
-                if (button.update(dpadDown)){
-                    startTeam = StartTeam.BlUE;
-                }
-                if (button.update(dpadUp)){
-                    startTeam = StartTeam.RED;
-                }
-                if (button.update(dpadLeft)){
-                    startPosition = StartPosition.LEFT;
-
-                }
-                if (button.update(dpadRight)){
-                    startPosition = StartPosition.RIGHT;
-                }
-                telemetry.addData("Team",startTeam);
-                telemetry.addData("Position",startPosition);
-                telemetry.update();
+    public void waitForStart() {
+        long  timeToSleep= 0;
+        while (!isStarted()) {
+            if (button.update(dpadDown)){
+                startTeam = StartTeam.BlUE;
             }
+            if (button.update(dpadUp)){
+                startTeam = StartTeam.RED;
+            }
+            if (button.update(dpadLeft)){
+                startPosition = StartPosition.LEFT;
+            }
+            if (button.update(dpadRight)){
+                startPosition = StartPosition.RIGHT;
+            }
+            if (button.update(rightBumper)){
+                timeToSleep += 1000;
+            }
+            telemetry.addData("Team",startTeam);
+            telemetry.addData("Position",startPosition);
+            telemetry.update();
+            }
+            sleep(timeToSleep);
     }
 
 
