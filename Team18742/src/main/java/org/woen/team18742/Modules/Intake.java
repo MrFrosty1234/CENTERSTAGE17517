@@ -21,7 +21,7 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.15, PixelCenterOpen = 0;//0.4
+    public static double pixelSensorvoltage = 0.177, PixelCenterOpen = 0;//0.4
     boolean inableIntake;
     private final DcMotor _lighting;
 
@@ -36,10 +36,10 @@ public class Intake {
     }
 
     public static double servoperevorotnazad = 0.94;
-    public static double servoperevorot = 0.32;//0.5
+    public static final double servoperevorot = 0.32;
 
     public void setperevorotik() {
-        if (_collector.Lift.isMoveAverage() || _collector.Lift.isAverage()) {
+        if (_collector.Lift.isUp() || _collector.Lift.isAverage()) {
             servopere.setPosition(servoperevorot);
         } else {
                 servopere.setPosition(servoperevorotnazad);
@@ -76,7 +76,7 @@ public class Intake {
     double pixelTimeconst = 500;
 
     public boolean pixelDetected() {
-      if(pixelSensor1.getVoltage() >= pixelSensorvoltage )//|| pixelSensor2.getVoltage() >= pixelSensorvoltage)
+      if(pixelSensor1.getVoltage() >= pixelSensorvoltage)
            pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
