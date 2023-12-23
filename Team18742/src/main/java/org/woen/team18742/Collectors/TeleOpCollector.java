@@ -10,8 +10,6 @@ public class TeleOpCollector extends BaseCollector {
     public TeleOpCollector(LinearOpMode commandCode) {
         super(commandCode);
 
-        Intake.setGripper(false);
-
         Manual = new Manual(this);
     }
 
@@ -19,5 +17,11 @@ public class TeleOpCollector extends BaseCollector {
     public void Update() {
         super.Update();
         Manual.Update();
+    }
+
+    @Override
+    public void Start() {
+        super.Start();
+        Intake.setGripper(false);
     }
 }

@@ -14,23 +14,36 @@ public class Lift implements RobotModule {
     public static double kI = 0;
     public static double kD = 0;
     public DcMotor liftMotor;
-    //public DigitalChannel buttonUp;
-    //public DigitalChannel buttonDown;
+    public DigitalChannel buttonUp;
+    public DigitalChannel buttonDown;
     private double power = 0;
-    public LiftPosition liftPosition = LiftPosition.ZERO;
+    public LiftPosition targetPosition = LiftPosition.UNKNOWN;
     public LiftMode liftMode = LiftMode.AUTO;
-    double  err1 = 0;
+    double err1 = 0;
     UltRobot robot;
-    int liftOffset= 0;
+    static int liftOffset = -LiftPosition.UP.value;
     private final PidRegulator PIDZL1 = new PidRegulator(kP, kI, kD);
     public boolean liftPos = true;
+
     public Lift(UltRobot robot) {
         this.robot = robot;
-        liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("motor");
+        liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("liftMotor");
         liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       // buttonUp.setMode(DigitalChannel.Mode.INPUT);
-       // buttonDown.setMode(DigitalChannel.Mode.INPUT);
+        buttonUp = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonUp");
+        buttonDown = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonDown");
+        buttonUp.setMode(DigitalChannel.Mode.INPUT);
+        buttonDown.setMode(DigitalChannel.Mode.INPUT);
+        //resetEncoder();
+    }
+
+    private void resetEncoder(){
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public boolean getTopSwitch(){
+        return !buttonUp.getState();
     }
 
     public void reset() {
@@ -38,18 +51,22 @@ public class Lift implements RobotModule {
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void setPower(double power){
-        this.power = power;
-    }
-    public void setPowers(double x) {
+
+    public void setPower(double x) {
         liftMotor.setPower(x);
     }
 
-
-    public int getPosition() {
-        return liftMotor.getCurrentPosition() - liftOffset;
+    public int getRawPosition(){
+        return liftMotor.getCurrentPosition();
     }
 
+    public int getPosition() {
+        return getRawPosition() + liftOffset;
+    }
+
+    public void setPositionOffset(int liftOffset){
+        Lift.liftOffset = liftOffset;
+    }
 
     private void setPowersLimit(double x) {
         int pos = getPosition();
@@ -60,7 +77,7 @@ public class Lift implements RobotModule {
                 liftMotor.setPower(x);
             }
         } else {
-            if (pos < LiftPosition.ZERO.value) {
+            if (pos < LiftPosition.DOWN.value) {
                 liftMotor.setPower(0);
             } else {
                 liftMotor.setPower(x);
@@ -68,30 +85,27 @@ public class Lift implements RobotModule {
         }
     }
 
-    public void displayEncoders() {
-        robot.linearOpMode.telemetry.addData("lift", liftMotor.getCurrentPosition());
-        robot.linearOpMode.telemetry.update();
-    }
-
     public void update() {
+        if (true)
+            return;
         switch (liftMode) {
             case AUTO: {
-                    double target1 = liftPosition.value;
-                    double position = getPosition();
-                    err1 = target1 - position;
-                    double poweryl1 = 0.2 + PIDZL1.update(err1);
-                    liftMotor.setPower(Range.clip(poweryl1, -0.1, 0.7));
-                    if(abs(position) > 50)
-                        liftPos = false;
-                    else
-                        liftPos = true;
-                }
-                break;
+                double target1 = targetPosition.value;
+                double position = getPosition();
+                err1 = target1 - position;
+                double poweryl1 = 0.2 + PIDZL1.update(err1);
+                liftMotor.setPower(Range.clip(poweryl1, -0.1, 0.7));
+                if (abs(position) > 50)
+                    liftPos = false;
+                else
+                    liftPos = true;
+            }
+            break;
             case MANUALLIMIT:
                 setPowersLimit(power);
                 break;
             case MANUAL:
-                setPowers(power);
+                setPower(power);
                 break;
         }
     }
@@ -105,7 +119,7 @@ public class Lift implements RobotModule {
     }
 
     public enum LiftPosition {
-        ZERO(0), LOW(780), MIDDLE(1008), UP(1108);
+        DOWN(0), UP(2733), UNKNOWN(0);
         public int value;
 
         LiftPosition(int value) {

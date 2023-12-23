@@ -18,13 +18,12 @@ public class Plane {
     private double pos;
 
     public Plane(ElapsedTime time){
-
         _time = time;
         _servoPlane = Devices.ServoPlane;
         _servorailgun = Devices.ServoRailGun;
     }
     public void Launch(boolean debug){
-        if(_time.milliseconds() > 90000 || debug)
+        if(debug)
             _servoPlane.setPosition(servoplaneOtkrit);
     }
 

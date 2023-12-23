@@ -35,8 +35,8 @@ public class Intake {
         _lighting = Devices.LightingMotor;
     }
 
-    public static double servoperevorotnazad = 0.765;
-    public static final double servoperevorot = 0.20;
+    public static double servoperevorotnazad = 0.94;
+    public static final double servoperevorot = 0.32;
 
     public void setperevorotik() {
         if (_collector.Lift.isMoveAverage() || _collector.Lift.isAverage()) {
@@ -46,8 +46,8 @@ public class Intake {
         }
     }
 
-    public static double servoGripperreturn = 0.2;
-    public static double servoGripper = 0;
+    public static double servoGripperreturn = 0.4;
+    public static double servoGripper = 0.15;
 
     private boolean gripped = false;
 
@@ -60,8 +60,8 @@ public class Intake {
         gripped = grip;
     }
 
-    public static double servoClamp = 0.44;
-    public static double servoClampreturn = 0.1;
+    public static double servoClamp = 0.8;
+    public static double servoClampreturn = 0.5;
 
     public void setClamp(boolean clampIk) {
         if (clampIk) {
