@@ -1,6 +1,8 @@
 package org.woen.team18742.Modules;
 
 
+import android.annotation.SuppressLint;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,7 +23,7 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.177, PixelCenterOpen = 0;//0.4
+    public static double pixelSensorvoltage = 0.130, PixelCenterOpen = 0;//0.4
     boolean inableIntake;
     private final DcMotor _lighting;
 
@@ -35,11 +37,11 @@ public class Intake {
         _lighting = Devices.LightingMotor;
     }
 
-    public static double servoperevorotnazad = 0.94;
+    public static double servoperevorotnazad = 0.96;
     public static final double servoperevorot = 0.32;
 
     public void setperevorotik() {
-        if (_collector.Lift.isUp() || _collector.Lift.isAverage()) {
+        if (_collector.Lift.isUp()) {
             servopere.setPosition(servoperevorot);
         } else {
                 servopere.setPosition(servoperevorotnazad);
@@ -61,7 +63,7 @@ public class Intake {
     }
 
     public static double servoClamp = 0.8;
-    public static double servoClampreturn = 0.5;
+    public static double servoClampreturn = 0.5;//0.5
 
     public void setClamp(boolean clampIk) {
         if (clampIk) {
@@ -76,7 +78,7 @@ public class Intake {
     double pixelTimeconst = 500;
 
     public boolean pixelDetected() {
-      if(pixelSensor1.getVoltage() >= pixelSensorvoltage)
+      if(pixelSensor1.getVoltage() >= pixelSensorvoltage )//|| pixelSensor2.getVoltage() >= pixelSensorvoltage)
            pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
@@ -95,7 +97,7 @@ public class Intake {
         if (pixelDetected()) {
             setGripper(true);
             setClamp(clampTimer.milliseconds() < clampTimerconst && _collector.Lift.isDown());
-            _collector.Brush.intakePowerWithDefense(false);
+           // _collector.Brush.intakePower(false);
 
             isPixelLocated = true;
 
@@ -103,8 +105,8 @@ public class Intake {
         } else {
             clampTimer.reset();
             setClamp(!gripped && _collector.Lift.isDown());
-            if (inableIntake)
-                _collector.Brush.intakePowerWithDefense(true);
+           // if (inableIntake)
+               // _collector.Brush.intakePower(true);
 
             isPixelLocated = false;
             _lighting.setPower(0);

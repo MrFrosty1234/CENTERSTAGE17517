@@ -29,8 +29,7 @@ public class Manual {
         _plane.Update();
 
         _collector.Driver.DriveDirection(
-                new Vector2(_collector.Robot.gamepad1.left_stick_y,
-                _collector.Robot.gamepad1.left_stick_x),
+                new Vector2(_collector.Robot.gamepad1.left_stick_y, _collector.Robot.gamepad1.left_stick_x),
                 _collector.Robot.gamepad1.right_stick_x);
 
         boolean A = _collector.Robot.gamepad1.square;
@@ -61,10 +60,10 @@ public class Manual {
             if (brush && !_brushOld) {
                 _brushReverseOn = false;
                 _isBrushOn = !_isBrushOn;
-                _collector.Brush.intakePowerWithDefense(_isBrushOn);
+                _collector.Brush.intakePower(_isBrushOn);
             } else if(brushRevers && !_brushReversOld){
                 _isBrushOn = false;
-                _collector.Brush.intakePowerWithDefense(_isBrushOn);
+                _collector.Brush.intakePower(_isBrushOn);
                 _brushReverseOn = !_brushReverseOn;
                 _collector.Brush.reversbrush(_brushReverseOn ? -1 : 0);
             }
@@ -74,7 +73,7 @@ public class Manual {
             _collector.Brush.reversbrush(0);
             _isBrushOn = false;
             _brushReverseOn = false;
-            _collector.Brush.intakePowerWithDefense(_isBrushOn);
+            _collector.Brush.intakePower(_isBrushOn);
         }
 
         if (A)
