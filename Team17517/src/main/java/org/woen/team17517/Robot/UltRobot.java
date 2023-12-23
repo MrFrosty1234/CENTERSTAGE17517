@@ -25,6 +25,7 @@ public class UltRobot {
     public Odometry odometry;
     public Timer timer;
     public RobotModule[] robotModules;
+    public  AutonomForBase autonomForBase;
 
     private final List<LynxModule> revHubs;
 
@@ -43,6 +44,7 @@ public class UltRobot {
         testAprilTagPipeline = new TestAprilTagPipeline(this);
         odometry = new Odometry(this);
         drivetrainNew = new DrivetrainNew(this);
+        autonomForBase = new AutonomForBase(this);
         this.robotModules = new RobotModule[]{telemetryOutput, grabber, timer, voltageSensorPoint,
                 lift, driveTrainVelocityControl, gyro, lighting, odometry, drivetrainNew,/*updateCameraAndOdometry*/};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);

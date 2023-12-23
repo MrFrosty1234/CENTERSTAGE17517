@@ -9,7 +9,7 @@ import org.woen.team17517.Robot.Lift;
 import org.woen.team17517.Robot.UltRobot;
 
 @TeleOp
-public class TeleOP extends LinearOpMode {
+public class  TeleOP extends LinearOpMode {
     UltRobot robot;
 
     @Override
@@ -36,7 +36,7 @@ public class TeleOP extends LinearOpMode {
         while (opModeIsActive()) {
             liftMotor = robot.linearOpMode.hardwareMap.dcMotor.get("liftMotor");
             grabber = robot.linearOpMode.hardwareMap.dcMotor.get("intakeMotor");
-            forwardSpeed = gamepad1.left_stick_y;
+            forwardSpeed = -gamepad1.left_stick_y;
             sideSpeed = gamepad1.left_stick_x;
             angleSpeed = -gamepad1.right_stick_x;
             forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(forwardSpeed);

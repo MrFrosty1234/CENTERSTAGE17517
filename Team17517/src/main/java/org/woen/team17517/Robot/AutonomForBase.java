@@ -1,33 +1,24 @@
-package org.woen.team17517.Programms;
+package org.woen.team17517.Robot;
 
-import android.widget.VideoView;
-
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.woen.team17517.Robot.Lift;
 import org.woen.team17517.Robot.OpenCV.PipeLine;
-import org.woen.team17517.Robot.UltRobot;
-import org.woen.team17517.Robot.Camera;
 
-@Autonomous
-public class AutonomBetaUniversal extends LinearOpMode {
+
+public class AutonomForBase {
     UltRobot robot;
     Camera camera;
     VisionPortal visionPortal;
     PipeLine pipeLine;
 
-    public void runOpMode() {
 
-        robot = new UltRobot(this);
+    public AutonomForBase(UltRobot robot){
+        this.robot = robot;
 
-        camera = new Camera(hardwareMap);
+        camera = new Camera(robot.linearOpMode.hardwareMap);
         pipeLine = new PipeLine();
         robot.lift.reset();
         int positionEllment = pipeLine.pos;
-        waitForStart();
+        robot.linearOpMode.waitForStart();
         robot.grabber.closeGraber();
         Runnable[] actions = {
                 () -> {
