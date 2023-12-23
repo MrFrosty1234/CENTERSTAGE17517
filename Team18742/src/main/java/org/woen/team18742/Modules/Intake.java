@@ -21,7 +21,7 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.187, PixelCenterOpen = 0;//0.4
+    public static double pixelSensorvoltage = 0.177, PixelCenterOpen = 0;//0.4
     boolean inableIntake;
     private final DcMotor _lighting;
 

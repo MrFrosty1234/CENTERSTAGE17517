@@ -11,7 +11,7 @@ public class Plane {
     private final Servo _servoPlane;
 
     private final Servo _servorailgun;
-    public static double servoplaneOtkrit = 0.5;
+    public static double servoplaneOtkrit = 0.15;
     public static double servoplaneneOtkrit = 0.07;
     private final ElapsedTime _time;
     private double _oldTime = 0;

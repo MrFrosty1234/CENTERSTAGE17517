@@ -40,6 +40,7 @@ public class DriverTrain {
         ResetIncoder();
     }
 
+
     public void DriveDirection(Vector2 speed, double rotate){
        _leftForwardDrive.setPower(speed.X - speed.Y + rotate);
        _rightBackDrive.setPower(speed.X - speed.Y - rotate);
