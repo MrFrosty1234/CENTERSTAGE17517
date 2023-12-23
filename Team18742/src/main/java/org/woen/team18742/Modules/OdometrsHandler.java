@@ -32,11 +32,11 @@ public class OdometrsHandler {
 
     public void Reset(){
         _odometrXLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _odometrXLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        _odometrXLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         _odometrXRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _odometrXRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        _odometrXRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         _odometrY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _odometrY.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        _odometrY.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }

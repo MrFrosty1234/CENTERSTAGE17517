@@ -16,7 +16,7 @@ public class Lift {
 
     private final DigitalChannel _ending1, _ending2;
 
-    private boolean _ending1State = false, _ending2State = false;
+    private boolean _endingUpState = false, _endingDownState = false;
 
     public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
 
@@ -46,19 +46,20 @@ public class Lift {
     public void Update() {
         _liftPid.UpdateCoefs(PCoef, ICoef, DCoef);
 
-        _ending1State = _ending1.getState();
-        _ending2State = _ending2.getState();
+        _endingUpState = _ending1.getState();
+        _endingDownState = _ending2.getState();
         
         _liftMotor.setPower(Math.max(_liftPid.Update(_targetPoseDouble - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
 
-        ToolTelemetry.AddLine("Lift end1 = " + _ending1State + " end = " + _ending2State);
+        ToolTelemetry.AddLine("Lift end1 = " + _endingUpState + " end = " + _endingDownState);
 
-        /*if(_ending2State)
-            ResetLift();*/
+        if(_endingDownState)
+            ResetLift();
     }
 
     public boolean isATarget() {
-        return Math.abs(_liftPid.Err) < 30;
+        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState);
+        //return Math.abs(_liftPid.Err) < 30;
     }
 
     public boolean isDown(){

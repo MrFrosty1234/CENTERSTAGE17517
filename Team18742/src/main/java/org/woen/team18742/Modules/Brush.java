@@ -59,7 +59,7 @@ public class Brush {
 
     }
 
-    private void intakePower(boolean brush) {
+    public void intakePower(boolean brush) {
         if (brush) {
             speed = 1;
             brushMotor.setPower(speed);

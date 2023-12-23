@@ -52,7 +52,7 @@ public class Devices {
 
         OdometrXLeft = map.get(DcMotor.class, "OdometrXLeft");
         OdometrY = map.get(DcMotor.class, "OdometrY");
-        //OdometrXRight = BrushMotor;
+        OdometrXRight = BrushMotor;
 
         Camera = map.get(WebcamName.class, "Webcam 1");
 
