@@ -118,7 +118,11 @@ public class AutonomBaseClass extends LinearOpMode{
 
              */
     };
-    Runnable[] blueLeft;
+    Runnable[] blueLeft = {
+            () -> {
+                robot.driveTrain.moveField(60, -60, 0);
+            },
+    };
     Runnable[] redRight = {
             () -> {
                 robot.driveTrain.moveField(60, -60, 0);
@@ -149,7 +153,11 @@ public class AutonomBaseClass extends LinearOpMode{
             }
           */
     };
-    Runnable[] redLeft;
+    Runnable[] redLeft = {
+            () -> {
+                robot.driveTrain.moveField(60, -60, 0);
+            },
+    };
 
     @Override
     public void runOpMode(){
