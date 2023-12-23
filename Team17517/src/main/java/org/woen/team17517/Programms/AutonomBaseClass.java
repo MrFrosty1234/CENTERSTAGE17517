@@ -29,8 +29,11 @@ public class AutonomBaseClass extends LinearOpMode{
     boolean dpadUp = false;
     boolean dpadDown = false;
     boolean dpadRight = false;
+    Button dpadRightButton = new Button();
     boolean dpadLeft = false;
-    boolean rightBumper = gamepad1.right_bumper;
+    Button dpadLeftButton = new Button();
+    boolean rightBumper = false;
+    Button rightBumperButton   = new Button();
 
     Camera camera;
     VisionPortal visionPortal;
@@ -45,23 +48,29 @@ public class AutonomBaseClass extends LinearOpMode{
     public void waitForStart() {
         long  timeToSleep= 0;
         while (!isStarted()) {
-            if (button.update(dpadDown)){
+            dpadDown = gamepad1.dpad_down;
+            dpadUp = gamepad1.dpad_up;
+            dpadLeft = gamepad1.dpad_left;
+            dpadRight = gamepad1.dpad_right;
+            rightBumper = gamepad1.right_bumper;
+            if (dpadDownButton.update(dpadDown)){
                 startTeam = StartTeam.BlUE;
             }
-            if (button.update(dpadUp)){
+            if (dpadUpButton.update(dpadUp)){
                 startTeam = StartTeam.RED;
             }
-            if (button.update(dpadLeft)){
+            if (dpadLeftButton.update(dpadLeft)){
                 startPosition = StartPosition.LEFT;
             }
-            if (button.update(dpadRight)){
+            if (dpadRightButton.update(dpadRight)){
                 startPosition = StartPosition.RIGHT;
             }
-            if (button.update(rightBumper)){
+            if (rightBumperButton.update(rightBumper)){
                 timeToSleep += 1000;
             }
             telemetry.addData("Team",startTeam);
             telemetry.addData("Position",startPosition);
+            telemetry.addData("Time to sleep", timeToSleep);
             telemetry.update();
             }
             sleep(timeToSleep);
@@ -138,6 +147,10 @@ public class AutonomBaseClass extends LinearOpMode{
           */
     };
     Runnable[] redLeft;
+    Runnable[] blueRight = {};
+    Runnable[] blueLeft = {};
+    Runnable[] redRight = {};
+    Runnable[] redLeft = {};
 
     @Override
     public void runOpMode(){
@@ -148,12 +161,7 @@ public class AutonomBaseClass extends LinearOpMode{
         right_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_back_drive");
 
         waitForStart();
-        camera = new Camera(robot.linearOpMode.hardwareMap);
-        pipeLine = new PipeLine();
-        robot.lift.reset();
-        int positionEllment = pipeLine.pos;
-        robot.linearOpMode.waitForStart();
-        robot.grabber.closeGraber();
+
         switch (startTeam) {
             case BlUE:
                 switch (startPosition){

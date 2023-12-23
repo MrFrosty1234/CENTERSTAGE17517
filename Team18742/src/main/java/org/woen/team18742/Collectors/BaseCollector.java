@@ -10,6 +10,7 @@ import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.OdometrsHandler;
+import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
@@ -23,6 +24,7 @@ public class BaseCollector {
     public Brush Brush;
     private Cachinger _cachinger;
     public OdometrsHandler Odometrs;
+    private Battery _battery;
 
     public BaseCollector(LinearOpMode robot){
         Robot = robot;
@@ -30,6 +32,7 @@ public class BaseCollector {
         Devices.Init(robot.hardwareMap);
         ToolTelemetry.SetTelemetry(Robot.telemetry);
 
+        _battery = new Battery(this);
         _cachinger = new Cachinger();
         Time = new ElapsedTime();
         Lift = new Lift(this);
@@ -49,6 +52,7 @@ public class BaseCollector {
     }
 
     public void Update(){
+        _battery.Update();
         _cachinger.Update();
         Lift.Update();
         Gyro.Update();

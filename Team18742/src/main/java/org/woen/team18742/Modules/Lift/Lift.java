@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.PID;
 import org.woen.team18742.Tools.ToolTelemetry;
@@ -48,7 +49,7 @@ public class Lift {
         _ending1State = _ending1.getState();
         _ending2State = _ending2.getState();
         
-        _liftMotor.setPower(Math.max(_liftPid.Update(_targetPoseDouble - _liftMotor.getCurrentPosition()), 0.007));
+        _liftMotor.setPower(Math.max(_liftPid.Update(_targetPoseDouble - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
 
         ToolTelemetry.AddLine("Lift end1 = " + _ending1State + " end = " + _ending2State);
 
