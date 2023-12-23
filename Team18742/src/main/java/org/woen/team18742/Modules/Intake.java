@@ -21,7 +21,7 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.187, PixelCenterOpen = 0;//0.4
+    public static double pixelSensorvoltage = 0.15, PixelCenterOpen = 0;//0.4
     boolean inableIntake;
     private final DcMotor _lighting;
 
@@ -35,8 +35,8 @@ public class Intake {
         _lighting = Devices.LightingMotor;
     }
 
-    public static double servoperevorotnazad = 0.765;
-    public static final double servoperevorot = 0.16;
+    public static double servoperevorotnazad = 0.94;
+    public static double servoperevorot = 0.32;//0.5
 
     public void setperevorotik() {
         if (_collector.Lift.isMoveAverage() || _collector.Lift.isAverage()) {
@@ -46,8 +46,8 @@ public class Intake {
         }
     }
 
-    public static double servoGripperreturn = 0.43;
-    public static double servoGripper = 0.221;
+    public static double servoGripperreturn = 0.4;
+    public static double servoGripper = 0.15;
 
     private boolean gripped = false;
 
@@ -60,8 +60,8 @@ public class Intake {
         gripped = grip;
     }
 
-    public static double servoClamp = 0.44;
-    public static double servoClampreturn = 0.1;
+    public static double servoClamp = 0.8;
+    public static double servoClampreturn = 0.5;
 
     public void setClamp(boolean clampIk) {
         if (clampIk) {
