@@ -32,6 +32,8 @@ public class AutonomBaseClass extends LinearOpMode{
     Button dpadRightButton = new Button();
     boolean dpadLeft = false;
     Button dpadLeftButton = new Button();
+    Button dpadDownButton = new Button();
+    Button dpadUpButton = new Button();
     boolean rightBumper = false;
     Button rightBumperButton   = new Button();
 
@@ -53,6 +55,7 @@ public class AutonomBaseClass extends LinearOpMode{
             dpadLeft = gamepad1.dpad_left;
             dpadRight = gamepad1.dpad_right;
             rightBumper = gamepad1.right_bumper;
+
             if (dpadDownButton.update(dpadDown)){
                 startTeam = StartTeam.BlUE;
             }
@@ -147,10 +150,6 @@ public class AutonomBaseClass extends LinearOpMode{
           */
     };
     Runnable[] redLeft;
-    Runnable[] blueRight = {};
-    Runnable[] blueLeft = {};
-    Runnable[] redRight = {};
-    Runnable[] redLeft = {};
 
     @Override
     public void runOpMode(){
