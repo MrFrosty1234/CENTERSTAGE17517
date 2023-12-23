@@ -57,7 +57,7 @@ public class Lift {
     }
 
     public boolean isATarget() {
-        return Math.abs(_liftPid.Err) < 20;
+        return Math.abs(_liftPid.Err) < 30;
     }
 
     public boolean isDown(){
