@@ -3,27 +3,32 @@ package org.woen.team17517.Programms;
 import android.icu.text.Transliterator;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.woen.team17517.R;
 import org.woen.team17517.Robot.Button;
 import org.woen.team17517.Robot.UltRobot;
 
 import java.nio.Buffer;
 import java.util.HashMap;
-
+@TeleOp
 public class AutonomBaseClass extends LinearOpMode{
     UltRobot robot;
     DcMotor left_front_drive;
     DcMotor left_back_drive;
-
     DcMotor right_front_drive;
     DcMotor right_back_drive;
-    boolean dpadUp = gamepad1.dpad_up;
-    boolean dpadDown = gamepad1.dpad_down;
-    boolean dpadRight = gamepad1.dpad_right;
-    boolean dpadLeft = gamepad1.dpad_left;
+
+    boolean dpadUp = false;
+    boolean dpadDown = false;
+    boolean dpadRight = false;
+    boolean dpadLeft = false;
     boolean rightBumper = gamepad1.right_bumper;
+
     Button button = new Button();
     StartTeam startTeam = StartTeam.BlUE;
     StartPosition startPosition = StartPosition.RIGHT;
@@ -62,23 +67,10 @@ public class AutonomBaseClass extends LinearOpMode{
         RIGHT,
         LEFT
     }
-    EncoderMove blueRight;
-    EncoderMove blueLeft;
-    EncoderMove redRight;
-    EncoderMove redLeft;
-
-    public void setBlueLeft(Runnable[] blueLeft) {
-        this.blueLeft.setActions(blueLeft);
-    }
-    public void setBlueRight(Runnable[] blueRight){
-        this.blueRight.setActions(blueRight);
-    }
-    public void setRedLeft(Runnable[] redLeft){
-        this.blueRight.setActions(redLeft);
-    }
-    public void setRedRight(Runnable[] redRight){
-        this.blueRight.setActions(redRight);
-    }
+    Runnable[] blueRight;
+    Runnable[] blueLeft;
+    Runnable[] redRight;
+    Runnable[] redLeft;
 
     @Override
     public void runOpMode(){
@@ -94,19 +86,19 @@ public class AutonomBaseClass extends LinearOpMode{
             case BlUE:
                 switch (startPosition){
                     case LEFT:
-                        robot.updateWhilePositionFalse(blueLeft.getActions());
+                        robot.updateWhilePositionFalse(blueLeft);
                         break;
                     case RIGHT:
-                        robot.updateWhilePositionFalse(blueRight.getActions());
+                        robot.updateWhilePositionFalse(blueRight);
                         break;
                 }
             case RED:
                 switch (startPosition) {
                     case LEFT:
-                        robot.updateWhilePositionFalse(redLeft.getActions());
+                        robot.updateWhilePositionFalse(redLeft);
                         break;
                     case RIGHT:
-                        robot.updateWhilePositionFalse(redRight.getActions());
+                        robot.updateWhilePositionFalse(redRight);
                         break;
                 }
         }

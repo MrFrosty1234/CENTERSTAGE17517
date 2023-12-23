@@ -41,7 +41,7 @@ public class TeleOP extends LinearOpMode {
             angleSpeed = -gamepad1.right_stick_x;
             forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(forwardSpeed);
             sideSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(sideSpeed);
-            angleSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(angleSpeed);
+            angleSpeed = robot.driveTrainVelocityControl.angularVelocityPercent(angleSpeed);
 
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
 
@@ -70,6 +70,7 @@ public class TeleOP extends LinearOpMode {
             }
 
             liftMotor.setPower(liftPower);
+
 
             ///////////////////////
 

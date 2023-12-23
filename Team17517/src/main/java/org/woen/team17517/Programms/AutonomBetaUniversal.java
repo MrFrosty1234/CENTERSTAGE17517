@@ -66,7 +66,7 @@ public class AutonomBetaUniversal extends LinearOpMode {
                     robot.grabber.powerPixelMotor(0);
                 },
                 () -> {
-                    robot.lift.liftPosition = Lift.LiftPosition.UP;
+                    robot.lift.targetPosition = Lift.LiftPosition.UP;
                 },
                 () -> {
                     robot.grabber.perekidStart();
