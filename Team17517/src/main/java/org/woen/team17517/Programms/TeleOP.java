@@ -9,7 +9,7 @@ import org.woen.team17517.Robot.Lift;
 import org.woen.team17517.Robot.UltRobot;
 
 @TeleOp
-public class TeleOP extends LinearOpMode {
+public class  TeleOP extends LinearOpMode {
     UltRobot robot;
 
     @Override

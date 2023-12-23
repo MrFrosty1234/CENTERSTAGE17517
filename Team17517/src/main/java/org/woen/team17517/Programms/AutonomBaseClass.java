@@ -9,8 +9,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.vision.VisionPortal;
 import org.woen.team17517.R;
 import org.woen.team17517.Robot.Button;
+import org.woen.team17517.Robot.Camera;
+import org.woen.team17517.Robot.OpenCV.PipeLine;
 import org.woen.team17517.Robot.UltRobot;
 
 import java.nio.Buffer;
@@ -24,15 +27,21 @@ public class AutonomBaseClass extends LinearOpMode{
     DcMotor right_back_drive;
 
     boolean dpadUp = false;
-    Button dpadUpButton = new Button();
     boolean dpadDown = false;
-    Button dpadDownButton = new Button();
     boolean dpadRight = false;
     Button dpadRightButton = new Button();
     boolean dpadLeft = false;
     Button dpadLeftButton = new Button();
+    Button dpadDownButton = new Button();
+    Button dpadUpButton = new Button();
     boolean rightBumper = false;
     Button rightBumperButton   = new Button();
+
+    Camera camera;
+    VisionPortal visionPortal;
+    PipeLine pipeLine;
+
+    int positionEllment = 0;
 
     Button button = new Button();
     StartTeam startTeam = StartTeam.BlUE;
@@ -46,6 +55,7 @@ public class AutonomBaseClass extends LinearOpMode{
             dpadLeft = gamepad1.dpad_left;
             dpadRight = gamepad1.dpad_right;
             rightBumper = gamepad1.right_bumper;
+
             if (dpadDownButton.update(dpadDown)){
                 startTeam = StartTeam.BlUE;
             }
@@ -78,10 +88,76 @@ public class AutonomBaseClass extends LinearOpMode{
         RIGHT,
         LEFT
     }
-    Runnable[] blueRight = {};
-    Runnable[] blueLeft = {};
-    Runnable[] redRight = {};
-    Runnable[] redLeft = {};
+    Runnable[] blueRight =  {
+            () -> {
+                robot.driveTrain.moveField(60, -60, 0);
+            },
+            /*    if (positionEllment == 1)
+                    robot.driveTrain.moveField(60, -60, 0);
+                if (positionEllment == 2)
+                    robot.driveTrain.moveField(60, 0, 0);
+                if (positionEllment == 3)
+                    robot.driveTrain.moveField(60, 60, 0);
+            },
+            () -> {
+                robot.driveTrain.moveField(60, 60, 90);
+            },
+            () -> {
+                robot.driveTrain.moveField(60, 200, 90);
+
+            },
+            () -> {
+                robot.driveTrain.moveField(60, 300, 90);
+            },
+            () -> {
+                robot.driveTrain.moveField(30, 300, 90);
+            },
+            () -> {
+                robot.driveTrain.moveField(30, 350, 90);
+            }
+
+             */
+    };
+    Runnable[] blueLeft = {
+            () -> {
+                robot.driveTrain.moveField(60, -60, 0);
+            },
+    };
+    Runnable[] redRight = {
+            () -> {
+                robot.driveTrain.moveField(60, -60, 0);
+            },
+         /*       if (positionEllment == 1)
+                    robot.driveTrain.moveField(60, -60, 0);
+                if (positionEllment == 2)
+                    robot.driveTrain.moveField(60, 0, 0);
+                if (positionEllment == 3)
+                    robot.driveTrain.moveField(60, 60, 0);
+            },
+           () -> {
+                robot.driveTrain.moveField(60, 60, 90);
+            },
+            () -> {
+                robot.driveTrain.moveField(60, 200, 90);
+
+            },
+            () -> {
+                robot.driveTrain.moveField(60, 300, 90);
+            },
+            () -> {
+                robot.driveTrain.moveField(30, 300, 90);
+            },
+            () -> {
+                robot.driveTrain.moveField(30, 350, 90);
+
+            }
+          */
+    };
+    Runnable[] redLeft = {
+            () -> {
+                robot.driveTrain.moveField(60, -60, 0);
+            },
+    };
 
     @Override
     public void runOpMode(){
