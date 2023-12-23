@@ -1,9 +1,12 @@
 package org.woen.team17517.Robot;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team17517.Robot.OpenCV.TestAprilTagPipeline;
 import org.woen.team17517.Robot.OpenCV.UpdateCameraAndOdometry;
+
+import java.util.List;
 
 
 public class UltRobot {
@@ -23,6 +26,7 @@ public class UltRobot {
     public Timer timer;
     public RobotModule[] robotModules;
 
+    private final List<LynxModule> revHubs;
 
     public UltRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
@@ -41,6 +45,8 @@ public class UltRobot {
         drivetrainNew = new DrivetrainNew(this);
         this.robotModules = new RobotModule[]{telemetryOutput, grabber, timer, voltageSensorPoint,
                 lift, driveTrainVelocityControl, gyro, lighting, odometry, drivetrainNew,/*updateCameraAndOdometry*/};
+        revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
+        revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }
     public boolean isAtPositionAll(){
         boolean positionIndicator = true;
@@ -50,6 +56,7 @@ public class UltRobot {
         return positionIndicator;
     }
     public void allUpdate() {
+        revHubs.forEach(LynxModule::clearBulkCache);
         for(RobotModule robotModule: robotModules){
             robotModule.update();
         }

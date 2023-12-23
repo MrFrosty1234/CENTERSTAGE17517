@@ -1,7 +1,5 @@
 package org.woen.team17517.Robot;
 
-import static org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit.AMPS;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
-public class Grabber implements RobotModule{
+public class Grabber implements RobotModule {
     UltRobot robot;
     public DcMotorEx pixelMotor;
     AnalogInput pixelSensorRight;
@@ -20,19 +18,21 @@ public class Grabber implements RobotModule{
     double pixelsCount = 0;
     double pixelsCountOld = 0;
     double targetPower = 1;
-    public double pixelLeftSensorVoltage = pixelSensorLeft.getVoltage();
-    public double pixelRightSensorVoltage = pixelSensorRight.getVoltage();
+    public double pixelLeftSensorVoltage = 3.3;
+    public double pixelRightSensorVoltage = 3.3;
     public boolean pixelIn = false;
     public boolean positionGrabber = false;
 
-    GrabberMode grabberMode = GrabberMode.FULLPROTECTION;
+    GrabberMode grabberMode = GrabberMode.MANUALMODE;
     PixelsPosition pixelsPosition = PixelsPosition.AUTONOM;
     int perekid = 0;
     int grabber = 0;
 
-    public static double grabberOpen = 0.30;
-    public static double grabberClose = 0;
-    public static double perekidStart = 0.90    ;
+    public static double grabberOpen = 0.5;
+    public static double grabberClose = .35;
+
+    public static double perekidStartDown = 0.875;
+    public static double perekidStart = 0.905;
     public static double perekidFinish = 0.25;
 
     boolean protectorIteration = false;
@@ -47,12 +47,12 @@ public class Grabber implements RobotModule{
 
         pixelSensorLeft = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageLeft");
         pixelSensorRight = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageRight");
-        progibServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServo");
-        pixelMotor = (DcMotorEx) this.robot.linearOpMode.hardwareMap.dcMotor.get("pixelMotor");
+        progibServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoLift");
+        pixelMotor = (DcMotorEx) this.robot.linearOpMode.hardwareMap.dcMotor.get("intakeMotor");
         pixelGrabServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
     }
 
-    public void powerPixelMotor(double power){
+    public void powerPixelMotor(double power) {
         pixelMotor.setPower(power * 0.5);
     }
 
@@ -60,18 +60,23 @@ public class Grabber implements RobotModule{
     public boolean isAtPosition() {
         return true;
     }
-    public void graberToClose(){
+
+    public void graberToClose() {
         positionGrabber = false;
     }
 
-    public void graberToOpen(){
+    public void graberToOpen() {
         positionGrabber = true;
     }
-    public void update(){
+
+    public void update() {
+        /*
+        pixelLeftSensorVoltage = pixelSensorLeft.getVoltage();
+        pixelRightSensorVoltage = pixelSensorRight.getVoltage();
         double motorCurrent = pixelMotor.getCurrent(AMPS);
 
         switch (grabberMode) {
-            case FULLPROTECTION:{
+            case FULLPROTECTION: {
 
                 if (moveTimer.time() < 0.5) {
                     moveTimer.reset();
@@ -96,13 +101,11 @@ public class Grabber implements RobotModule{
                     robot.lift.liftPos = !robot.lift.liftPos;
                 } else
                     pixelMotor.setPower(0);
-                    robot.linearOpMode.telemetry.addData("motorCurrent", motorCurrent);
                 if ((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
                     pixelMotor.setPower(targetPower);
                     robot.lift.liftPos = !robot.lift.liftPos;
                 } else
                     pixelMotor.setPower(0);
-                robot.linearOpMode.telemetry.addData("motorCurrent", motorCurrent);
 
             }
             case MANUALMODE: {
@@ -110,24 +113,25 @@ public class Grabber implements RobotModule{
             }
 
 
-            switch (pixelsPosition){
-                case AUTONOM:{
-                    if(pixelRightSensorVoltage > 1 && pixelLeftSensorVoltage > 1 && positionGrabber) {
+            switch (pixelsPosition) {
+                case AUTONOM: {
+                    if (pixelRightSensorVoltage > 1 && pixelLeftSensorVoltage > 1 && positionGrabber) {
                         closeGraber();
                     }
-                    if(!positionGrabber){
+                    if (!positionGrabber) {
                         openGraber();
                     }
                 }
-                case MANUAL:{
-                     if(positionGrabber)
-                         closeGraber();
-                     if(!positionGrabber)
-                         openGraber();
+                case MANUAL: {
+                    if (positionGrabber)
+                        closeGraber();
+                    if (!positionGrabber)
+                        openGraber();
                 }
             }
 
         }
+         */
     }
 
     public void enable(boolean motorPowerControll) {
@@ -138,58 +142,73 @@ public class Grabber implements RobotModule{
 
     }
 
-    public void openGraber(){
-        pixelGrabServo.setPosition(grabberClose);
-    }
-    public void closeGraber(){
+    public void openGraber() {
         pixelGrabServo.setPosition(grabberOpen);
     }
-   public void positionGrabber(){
-        if(grabber == 0){
-            openGraber();
-            grabber = 1;
-        }
-        else{
-            if(grabber == 1){
-               closeGraber();
-                grabber = 0;
-            }
-        }
+
+    public void closeGraber() {
+        pixelGrabServo.setPosition(grabberClose);
     }
-    public void perekidStart(){
+
+
+    public void perekidLiftSafe() {
+        robot.grabber.progibServo.setPosition(perekidStartDown);
+    }
+
+
+    public void perekidStart() {
         robot.grabber.progibServo.setPosition(perekidStart);
     }
-    public void perekidFinish(){
+
+    public void perekidFinish() {
         robot.grabber.progibServo.setPosition(perekidFinish);
     }
-    public void positionPerekid(){
-        if(perekid == 0){
+
+    public enum PerekidPosition {
+        START, FINISH, LIFT_SAFE
+
+    }
+
+    public void setPerekidPosition(PerekidPosition perekidPosition){
+        switch (perekidPosition){
+            case START:
+                perekidStart();
+                break;
+            case FINISH:
+                perekidFinish();
+                break;
+            case LIFT_SAFE:
+                perekidLiftSafe();
+                break;
+        }
+    }
+
+    public void positionPerekid() {
+        if (perekid == 0) {
             perekidStart();
             perekid = 1;
-        }
-        else {
+        } else {
             if (perekid == 1) {
-               perekidFinish();
+                perekidFinish();
                 perekid = 0;
             }
         }
     }
 
 
-
-
-    public boolean pixelЕxamination(){
-        if (pixelLeftSensorVoltage > 1 && pixelRightSensorVoltage > 1){
+    public boolean pixelЕxamination() {
+        if (pixelLeftSensorVoltage > 1 && pixelRightSensorVoltage > 1) {
             pixelIn = true;
-        }
-        else {
+        } else {
             pixelIn = false;
         }
         return pixelIn;
     }
+
     public enum GrabberMode {
         FULLPROTECTION, NOTFULLPROTECTION, MANUALMODE;
     }
+
     public enum PixelsPosition {
         AUTONOM, MANUAL;
     }
