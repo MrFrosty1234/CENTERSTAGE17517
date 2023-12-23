@@ -109,76 +109,10 @@ public class AutonomBaseClass extends LinearOpMode{
         return redRight;
     }
 
-    Runnable[] blueRight =  {
-            () -> {
-                robot.driveTrain.moveField(60, -60, 0);
-            },
-            /*    if (positionEllment == 1)
-                    robot.driveTrain.moveField(60, -60, 0);
-                if (positionEllment == 2)
-                    robot.driveTrain.moveField(60, 0, 0);
-                if (positionEllment == 3)
-                    robot.driveTrain.moveField(60, 60, 0);
-            },
-            () -> {
-                robot.driveTrain.moveField(60, 60, 90);
-            },
-            () -> {
-                robot.driveTrain.moveField(60, 200, 90);
-
-            },
-            () -> {
-                robot.driveTrain.moveField(60, 300, 90);
-            },
-            () -> {
-                robot.driveTrain.moveField(30, 300, 90);
-            },
-            () -> {
-                robot.driveTrain.moveField(30, 350, 90);
-            }
-
-             */
-    };
-    Runnable[] blueLeft = {
-            () -> {
-                robot.driveTrain.moveField(60, -60, 0);
-            },
-    };
-    Runnable[] redRight = {
-            () -> {
-                robot.driveTrain.moveField(60, -60, 0);
-            },
-         /*       if (positionEllment == 1)
-                    robot.driveTrain.moveField(60, -60, 0);
-                if (positionEllment == 2)
-                    robot.driveTrain.moveField(60, 0, 0);
-                if (positionEllment == 3)
-                    robot.driveTrain.moveField(60, 60, 0);
-            },
-           () -> {
-                robot.driveTrain.moveField(60, 60, 90);
-            },
-            () -> {
-                robot.driveTrain.moveField(60, 200, 90);
-
-            },
-            () -> {
-                robot.driveTrain.moveField(60, 300, 90);
-            },
-            () -> {
-                robot.driveTrain.moveField(30, 300, 90);
-            },
-            () -> {
-                robot.driveTrain.moveField(30, 350, 90);
-
-            }
-          */
-    };
-    Runnable[] redLeft = {
-            () -> {
-                robot.driveTrain.moveField(60, -60, 0);
-            },
-    };
+    Runnable[] blueRight =  {};
+    Runnable[] blueLeft = {};
+    Runnable[] redRight = {};
+    Runnable[] redLeft = {};
 
     @Override
     public void runOpMode(){
