@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
@@ -23,7 +24,7 @@ public class Intake {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.130, PixelCenterOpen = 0;//0.4
+    public static double pixelSensorvoltage = 0.125, PixelCenterOpen = 0;//0.4
     boolean inableIntake;
     private final DcMotor _lighting;
 
@@ -38,18 +39,30 @@ public class Intake {
     }
 
     public static double servoperevorotnazad = 0.96;
-    public static final double servoperevorot = 0.32;
+    public static final double servoperevorot = 0.35;
 
     public void setperevorotik() {
         if (_collector.Lift.isUp()) {
             servopere.setPosition(servoperevorot);
-        } else {
+        }else if(_collector.Lift.isAverage())
+        {
+            servopere.setPosition(servoperevorot);
+            _normalCoup.reset();
+        }
+        else {
                 servopere.setPosition(servoperevorotnazad);
         }
     }
 
+    public boolean IsCoupNormal(){
+        return _normalCoup.milliseconds() > AverageTime;
+    }
+
+    public static long AverageTime = 830;
+
     public static double servoGripperreturn = 0.4;
-    public static double servoGripper = 0.15;
+    public static double servoGripper = 0.13;
+    private ElapsedTime _normalCoup = new ElapsedTime(AverageTime);
 
     private boolean gripped = false;
 
@@ -60,10 +73,11 @@ public class Intake {
             gripper.setPosition(servoGripperreturn);
         }
         gripped = grip;
+        isPixelLocated = grip;
     }
 
-    public static double servoClamp = 0.8;
-    public static double servoClampreturn = 0.5;//0.5
+    public static double servoClamp = 0.9;
+    public static double servoClampreturn = 0.42 ;//0.5
 
     public void setClamp(boolean clampIk) {
         if (clampIk) {
@@ -75,16 +89,16 @@ public class Intake {
 
 
     ElapsedTime pixelTimer = new ElapsedTime();
-    double pixelTimeconst = 500;
+    double pixelTimeconst = 1000;
 
     public boolean pixelDetected() {
-      if(pixelSensor1.getVoltage() >= pixelSensorvoltage )//|| pixelSensor2.getVoltage() >= pixelSensorvoltage)
+      if(pixelSensor2.getVoltage() >= pixelSensorvoltage /*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
            pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
 
     ElapsedTime clampTimer = new ElapsedTime();
-    double clampTimerconst = 1000;
+    double clampTimerconst = 800;
 
     void releaseGripper(){
         setGripper(false);
@@ -108,7 +122,6 @@ public class Intake {
            // if (inableIntake)
                // _collector.Brush.intakePower(true);
 
-            isPixelLocated = false;
             _lighting.setPower(0);
         }
 

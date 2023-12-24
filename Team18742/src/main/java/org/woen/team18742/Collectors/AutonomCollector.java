@@ -13,6 +13,9 @@ import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Config
 public class AutonomCollector extends BaseCollector {
     public static boolean IsAutonomEnable = true;
@@ -21,7 +24,7 @@ public class AutonomCollector extends BaseCollector {
     public Camera Camera;
     private final VisionPortalHandler _visionHandler;
 
-    private Runnable[] _route;
+    private List<Runnable> _route = new ArrayList<>();
 
     private int _currentRouteAction = 0;
     private boolean _isPixelWait = false;
@@ -49,31 +52,24 @@ public class AutonomCollector extends BaseCollector {
         Auto.Start(_startPosition.Position);
         Odometry.Start(_startPosition.Position);
 
-        Intake.PixelCenterGrip(true);
+        //Intake.PixelCenterGrip(true);
 
         switch (Camera.GetPosition()) {
             case FORWARD: {
-                _route = new Runnable[]{
-                        () -> Auto.TurnGyro(0)
-                };
+                _route.add(()-> Auto.PIDMove(new Vector2(-54, 0)));
 
                 break;
             }
 
             case RIGHT: {
-                _route = new Runnable[]{
-                        () -> Auto.PIDMove(new Vector2(80, 5)),
-                        () -> Auto.PIDMove(new Vector2(-10, 60))
-                };
+                _route.add(()->Auto.PIDMove(new Vector2(-54, 30)));
 
                 break;
             }
 
             default: {
-                _route = new Runnable[]{
-                        () -> Auto.PIDMove(new Vector2(60, 0)),
-                        () -> Auto.PIDMove(new Vector2(-10, 60))
-                };
+                _route.add(()->Auto.PIDMove(new Vector2(-54, -30)));
+
                 break;
             }
         }
@@ -90,9 +86,9 @@ public class AutonomCollector extends BaseCollector {
             Auto.Update();
 
             if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
-                if (_currentRouteAction < _route.length) {
+                if (_currentRouteAction < _route.size()) {
                     _isPixelWait = false;
-                    _route[_currentRouteAction].run();
+                    _route.get(_currentRouteAction).run();
 
                     _currentRouteAction++;
                 }

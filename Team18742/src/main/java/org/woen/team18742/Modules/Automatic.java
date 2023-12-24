@@ -12,9 +12,9 @@ import org.woen.team18742.Tools.Vector2;
 public class Automatic {
     private final AutonomCollector _collector;
     private final Odometry _odometry;
-    public static double PidForwardP = 0.2, PidForwardI = 0, PidForwardD = 0;
-    public static double PidSideP = 0.2, PidSideI = 0, PidSideD = 0;
-    public static double PidRotateP = 0.02, PidRotateI = 0, PidRotateD = 0;
+    public static double PidForwardP = 0.2, PidForwardI = 0, PidForwardD = 2.3;
+    public static double PidSideP = 0.2, PidSideI = 0, PidSideD = 2.3;
+    public static double PidRotateP = 0.02, PidRotateI = 0, PidRotateD = 0.03;
 
     public Automatic(AutonomCollector collector) {
         _collector = collector;

@@ -68,9 +68,6 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
-        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
-        Utils.matToBitmap(frame, b);
-        LastFrame.set(b);
         //
 
         cvtColor(frame, frame, COLOR_RGB2HSV);//конвертация в хсв
@@ -90,6 +87,9 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Сжать
         dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Раздуть
 
+
+
+
         Rect boundingRect = boundingRect(frame);//boudingRect рисуем прямоугольник
 
         centerOfRectX = boundingRect.x + boundingRect.width / 2.0;//координаты центра вычисляем
@@ -104,6 +104,10 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
             pos.set(3);
         }
+
+        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(frame, b);
+        LastFrame.set(b);
 
         return frame;
     }
