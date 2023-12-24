@@ -1,17 +1,12 @@
 package org.woen.team17517.Robot;
-
 import com.acmerobotics.dashboard.config.Config;
-
-
 @Config
 public  class PIDMethod {
-
-    public PIDMethod(double kp, double ki, double kd){
-            setCoefficent(kp, ki, kd,0,Double.POSITIVE_INFINITY);
+    public PIDMethod(double kp, double ki, double kd,Double maxI){
+            setCoefficent(kp, ki, kd,0,maxI);
     }
     public PIDMethod(double kp, double ki, double kd, double ks,Double maxI){
         setCoefficent(kp,ki,kd,ks,maxI);
-
     }
     private double kp,kd,ki,ks = 0;
     Double maxI = Double.POSITIVE_INFINITY;
@@ -22,14 +17,12 @@ public  class PIDMethod {
         this.kd = kd;
         this.ks = ks;
         this.maxI = maxI;
-
-
     }
     double timeOld = System.nanoTime();
     Double deltaTime = null;
     double lastWrong = 0;
     private double P = 0;
-    private double D =0;
+    private double D = 0;
     private double I = 0;
     private double C = 0;
     public double getI(){
@@ -38,7 +31,7 @@ public  class PIDMethod {
     public double getP(){return P;}
     public double getD(){return D;}
     public double getC(){return C;}
-    public double PID(double target,double voltage,double enc,double ks) {
+    public double PID(double target,double enc,double voltage) {
         double wrong = target - enc;
         P = kp * wrong;
         if (deltaTime != null) {

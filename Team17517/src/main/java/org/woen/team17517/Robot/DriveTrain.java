@@ -165,6 +165,11 @@ public class DriveTrain{
             double timeNow = moveTimer.seconds();
             moveTime = timeNow;
 
+
+            PidRegulator pidFieldX = new PidRegulator(kPdrive, kIdrive, kDdrive);
+            PidRegulator pidFieldY = new PidRegulator(kPdrive, kIdrive, kDdrive);
+
+
             xError = xTarget - robot.odometry.x;
             yError = yTarget - robot.odometry.y;
             headingError = headingTargetGlobal - robot.odometry.heading;

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 @Config
 public class DriveTrainVelocityControl implements RobotModule{
@@ -154,18 +155,16 @@ public class DriveTrainVelocityControl implements RobotModule{
     }
     private double moveRat(double target)
     {
-        double degreesRat = hEnc;
-        return speedH.PID(target,this.voltage,degreesRat,ksRat);
+        return speedH.PID(target,hEnc,this.voltage);
     }
     private double moveX(double target)
     {
-        double xEncSm = xEnc;//encToSm(xEnc);
-        return speedX.PID(target,this.voltage,xEncSm,ksX);
+
+        return speedX.PID(target,xEnc,this.voltage);
     }
     private double moveY(double target)
     {
-        double yEncSm = yEnc;
-        return speedY.PID(target,this.voltage,yEncSm,ksY);
+        return speedY.PID(target,yEnc,this.voltage);
     }
     public double linearVelocityPercent(double target){
         return smToEnc(maxLinearSpeed)*target;
@@ -190,6 +189,12 @@ public class DriveTrainVelocityControl implements RobotModule{
     public void moveGlobalCord(Vector2D vector, double targetH){
         vector.vectorRat(robot.odometry.heading);
         this.vector.setCord(vector.getX(),vector.getY());
+        this.targetH = targetH;
+    }
+    public void moveGlobalCord(double x, double y, double targetH){
+        Vector2D vectorGot = new Vector2D(x,y);
+        vectorGot.vectorRat(robot.odometry.heading);
+        this.vector.setCord(vectorGot.getX(),vectorGot.getY());
         this.targetH = targetH;
     }
     @Override

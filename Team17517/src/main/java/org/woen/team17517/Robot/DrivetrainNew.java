@@ -10,7 +10,7 @@ public class DrivetrainNew implements RobotModule{
     UltRobot robot;
 
     boolean autoMode = false;
-
+    double voltage ;
     public static double kPX = 1;
     public static double kDX = 0;
     public static double kIX = 0;
@@ -45,9 +45,9 @@ public class DrivetrainNew implements RobotModule{
     public double maxSpeedR = Math.toDegrees(maxSpeedL /trackLength);;
 
 
-    PidRegulator pidX = new PidRegulator(kPX, kIX, kDX, u_maxX);
-    PidRegulator pidY = new PidRegulator(kPY, kIY, kDY, u_maxY);
-    PidRegulator pidH = new PidRegulator(kPH, kIH, kDH, u_maxH);
+    PIDMethod pidX = new PIDMethod(kPX, kIX, kDX, u_maxX);
+    PIDMethod pidY = new PIDMethod(kPY, kIY, kDY, u_maxY);
+    PIDMethod pidH = new PIDMethod(kPH, kIH, kDH, u_maxH);
 
     public void setTarget(double x, double y, double h) {
         targetX = x;
@@ -61,12 +61,17 @@ public class DrivetrainNew implements RobotModule{
 
     public DrivetrainNew(UltRobot robot) {
         this.robot = robot;
+        voltage = 12;
     }
 
      public void update() {
+        voltage = robot.voltageSensorPoint.getVol();
+        pidH.setCoefficent(kPH,kIH,kDH,0,u_maxH);
+        pidX.setCoefficent(kPX,kIX,kDX,0, u_maxX);
+        pidX.setCoefficent(kPY,kIY,kDY,0, u_maxY);
         if (autoMode) {
-            double x = robot.odometry.y ;
-            double y = robot.odometry.x;
+            double x = robot.odometry.x ;
+            double y = robot.odometry.y;
             double h = robot.odometry.heading;
             errX = targetX - x;
             errY = targetY - y;
@@ -79,9 +84,9 @@ public class DrivetrainNew implements RobotModule{
             while (errH < -180) {
                 errH = errH + 360;
             }
-            double H = pidH.update(errH);
-            double X = pidX.update(errX);
-            double Y = pidY.update(errY);
+            double H = pidH.PID(targetH,h,voltage);
+            double X = pidX.PID(targetX,x,voltage);
+            double Y = pidY.PID(targetY,y,voltage);
 
 
             if (abs(H)> maxSpeedR){
@@ -95,18 +100,17 @@ public class DrivetrainNew implements RobotModule{
 
 
 
-            robot.driveTrainVelocityControl.moveRobotCord(X, Y, H);
+            robot.driveTrainVelocityControl.moveGlobalCord(Y, -X, H);
         }
     }
     public void speedcontrol(){
-
     }
 
 
      public boolean isAtPosition() {
-       // if((errX < minX) && (errY < minY) && (errH < minH)){
-            return true;
-       // }
-       // return false;
+       if((errX < minX) && (errY < minY) && (errH < minH)){
+           return true;
+       }
+        return false;
     }
 }
