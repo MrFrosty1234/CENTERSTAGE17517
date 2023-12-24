@@ -172,7 +172,7 @@ public class DriveTrainVelocityControl implements RobotModule{
     }
     public double angularVelocityPercent(double target)
     {
-        return target*smToDegrees(encToSm(maxAngularSpeed));
+        return target*smToDegrees(maxAngularSpeed);
     }
     public double getMetersPerSecondSpeed(double target)
     {
