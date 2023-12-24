@@ -3,8 +3,10 @@ package org.woen.team18742.Modules.Lift;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.PID;
@@ -22,8 +24,11 @@ public class Lift {
 
     private final PID _liftPid = new PID(PCoef, ICoef, DCoef, 1, 1);
     private double _targetPoseDouble = 0;
+    private BaseCollector _collector;
 
     public Lift(BaseCollector collector) {
+        _collector = collector;
+
         _ending1 = Devices.Ending1;
         _ending2 = Devices.Ending2;
 
@@ -48,8 +53,11 @@ public class Lift {
 
         _endingUpState = _ending1.getState();
         _endingDownState = _ending2.getState();
-        
-        _liftMotor.setPower(Math.max(_liftPid.Update(_targetPoseDouble - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
+
+        if(_collector.Intake.IsCoupNormal())
+            _liftMotor.setPower(Math.max(_liftPid.Update(_targetPoseDouble - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
+        else
+            _liftMotor.setPower(Math.max(_liftPid.Update(LiftPose.AVERAGE.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
 
         ToolTelemetry.AddLine("Lift end1 = " + _endingUpState + " end = " + _endingDownState);
 
@@ -58,8 +66,8 @@ public class Lift {
     }
 
     public boolean isATarget() {
-        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState);
-        //return Math.abs(_liftPid.Err) < 30;
+        return Math.abs(_liftPid.Err) < 30;
+        //return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || (_liftPose == LiftPose.AVERAGE && Math.abs(_liftPid.Err) < 30);
     }
 
     public boolean isDown(){
@@ -68,7 +76,7 @@ public class Lift {
     public boolean isUp(){
         return _liftPose == LiftPose.UP && isATarget();
     }
-    public boolean isAverage(){return  _liftPose == LiftPose.AVERAGE && isATarget();}
+    public boolean isAverage(){return _liftPose == LiftPose.AVERAGE && isATarget();}
 
     public void SetLiftPose(LiftPose pose) {
         _targetPoseDouble = pose.Pose;

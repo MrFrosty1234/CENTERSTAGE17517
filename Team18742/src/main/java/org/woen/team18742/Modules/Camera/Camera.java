@@ -6,7 +6,7 @@ import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 
 @Config
 public class Camera {
-    public static boolean IsDebug = true;
+    public static boolean IsDebug = false;
     public static int RobotPos = 2;
     PipeLine pipeLine = new PipeLine();
 

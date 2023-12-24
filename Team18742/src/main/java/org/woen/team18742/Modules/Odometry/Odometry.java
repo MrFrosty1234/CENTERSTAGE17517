@@ -53,7 +53,7 @@ public class Odometry {
             double odometrXLeft = _odometrs.GetOdometrXLeft(), odometrY = _odometrs.GetOdometrY(), odometrXRight = _odometrs.GetOdometrXRigth();
 
             deltaX = (odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
-            deltaY = (odometrY - _oldOdometrY) - OdometrsHandler.RadiusOdometr * deltaRotate;
+            deltaY = (odometrY - _oldOdometrY) - OdometrsHandler.RadiusOdometrY * deltaRotate;
 
             _oldOdometrXLeft = odometrXLeft;
             _oldOdometrXRight = odometrXRight;

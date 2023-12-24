@@ -35,7 +35,7 @@ public class Manual {
         boolean A = _collector.Robot.gamepad1.square;
         boolean liftUp = _collector.Robot.gamepad1.dpad_up;
         boolean liftDown = _collector.Robot.gamepad1.dpad_down;
-        boolean brushRevers = _collector.Robot.gamepad1.dpad_left;
+        boolean brushRevers = _collector.Robot.gamepad1.circle;
         boolean grip = _collector.Robot.gamepad1.triangle;
         boolean brush = _collector.Robot.gamepad1.cross;
         boolean zajat = _collector.Robot.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
@@ -81,13 +81,13 @@ public class Manual {
         else
             _plane.DeLaunch();
 
-        if (liftUp)
+        if (liftUp && _collector.Intake.isPixelLocated)
             _collector.Lift.SetLiftPose(LiftPose.UP);
 
         if(liftDown)
             _collector.Lift.SetLiftPose(LiftPose.DOWN);
 
-        if(average)
+        if(average && _collector.Intake.isPixelLocated)
             _collector.Lift.SetLiftPose(LiftPose.AVERAGE);
 
         _brushOld = brush;
