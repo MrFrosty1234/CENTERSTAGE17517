@@ -9,7 +9,7 @@ import org.woen.team18742.Tools.Devices;
 
 public class OdometrsHandler {
     private final DcMotor _odometrY, _odometrXLeft, _odometrXRight;
-    public static double RadiusOdometr = 5; //random number
+    public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
     private final double _diametrOdometr = 4.8, _encoderconstatOdometr = 1440;
 
     public OdometrsHandler(BaseCollector collector){
