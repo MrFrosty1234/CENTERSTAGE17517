@@ -25,6 +25,8 @@ public class Lift implements RobotModule {
     private final PidRegulator PIDZL1 = new PidRegulator(kP, kI, kD);
     public boolean liftPos = true;
 
+    public boolean liftAtTaget = false;
+
     public Lift(UltRobot robot) {
         this.robot = robot;
         liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("liftMotor");
@@ -86,7 +88,7 @@ public class Lift implements RobotModule {
     }
 
     public void update() {
-        if (true)
+        /*if (true)
             return;
         switch (liftMode) {
             case AUTO: {
@@ -108,10 +110,35 @@ public class Lift implements RobotModule {
                 setPower(power);
                 break;
         }
+
+         */
+        double liftPower = 0;
+        double liftGravityPower = 0.1;
+        double liftMovePower = 1;
+
+        if (robot.lift.getTopSwitch())
+            robot.lift.setPositionOffset(Lift.LiftPosition.UP.value - robot.lift.getRawPosition());
+        switch (robot.lift.targetPosition) {
+            case UP:
+                liftAtTaget = robot.lift.getTopSwitch();
+                liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
+                setPower(liftPower);
+                break;
+            case DOWN:
+                liftAtTaget = robot.lift.getPosition() <= Lift.LiftPosition.DOWN.value;
+                liftPower = liftAtTaget ? 0 : -liftMovePower;
+                setPower(liftPower);
+                break;
+            default:
+                liftAtTaget = true;
+                liftPower = 0;
+                setPower(liftPower);
+        }
+
     }
 
     public boolean isAtPosition() {
-        return abs(err1) < 5;
+        return liftAtTaget; //abs(err1) < 5;
     }
 
     public enum LiftMode {

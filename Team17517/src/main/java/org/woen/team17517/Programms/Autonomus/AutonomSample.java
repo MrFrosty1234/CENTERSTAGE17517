@@ -1,36 +1,79 @@
 package org.woen.team17517.Programms.Autonomus;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.woen.team17517.Robot.Lift;
+import org.woen.team17517.Robot.Timer;
+
+@Autonomous
 public class AutonomSample extends AutonomBaseClass {
     @Override
     public Runnable[] getBlueRight() {
         return new Runnable[]{
-                () ->
-                        robot.driveTrain.moveField(60, -60, 0)
-                /*    if (positionEllment == 1)
-                        robot.driveTrain.moveField(60, -60, 0);
-                    if (positionEllment == 2)
-                        robot.driveTrain.moveField(60, 0, 0);
-                    if (positionEllment == 3)
-                        robot.driveTrain.moveField(60, 60, 0);
-                },
-                () -> {
-                    robot.driveTrain.moveField(60, 60, 90);
-                },
-                () -> {
-                    robot.driveTrain.moveField(60, 200, 90);
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 1400, 0),
+                () -> robot.timer.getTimeForTimer(2.3d/1.5d),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 0),
+                () -> robot.timer.getTimeForTimer(0.2),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, -500),
+                () -> robot.timer.getTimeForTimer(2),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 0),
+                ()-> robot.timer.getTimeForTimer(0.2),
+                ()-> robot.driveTrainVelocityControl.moveRobotCord(0, 1500, 0),
+                () -> robot.timer.getTimeForTimer(4400d/1.5d),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 0)
+        };
+        }
 
-                },
-                () -> {
-                    robot.driveTrain.moveField(60, 300, 90);
-                },
-                () -> {
-                    robot.driveTrain.moveField(30, 300, 90);
-                },
-                () -> {
-                    robot.driveTrain.moveField(30, 350, 90);
-                }
 
-                 */
+    @Override
+    public Runnable[] getRedLeft() {
+        return new Runnable[]{
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 1000, 0),
+                () -> robot.timer.getTimeForTimer(2.3),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 0),
+                () -> robot.timer.getTimeForTimer(0.5),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 500),
+                () -> robot.timer.getTimeForTimer(2),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 0),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 1000, 0),
+                () -> robot.timer.getTimeForTimer(4400),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 0)
+        };
+    }
+
+    @Override
+    public Runnable[] getRedRight() {
+        return new Runnable[]{
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 1370, 0),
+                () -> robot.timer.getTimeForTimer(2.2d/1.5d),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 0),
+                () -> robot.timer.getTimeForTimer(0.2),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, -500            *(12/robot.voltageSensorPoint.getVol())),
+                () -> robot.timer.getTimeForTimer(2),
+
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0,-1000,0),
+                () -> robot.timer.getTimeForTimer(5.2),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0,1000,0),
+                () -> robot.timer.getTimeForTimer(0.6),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(1000,0,0),
+                () -> robot.timer.getTimeForTimer(0.4),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(1000,0,0),
+                () -> robot.timer.getTimeForTimer(2),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0,-1000,0),
+                () -> robot.timer.getTimeForTimer(0.5),
+
+
+                () -> robot.lift.targetPosition = Lift.LiftPosition.UP,
+                () -> robot.timer.getTimeForTimer(1.5),
+                () -> robot.grabber.perekidFinish(),
+                () -> robot.grabber.openGraber(),
+                () -> robot.timer.getTimeForTimer(1.5),
+                () -> robot.grabber.perekidStart(),
+                () -> robot.timer.getTimeForTimer(0.5),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0,1000,0),
+                () -> robot.timer.getTimeForTimer(0.2),
+
+
         };
     }
 
@@ -38,47 +81,17 @@ public class AutonomSample extends AutonomBaseClass {
     public Runnable[] getBlueLeft() {
         return new Runnable[]{
                 () ->
-                        robot.driveTrain.moveField(60, -60, 0)
-        };
-    }
-
-    @Override
-    public Runnable[] getRedRight() {
-        return new Runnable[]{
+                        robot.driveTrainVelocityControl.moveRobotCord(0, 1000, 0),
                 () ->
-                        robot.driveTrain.moveField(60, -60, 0)
-                /*       if (positionEllment == 1)
-                           robot.driveTrain.moveField(60, -60, 0);
-                       if (positionEllment == 2)
-                           robot.driveTrain.moveField(60, 0, 0);
-                       if (positionEllment == 3)
-                           robot.driveTrain.moveField(60, 60, 0);
-                   },
-                  () -> {
-                       robot.driveTrain.moveField(60, 60, 90);
-                   },
-                   () -> {
-                       robot.driveTrain.moveField(60, 200, 90);
-
-                   },
-                   () -> {
-                       robot.driveTrain.moveField(60, 300, 90);
-                   },
-                   () -> {
-                       robot.driveTrain.moveField(30, 300, 90);
-                   },
-                   () -> {
-                       robot.driveTrain.moveField(30, 350, 90);
-
-                   }
-                 */
-        };
-    }
-
-    @Override
-    public Runnable[] getRedLeft() {
-        return new Runnable[]{
-                () -> robot.driveTrain.moveField(60, -60, 0)
+                        robot.timer.getTimeForTimer(1200),
+                () ->
+                        robot.driveTrainVelocityControl.moveRobotCord(0, 0, 500),
+                () ->
+                        robot.timer.getTimeForTimer(200),
+                () ->
+                        robot.driveTrainVelocityControl.moveRobotCord(0, 1000, 0),
+                () ->
+                        robot.timer.getTimeForTimer(2400)
         };
     }
 }

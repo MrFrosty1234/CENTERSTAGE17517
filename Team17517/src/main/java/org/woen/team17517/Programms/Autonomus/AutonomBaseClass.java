@@ -74,6 +74,9 @@ public class AutonomBaseClass extends LinearOpMode{
             if (rightBumperButton.update(rightBumper)){
                 timeToSleep += 1000;
             }
+            if (rigtTrigerButton.update(rightTriger)){
+                timeToSleep += 5000;
+            }
 
             telemetry.addData("Team",startTeam);
             telemetry.addData("Position",startPosition);
@@ -122,8 +125,12 @@ public class AutonomBaseClass extends LinearOpMode{
         right_front_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_front_drive");
         right_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_back_drive");
 
-        waitForStart();
+        robot.grabber.graberToOpen();
+        robot.timer.getTimeForTimer(1);
+        robot.grabber.graberToClose();
 
+
+        waitForStart();
         switch (startTeam) {
             case BlUE:
                 switch (startPosition){
@@ -144,5 +151,6 @@ public class AutonomBaseClass extends LinearOpMode{
                         break;
                 }
         }
+        robot.allUpdate();
     }
 }

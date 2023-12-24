@@ -46,31 +46,9 @@ public class  TeleOP extends LinearOpMode {
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
 
 
-            double liftPower;
-            double liftGravityPower = 0.1;
-            double liftMovePower = 1;
+
             if (gamepad1.dpad_up) robot.lift.targetPosition = Lift.LiftPosition.UP;
             else if (gamepad1.dpad_down) robot.lift.targetPosition = Lift.LiftPosition.DOWN;
-
-
-            if (robot.lift.getTopSwitch())
-                robot.lift.setPositionOffset(Lift.LiftPosition.UP.value - robot.lift.getRawPosition());
-
-            switch (robot.lift.targetPosition) {
-                case UP:
-                    liftAtTaget = robot.lift.getTopSwitch();
-                    liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
-                    break;
-                case DOWN:
-                    liftAtTaget = robot.lift.getPosition() <= Lift.LiftPosition.DOWN.value;
-                    liftPower = liftAtTaget ? 0 : -liftMovePower;
-                    break;
-                default:
-                    liftPower = 0;
-            }
-            telemetry.addData("t",robot.lift.getTopSwitch());
-            telemetry.update();
-            liftMotor.setPower(liftPower);
 
 
             ///////////////////////
@@ -88,7 +66,7 @@ public class  TeleOP extends LinearOpMode {
             if (gamepad1.b) robot.grabber.openGraber();
 
 
-            if (liftAtTaget) {
+            if (robot.lift.isAtPosition()) {
                 if (robot.lift.targetPosition == Lift.LiftPosition.UP)
                     perekidPosition = Grabber.PerekidPosition.FINISH;
                 else

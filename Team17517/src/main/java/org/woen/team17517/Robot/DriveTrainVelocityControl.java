@@ -25,9 +25,9 @@ public class DriveTrainVelocityControl implements RobotModule{
     public static double kiY =0.000_000_1;
     public static double kpY = 0.0003;
 
-    public static  double maxIY = 0.2;
-    public static  double maxIRat = 0.2;
-    public static  double maxIX = 0.2;
+    public static  double maxIY = 0.01;
+    public static  double maxIRat = 0.01;
+    public static  double maxIX = 0.01;
 
     private PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX,maxIX);
     private PIDMethod speedH = new PIDMethod(kpRat,kiRat,kdRat,ksY,maxIY);

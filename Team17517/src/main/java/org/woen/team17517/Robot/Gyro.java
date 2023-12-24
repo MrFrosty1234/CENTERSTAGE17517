@@ -34,7 +34,7 @@ public class Gyro implements RobotModule{
 
     @Override
     public boolean isAtPosition() {
-        return false;
+        return true;
     }
 
     public void update(){
