@@ -11,7 +11,6 @@ public class Manual {
     private final BaseCollector _collector;
 
     private boolean _brushReversOld = false, _brushOld = false;
-    private boolean ferty = false;
 
     private final Plane _plane;
 
@@ -20,8 +19,6 @@ public class Manual {
 
         _plane = new Plane(_collector.Time);
     }
-
-    boolean oldgrip;
 
     public void Update() {
         _plane.Update();
@@ -41,13 +38,8 @@ public class Manual {
         double railgunopen = _collector.Robot.gamepad1.left_trigger;
         double railgunnoopen = _collector.Robot.gamepad1.right_trigger;
 
-        _plane.BezpolezniRailgunUp(railgunopen * 0.1);
-        _plane.BezpolezniRailgunDown(railgunnoopen * 0.1);
-
-        if(grip && !oldgrip) {
-            ferty = !ferty;
-            _collector.Intake.setGripper(ferty);
-        }
+        _plane.BezpolezniRailgunUp(railgunopen * 0.3);
+        _plane.BezpolezniRailgunDown(railgunnoopen * 0.3);
 
         if(grip)
             _collector.Intake.releaseGripper();
@@ -79,9 +71,6 @@ public class Manual {
             _collector.Lift.SetLiftPose(LiftPose.AVERAGE);
 
         _brushOld = brush;
-
         _brushReversOld = brushRevers;
-
-        oldgrip = grip;
     }
 }
