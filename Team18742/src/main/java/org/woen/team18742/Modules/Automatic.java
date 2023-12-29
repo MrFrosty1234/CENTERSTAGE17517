@@ -12,9 +12,9 @@ import org.woen.team18742.Tools.Vector2;
 public class Automatic {
     private final AutonomCollector _collector;
     private final Odometry _odometry;
-    public static double PidForwardP = 0.2, PidForwardI = 0, PidForwardD = 2.3;
-    public static double PidSideP = 0.2, PidSideI = 0, PidSideD = 2.3;
-    public static double PidRotateP = 0.02, PidRotateI = 0, PidRotateD = 0.03;
+    public static double PidForwardP = 0.1, PidForwardI = 0, PidForwardD = 1;
+    public static double PidSideP = 0.2, PidSideI = 0, PidSideD = 1;
+    public static double PidRotateP = 1, PidRotateI = 0, PidRotateD = 1;
 
     public Automatic(AutonomCollector collector) {
         _collector = collector;
@@ -62,7 +62,7 @@ public class Automatic {
 
         _collector.Driver.SetSpeedWorldCoords(
                 new Vector2(_pidForward.Update(_targetPosition.X - _odometry.Position.X), _pidSide.Update(_targetPosition.Y - _odometry.Position.Y)),
-                _pidTurn.Update(Gyroscope.ChopAngele(_collector.Gyro.GetDegrees() - _turnTarget)));
+                _pidTurn.Update((_collector.Gyro.GetRadians() - _turnTarget)));
 
         ToolTelemetry.AddLine( "Autonom:" + _pidForward.Err + " " + _pidSide.Err + " " + _pidTurn.Err);
         ToolTelemetry.AddVal("turn err", _pidTurn.Err);

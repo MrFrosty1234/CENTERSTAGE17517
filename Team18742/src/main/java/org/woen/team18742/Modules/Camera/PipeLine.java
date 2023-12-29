@@ -6,6 +6,8 @@ import static org.opencv.imgproc.Imgproc.*;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
@@ -22,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+//@Config
 public class PipeLine implements VisionProcessor, CameraStreamSource {
     public AtomicReference<Bitmap> LastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
 
@@ -35,26 +38,24 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     double b2 = 296;
     Mat img_range_red = new Mat();
     Mat img_range_blue = new Mat();
-    public double hRedDown = 4;
-    public double cRedDown = 127.7;
-    public double vRedDowm = 154.4;
-    public double hRedUp = 30;
-    public double cRedUp = 255;
-    public double vRedUp = 255;
+    public static double hRedDown = 4;
+    public static double cRedDown = 127.7;
+    public static double vRedDowm = 154.4;
+    public static double hRedUp = 30;
+    public static double cRedUp = 255;
+    public static double vRedUp = 255;
 
-    public double hBlueDown = 85;
-    public double cBlueDown = 53.8;
-    public double vBlueDowm = 148.8;
-    public double hBlueUp = 100;
-    public double cBlueUp = 255;
-    public double vBlueUp = 255;
-    public boolean alyans = false;
-    double x1Finish = x * 0.3;
-    double x1Start = x * 0;
-    double x2Finish = x * 0.6;
-    double x2Start = x * 0.3;
-    double x3Finish = x;
-    double x3Start = x * 0.6;
+    public static double hBlueDown = 85;
+    public static double cBlueDown = 53.8;
+    public static double vBlueDowm = 148.8;
+    public static double hBlueUp = 98.5;
+    public static double cBlueUp = 255;
+    public static double vBlueUp = 255;
+    public static boolean alyans = false;
+    double x2Finish = x;
+    double x2Start = x * 0.6;
+    double x3Finish = 0.6 * x;
+    double x3Start = 0;
     double centerOfRectX = 0;
     double centerOfRectY = 0;
     public AtomicInteger pos = new AtomicInteger(2);
@@ -87,27 +88,26 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Сжать
         dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Раздуть
 
-
-
+        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(frame, b);
+        LastFrame.set(b);
 
         Rect boundingRect = boundingRect(frame);//boudingRect рисуем прямоугольник
+
+        if(boundingRect == null || boundingRect.area() <= 0)
+            return frame;
 
         centerOfRectX = boundingRect.x + boundingRect.width / 2.0;//координаты центра вычисляем
         centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
 
-        if (centerOfRectX < x1Finish && centerOfRectX > x1Start) {
-            pos.set(1);
-        }
         if (centerOfRectX < x2Finish && centerOfRectX > x2Start) {
             pos.set(2);
         }
-        if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
+        else if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
             pos.set(3);
         }
-
-        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
-        Utils.matToBitmap(frame, b);
-        LastFrame.set(b);
+        else
+            pos.set(1);
 
         return frame;
     }

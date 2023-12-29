@@ -3,6 +3,7 @@ package org.woen.team18742.Collectors;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Modules.Automatic;
@@ -29,7 +30,7 @@ public class AutonomCollector extends BaseCollector {
     private int _currentRouteAction = 0;
     private boolean _isPixelWait = false;
 
-    private StartRobotPosition _startPosition = StartRobotPosition.BLUE_BACK;
+    private StartRobotPosition _startPosition = StartRobotPosition.RED_BACK;
 
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
@@ -57,18 +58,23 @@ public class AutonomCollector extends BaseCollector {
         switch (Camera.GetPosition()) {
             case FORWARD: {
                 _route.add(()-> Auto.PIDMove(new Vector2(-54, 0)));
+                /*_route.add(()-> Auto.PIDMove(new Vector2(48, 0)));
+                _route.add(()-> Auto.PIDMove(new Vector2(45, 0), Math.toRadians(_startPosition == StartRobotPosition.RED_BACK ? 90 : -90)));
+                _route.add(()->Auto.PIDMove(new Vector2(0, _startPosition == StartRobotPosition.RED_BACK ? 215 : -215)));
+                _route.add(()->Auto.TurnGyro(Math.toRadians(0)));
+                _route.add(()->Auto.PIDMove(new Vector2(-80, 0)));*/
 
                 break;
             }
 
             case RIGHT: {
-                _route.add(()->Auto.PIDMove(new Vector2(-54, 30)));
+                _route.add(()-> Auto.PIDMove(new Vector2(-45, 20)));
 
                 break;
             }
 
             default: {
-                _route.add(()->Auto.PIDMove(new Vector2(-54, -30)));
+                _route.add(()-> Auto.PIDMove(new Vector2(-45, -20)));
 
                 break;
             }

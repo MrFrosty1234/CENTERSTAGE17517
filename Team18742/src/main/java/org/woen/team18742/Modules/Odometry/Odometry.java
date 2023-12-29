@@ -85,13 +85,13 @@ public class Odometry {
 
         _CVOdometry.Update();
 
-        if(!_CVOdometry.IsZero) {
+        /*if(!_CVOdometry.IsZero) {
             //X += (_CVOdometry.X - X) * (deltaTime / (XCoef + deltaTime));
             //Y += (_CVOdometry.Y - Y) * (deltaTime / (YCoef + deltaTime));
 
             Position.X = _filterX.Update(Position.X, _CVOdometry.Position.X);
             Position.Y = _filterY.Update(Position.Y, _CVOdometry.Position.Y);
-        }
+        }*/
 
         ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
         ToolTelemetry.AddLine("OdometryX :" + Position);

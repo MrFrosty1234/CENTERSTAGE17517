@@ -20,17 +20,17 @@ public class Autonom extends LinearOpMode {
 
         resetRuntime();
 
-        _collector.Driver.Stop();
+        /*_collector.Driver.Stop();
         _collector.Driver.DriveDirection(new Vector2(0.5,0), 0);
         sleep(1700);
         _collector.Driver.DriveDirection(new Vector2(-0.2,0),0);
         sleep(1000);
-        _collector.Driver.Stop();
+        _collector.Driver.Stop();*/
 
         _collector.Start();
 
         while (opModeIsActive()) {
-            //_collector.Update();
+            _collector.Update();
         }
 
         _collector.Stop();
