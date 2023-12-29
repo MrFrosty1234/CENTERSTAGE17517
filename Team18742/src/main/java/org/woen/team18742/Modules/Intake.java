@@ -106,7 +106,9 @@ public class Intake {
 
     public boolean isPixelLocated = false;
 
-    private ElapsedTime _brushReversTime = new ElapsedTime();
+    private ElapsedTime _brushReversTime = new ElapsedTime(ReversTime);
+
+    public static double ReversTime = 2;
 
     public void Update() {
         if (pixelDetected()) {
@@ -120,7 +122,7 @@ public class Intake {
         }
 
         if (isPixelLocated) {
-            if (_brushReversTime.seconds() < 2 && _collector.Lift.isDown())
+            if (_brushReversTime.seconds() < ReversTime && _collector.Lift.isDown())
                 _collector.Brush.Revers();
             else
                 _collector.Brush.Stop();
