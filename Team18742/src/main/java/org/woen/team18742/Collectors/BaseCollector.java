@@ -58,6 +58,7 @@ public class BaseCollector {
         Lift.Update();
         Gyro.Update();
         Intake.Update();
+        Brush.Update();
 
         ToolTelemetry.Update();
     }

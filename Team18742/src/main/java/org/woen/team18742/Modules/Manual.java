@@ -52,23 +52,17 @@ public class Manual {
         if(grip)
             _collector.Intake.releaseGripper();
 
-        oldgrip = grip;
-
-        if(_collector.Lift.isDown()){
-            if (brush && !_brushOld) {
-                if(_collector.Brush.IsIntake())
-                    _collector.Brush.Stop();
-                else
-                    _collector.Brush.IntakePowerWithDefense();
-            } else if(brushRevers && !_brushReversOld){
-                if(_collector.Brush.IsRevers())
-                    _collector.Brush.Stop();
-                else
-                    _collector.Brush.Revers();
-            }
+        if (brush && !_brushOld) {
+            if(_collector.Brush.IsIntake())
+                _collector.Brush.Stop();
+            else
+                _collector.Brush.IntakePowerWithDefense();
+        } else if(brushRevers && !_brushReversOld){
+            if(_collector.Brush.IsRevers())
+                _collector.Brush.Stop();
+            else
+                _collector.Brush.Revers();
         }
-        else
-            _collector.Brush.Stop();
 
         if (A)
             _plane.Launch(zajat);
@@ -87,5 +81,7 @@ public class Manual {
         _brushOld = brush;
 
         _brushReversOld = brushRevers;
+
+        oldgrip = grip;
     }
 }

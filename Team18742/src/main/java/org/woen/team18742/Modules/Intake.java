@@ -122,7 +122,7 @@ public class Intake {
         }
 
         if (isPixelLocated) {
-            if (_brushReversTime.milliseconds() < ReversTime && _collector.Lift.isDown())
+            if (_brushReversTime.milliseconds() < ReversTime)
                 _collector.Brush.Revers();
             else
                 _collector.Brush.Stop();

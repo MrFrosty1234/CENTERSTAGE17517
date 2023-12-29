@@ -20,9 +20,14 @@ public class Brush {
 
     private boolean _isReversed = false, _isIntake = false;
 
-    ElapsedTime elapsedTime = new ElapsedTime();
+    private ElapsedTime elapsedTime = new ElapsedTime();
+
+    private BaseCollector _collector;
+
     public Brush(BaseCollector collector){
         brushMotor = Devices.BrushMotor;
+
+        _collector = collector;
 
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
@@ -49,6 +54,10 @@ public class Brush {
     }
 
     public void IntakePowerWithDefense() {//функция для щёток с зашитой от зажёвывания
+
+        if(!_collector.Lift.isDown())
+            return;
+
         _isReversed = false;
         _isIntake = true;
         brushMotor.setPower(0);
@@ -57,6 +66,9 @@ public class Brush {
     }
 
     public void Revers(){
+        if(!_collector.Lift.isDown())
+            return;
+
         intakePowerWithDefense(false, 1);
         _isIntake = false;
         brushMotor.setPower(-1);
@@ -79,5 +91,10 @@ public class Brush {
 
     public boolean IsStop(){
         return !_isIntake && !_isReversed;
+    }
+
+    public void Update(){
+        if(!_collector.Lift.isDown())
+            Stop();
     }
 }
