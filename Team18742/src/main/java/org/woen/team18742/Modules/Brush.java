@@ -18,7 +18,7 @@ public class Brush {
     public static double timesxz = 1500;
     public static double times1 = 3000;
 
-    double speed;
+    private boolean _isReversed = false, _isIntake = false;
 
     ElapsedTime elapsedTime = new ElapsedTime();
     public Brush(BaseCollector collector){
@@ -27,7 +27,7 @@ public class Brush {
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
+    private void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
         if (brush1) {
             if (brushMotor.getCurrent(CurrentUnit.AMPS) <= getvolteges && flagdefense) {
                 elapsedTime.reset();
@@ -48,24 +48,36 @@ public class Brush {
         }
     }
 
-    public void intakePowerWithDefense(boolean brush1) {//функция для щёток с зашитой от зажёвывания
-        double speed = 1.00;
-        intakePowerWithDefense(brush1, speed);
+    public void IntakePowerWithDefense() {//функция для щёток с зашитой от зажёвывания
+        _isReversed = false;
+        _isIntake = true;
+        brushMotor.setPower(0);
 
+        intakePowerWithDefense(true, 1);
     }
 
-    public void reversbrush(int speed){
-        brushMotor.setPower(speed);
-
+    public void Revers(){
+        intakePowerWithDefense(false, 1);
+        _isIntake = false;
+        brushMotor.setPower(-1);
+        _isReversed = true;
     }
 
-    public void intakePower(boolean brush) {
-        if (brush) {
-            speed = 1;
-            brushMotor.setPower(speed);
-        } else {
-            speed = 0;
-            brushMotor.setPower(speed);
-        }
+    public void Stop(){
+        _isIntake = false;
+        _isReversed = false;
+        intakePowerWithDefense(false, 1);
+    }
+
+    public boolean IsRevers(){
+        return _isReversed;
+    }
+
+    public boolean IsIntake(){
+        return _isIntake;
+    }
+
+    public boolean IsStop(){
+        return !_isIntake && !_isReversed;
     }
 }

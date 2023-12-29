@@ -23,7 +23,6 @@ public class Lift {
     public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
 
     private final PID _liftPid = new PID(PCoef, ICoef, DCoef, 1, 1);
-    private double _targetPoseDouble = 0;
     private BaseCollector _collector;
 
     public Lift(BaseCollector collector) {
@@ -54,10 +53,10 @@ public class Lift {
         _endingUpState = _ending1.getState();
         _endingDownState = _ending2.getState();
 
-        if(_collector.Intake.IsCoupNormal())
-            _liftMotor.setPower(Math.max(_liftPid.Update(_targetPoseDouble - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
-        else
+        if(!_collector.Intake.IsCoupNormal() && _liftPose == LiftPose.DOWN)
             _liftMotor.setPower(Math.max(_liftPid.Update(LiftPose.AVERAGE.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
+        else
+            _liftMotor.setPower(Math.max(_liftPid.Update(_liftPose.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
 
         ToolTelemetry.AddLine("Lift end1 = " + _endingUpState + " end = " + _endingDownState);
 
@@ -79,7 +78,6 @@ public class Lift {
     public boolean isAverage(){return _liftPose == LiftPose.AVERAGE && isATarget();}
 
     public void SetLiftPose(LiftPose pose) {
-        _targetPoseDouble = pose.Pose;
         _liftPose = pose;
     }
 

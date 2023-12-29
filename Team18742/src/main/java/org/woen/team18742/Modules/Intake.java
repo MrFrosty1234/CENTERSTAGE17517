@@ -25,7 +25,6 @@ public class Intake {
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
     public static double pixelSensorvoltage = 0.125, PixelCenterOpen = 0;//0.4
-    boolean inableIntake;
     private final DcMotor _lighting;
 
     public Intake(BaseCollector collector) {
@@ -44,17 +43,15 @@ public class Intake {
     public void setperevorotik() {
         if (_collector.Lift.isUp()) {
             servopere.setPosition(servoperevorot);
-        }else if(_collector.Lift.isAverage())
-        {
+        } else if (_collector.Lift.isAverage()) {
             servopere.setPosition(servoperevorot);
             _normalCoup.reset();
-        }
-        else {
-                servopere.setPosition(servoperevorotnazad);
+        } else {
+            servopere.setPosition(servoperevorotnazad);
         }
     }
 
-    public boolean IsCoupNormal(){
+    public boolean IsCoupNormal() {
         return _normalCoup.milliseconds() > AverageTime;
     }
 
@@ -74,10 +71,12 @@ public class Intake {
         }
         gripped = grip;
         isPixelLocated = grip;
+
+        _lighting.setPower(grip ? 1 : 0);
     }
 
     public static double servoClamp = 0.9;
-    public static double servoClampreturn = 0.42 ;//0.5
+    public static double servoClampreturn = 0.42;//0.5
 
     public void setClamp(boolean clampIk) {
         if (clampIk) {
@@ -92,37 +91,39 @@ public class Intake {
     double pixelTimeconst = 1000;
 
     public boolean pixelDetected() {
-      if(pixelSensor2.getVoltage() >= pixelSensorvoltage /*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
-           pixelTimer.reset();
+        if (pixelSensor2.getVoltage() >= pixelSensorvoltage /*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
+            pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
 
     ElapsedTime clampTimer = new ElapsedTime();
     double clampTimerconst = 800;
 
-    void releaseGripper(){
+    void releaseGripper() {
         setGripper(false);
         clampTimer.reset();
     }
 
     public boolean isPixelLocated = false;
 
+    private ElapsedTime _brushReversTime = new ElapsedTime();
+
     public void Update() {
         if (pixelDetected()) {
             setGripper(true);
             setClamp(clampTimer.milliseconds() < clampTimerconst && _collector.Lift.isDown());
-           // _collector.Brush.intakePower(false);
 
-            isPixelLocated = true;
-
-            _lighting.setPower(1);
+            _brushReversTime.reset();
         } else {
             clampTimer.reset();
             setClamp(!gripped && _collector.Lift.isDown());
-           // if (inableIntake)
-               // _collector.Brush.intakePower(true);
+        }
 
-            _lighting.setPower(0);
+        if (isPixelLocated) {
+            if (_brushReversTime.seconds() < 2 && _collector.Lift.isDown())
+                _collector.Brush.Revers();
+            else
+                _collector.Brush.Stop();
         }
 
         setperevorotik();
@@ -131,9 +132,7 @@ public class Intake {
         ToolTelemetry.AddLine(pixelDetected() + "");
     }
 
-    public void PixelCenterGrip(boolean gripped){
+    public void PixelCenterGrip ( boolean gripped){
         gripper.setPosition(gripped ? PixelCenterOpen : servoGripperreturn);
     }
 }
-
-

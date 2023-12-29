@@ -10,9 +10,7 @@ import org.woen.team18742.Tools.Vector2;
 public class Manual {
     private final BaseCollector _collector;
 
-    private boolean _isBrushOn = false, _brushReversOld = false;
-    private boolean _brushReverseOn = false;
-    private boolean _brushOld = false;
+    private boolean _brushReversOld = false, _brushOld = false;
     private boolean ferty = false;
 
     private final Plane _plane;
@@ -58,23 +56,19 @@ public class Manual {
 
         if(_collector.Lift.isDown()){
             if (brush && !_brushOld) {
-                _brushReverseOn = false;
-                _isBrushOn = !_isBrushOn;
-                _collector.Brush.intakePower(_isBrushOn);
+                if(_collector.Brush.IsIntake())
+                    _collector.Brush.Stop();
+                else
+                    _collector.Brush.IntakePowerWithDefense();
             } else if(brushRevers && !_brushReversOld){
-                _isBrushOn = false;
-                _collector.Brush.intakePower(_isBrushOn);
-                _brushReverseOn = !_brushReverseOn;
-                _collector.Brush.reversbrush(_brushReverseOn ? -1 : 0);
+                if(_collector.Brush.IsRevers())
+                    _collector.Brush.Stop();
+                else
+                    _collector.Brush.Revers();
             }
         }
         else
-        {
-            _collector.Brush.reversbrush(0);
-            _isBrushOn = false;
-            _brushReverseOn = false;
-            _collector.Brush.intakePower(_isBrushOn);
-        }
+            _collector.Brush.Stop();
 
         if (A)
             _plane.Launch(zajat);
