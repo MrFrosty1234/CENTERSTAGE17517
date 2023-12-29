@@ -12,6 +12,8 @@ public class Configs {
         public static boolean IsCachinger = true;
 
         public static boolean IsCameraDebug = false;
+
+        public static boolean TelemetryOn = true;
     }
 
     @Config

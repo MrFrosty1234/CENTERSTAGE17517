@@ -17,6 +17,9 @@ public class ToolTelemetry {
     private static TelemetryPacket _packet = new TelemetryPacket();
 
     public static void Update(){
+        if(!Configs.GeneralSettings.TelemetryOn)
+            return;
+
         _telemetry.update();
         FtcDashboard ftcDashboard = FtcDashboard.getInstance();
 
@@ -26,19 +29,21 @@ public class ToolTelemetry {
     }
 
     public static void DrawCircle(Vector2 pos, double radius, String color){
-        _packet.fieldOverlay().fillCircle(pos.X,pos.Y,radius);
+        if(Configs.GeneralSettings.TelemetryOn)
+            _packet.fieldOverlay().fillCircle(pos.X,pos.Y,radius);
     }
 
     public static void AddLine(String str) {
-        _telemetry.addLine(str);
-        _packet.addLine(str);
+        if(Configs.GeneralSettings.TelemetryOn) {
+            _telemetry.addLine(str);
+            _packet.addLine(str);
+        }
     }
 
     public static void AddVal(String name, Object val) {
-        _telemetry.addData(name, val);
-        _packet.put(name, val);
-    }
-    public static void AddDashboardValue(String name, Object value){
-        _telemetry.addData(name, value);
+        if(Configs.GeneralSettings.TelemetryOn) {
+            _telemetry.addData(name, val);
+            _packet.put(name, val);
+        }
     }
 }

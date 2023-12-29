@@ -13,6 +13,7 @@ public class EnableCompetitions extends LinearOpMode {
         Configs.GeneralSettings.IsAutonomEnable = true;
         Configs.GeneralSettings.IsCachinger = true;
         Configs.GeneralSettings.IsUseOdometrs = true;
+        Configs.GeneralSettings.TelemetryOn = false;
 
         waitForStart();
 
