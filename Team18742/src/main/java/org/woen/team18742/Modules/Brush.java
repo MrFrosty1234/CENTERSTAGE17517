@@ -7,16 +7,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 
-@Config
 public class Brush {
     private final DcMotorEx brushMotor;
     private boolean flagdefense = true;
-
-    public static double getvolteges = 1;
-    public static double timesxz = 1500;
-    public static double times1 = 3000;
 
     private boolean _isReversed = false, _isIntake = false;
 
@@ -34,13 +30,13 @@ public class Brush {
 
     private void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
         if (brush1) {
-            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= getvolteges && flagdefense) {
+            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= Configs.Brush.getvolteges && flagdefense) {
                 elapsedTime.reset();
             }
-            if (elapsedTime.milliseconds() >= timesxz && flagdefense) {
+            if (elapsedTime.milliseconds() >= Configs.Brush.timesxz && flagdefense) {
                 flagdefense = false;
             }
-            if (elapsedTime.milliseconds() >= times1 && !flagdefense) {
+            if (elapsedTime.milliseconds() >= Configs.Brush.times1 && !flagdefense) {
                 flagdefense = true;
             }
             if (!flagdefense) {

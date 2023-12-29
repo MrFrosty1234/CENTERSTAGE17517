@@ -11,15 +11,14 @@ import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.VisionPortalHandler;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Modules.StartRobotPosition;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Config
 public class AutonomCollector extends BaseCollector {
-    public static boolean IsAutonomEnable = true;
     public Automatic Auto;
     public org.woen.team18742.Modules.Odometry.Odometry Odometry;
     public Camera Camera;
@@ -88,7 +87,7 @@ public class AutonomCollector extends BaseCollector {
 
         ToolTelemetry.AddLine("camera = " + Camera.GetPosition());
 
-        if (IsAutonomEnable) {
+        if (Configs.GeneralSettings.IsAutonomEnable) {
             Auto.Update();
 
             if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {

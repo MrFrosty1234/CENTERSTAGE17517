@@ -9,16 +9,14 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponationFilter;
 
-@Config
 public class Gyroscope {
     private final IMU _imu;
     private final OdometrsHandler _odometrs;
-    public static boolean IsMerger = false;
-    public static double MergerCoef = 0.9;
-    private ExponationFilter _filter = new ExponationFilter(MergerCoef);
+    private ExponationFilter _filter = new ExponationFilter(Configs.Gyroscope.MergerCoef);
 
     public Gyroscope(BaseCollector collector) {
         _imu = Devices.IMU;
@@ -37,13 +35,13 @@ public class Gyroscope {
     private double _degree, _radians, _odometrDegree, _odometrRadians;
 
     public void Update() {
-        _filter.UpdateCoef(MergerCoef);
+        _filter.UpdateCoef(Configs.Gyroscope.MergerCoef);
 
         _degree = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         _radians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-        if (IsMerger) {
-            _odometrRadians = (_odometrs.GetOdometrXLeft() / OdometrsHandler.RadiusOdometrXLeft - _odometrs.GetOdometrXRigth() / OdometrsHandler.RadiusOdometrXRight) / 2;//(_odometrs.GetOdometrXLeft() - _odometrs.GetOdometrXRigth()) / 2.0 / OdometrsHandler.RadiusOdometr;
+        if (Configs.GeneralSettings.IsUseOdometrs) {
+            _odometrRadians = (_odometrs.GetOdometrXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometrXRigth() / Configs.Odometry.RadiusOdometrXRight) / 2;
             _odometrDegree = Math.toDegrees(_odometrRadians);
 
             _odometrRadians = ChopAngele(_odometrRadians);

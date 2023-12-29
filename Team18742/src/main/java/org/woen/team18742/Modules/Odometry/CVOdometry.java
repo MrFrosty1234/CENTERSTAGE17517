@@ -17,24 +17,20 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Gyroscope;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
 
-@Config
 public class CVOdometry {
     private AprilTagProcessor  _aprilTagProcessor = null;
 
     public Vector2 Position = new Vector2();
     public boolean IsZero = true;
 
-    public static double CameraX = 16.01, CameraY = 16.18;
-
-    private Vector2 _cameraPosition = new Vector2(CameraX, CameraY);
+    private Vector2 _cameraPosition = new Vector2(Configs.Camera.CameraX, Configs.Camera.CameraY);
     private final Gyroscope _gyro;
-
-    public static float Accuracy = 130;
 
     public CVOdometry(BaseCollector collector){
         _gyro = collector.Gyro;
@@ -47,8 +43,8 @@ public class CVOdometry {
     }
 
     public void Update() {
-        _cameraPosition.X = CameraX;
-        _cameraPosition.Y = CameraY;
+        _cameraPosition.X = Configs.Camera.CameraX;
+        _cameraPosition.Y = Configs.Camera.CameraY;
 
         ArrayList<AprilTagDetection> detections = _aprilTagProcessor.getDetections();
 
@@ -57,7 +53,7 @@ public class CVOdometry {
         int suitableDetections = 0;
 
         for (AprilTagDetection detection : detections) {
-            if (detection.rawPose != null && detection.decisionMargin > Accuracy) {
+            if (detection.rawPose != null && detection.decisionMargin > Configs.Camera.CameraAccuracy) {
                 // Считать позицию тэга относительно камеры и записать её в VectorF
                 AprilTagPoseRaw rawTagPose = detection.rawPose;
                 VectorF rawTagPoseVector = new VectorF(

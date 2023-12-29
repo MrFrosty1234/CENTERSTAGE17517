@@ -8,6 +8,7 @@ import static java.lang.Math.sin;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.Vector2;
 
@@ -16,8 +17,6 @@ public class DriverTrain {
     private final DcMotor _rightForwardDrive;
     private final DcMotor _leftBackDrive;
     private final DcMotor _rightBackDrive;
-
-    private final double diametr = 9.8, encoderconstat = 1440;
     private final Gyroscope _gyro;
 
     public DriverTrain(BaseCollector collector) {
@@ -60,28 +59,20 @@ public class DriverTrain {
         _rightForwardDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public double GetForwardDistance(){
-        return (_leftBackDrive.getCurrentPosition()-_rightForwardDrive.getCurrentPosition()+_leftForwardDrive.getCurrentPosition()-_rightBackDrive.getCurrentPosition())/4.0/encoderconstat*PI*diametr;
-    }
-
-    public double GetSideDistance(){
-        return (_leftBackDrive.getCurrentPosition()+_rightForwardDrive.getCurrentPosition()+_leftForwardDrive.getCurrentPosition()+_rightBackDrive.getCurrentPosition())/4.0/encoderconstat*PI*diametr;
-    }
-
     public double GetLeftBackIncoder(){
-        return  _leftBackDrive.getCurrentPosition() / encoderconstat * PI * diametr;
+        return  _leftBackDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
     }
 
     public double GetLeftForwardIncoder(){
-        return  _leftForwardDrive.getCurrentPosition() / encoderconstat * PI * diametr;
+        return  _leftForwardDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
     }
 
     public double GetRightBackIncoder(){
-        return  _rightBackDrive.getCurrentPosition() / encoderconstat * PI * diametr;
+        return  _rightBackDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
     }
 
     public double GetRightForwardIncoder(){
-        return  _rightForwardDrive.getCurrentPosition() / encoderconstat * PI * diametr;
+        return  _rightForwardDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
     }
 
     public void Stop(){

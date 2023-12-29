@@ -3,12 +3,11 @@ package org.woen.team18742.Modules.Camera;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
+import org.woen.team18742.Tools.Configs;
 
 @Config
 public class Camera {
-    public static boolean IsDebug = false;
-    public static int RobotPos = 2;
-    PipeLine pipeLine = new PipeLine();
+    private final PipeLine pipeLine = new PipeLine();
 
     public CameraStreamSource GetProcessor() {
         return pipeLine;
@@ -26,8 +25,8 @@ public class Camera {
     }
 
     public CameraRobotPosition GetPosition() {
-        if (IsDebug)
-            return GetEnum(RobotPos);
+        if (Configs.GeneralSettings.IsCameraDebug)
+            return GetEnum(Configs.Camera.RobotPos);
 
         return GetEnum(pipeLine.pos.get());
     }

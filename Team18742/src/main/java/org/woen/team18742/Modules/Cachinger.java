@@ -2,6 +2,7 @@ package org.woen.team18742.Modules;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class Cachinger {
     }
 
     public void Update(){
-        for(LynxModule i: _hubs)
-            i.getBulkData();
+        if(Configs.GeneralSettings.IsCachinger)
+            for(LynxModule i: _hubs)
+                i.getBulkData();
     }
 }

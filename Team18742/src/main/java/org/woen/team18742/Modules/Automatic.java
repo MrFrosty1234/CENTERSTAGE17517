@@ -4,26 +4,23 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Modules.Odometry.Odometry;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.PID;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
-@Config
 public class Automatic {
     private final AutonomCollector _collector;
     private final Odometry _odometry;
-    public static double PidForwardP = 0.1, PidForwardI = 0, PidForwardD = 1;
-    public static double PidSideP = 0.2, PidSideI = 0, PidSideD = 1;
-    public static double PidRotateP = 1, PidRotateI = 0, PidRotateD = 1;
 
     public Automatic(AutonomCollector collector) {
         _collector = collector;
         _odometry = collector.Odometry;
     }
 
-    private final PID _pidForward = new PID(PidForwardP, PidForwardI, PidForwardD, 1);
-    private final PID _pidSide = new PID(PidSideP, PidSideI, PidSideD, 1);
-    private final PID _pidTurn = new PID(PidRotateP, PidRotateI, PidRotateD, 1);
+    private final PID _pidForward = new PID(Configs.AutomaticForwardPid.PidForwardP, Configs.AutomaticForwardPid.PidForwardI, Configs.AutomaticForwardPid.PidForwardD, 1);
+    private final PID _pidSide = new PID(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideI, Configs.AutomaticSidePid.PidSideD, 1);
+    private final PID _pidTurn = new PID(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD, 1);
 
     public void PIDMove(Vector2 moved) {
         _targetPosition = Vector2.Plus(_targetPosition, moved);
@@ -56,9 +53,9 @@ public class Automatic {
     }
 
     public void Update() {
-        _pidForward.UpdateCoefs(PidForwardP, PidForwardI, PidForwardD);
-        _pidSide.UpdateCoefs(PidSideP, PidSideI, PidSideD);
-        _pidTurn.UpdateCoefs(PidRotateP, PidRotateI, PidRotateD);
+        _pidForward.UpdateCoefs(Configs.AutomaticForwardPid.PidForwardP, Configs.AutomaticForwardPid.PidForwardI, Configs.AutomaticForwardPid.PidForwardD);
+        _pidSide.UpdateCoefs(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideD);
+        _pidTurn.UpdateCoefs(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD);
 
         _collector.Driver.SetSpeedWorldCoords(
                 new Vector2(_pidForward.Update(_targetPosition.X - _odometry.Position.X), _pidSide.Update(_targetPosition.Y - _odometry.Position.Y)),

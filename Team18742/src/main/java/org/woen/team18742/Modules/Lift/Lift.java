@@ -8,11 +8,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Tools.Battery;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.PID;
 import org.woen.team18742.Tools.ToolTelemetry;
 
-@Config
 public class Lift {
     private final DcMotor _liftMotor;
 
@@ -20,9 +20,7 @@ public class Lift {
 
     private boolean _endingUpState = false, _endingDownState = false;
 
-    public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
-
-    private final PID _liftPid = new PID(PCoef, ICoef, DCoef, 1, 1);
+    private final PID _liftPid = new PID(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef, 1, 1);
     private BaseCollector _collector;
 
     public Lift(BaseCollector collector) {
@@ -48,7 +46,7 @@ public class Lift {
     }
 
     public void Update() {
-        _liftPid.UpdateCoefs(PCoef, ICoef, DCoef);
+        _liftPid.UpdateCoefs(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef);
 
         _endingUpState = _ending1.getState();
         _endingDownState = _ending2.getState();

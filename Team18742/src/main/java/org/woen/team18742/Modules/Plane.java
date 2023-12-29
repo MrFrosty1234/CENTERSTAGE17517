@@ -4,15 +4,13 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 
-@Config
 public class Plane {
     private final Servo _servoPlane;
 
     private final Servo _servorailgun;
-    public static double servoplaneOtkrit = 0.07;
-    public static double servoplaneneOtkrit = 0.17;
     private final ElapsedTime _time;
     private double _oldTime = 0;
     private double pos;
@@ -24,11 +22,11 @@ public class Plane {
     }
     public void Launch(boolean debug){
         if(debug)
-            _servoPlane.setPosition(servoplaneOtkrit);
+            _servoPlane.setPosition(Configs.Plane.servoplaneOtkrit);
     }
 
     public void DeLaunch(){
-        _servoPlane.setPosition(servoplaneneOtkrit);
+        _servoPlane.setPosition(Configs.Plane.servoplaneneOtkrit);
     }
 
     public void BezpolezniRailgunUp(double step)

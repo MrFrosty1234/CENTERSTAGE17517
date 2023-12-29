@@ -14,17 +14,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Lift.LiftPose;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
-@Config
 public class Intake {
     private Servo servopere;
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private BaseCollector _collector; // Штука в которой хранится всё остальное
-    public static double pixelSensorvoltage = 0.125, PixelCenterOpen = 0;//0.4
     private final DcMotor _lighting;
 
     public Intake(BaseCollector collector) {
@@ -37,37 +36,30 @@ public class Intake {
         _lighting = Devices.LightingMotor;
     }
 
-    public static double servoperevorotnazad = 0.96;
-    public static final double servoperevorot = 0.35;
-
     public void setperevorotik() {
         if (_collector.Lift.isUp()) {
-            servopere.setPosition(servoperevorot);
+            servopere.setPosition(Configs.Intake.servoperevorot);
         } else if (_collector.Lift.isAverage()) {
-            servopere.setPosition(servoperevorot);
+            servopere.setPosition(Configs.Intake.servoperevorot);
             _normalCoup.reset();
         } else {
-            servopere.setPosition(servoperevorotnazad);
+            servopere.setPosition(Configs.Intake.servoperevorotnazad);
         }
     }
 
     public boolean IsCoupNormal() {
-        return _normalCoup.milliseconds() > AverageTime;
+        return _normalCoup.milliseconds() > Configs.Intake.AverageTime;
     }
 
-    public static long AverageTime = 830;
-
-    public static double servoGripperreturn = 0.4;
-    public static double servoGripper = 0.13;
-    private ElapsedTime _normalCoup = new ElapsedTime(AverageTime);
+    private ElapsedTime _normalCoup = new ElapsedTime(Configs.Intake.AverageTime);
 
     private boolean gripped = false;
 
     public void setGripper(boolean grip) {
         if (grip) {
-            gripper.setPosition(servoGripper);
+            gripper.setPosition(Configs.Intake.servoGripper);
         } else {
-            gripper.setPosition(servoGripperreturn);
+            gripper.setPosition(Configs.Intake.servoGripperreturn);
         }
         gripped = grip;
         isPixelLocated = grip;
@@ -75,14 +67,11 @@ public class Intake {
         _lighting.setPower(grip ? 1 : 0);
     }
 
-    public static double servoClamp = 0.9;
-    public static double servoClampreturn = 0.42;//0.5
-
     public void setClamp(boolean clampIk) {
         if (clampIk) {
-            clamp.setPosition(servoClamp);
+            clamp.setPosition(Configs.Intake.servoClamp);
         } else {
-            clamp.setPosition(servoClampreturn);
+            clamp.setPosition(Configs.Intake.servoClampreturn);
         }
     }
 
@@ -91,7 +80,7 @@ public class Intake {
     double pixelTimeconst = 1000;
 
     public boolean pixelDetected() {
-        if (pixelSensor2.getVoltage() >= pixelSensorvoltage /*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
+        if (pixelSensor2.getVoltage() >= Configs.Intake.pixelSensorvoltage /*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
             pixelTimer.reset();
         return pixelTimer.milliseconds() > pixelTimeconst;
     }
@@ -106,9 +95,7 @@ public class Intake {
 
     public boolean isPixelLocated = false;
 
-    private ElapsedTime _brushReversTime = new ElapsedTime(ReversTime);
-
-    public static long ReversTime = 2000;
+    private ElapsedTime _brushReversTime = new ElapsedTime(Configs.Intake.ReversTime);
 
     public void Update() {
         if (pixelDetected()) {
@@ -122,7 +109,7 @@ public class Intake {
         }
 
         if (isPixelLocated) {
-            if (_brushReversTime.milliseconds() < ReversTime)
+            if (_brushReversTime.milliseconds() < Configs.Intake.ReversTime)
                 _collector.Brush.Revers();
             else
                 _collector.Brush.Stop();
@@ -135,6 +122,6 @@ public class Intake {
     }
 
     public void PixelCenterGrip ( boolean gripped){
-        gripper.setPosition(gripped ? PixelCenterOpen : servoGripperreturn);
+        gripper.setPosition(gripped ? Configs.Intake.PixelCenterOpen : Configs.Intake.servoGripperreturn);
     }
 }

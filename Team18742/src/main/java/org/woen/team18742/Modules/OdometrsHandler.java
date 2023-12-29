@@ -5,12 +5,11 @@ import static java.lang.Math.PI;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 
 public class OdometrsHandler {
     private final DcMotor _odometrY, _odometrXLeft, _odometrXRight;
-    public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
-    private final double _diametrOdometr = 4.8, _encoderconstatOdometr = 1440;
 
     public OdometrsHandler(BaseCollector collector){
         _odometrXLeft = Devices.OdometrXLeft;
@@ -19,15 +18,15 @@ public class OdometrsHandler {
     }
 
     public double GetOdometrXLeft(){
-        return _odometrXLeft.getCurrentPosition() / _encoderconstatOdometr * PI * _diametrOdometr;
+        return _odometrXLeft.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
     }
 
     public double GetOdometrXRigth(){
-        return _odometrXRight.getCurrentPosition() / _encoderconstatOdometr * PI * _diametrOdometr;
+        return _odometrXRight.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
     }
 
     public double GetOdometrY(){
-        return _odometrY.getCurrentPosition() / _encoderconstatOdometr * PI * _diametrOdometr;
+        return _odometrY.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
     }
 
     public void Reset(){

@@ -1,12 +1,14 @@
 package org.woen.team18742.NotUsed.OpenCV;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 
+@Disabled
 @TeleOp(name = "Test Pipeline OpMode")
 public class OpModeCamera extends LinearOpMode {
     VisionPortal visionPortal;

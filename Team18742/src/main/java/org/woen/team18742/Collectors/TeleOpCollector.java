@@ -10,16 +10,11 @@ import org.woen.team18742.Modules.Manual;
 
 public class TeleOpCollector extends BaseCollector {
     public org.woen.team18742.Modules.Manual Manual;
-    //private VisionPortalHandler _visionHandler;
 
     public TeleOpCollector(LinearOpMode commandCode) {
         super(commandCode);
 
         Manual = new Manual(this);
-
-        /*CameraStreamSource v = new PipeLine();
-        _visionHandler = new VisionPortalHandler(new VisionProcessor[]{(VisionProcessor) v});
-        _visionHandler.StartDashBoardVid(v);*/
     }
 
     @Override
@@ -37,6 +32,5 @@ public class TeleOpCollector extends BaseCollector {
     @Override
     public void Stop() {
         super.Stop();
-        //_visionHandler.Stop();
     }
 }

@@ -10,25 +10,22 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.OdometrsHandler;
+import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.ExponationFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
-@Config
 public class Odometry {
-    public static boolean IsOdometr = false;
     private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY;
 
     public Vector2 Position = new Vector2();
     private final DriverTrain _driverTrain;
     private final Gyroscope _gyro;
-    public static double YCoef = 0.9;
-    public static double XCoef = 0.9;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
     private final CVOdometry _CVOdometry;
     private final OdometrsHandler _odometrs;
 
-    private final ExponationFilter _filterX = new ExponationFilter(XCoef), _filterY = new ExponationFilter(YCoef);
+    private final ExponationFilter _filterX = new ExponationFilter(Configs.Odometry.XCoef), _filterY = new ExponationFilter(Configs.Odometry.YCoef);
 
     public Odometry(BaseCollector collector) {
         _CVOdometry = new CVOdometry(collector);
@@ -42,18 +39,18 @@ public class Odometry {
     }
 
     public void Update() {
-        _filterX.UpdateCoef(XCoef);
-        _filterY.UpdateCoef(YCoef);
+        _filterX.UpdateCoef(Configs.Odometry.XCoef);
+        _filterY.UpdateCoef(Configs.Odometry.YCoef);
 
         double deltaX, deltaY;
 
-        if(IsOdometr){
+        if(Configs.GeneralSettings.IsUseOdometrs){
             double deltaRotate = _gyro.GetRadians() - _oldRotate;
 
             double odometrXLeft = _odometrs.GetOdometrXLeft(), odometrY = _odometrs.GetOdometrY(), odometrXRight = _odometrs.GetOdometrXRigth();
 
             deltaX = (odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
-            deltaY = (odometrY - _oldOdometrY) - OdometrsHandler.RadiusOdometrY * deltaRotate;
+            deltaY = (odometrY - _oldOdometrY) - Configs.Odometry.RadiusOdometrY * deltaRotate;
 
             _oldOdometrXLeft = odometrXLeft;
             _oldOdometrXRight = odometrXRight;
@@ -85,13 +82,10 @@ public class Odometry {
 
         _CVOdometry.Update();
 
-        /*if(!_CVOdometry.IsZero) {
-            //X += (_CVOdometry.X - X) * (deltaTime / (XCoef + deltaTime));
-            //Y += (_CVOdometry.Y - Y) * (deltaTime / (YCoef + deltaTime));
-
+        if(!_CVOdometry.IsZero) {
             Position.X = _filterX.Update(Position.X, _CVOdometry.Position.X);
             Position.Y = _filterY.Update(Position.Y, _CVOdometry.Position.Y);
-        }*/
+        }
 
         ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
         ToolTelemetry.AddLine("OdometryX :" + Position);
