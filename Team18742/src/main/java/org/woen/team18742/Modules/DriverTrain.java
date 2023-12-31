@@ -8,20 +8,22 @@ import static java.lang.Math.sin;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.Vector2;
 
-public class DriverTrain {
-    private final DcMotor _leftForwardDrive;
-    private final DcMotor _rightForwardDrive;
-    private final DcMotor _leftBackDrive;
-    private final DcMotor _rightBackDrive;
-    private final Gyroscope _gyro;
+@Module
+public class DriverTrain implements IRobotModule {
+    private DcMotor _leftForwardDrive;
+    private DcMotor _rightForwardDrive;
+    private DcMotor _leftBackDrive;
+    private DcMotor _rightBackDrive;
+    private Gyroscope _gyro;
 
-    public DriverTrain(BaseCollector collector) {
-        _gyro = collector.Gyro;
-
+    @Override
+    public void Init(BaseCollector collector) {
         _leftForwardDrive = Devices.LeftForwardDrive;
         _rightBackDrive = Devices.RightBackDrive;
         _rightForwardDrive = Devices.RightForwardDrive;
@@ -36,8 +38,16 @@ public class DriverTrain {
         _rightForwardDrive.setDirection(REVERSE);
         _rightBackDrive.setDirection(REVERSE);
 
+        _gyro = (Gyroscope) collector.GetModule(Gyroscope.class);
+    }
+
+    @Override
+    public void Start() {
         ResetIncoder();
     }
+
+    @Override
+    public void Update() {}
 
 
     public void DriveDirection(Vector2 speed, double rotate){
@@ -75,6 +85,7 @@ public class DriverTrain {
         return  _rightForwardDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
     }
 
+    @Override
     public void Stop(){
         _leftForwardDrive.setPower(0);
         _rightBackDrive.setPower(0);

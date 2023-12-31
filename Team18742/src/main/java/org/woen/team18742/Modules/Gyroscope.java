@@ -9,19 +9,28 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponationFilter;
 
-public class Gyroscope {
-    private final IMU _imu;
-    private final OdometrsHandler _odometrs;
+@Module
+public class Gyroscope implements IRobotModule {
+    private IMU _imu;
+    private OdometrsHandler _odometrs;
     private ExponationFilter _filter = new ExponationFilter(Configs.Gyroscope.MergerCoef);
 
-    public Gyroscope(BaseCollector collector) {
+    @Override
+    public void Init(BaseCollector collector) {
         _imu = Devices.IMU;
-        _odometrs = collector.Odometrs;
+        _odometrs = (OdometrsHandler)collector.GetModule(OdometrsHandler.class);
         _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP)));
+    }
+
+    @Override
+    public void Start() {
+        Reset();
     }
 
     public double GetRadians() {
@@ -34,6 +43,7 @@ public class Gyroscope {
 
     private double _degree, _radians, _odometrDegree, _odometrRadians;
 
+    @Override
     public void Update() {
         _filter.UpdateCoef(Configs.Gyroscope.MergerCoef);
 
@@ -50,6 +60,9 @@ public class Gyroscope {
             _degree = Math.toDegrees(_radians);
         }
     }
+
+    @Override
+    public void Stop() {}
 
     public void Reset() {
         _imu.resetYaw();

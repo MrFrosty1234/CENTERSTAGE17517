@@ -3,10 +3,13 @@ package org.woen.team18742.Modules.Camera;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
+import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Manager.AutonomModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Tools.Configs;
 
-@Config
-public class Camera {
+@AutonomModule
+public class Camera implements IRobotModule {
     private final PipeLine pipeLine = new PipeLine();
 
     public CameraStreamSource GetProcessor() {
@@ -30,4 +33,16 @@ public class Camera {
 
         return GetEnum(pipeLine.pos.get());
     }
+
+    @Override
+    public void Init(BaseCollector collector) {}
+
+    @Override
+    public void Start() {}
+
+    @Override
+    public void Update() {}
+
+    @Override
+    public void Stop() {}
 }

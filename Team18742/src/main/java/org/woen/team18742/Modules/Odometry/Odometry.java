@@ -6,38 +6,51 @@ import static java.lang.Math.sin;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
+import org.woen.team18742.Modules.Manager.AutonomModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.OdometrsHandler;
 import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.ExponationFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
-public class Odometry {
+@AutonomModule
+public class Odometry implements IRobotModule {
     private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY;
 
     public Vector2 Position = new Vector2();
-    private final DriverTrain _driverTrain;
-    private final Gyroscope _gyro;
+    private DriverTrain _driverTrain;
+    private Gyroscope _gyro;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
-    private final CVOdometry _CVOdometry;
-    private final OdometrsHandler _odometrs;
+    private CVOdometry _CVOdometry;
+    private OdometrsHandler _odometrs;
 
     private final ExponationFilter _filterX = new ExponationFilter(Configs.Odometry.XCoef), _filterY = new ExponationFilter(Configs.Odometry.YCoef);
 
-    public Odometry(BaseCollector collector) {
+    private AutonomCollector _collector;
+
+    @Override
+    public void Init(BaseCollector collector) {
         _CVOdometry = new CVOdometry(collector);
-        _driverTrain = collector.Driver;
-        _gyro = collector.Gyro;
-        _odometrs = collector.Odometrs;
+
+        _driverTrain = (DriverTrain) collector.GetModule(DriverTrain.class);
+        _gyro = (Gyroscope) collector.GetModule(Gyroscope.class);
+        _odometrs = (OdometrsHandler) collector.GetModule(OdometrsHandler.class);
+
+        if(collector instanceof AutonomCollector)
+            _collector = (AutonomCollector) collector;
+
     }
 
     public VisionProcessor GetProcessor(){
         return _CVOdometry.GetProcessor();
     }
 
+    @Override
     public void Update() {
         _filterX.UpdateCoef(Configs.Odometry.XCoef);
         _filterY.UpdateCoef(Configs.Odometry.YCoef);
@@ -91,10 +104,15 @@ public class Odometry {
         ToolTelemetry.AddLine("OdometryX :" + Position);
     }
 
-    public void Start(Vector2 startPos){
+    @Override
+    public void Stop() {}
+
+    @Override
+    public void Start(){
         _filterX.Reset();
         _filterY.Reset();
 
-        Position = startPos.copy();
+        if(_collector != null)
+            Position = _collector.StartPosition.Position.copy();
     }
 }

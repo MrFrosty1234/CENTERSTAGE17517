@@ -13,33 +13,45 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
+import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
-public class Intake {
+@Module
+public class Intake implements IRobotModule {
     private Servo servopere;
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
-    private BaseCollector _collector; // Штука в которой хранится всё остальное
-    private final DcMotor _lighting;
+    private DcMotor _lighting;
 
-    public Intake(BaseCollector collector) {
-        _collector = collector;
+    private Brush _brush;
+    private Lift _lift;
+
+    @Override
+    public void Init(BaseCollector collector) {
         pixelSensor1 = Devices.PixelSensor1;
         pixelSensor2 = Devices.PixelSensor2;
         gripper = Devices.Gripper;
         clamp = Devices.Clamp;
         servopere = Devices.Servopere;
         _lighting = Devices.LightingMotor;
+
+        _brush = (Brush) collector.GetModule(Brush.class);
+        _lift = (Lift) collector.GetModule(Lift.class);
     }
 
+    @Override
+    public void Start() {}
+
     public void setperevorotik() {
-        if (_collector.Lift.isUp()) {
+        if (_lift.isUp()) {
             servopere.setPosition(Configs.Intake.servoperevorot);
-        } else if (_collector.Lift.isAverage()) {
+        } else if (_lift.isAverage()) {
             servopere.setPosition(Configs.Intake.servoperevorot);
             _normalCoup.reset();
         } else {
@@ -97,22 +109,23 @@ public class Intake {
 
     private ElapsedTime _brushReversTime = new ElapsedTime(Configs.Intake.ReversTime);
 
+    @Override
     public void Update() {
         if (pixelDetected()) {
             setGripper(true);
-            setClamp(clampTimer.milliseconds() < clampTimerconst && _collector.Lift.isDown());
+            setClamp(clampTimer.milliseconds() < clampTimerconst && _lift.isDown());
 
             _brushReversTime.reset();
         } else {
             clampTimer.reset();
-            setClamp(!gripped && _collector.Lift.isDown());
+            setClamp(!gripped && _lift.isDown());
         }
 
         if (isPixelLocated) {
             if (_brushReversTime.milliseconds() < Configs.Intake.ReversTime)
-                _collector.Brush.Revers();
+                _brush.Revers();
             else
-                _collector.Brush.Stop();
+                _brush.Stop();
         }
 
         setperevorotik();
@@ -120,6 +133,9 @@ public class Intake {
         ToolTelemetry.AddLine(pixelSensor1.getVoltage() + " " + pixelSensor2.getVoltage());
         ToolTelemetry.AddLine(pixelDetected() + "");
     }
+
+    @Override
+    public void Stop() {}
 
     public void PixelCenterGrip ( boolean gripped){
         gripper.setPosition(gripped ? Configs.Intake.PixelCenterOpen : Configs.Intake.servoGripperreturn);

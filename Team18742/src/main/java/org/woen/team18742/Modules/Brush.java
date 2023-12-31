@@ -7,26 +7,34 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Lift.Lift;
+import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 
-public class Brush {
-    private final DcMotorEx brushMotor;
+@Module
+public class Brush implements IRobotModule {
+    private DcMotorEx brushMotor;
     private boolean flagdefense = true;
 
     private boolean _isReversed = false, _isIntake = false;
 
     private ElapsedTime elapsedTime = new ElapsedTime();
 
-    private BaseCollector _collector;
+    private Lift _lift;
 
-    public Brush(BaseCollector collector){
+    @Override
+    public void Init(BaseCollector collector){
         brushMotor = Devices.BrushMotor;
 
-        _collector = collector;
-
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        _lift = (Lift) collector.GetModule(Lift.class);
     }
+
+    @Override
+    public void Start() {}
 
     private void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
         if (brush1) {
@@ -51,7 +59,7 @@ public class Brush {
 
     public void IntakePowerWithDefense() {//функция для щёток с зашитой от зажёвывания
 
-        if(!_collector.Lift.isDown())
+        if(!_lift.isDown())
             return;
 
         _isReversed = false;
@@ -62,7 +70,7 @@ public class Brush {
     }
 
     public void Revers(){
-        if(!_collector.Lift.isDown())
+        if(!_lift.isDown())
             return;
 
         intakePowerWithDefense(false, 1);
@@ -71,6 +79,7 @@ public class Brush {
         _isReversed = true;
     }
 
+    @Override
     public void Stop(){
         _isIntake = false;
         _isReversed = false;
@@ -89,8 +98,9 @@ public class Brush {
         return !_isIntake && !_isReversed;
     }
 
+    @Override
     public void Update(){
-        if(!_collector.Lift.isDown())
+        if(!_lift.isDown())
             Stop();
     }
 }

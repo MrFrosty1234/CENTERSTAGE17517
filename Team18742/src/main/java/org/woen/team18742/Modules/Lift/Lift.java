@@ -1,30 +1,32 @@
 package org.woen.team18742.Modules.Lift;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Intake;
+import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.PID;
 import org.woen.team18742.Tools.ToolTelemetry;
 
-public class Lift {
-    private final DcMotor _liftMotor;
+@Module
+public class Lift implements IRobotModule {
+    private DcMotor _liftMotor;
 
-    private final DigitalChannel _ending1, _ending2;
+    private DigitalChannel _ending1, _ending2;
 
     private boolean _endingUpState = false, _endingDownState = false;
 
     private final PID _liftPid = new PID(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef, 1, 1);
-    private BaseCollector _collector;
+    private Intake _intake;
 
-    public Lift(BaseCollector collector) {
-        _collector = collector;
+    @Override
+    public void Init(BaseCollector collector) {
+        _intake = (Intake) collector.GetModule(Intake.class);
 
         _ending1 = Devices.Ending1;
         _ending2 = Devices.Ending2;
@@ -45,13 +47,14 @@ public class Lift {
         _liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    @Override
     public void Update() {
         _liftPid.UpdateCoefs(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef);
 
         _endingUpState = _ending1.getState();
         _endingDownState = _ending2.getState();
 
-        if(!_collector.Intake.IsCoupNormal() && _liftPose == LiftPose.DOWN)
+        if(!_intake.IsCoupNormal() && _liftPose == LiftPose.DOWN)
             _liftMotor.setPower(Math.max(_liftPid.Update(LiftPose.AVERAGE.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
         else
             _liftMotor.setPower(Math.max(_liftPid.Update(_liftPose.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
@@ -61,6 +64,9 @@ public class Lift {
         if(_endingDownState)
             ResetLift();
     }
+
+    @Override
+    public void Stop() {}
 
     public boolean isATarget() {
         return Math.abs(_liftPid.Err) < 30;
@@ -79,6 +85,7 @@ public class Lift {
         _liftPose = pose;
     }
 
+    @Override
     public void Start() {
         _liftPid.Start();
     }

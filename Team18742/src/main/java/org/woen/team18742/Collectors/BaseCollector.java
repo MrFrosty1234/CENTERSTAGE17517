@@ -10,58 +10,72 @@ import org.woen.team18742.Modules.DriverTrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
+import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Modules.OdometrsHandler;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
+import java.util.ArrayList;
+
 public class BaseCollector {
     public LinearOpMode Robot;
-    public Gyroscope Gyro;
-    public DriverTrain Driver;
-    public org.woen.team18742.Modules.Lift.Lift Lift;
-    public org.woen.team18742.Modules.Intake Intake;
     public ElapsedTime Time;
-    public Brush Brush;
-    private Cachinger _cachinger;
-    public OdometrsHandler Odometrs;
     private Battery _battery;
 
-    public BaseCollector(LinearOpMode robot){
+    private ArrayList<IRobotModule> _modules = new ArrayList<>();
+
+    public BaseCollector(LinearOpMode robot) {
         Robot = robot;
 
         Devices.Init(robot.hardwareMap);
         ToolTelemetry.SetTelemetry(Robot.telemetry);
 
         _battery = new Battery(this);
-        _cachinger = new Cachinger();
         Time = new ElapsedTime();
-        Lift = new Lift(this);
-        Brush = new Brush(this);
-        Odometrs = new OdometrsHandler(this);
-        Gyro = new Gyroscope(this);
-        Driver = new DriverTrain(this);
-        Intake = new Intake(this);
+
+        AddAditionModules(Module.class.getClasses());
     }
 
     public void Start(){
         Time.reset();
-        Odometrs.Reset();
-        Gyro.Reset();
-        Lift.Start();
-        Driver.ResetIncoder();
+
+        for (IRobotModule i : _modules)
+            i.Start();
     }
 
     public void Update(){
         _battery.Update();
-        _cachinger.Update();
-        Lift.Update();
-        Gyro.Update();
-        Intake.Update();
-        Brush.Update();
+
+        for (IRobotModule i : _modules)
+            i.Update();
 
         ToolTelemetry.Update();
     }
 
-    public void Stop(){}
+    public void Stop(){
+        for (IRobotModule i : _modules)
+            i.Stop();
+    }
+
+    protected void AddAditionModules(Class<?>[] modules){
+        try {
+            for (Class<?> i : modules)
+                if (i.isInstance(IRobotModule.class))
+                    _modules.add((IRobotModule) i.newInstance());
+        }
+        catch (Exception ignored){}
+
+        for (IRobotModule i : _modules)
+            i.Init(this);
+    }
+
+    public IRobotModule GetModule(Class<? extends IRobotModule> type){
+        for(IRobotModule i : _modules)
+            if(i.getClass() == type)
+                return i;
+
+        throw new RuntimeException("not found " + type.getName() + "module");
+    }
 }

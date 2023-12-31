@@ -9,6 +9,7 @@ import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Modules.Automatic;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.VisionPortalHandler;
+import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Configs;
@@ -19,101 +20,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AutonomCollector extends BaseCollector {
-    public Automatic Auto;
-    public org.woen.team18742.Modules.Odometry.Odometry Odometry;
-    public Camera Camera;
-    private final VisionPortalHandler _visionHandler;
-
-    private List<Runnable> _route = new ArrayList<>();
-
-    private int _currentRouteAction = 0;
-    private boolean _isPixelWait = false;
-
-    private StartRobotPosition _startPosition = StartRobotPosition.RED_BACK;
+    public StartRobotPosition StartPosition = StartRobotPosition.RED_BACK;
 
     public AutonomCollector(LinearOpMode commandCode) {
         super(commandCode);
 
-        Camera = new Camera();
-        Odometry = new Odometry(this);
-        Auto = new Automatic(this);
-
-        CameraStreamSource v = Camera.GetProcessor();
-
-        _visionHandler = new VisionPortalHandler(new VisionProcessor[]{Odometry.GetProcessor(), (VisionProcessor) v});
-
-        _visionHandler.StartDashBoardVid(v);
+        AddAditionModules(AutonomModule.class.getClasses());
     }
 
     @Override
     public void Start() {
         super.Start();
-
-        Auto.Start(_startPosition.Position);
-        Odometry.Start(_startPosition.Position);
-
-        //Intake.PixelCenterGrip(true);
-
-        switch (Camera.GetPosition()) {
-            case FORWARD: {
-                _route.add(()-> Auto.PIDMove(new Vector2(-54, 0)));
-                /*_route.add(()-> Auto.PIDMove(new Vector2(48, 0)));
-                _route.add(()-> Auto.PIDMove(new Vector2(45, 0), Math.toRadians(_startPosition == StartRobotPosition.RED_BACK ? 90 : -90)));
-                _route.add(()->Auto.PIDMove(new Vector2(0, _startPosition == StartRobotPosition.RED_BACK ? 215 : -215)));
-                _route.add(()->Auto.TurnGyro(Math.toRadians(0)));
-                _route.add(()->Auto.PIDMove(new Vector2(-80, 0)));*/
-
-                break;
-            }
-
-            case RIGHT: {
-                _route.add(()-> Auto.PIDMove(new Vector2(-45, 20)));
-
-                break;
-            }
-
-            default: {
-                _route.add(()-> Auto.PIDMove(new Vector2(-45, -20)));
-
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void Update() {
-        super.Update();
-        Odometry.Update();
-
-        ToolTelemetry.AddLine("camera = " + Camera.GetPosition());
-
-        if (Configs.GeneralSettings.IsAutonomEnable) {
-            Auto.Update();
-
-            if (Auto.isMovedEnd() && Lift.isATarget() && (!_isPixelWait || Intake.isPixelLocated)) {
-                if (_currentRouteAction < _route.size()) {
-                    _isPixelWait = false;
-                    _route.get(_currentRouteAction).run();
-
-                    _currentRouteAction++;
-                }
-            }
-        }
     }
 
     public void PreUpdate(){
         if(Robot.gamepad1.dpad_left)
-            _startPosition = StartRobotPosition.BLUE_BACK;
+            StartPosition = StartRobotPosition.BLUE_BACK;
         else if(Robot.gamepad1.dpad_right)
-            _startPosition = StartRobotPosition.BLUE_FORWAD;
+            StartPosition = StartRobotPosition.BLUE_FORWAD;
         else if(Robot.gamepad1.dpad_up)
-            _startPosition = StartRobotPosition.RED_BACK;
+            StartPosition = StartRobotPosition.RED_BACK;
         else if(Robot.gamepad1.dpad_down)
-            _startPosition = StartRobotPosition.RED_FORWARD;
-    }
-
-    @Override
-    public void Stop() {
-        _visionHandler.Stop();
+            StartPosition = StartRobotPosition.RED_FORWARD;
     }
 }

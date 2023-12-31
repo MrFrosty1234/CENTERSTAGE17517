@@ -1,59 +1,80 @@
 package org.woen.team18742.Modules;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
+import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
+import org.woen.team18742.Modules.Manager.TeleopModule;
 import org.woen.team18742.Tools.Vector2;
 
-public class Manual {
-    private final BaseCollector _collector;
-
+@TeleopModule
+public class Manual implements IRobotModule {
     private boolean _brushReversOld = false, _brushOld = false;
 
-    private final Plane _plane;
+    private Plane _plane;
 
-    public Manual(BaseCollector collector) {
-        _collector = collector;
+    private Gamepad _gamepad;
 
-        _plane = new Plane(_collector.Time);
+    private Brush _brush;
+    private Intake _intake;
+    private Lift _lift;
+    private DriverTrain _driverTrain;
+
+    @Override
+    public void Init(BaseCollector collector) {
+        _plane = new Plane(collector.Time);
+
+        _gamepad = collector.Robot.gamepad1;
+
+        _brush = (Brush) collector.GetModule(Brush.class);
+        _intake = (Intake) collector.GetModule(Intake.class);
+        _lift = (Lift) collector.GetModule(Lift.class);
+        _driverTrain = (DriverTrain) collector.GetModule(DriverTrain.class);
     }
 
+    @Override
+    public void Start() {}
+
+    @Override
     public void Update() {
         _plane.Update();
 
-        _collector.Driver.DriveDirection(
-                new Vector2(_collector.Robot.gamepad1.left_stick_y, _collector.Robot.gamepad1.left_stick_x),
-                _collector.Robot.gamepad1.right_stick_x);
+        _driverTrain.DriveDirection(
+                new Vector2(_gamepad.left_stick_y, _gamepad.left_stick_x),
+                _gamepad.right_stick_x);
 
-        boolean A = _collector.Robot.gamepad1.square;
-        boolean liftUp = _collector.Robot.gamepad1.dpad_up;
-        boolean liftDown = _collector.Robot.gamepad1.dpad_down;
-        boolean brushRevers = _collector.Robot.gamepad1.circle;
-        boolean grip = _collector.Robot.gamepad1.triangle;
-        boolean brush = _collector.Robot.gamepad1.cross;
-        boolean zajat = _collector.Robot.gamepad1.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
-        boolean average = _collector.Robot.gamepad1.dpad_right;
-        double railgunopen = _collector.Robot.gamepad1.left_trigger;
-        double railgunnoopen = _collector.Robot.gamepad1.right_trigger;
+        boolean A = _gamepad.square;
+        boolean liftUp = _gamepad.dpad_up;
+        boolean liftDown = _gamepad.dpad_down;
+        boolean brushRevers = _gamepad.circle;
+        boolean grip = _gamepad.triangle;
+        boolean brush = _gamepad.cross;
+        boolean zajat = _gamepad.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
+        boolean average = _gamepad.dpad_right;
+        double railgunopen = _gamepad.left_trigger;
+        double railgunnoopen = _gamepad.right_trigger;
 
         _plane.BezpolezniRailgunUp(railgunopen * 0.3);
         _plane.BezpolezniRailgunDown(railgunnoopen * 0.3);
 
         if(grip)
-            _collector.Intake.releaseGripper();
+            _intake.releaseGripper();
 
         if (brush && !_brushOld) {
-            if(_collector.Brush.IsIntake())
-                _collector.Brush.Stop();
+            if(_brush.IsIntake())
+                _brush.Stop();
             else
-                _collector.Brush.IntakePowerWithDefense();
+                _brush.IntakePowerWithDefense();
         } else if(brushRevers && !_brushReversOld){
-            if(_collector.Brush.IsRevers())
-                _collector.Brush.Stop();
+            if(_brush.IsRevers())
+                _brush.Stop();
             else
-                _collector.Brush.Revers();
+                _brush.Revers();
         }
 
         if (A)
@@ -61,16 +82,19 @@ public class Manual {
         else
             _plane.DeLaunch();
 
-        if (liftUp && _collector.Intake.isPixelLocated)
-            _collector.Lift.SetLiftPose(LiftPose.UP);
+        if (liftUp && _intake.isPixelLocated)
+            _lift.SetLiftPose(LiftPose.UP);
 
         if(liftDown)
-            _collector.Lift.SetLiftPose(LiftPose.DOWN);
+            _lift.SetLiftPose(LiftPose.DOWN);
 
-        if(average && _collector.Intake.isPixelLocated)
-            _collector.Lift.SetLiftPose(LiftPose.AVERAGE);
+        if(average && _intake.isPixelLocated)
+            _lift.SetLiftPose(LiftPose.AVERAGE);
 
         _brushOld = brush;
         _brushReversOld = brushRevers;
     }
+
+    @Override
+    public void Stop() {}
 }

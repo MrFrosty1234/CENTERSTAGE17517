@@ -5,17 +5,32 @@ import static java.lang.Math.PI;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
 
-public class OdometrsHandler {
-    private final DcMotor _odometrY, _odometrXLeft, _odometrXRight;
+@Module
+public class OdometrsHandler implements IRobotModule {
+    private DcMotor _odometrY, _odometrXLeft, _odometrXRight;
 
-    public OdometrsHandler(BaseCollector collector){
+    @Override
+    public void Init(BaseCollector collector){
         _odometrXLeft = Devices.OdometrXLeft;
         _odometrY = Devices.OdometrY;
         _odometrXRight = Devices.OdometrXRight;
     }
+
+    @Override
+    public void Start() {
+        Reset();
+    }
+
+    @Override
+    public void Update() {}
+
+    @Override
+    public void Stop() {}
 
     public double GetOdometrXLeft(){
         return _odometrXLeft.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
