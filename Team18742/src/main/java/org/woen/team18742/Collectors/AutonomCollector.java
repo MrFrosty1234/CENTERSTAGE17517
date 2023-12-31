@@ -22,15 +22,10 @@ import java.util.List;
 public class AutonomCollector extends BaseCollector {
     public StartRobotPosition StartPosition = StartRobotPosition.RED_BACK;
 
-    public AutonomCollector(LinearOpMode commandCode) {
-        super(commandCode);
+    public AutonomCollector(LinearOpMode robot) {
+        super(robot);
 
         AddAditionModules(AutonomModule.class.getClasses());
-    }
-
-    @Override
-    public void Start() {
-        super.Start();
     }
 
     public void PreUpdate(){
