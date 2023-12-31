@@ -33,7 +33,7 @@ public class CVOdometry {
     private final Gyroscope _gyro;
 
     public CVOdometry(BaseCollector collector){
-        _gyro = collector.Gyro;
+        _gyro = collector.GetModule(Gyroscope.class);
     }
 
     public VisionProcessor GetProcessor(){

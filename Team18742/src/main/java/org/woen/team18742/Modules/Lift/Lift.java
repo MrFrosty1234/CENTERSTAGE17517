@@ -10,7 +10,7 @@ import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs;
 import org.woen.team18742.Tools.Devices;
-import org.woen.team18742.Tools.PID;
+import org.woen.team18742.Tools.PIDF;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
@@ -21,7 +21,7 @@ public class Lift implements IRobotModule {
 
     private boolean _endingUpState = false, _endingDownState = false;
 
-    private final PID _liftPid = new PID(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef, 1, 1);
+    private final PIDF _liftPIDF = new PIDF(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef, 0.1, 0, 1, 1);
     private Intake _intake;
 
     @Override
@@ -49,15 +49,15 @@ public class Lift implements IRobotModule {
 
     @Override
     public void Update() {
-        _liftPid.UpdateCoefs(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef);
+        _liftPIDF.UpdateCoefs(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef);
 
         _endingUpState = _ending1.getState();
         _endingDownState = _ending2.getState();
 
         if(!_intake.IsCoupNormal() && _liftPose == LiftPose.DOWN)
-            _liftMotor.setPower(Math.max(_liftPid.Update(LiftPose.AVERAGE.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
+            _liftMotor.setPower(Math.max(_liftPIDF.Update(LiftPose.AVERAGE.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
         else
-            _liftMotor.setPower(Math.max(_liftPid.Update(_liftPose.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
+            _liftMotor.setPower(Math.max(_liftPIDF.Update(_liftPose.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
 
         ToolTelemetry.AddLine("Lift end1 = " + _endingUpState + " end = " + _endingDownState);
 
@@ -69,7 +69,7 @@ public class Lift implements IRobotModule {
     public void Stop() {}
 
     public boolean isATarget() {
-        return Math.abs(_liftPid.Err) < 30;
+        return Math.abs(_liftPIDF.Err) < 30;
         //return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || (_liftPose == LiftPose.AVERAGE && Math.abs(_liftPid.Err) < 30);
     }
 
@@ -87,7 +87,7 @@ public class Lift implements IRobotModule {
 
     @Override
     public void Start() {
-        _liftPid.Start();
+        _liftPIDF.Start();
     }
 
     private LiftPose _liftPose = LiftPose.DOWN;

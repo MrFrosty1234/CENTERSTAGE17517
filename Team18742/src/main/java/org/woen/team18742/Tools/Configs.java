@@ -89,4 +89,36 @@ public class Configs {
         public static double servoplaneOtkrit = 0.07;
         public static double servoplaneneOtkrit = 0.17;
     }
+
+    @Config
+    public static class DriverTrainLeftBackPidf{
+        public static double pCof = 1;
+        public static double iCof = 0;
+        public static double dCof = 0;
+        public static double fCof = 0;
+    }
+
+    @Config
+    public static class DriverTrainRightBackPidf{
+        public static double pCof = 1;
+        public static double iCof = 0;
+        public static double dCof = 0;
+        public static double fCof = 0;
+    }
+
+    @Config
+    public static class DriverTrainRightForwardPidf{
+        public static double pCof = 1;
+        public static double iCof = 0;
+        public static double dCof = 0;
+        public static double fCof = 0;
+    }
+
+    @Config
+    public static class DriverTrainLeftForwardPidf{
+        public static double pCof = 1;
+        public static double iCof = 0;
+        public static double dCof = 0;
+        public static double fCof = 0;
+    }
 }

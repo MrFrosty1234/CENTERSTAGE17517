@@ -17,7 +17,7 @@ import java.util.List;
 public class Devices {
     private static HardwareMap _hardwareDevices;
 
-    public static DcMotor LeftForwardDrive, LeftBackDrive, RightForwardDrive, RightBackDrive;
+    public static DcMotorEx LeftForwardDrive, LeftBackDrive, RightForwardDrive, RightBackDrive;
 
     public static DcMotor OdometrXLeft, OdometrY, OdometrXRight;
 
@@ -41,10 +41,10 @@ public class Devices {
         if(_hardwareDevices != null)
             return;
 
-        LeftForwardDrive = map.get(DcMotor.class, "leftmotor");
-        RightForwardDrive = map.get(DcMotor.class, "rightmotor");
-        LeftBackDrive = map.get(DcMotor.class, "leftbackmotor");
-        RightBackDrive = map.get(DcMotor.class, "rightbackmotor");
+        LeftForwardDrive = map.get(DcMotorEx.class, "leftmotor");
+        RightForwardDrive = map.get(DcMotorEx.class, "rightmotor");
+        LeftBackDrive = map.get(DcMotorEx.class, "leftbackmotor");
+        RightBackDrive = map.get(DcMotorEx.class, "rightbackmotor");
 
         LiftMotor = map.get(DcMotor.class, "liftmotor");
 
