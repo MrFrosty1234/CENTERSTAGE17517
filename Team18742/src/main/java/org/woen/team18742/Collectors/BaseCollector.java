@@ -35,7 +35,7 @@ public class BaseCollector {
         _battery = new Battery(this);
         Time = new ElapsedTime();
 
-        AddAditionModules(Module.class.getClasses());
+        AddAdditionModules(Module.class.getClasses());
     }
 
     public void Start(){
@@ -59,13 +59,15 @@ public class BaseCollector {
             i.Stop();
     }
 
-    protected void AddAditionModules(Class<?>[] modules){
-        try {
-            for (Class<?> i : modules)
-                if (i.isInstance(IRobotModule.class))
+    protected void AddAdditionModules(Class<?>[] modules){
+        for (Class<?> i : modules)
+            if (i.isInstance(IRobotModule.class)) {
+                try {
                     _modules.add((IRobotModule) i.newInstance());
-        }
-        catch (Exception ignored){}
+                } catch (Exception e){
+                    throw new RuntimeException("not correct constructor in module " + i.getName());
+                }
+            }
 
         for (IRobotModule i : _modules)
             i.Init(this);

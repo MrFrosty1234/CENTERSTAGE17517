@@ -25,7 +25,7 @@ public class AutonomCollector extends BaseCollector {
     public AutonomCollector(LinearOpMode robot) {
         super(robot);
 
-        AddAditionModules(AutonomModule.class.getClasses());
+        AddAdditionModules(AutonomModule.class.getClasses());
     }
 
     public void PreUpdate(){
