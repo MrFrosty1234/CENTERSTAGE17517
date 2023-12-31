@@ -38,7 +38,7 @@ public class DriverTrain implements IRobotModule {
         _rightForwardDrive.setDirection(REVERSE);
         _rightBackDrive.setDirection(REVERSE);
 
-        _gyro = (Gyroscope) collector.GetModule(Gyroscope.class);
+        _gyro = collector.GetModule(Gyroscope.class);
     }
 
     @Override

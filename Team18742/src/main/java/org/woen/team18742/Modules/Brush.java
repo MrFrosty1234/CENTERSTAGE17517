@@ -30,7 +30,7 @@ public class Brush implements IRobotModule {
 
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        _lift = (Lift) collector.GetModule(Lift.class);
+        _lift = collector.GetModule(Lift.class);
     }
 
     @Override

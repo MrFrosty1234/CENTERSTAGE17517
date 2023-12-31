@@ -26,7 +26,7 @@ public class Lift implements IRobotModule {
 
     @Override
     public void Init(BaseCollector collector) {
-        _intake = (Intake) collector.GetModule(Intake.class);
+        _intake = collector.GetModule(Intake.class);
 
         _ending1 = Devices.Ending1;
         _ending2 = Devices.Ending2;

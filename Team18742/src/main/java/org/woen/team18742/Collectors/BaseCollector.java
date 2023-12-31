@@ -71,10 +71,10 @@ public class BaseCollector {
             i.Init(this);
     }
 
-    public IRobotModule GetModule(Class<? extends IRobotModule> type){
+    public  <T extends IRobotModule> T GetModule(Class<T> type){
         for(IRobotModule i : _modules)
             if(i.getClass() == type)
-                return i;
+                return (T) i;
 
         throw new RuntimeException("not found " + type.getName() + "module");
     }

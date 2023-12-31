@@ -41,8 +41,8 @@ public class Intake implements IRobotModule {
         servopere = Devices.Servopere;
         _lighting = Devices.LightingMotor;
 
-        _brush = (Brush) collector.GetModule(Brush.class);
-        _lift = (Lift) collector.GetModule(Lift.class);
+        _brush = collector.GetModule(Brush.class);
+        _lift = collector.GetModule(Lift.class);
     }
 
     @Override

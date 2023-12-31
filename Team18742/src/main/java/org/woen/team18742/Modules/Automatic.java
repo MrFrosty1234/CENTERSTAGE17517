@@ -21,9 +21,9 @@ public class Automatic implements IRobotModule {
 
     @Override
     public void Init(BaseCollector collector) {
-        _odometry = (Odometry) collector.GetModule(Odometry.class);
-        _gyro = (Gyroscope) collector.GetModule(Gyroscope.class);
-        _driverTrain = (DriverTrain) collector.GetModule(DriverTrain.class);
+        _odometry = collector.GetModule(Odometry.class);
+        _gyro = collector.GetModule(Gyroscope.class);
+        _driverTrain = collector.GetModule(DriverTrain.class);
 
         if(collector instanceof AutonomCollector)
             _collector = (AutonomCollector) collector;

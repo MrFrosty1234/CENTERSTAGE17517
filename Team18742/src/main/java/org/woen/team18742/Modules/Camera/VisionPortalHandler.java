@@ -17,12 +17,9 @@ public class VisionPortalHandler implements IRobotModule {
 
     @Override
     public void Init(BaseCollector collector){
-        Camera camera = (Camera)collector.GetModule(Camera.class);
-        CameraStreamSource video = camera.GetProcessor();
+        CameraStreamSource video = collector.GetModule(Camera.class).GetProcessor();
 
-        Odometry odometry = (Odometry) collector.GetModule(Odometry.class);
-
-        _visualPortal = new VisionPortal.Builder().addProcessors(odometry.GetProcessor(), (VisionProcessor) video).setCamera(Devices.Camera).build();
+        _visualPortal = new VisionPortal.Builder().addProcessors(collector.GetModule(Odometry.class).GetProcessor(), (VisionProcessor) video).setCamera(Devices.Camera).build();
 
         FtcDashboard.getInstance().startCameraStream(video, 15);
     }

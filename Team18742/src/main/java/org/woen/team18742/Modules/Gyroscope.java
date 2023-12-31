@@ -24,7 +24,7 @@ public class Gyroscope implements IRobotModule {
     @Override
     public void Init(BaseCollector collector) {
         _imu = Devices.IMU;
-        _odometrs = (OdometrsHandler)collector.GetModule(OdometrsHandler.class);
+        _odometrs = collector.GetModule(OdometrsHandler.class);
         _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP)));
     }
 

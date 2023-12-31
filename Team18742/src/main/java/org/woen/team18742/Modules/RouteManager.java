@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AutonomModule
-public class RoateManager implements IRobotModule {
+public class RouteManager implements IRobotModule {
     private final List<Runnable> _route = new ArrayList<>();
 
     private int _currentRouteAction = 0;
@@ -27,10 +27,10 @@ public class RoateManager implements IRobotModule {
 
     @Override
     public void Init(BaseCollector collector) {
-        _automatic = (Automatic) collector.GetModule(Automatic.class);
-        _lift = (Lift) collector.GetModule(Lift.class);
-        _intake = (Intake) collector.GetModule(Intake.class);
-        _camera = (Camera) collector.GetModule(Camera.class);
+        _automatic = collector.GetModule(Automatic.class);
+        _lift = collector.GetModule(Lift.class);
+        _intake = collector.GetModule(Intake.class);
+        _camera = collector.GetModule(Camera.class);
 
         if(collector instanceof AutonomCollector)
             _collector = (AutonomCollector) collector;

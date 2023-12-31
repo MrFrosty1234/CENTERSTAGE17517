@@ -37,9 +37,9 @@ public class Odometry implements IRobotModule {
     public void Init(BaseCollector collector) {
         _CVOdometry = new CVOdometry(collector);
 
-        _driverTrain = (DriverTrain) collector.GetModule(DriverTrain.class);
-        _gyro = (Gyroscope) collector.GetModule(Gyroscope.class);
-        _odometrs = (OdometrsHandler) collector.GetModule(OdometrsHandler.class);
+        _driverTrain = collector.GetModule(DriverTrain.class);
+        _gyro = collector.GetModule(Gyroscope.class);
+        _odometrs = collector.GetModule(OdometrsHandler.class);
 
         if(collector instanceof AutonomCollector)
             _collector = (AutonomCollector) collector;

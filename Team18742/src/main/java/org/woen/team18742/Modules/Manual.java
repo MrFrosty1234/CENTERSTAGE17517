@@ -31,10 +31,10 @@ public class Manual implements IRobotModule {
 
         _gamepad = collector.Robot.gamepad1;
 
-        _brush = (Brush) collector.GetModule(Brush.class);
-        _intake = (Intake) collector.GetModule(Intake.class);
-        _lift = (Lift) collector.GetModule(Lift.class);
-        _driverTrain = (DriverTrain) collector.GetModule(DriverTrain.class);
+        _brush = collector.GetModule(Brush.class);
+        _intake = collector.GetModule(Intake.class);
+        _lift = collector.GetModule(Lift.class);
+        _driverTrain = collector.GetModule(DriverTrain.class);
     }
 
     @Override
