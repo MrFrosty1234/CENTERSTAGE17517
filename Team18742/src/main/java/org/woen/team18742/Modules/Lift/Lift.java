@@ -17,7 +17,7 @@ import org.woen.team18742.Tools.ToolTelemetry;
 public class Lift implements IRobotModule {
     private DcMotor _liftMotor;
 
-    private DigitalChannel _ending1, _ending2;
+    private DigitalChannel _endSwitchUp, _endswitchDown;
 
     private boolean _endingUpState = false, _endingDownState = false;
 
@@ -28,8 +28,8 @@ public class Lift implements IRobotModule {
     public void Init(BaseCollector collector) {
         _intake = collector.GetModule(Intake.class);
 
-        _ending1 = Devices.Ending1;
-        _ending2 = Devices.Ending2;
+        _endSwitchUp = Devices.EndSwitchUp;
+        _endswitchDown = Devices.EndSwitchDown;
 
         _liftMotor = Devices.LiftMotor;
         _liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -38,8 +38,8 @@ public class Lift implements IRobotModule {
 
         ResetLift();
 
-        _ending1.setMode(DigitalChannel.Mode.INPUT);
-        _ending2.setMode(DigitalChannel.Mode.INPUT);
+        _endSwitchUp.setMode(DigitalChannel.Mode.INPUT);
+        _endswitchDown.setMode(DigitalChannel.Mode.INPUT);
     }
 
     private void ResetLift(){
@@ -51,10 +51,10 @@ public class Lift implements IRobotModule {
     public void Update() {
         _liftPIDF.UpdateCoefs(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef);
 
-        _endingUpState = _ending1.getState();
-        _endingDownState = _ending2.getState();
+        _endingUpState = _endSwitchUp.getState();
+        _endingDownState = _endswitchDown.getState();
 
-        if(!_intake.IsCoupNormal() && _liftPose == LiftPose.DOWN)
+        if(!_intake.IsTurnNormal() && _liftPose == LiftPose.DOWN)
             _liftMotor.setPower(Math.max(_liftPIDF.Update(LiftPose.AVERAGE.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
         else
             _liftMotor.setPower(Math.max(_liftPIDF.Update(_liftPose.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));

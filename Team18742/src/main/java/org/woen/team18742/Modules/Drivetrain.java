@@ -2,8 +2,6 @@ package org.woen.team18742.Modules;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 import static java.lang.Math.PI;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -17,7 +15,7 @@ import org.woen.team18742.Tools.PIDF;
 import org.woen.team18742.Tools.Vector2;
 
 @Module
-public class DriverTrain implements IRobotModule {
+public class Drivetrain implements IRobotModule {
     private DcMotorEx _leftForwardDrive;
     private DcMotorEx _rightForwardDrive;
     private DcMotorEx _leftBackDrive;
@@ -56,7 +54,7 @@ public class DriverTrain implements IRobotModule {
 
     @Override
     public void Start() {
-        ResetIncoder();
+        ResetEncoders();
 
         _leftForwardDrivePidf.Start();
         _rightForwardDrivePidf.Start();
@@ -97,7 +95,7 @@ public class DriverTrain implements IRobotModule {
 
     private double _leftTargetForwardVelocity = 0, _rightTargetBackVelocity = 0, _leftTargetBackVelocity = 0, _rightTargetForwardVelocity = 0;
 
-    public void ResetIncoder() {
+    public void ResetEncoders() {
         _leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _leftForwardDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -109,36 +107,36 @@ public class DriverTrain implements IRobotModule {
         _rightForwardDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public double GetLeftBackIncoder() {
-        return _leftBackDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
+    public double GetLeftBackEncoder() {
+        return _leftBackDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diameter;
     }
 
-    public double GetLeftForwardIncoder() {
-        return _leftForwardDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
+    public double GetLeftForwardEncoder() {
+        return _leftForwardDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diameter;
     }
 
-    public double GetRightBackIncoder() {
-        return _rightBackDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
+    public double GetRightBackEncoder() {
+        return _rightBackDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diameter;
     }
 
-    public double GetRightForwardIncoder() {
-        return _rightForwardDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
+    public double GetRightForwardEncoder() {
+        return _rightForwardDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diameter;
     }
 
     public double GetRightForwardVelocity() {
-        return _rightForwardDrive.getVelocity() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
+        return _rightForwardDrive.getVelocity() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diameter;
     }
 
     public double GetLeftForwardVelocity() {
-        return _leftForwardDrive.getVelocity() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
+        return _leftForwardDrive.getVelocity() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diameter;
     }
 
     public double GetRightBackVelocity() {
-        return _rightBackDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
+        return _rightBackDrive.getVelocity() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diameter;
     }
 
     public double GetLeftBackVelocity() {
-        return _leftBackDrive.getCurrentPosition() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diametr;
+        return _leftBackDrive.getVelocity() / Configs.DriverTrainWheels.encoderconstat * PI * Configs.DriverTrainWheels.diameter;
     }
 
     @Override

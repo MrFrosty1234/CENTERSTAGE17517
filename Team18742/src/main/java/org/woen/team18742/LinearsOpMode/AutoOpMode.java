@@ -4,11 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team18742.Collectors.AutonomCollector;
-import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Tools.Vector2;
 
 @Autonomous
-public class Autonom extends LinearOpMode {
+public class AutoOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {

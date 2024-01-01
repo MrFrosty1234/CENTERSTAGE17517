@@ -1,18 +1,10 @@
 package org.woen.team18742.Collectors;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.woen.team18742.Modules.Brush;
-import org.woen.team18742.Modules.Cachinger;
-import org.woen.team18742.Modules.DriverTrain;
-import org.woen.team18742.Modules.Gyroscope;
-import org.woen.team18742.Modules.Intake;
-import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
-import org.woen.team18742.Modules.OdometrsHandler;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
@@ -22,7 +14,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 

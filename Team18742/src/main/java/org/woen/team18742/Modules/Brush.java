@@ -1,6 +1,5 @@
 package org.woen.team18742.Modules;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,7 +15,7 @@ import org.woen.team18742.Tools.Devices;
 @Module
 public class Brush implements IRobotModule {
     private DcMotorEx brushMotor;
-    private boolean flagdefense = true;
+    private boolean _flagDefense = true;
 
     private boolean _isReversed = false, _isIntake = false;
 
@@ -36,18 +35,18 @@ public class Brush implements IRobotModule {
     @Override
     public void Start() {}
 
-    private void intakePowerWithDefense(boolean brush1, double speed) {//функция для щёток с зашитой от зажёвывания
-        if (brush1) {
-            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= Configs.Brush.getvolteges && flagdefense) {
+    private void intakePowerWithProtection(boolean brushOn, double speed) {//функция для щёток с зашитой от зажёвывания
+        if (brushOn) {
+            if (brushMotor.getCurrent(CurrentUnit.AMPS) <= Configs.Brush.protectionCurrentAmps && _flagDefense) {
                 elapsedTime.reset();
             }
-            if (elapsedTime.milliseconds() >= Configs.Brush.timesxz && flagdefense) {
-                flagdefense = false;
+            if (elapsedTime.milliseconds() >= Configs.Brush.protectionTimeThreshold && _flagDefense) {
+                _flagDefense = false;
             }
-            if (elapsedTime.milliseconds() >= Configs.Brush.times1 && !flagdefense) {
-                flagdefense = true;
+            if (elapsedTime.milliseconds() >= Configs.Brush.reverseTimeThreshold && !_flagDefense) {
+                _flagDefense = true;
             }
-            if (!flagdefense) {
+            if (!_flagDefense) {
                 brushMotor.setPower(-speed);
             } else {
                 brushMotor.setPower(speed);
@@ -57,7 +56,7 @@ public class Brush implements IRobotModule {
         }
     }
 
-    public void IntakePowerWithDefense() {//функция для щёток с зашитой от зажёвывания
+    public void IntakePowerWithProtection() {//функция для щёток с зашитой от зажёвывания
 
         if(!_lift.isDown())
             return;
@@ -66,14 +65,14 @@ public class Brush implements IRobotModule {
         _isIntake = true;
         brushMotor.setPower(0);
 
-        intakePowerWithDefense(true, 1);
+        intakePowerWithProtection(true, 1);
     }
 
-    public void Revers(){
+    public void Reverse(){
         if(!_lift.isDown())
             return;
 
-        intakePowerWithDefense(false, 1);
+        intakePowerWithProtection(false, 1);
         _isIntake = false;
         brushMotor.setPower(-1);
         _isReversed = true;
@@ -83,10 +82,10 @@ public class Brush implements IRobotModule {
     public void Stop(){
         _isIntake = false;
         _isReversed = false;
-        intakePowerWithDefense(false, 1);
+        intakePowerWithProtection(false, 1);
     }
 
-    public boolean IsRevers(){
+    public boolean IsReversed(){
         return _isReversed;
     }
 
@@ -94,7 +93,7 @@ public class Brush implements IRobotModule {
         return _isIntake;
     }
 
-    public boolean IsStop(){
+    public boolean IsStopped(){
         return !_isIntake && !_isReversed;
     }
 

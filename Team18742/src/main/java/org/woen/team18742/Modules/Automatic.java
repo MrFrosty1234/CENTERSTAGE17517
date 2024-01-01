@@ -14,14 +14,14 @@ import org.woen.team18742.Tools.Vector2;
 public class Automatic implements IRobotModule {
     private Odometry _odometry;
     private Gyroscope _gyro;
-    private DriverTrain _driverTrain;
+    private Drivetrain _drivetrain;
     private AutonomCollector _collector;
 
     @Override
     public void Init(BaseCollector collector) {
         _odometry = collector.GetModule(Odometry.class);
         _gyro = collector.GetModule(Gyroscope.class);
-        _driverTrain = collector.GetModule(DriverTrain.class);
+        _drivetrain = collector.GetModule(Drivetrain.class);
 
         if(collector instanceof AutonomCollector)
             _collector = (AutonomCollector) collector;
@@ -68,7 +68,7 @@ public class Automatic implements IRobotModule {
         _PIDFTurn.UpdateCoefs(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD);
 
         if(Configs.GeneralSettings.IsAutonomEnable) {
-            _driverTrain.SetSpeedWorldCoords(
+            _drivetrain.SetSpeedWorldCoords(
                     new Vector2(_PIDFForward.Update(_targetPosition.X - _odometry.Position.X), _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y)),
                     _PIDFTurn.Update((_gyro.GetRadians() - _turnTarget)));
         }
