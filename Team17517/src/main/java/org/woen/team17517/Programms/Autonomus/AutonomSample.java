@@ -48,7 +48,7 @@ public class AutonomSample extends AutonomBaseClass {
                 () -> robot.timer.getTimeForTimer(2.2d/1.5d),
                 () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 0),
                 () -> robot.timer.getTimeForTimer(0.2),
-                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, -500            *(12/robot.voltageSensorPoint.getVol())),
+                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, -500 *(12/robot.voltageSensorPoint.getVol())),
                 () -> robot.timer.getTimeForTimer(2),
 
                 () -> robot.driveTrainVelocityControl.moveRobotCord(0,-1000,0),
@@ -63,7 +63,7 @@ public class AutonomSample extends AutonomBaseClass {
                 () -> robot.timer.getTimeForTimer(0.5),
 
 
-                () -> robot.lift.targetPosition = Lift.LiftPosition.UP,
+                () -> robot.lift.moveUP(),
                 () -> robot.timer.getTimeForTimer(1.5),
                 () -> robot.grabber.perekidFinish(),
                 () -> robot.grabber.openGraber(),
