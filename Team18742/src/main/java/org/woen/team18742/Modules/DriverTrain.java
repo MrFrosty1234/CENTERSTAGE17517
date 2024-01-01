@@ -8,7 +8,6 @@ import static java.lang.Math.sin;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;

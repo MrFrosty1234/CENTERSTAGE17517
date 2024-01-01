@@ -19,8 +19,7 @@ public class Configs {
     @Config
     public static class Camera{
         public static int RobotPos = 2;
-
-        public static float CameraAccuracy = 130;
+        public static double CameraAccuracy = 130;
         public static double CameraX = 16.01, CameraY = 16.18;
     }
 
@@ -36,7 +35,7 @@ public class Configs {
 
         public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
 
-        public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 1440;
+        public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 8192;
     }
 
     @Config

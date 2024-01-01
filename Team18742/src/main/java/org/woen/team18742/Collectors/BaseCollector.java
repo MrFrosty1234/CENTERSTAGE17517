@@ -17,7 +17,14 @@ import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BaseCollector {
     public LinearOpMode Robot;
@@ -35,7 +42,7 @@ public class BaseCollector {
         _battery = new Battery(this);
         Time = new ElapsedTime();
 
-        AddAdditionModules(Module.class.getClasses());
+        AddAdditionModules(AnnotationFinder.GetAnnotation(Module.class));
     }
 
     public void Start(){
@@ -59,7 +66,7 @@ public class BaseCollector {
             i.Stop();
     }
 
-    protected void AddAdditionModules(Class<?>[] modules){
+    protected void AddAdditionModules(ArrayList<Class<?>> modules){
         for (Class<?> i : modules)
             if (i.isInstance(IRobotModule.class)) {
                 try {
@@ -79,5 +86,41 @@ public class BaseCollector {
                 return (T) i;
 
         throw new RuntimeException("not found " + type.getName() + "module");
+    }
+
+    public static class AnnotationFinder{
+        private static final String ProjectPath = "org.woen.team18742";
+
+        public static ArrayList<Class<?>> GetAnnotation(Class<?> annotation){
+            ArrayList<Class<?>> result = new ArrayList<>();
+
+            for (Class<?> i : findAllClassesUsingClassLoader(ProjectPath)){
+                for(Annotation j: i.getAnnotations())
+                    if(j.getClass().equals(annotation))
+                        result.add(i);
+            }
+
+            return result;
+        }
+
+        private static Set<Class> findAllClassesUsingClassLoader(String packageName) {
+            InputStream stream = ClassLoader.getSystemClassLoader()
+                    .getResourceAsStream(packageName.replaceAll("[.]", "/"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            return reader.lines()
+                    .filter(line -> line.endsWith(".class"))
+                    .map(line -> getClass(line, packageName))
+                    .collect(Collectors.toSet());
+        }
+
+        private static Class getClass(String className, String packageName) {
+            try {
+                return Class.forName(packageName + "."
+                        + className.substring(0, className.lastIndexOf('.')));
+            } catch (ClassNotFoundException e) {
+                // handle the exception
+            }
+            return null;
+        }
     }
 }

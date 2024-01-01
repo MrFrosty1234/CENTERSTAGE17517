@@ -10,6 +10,7 @@ import org.woen.team18742.Modules.Automatic;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.VisionPortalHandler;
 import org.woen.team18742.Modules.Manager.AutonomModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Configs;
@@ -25,7 +26,7 @@ public class AutonomCollector extends BaseCollector {
     public AutonomCollector(LinearOpMode robot) {
         super(robot);
 
-        AddAdditionModules(AutonomModule.class.getClasses());
+        AddAdditionModules(AnnotationFinder.GetAnnotation(AutonomModule.class));
     }
 
     public void PreUpdate(){

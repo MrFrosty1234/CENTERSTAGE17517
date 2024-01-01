@@ -15,6 +15,6 @@ public class TeleOpCollector extends BaseCollector {
     public TeleOpCollector(LinearOpMode robot) {
         super(robot);
 
-        AddAdditionModules(TeleopModule.class.getClasses());
+        AddAdditionModules(AnnotationFinder.GetAnnotation(TeleopModule.class));
     }
 }
