@@ -3,8 +3,6 @@ package org.woen.team18742.Modules.Odometry;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-import com.acmerobotics.dashboard.config.Config;
-
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
@@ -13,7 +11,7 @@ import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.OdometrsHandler;
-import org.woen.team18742.Tools.Configs;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.ExponationFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
@@ -57,7 +55,7 @@ public class Odometry implements IRobotModule {
 
         double deltaX, deltaY;
 
-        if(Configs.GeneralSettings.IsUseOdometrs){
+        if(Configs.GeneralSettings.IsUseOdometrs.Get()){
             double deltaRotate = _gyro.GetRadians() - _oldRotate;
 
             double odometrXLeft = _odometrs.GetOdometrXLeft(), odometrY = _odometrs.GetOdometrY(), odometrXRight = _odometrs.GetOdometrXRigth();

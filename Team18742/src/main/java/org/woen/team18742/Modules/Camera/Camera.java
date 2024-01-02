@@ -1,12 +1,10 @@
 package org.woen.team18742.Modules.Camera;
 
-import com.acmerobotics.dashboard.config.Config;
-
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
-import org.woen.team18742.Tools.Configs;
+import org.woen.team18742.Tools.Configs.Configs;
 
 @AutonomModule
 public class Camera implements IRobotModule {
@@ -28,7 +26,7 @@ public class Camera implements IRobotModule {
     }
 
     public CameraRobotPosition GetPosition() {
-        if (Configs.GeneralSettings.IsCameraDebug)
+        if (Configs.GeneralSettings.IsCameraDebug.Get())
             return GetEnum(Configs.Camera.RobotPos);
 
         return GetEnum(pipeLine.pos.get());

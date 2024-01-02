@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
-import org.woen.team18742.Tools.Configs;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 
 @Module

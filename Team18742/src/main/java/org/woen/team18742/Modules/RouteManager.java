@@ -6,7 +6,7 @@ import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
-import org.woen.team18742.Tools.Configs;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class RouteManager implements IRobotModule {
 
     @Override
     public void Update() {
-        if (Configs.GeneralSettings.IsAutonomEnable) {
+        if (Configs.GeneralSettings.IsAutonomEnable.Get()) {
             if (_automatic.isMovedEnd() && _lift.isATarget() && (!_isPixelWait || _intake.isPixelLocated)) {
                 if (_currentRouteAction < _route.size()) {
                     _isPixelWait = false;

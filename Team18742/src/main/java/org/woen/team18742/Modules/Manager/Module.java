@@ -1,9 +1,14 @@
 package org.woen.team18742.Modules.Manager;
 
+import org.woen.team18742.Modules.Lift.Lift;
+import org.woen.team18742.Tools.ToolTelemetry;
+
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Module {
 
 }

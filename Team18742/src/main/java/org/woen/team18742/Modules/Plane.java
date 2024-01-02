@@ -1,10 +1,9 @@
 package org.woen.team18742.Modules;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.woen.team18742.Tools.Configs;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 
 public class Plane {

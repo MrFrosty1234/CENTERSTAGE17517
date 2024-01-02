@@ -5,7 +5,7 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Odometry.Odometry;
-import org.woen.team18742.Tools.Configs;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.PIDF;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
@@ -67,7 +67,7 @@ public class Automatic implements IRobotModule {
         _PIDFSide.UpdateCoefs(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideD);
         _PIDFTurn.UpdateCoefs(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD);
 
-        if(Configs.GeneralSettings.IsAutonomEnable) {
+        if(Configs.GeneralSettings.IsAutonomEnable.Get()) {
             _driverTrain.SetSpeedWorldCoords(
                     new Vector2(_PIDFForward.Update(_targetPosition.X - _odometry.Position.X), _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y)),
                     _PIDFTurn.Update((_gyro.GetRadians() - _turnTarget)));

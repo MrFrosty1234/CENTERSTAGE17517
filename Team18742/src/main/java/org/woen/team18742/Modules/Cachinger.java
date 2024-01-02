@@ -5,7 +5,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
-import org.woen.team18742.Tools.Configs;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class Cachinger implements IRobotModule {
 
     @Override
     public void Update(){
-        if(Configs.GeneralSettings.IsCachinger)
+        if(Configs.GeneralSettings.IsCachinger.Get())
             for(LynxModule i: _hubs)
                 i.getBulkData();
     }

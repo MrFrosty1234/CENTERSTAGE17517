@@ -385,7 +385,6 @@ This is a bug fix only release to address the following four issues.
       * com.qualcomm.robotcore.hardware.configuration.annotations.MotorType
       * com.qualcomm.robotcore.hardware.configuration.annotations.ServoType
     * External libraries that use the following annotations can add new functionality to the Robot Controller:
-      * org.firstinspires.ftc.ftccommon.external.OnCreate
       * org.firstinspires.ftc.ftccommon.external.OnCreateEventLoop
       * org.firstinspires.ftc.ftccommon.external.OnCreateMenu
       * org.firstinspires.ftc.ftccommon.external.OnDestroy

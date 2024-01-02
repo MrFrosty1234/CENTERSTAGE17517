@@ -2,13 +2,14 @@ package org.woen.team18742.Modules.Lift;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.sun.source.tree.AnnotationTree;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
-import org.woen.team18742.Tools.Configs;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.PIDF;
 import org.woen.team18742.Tools.ToolTelemetry;
