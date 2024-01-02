@@ -16,9 +16,9 @@ public class OdometrsHandler implements IRobotModule {
 
     @Override
     public void Init(BaseCollector collector){
-        _odometrXLeft = Devices.OdometrXLeft;
-        _odometrY = Devices.OdometrY;
-        _odometrXRight = Devices.OdometrXRight;
+        _odometrXLeft = Devices.OdometerXLeft;
+        _odometrY = Devices.OdometerY;
+        _odometrXRight = Devices.OdometerXRight;
     }
 
     @Override

@@ -6,13 +6,13 @@ import static java.lang.Math.sin;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.DriverTrain;
+import org.woen.team18742.Modules.Drivetrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.OdometrsHandler;
 import org.woen.team18742.Tools.Configs.Configs;
-import org.woen.team18742.Tools.ExponationFilter;
+import org.woen.team18742.Tools.ExponentialFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
@@ -21,13 +21,13 @@ public class Odometry implements IRobotModule {
     private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY;
 
     public Vector2 Position = new Vector2();
-    private DriverTrain _driverTrain;
+    private Drivetrain _driverTrain;
     private Gyroscope _gyro;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
     private CVOdometry _CVOdometry;
     private OdometrsHandler _odometrs;
 
-    private final ExponationFilter _filterX = new ExponationFilter(Configs.Odometry.XCoef), _filterY = new ExponationFilter(Configs.Odometry.YCoef);
+    private final ExponentialFilter _filterX = new ExponentialFilter(Configs.Odometry.XCoef), _filterY = new ExponentialFilter(Configs.Odometry.YCoef);
 
     private AutonomCollector _collector;
 
@@ -35,7 +35,7 @@ public class Odometry implements IRobotModule {
     public void Init(BaseCollector collector) {
         _CVOdometry = new CVOdometry(collector);
 
-        _driverTrain = collector.GetModule(DriverTrain.class);
+        _driverTrain = collector.GetModule(Drivetrain.class);
         _gyro = collector.GetModule(Gyroscope.class);
         _odometrs = collector.GetModule(OdometrsHandler.class);
 
@@ -70,10 +70,10 @@ public class Odometry implements IRobotModule {
             _oldRotate = _gyro.GetRadians();
         }
         else {
-            double lfd = _driverTrain.GetLeftForwardIncoder();
-            double lbd = _driverTrain.GetLeftBackIncoder();
-            double rfd = _driverTrain.GetRightForwardIncoder();
-            double rbd = _driverTrain.GetRightBackIncoder();
+            double lfd = _driverTrain.GetLeftForwardEncoder();
+            double lbd = _driverTrain.GetLeftBackEncoder();
+            double rfd = _driverTrain.GetRightForwardEncoder();
+            double rbd = _driverTrain.GetRightBackEncoder();
 
             double deltaLfd = lfd - _leftForwardDrive, deltaLbd = lbd - _leftBackDrive, deltaRfd = rfd - _rightForwardDrive, deltaRbd = rbd - _rightBackDrive;
 

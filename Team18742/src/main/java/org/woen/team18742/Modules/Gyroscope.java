@@ -12,13 +12,13 @@ import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
-import org.woen.team18742.Tools.ExponationFilter;
+import org.woen.team18742.Tools.ExponentialFilter;
 
 @Module
 public class Gyroscope implements IRobotModule {
     private IMU _imu;
     private OdometrsHandler _odometrs;
-    private ExponationFilter _filter = new ExponationFilter(Configs.Gyroscope.MergerCoef);
+    private ExponentialFilter _filter = new ExponentialFilter(Configs.Gyroscope.MergerCoefSeconds);
 
     @Override
     public void Init(BaseCollector collector) {
@@ -44,7 +44,7 @@ public class Gyroscope implements IRobotModule {
 
     @Override
     public void Update() {
-        _filter.UpdateCoef(Configs.Gyroscope.MergerCoef);
+        _filter.UpdateCoef(Configs.Gyroscope.MergerCoefSeconds);
 
         _degree = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         _radians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);

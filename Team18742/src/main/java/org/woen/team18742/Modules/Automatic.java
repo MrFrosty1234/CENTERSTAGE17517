@@ -14,14 +14,14 @@ import org.woen.team18742.Tools.Vector2;
 public class Automatic implements IRobotModule {
     private Odometry _odometry;
     private Gyroscope _gyro;
-    private DriverTrain _driverTrain;
+    private Drivetrain _driverTrain;
     private AutonomCollector _collector;
 
     @Override
     public void Init(BaseCollector collector) {
         _odometry = collector.GetModule(Odometry.class);
         _gyro = collector.GetModule(Gyroscope.class);
-        _driverTrain = collector.GetModule(DriverTrain.class);
+        _driverTrain = collector.GetModule(Drivetrain.class);
 
         if(collector instanceof AutonomCollector)
             _collector = (AutonomCollector) collector;
