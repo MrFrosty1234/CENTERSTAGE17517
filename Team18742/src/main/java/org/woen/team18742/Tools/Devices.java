@@ -19,7 +19,7 @@ public class Devices {
 
     public static DcMotorEx LeftForwardDrive, LeftBackDrive, RightForwardDrive, RightBackDrive;
 
-    public static DcMotor OdometrXLeft, OdometrY, OdometrXRight;
+    public static DcMotor OdometerXLeft, OdometerY, OdometerXRight;
 
     public static DcMotor LiftMotor, LightingMotor;
 
@@ -27,7 +27,7 @@ public class Devices {
 
     public static WebcamName Camera;
 
-    public static DigitalChannel Ending1, Ending2;
+    public static DigitalChannel EndSwitchUp, EndSwitchDown;
 
     public static IMU IMU;
 
@@ -50,14 +50,14 @@ public class Devices {
 
         BrushMotor = map.get(DcMotorEx.class, "brushMotor");
 
-        OdometrXLeft = map.get(DcMotor.class, "OdometrXLeft");
-        OdometrY = map.get(DcMotor.class, "OdometrY");
-        OdometrXRight = BrushMotor;
+        OdometerXLeft = map.get(DcMotor.class, "OdometrXLeft");
+        OdometerY = map.get(DcMotor.class, "OdometrY");
+        OdometerXRight = BrushMotor;
 
         Camera = map.get(WebcamName.class, "Webcam 1");
 
-        Ending1 = map.get(DigitalChannel.class, "ending1");
-        Ending2 = map.get(DigitalChannel.class, "ending2");
+        EndSwitchUp = map.get(DigitalChannel.class, "ending1");
+        EndSwitchDown = map.get(DigitalChannel.class, "ending2");
 
         ServoPlane = map.get(Servo.class, "servoPlane");
         ServoRailGun = map.get(Servo.class, "servoRailGun");
@@ -74,7 +74,7 @@ public class Devices {
 
         VoltageSensor = map.get(VoltageSensor.class, "Control Hub");
 
-        LightingMotor = OdometrXLeft;
+        LightingMotor = OdometerXLeft;
 
         _hardwareDevices = map;
     }

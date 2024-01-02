@@ -57,7 +57,7 @@ public class AutonomForBase {
                     robot.grabber.powerPixelMotor(0);
                 },
                 () -> {
-                    robot.lift.targetPosition = Lift.LiftPosition.UP;
+                    robot.lift.moveUP();
                 },
                 () -> {
                     robot.grabber.perekidStart();

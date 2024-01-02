@@ -1,14 +1,11 @@
 package org.woen.team18742.Modules;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.IRobotModule;
-import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Modules.Manager.TeleopModule;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
@@ -24,7 +21,7 @@ public class Manual implements IRobotModule {
     private Brush _brush;
     private Intake _intake;
     private Lift _lift;
-    private DriverTrain _driverTrain;
+    private Drivetrain _drivetrain;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -35,7 +32,7 @@ public class Manual implements IRobotModule {
         _brush = collector.GetModule(Brush.class);
         _intake = collector.GetModule(Intake.class);
         _lift = collector.GetModule(Lift.class);
-        _driverTrain = collector.GetModule(DriverTrain.class);
+        _drivetrain = collector.GetModule(Drivetrain.class);
     }
 
     @Override
@@ -45,7 +42,7 @@ public class Manual implements IRobotModule {
     public void Update() {
         _plane.Update();
 
-        _driverTrain.DriveDirection(
+        _drivetrain.DriveDirection(
                 new Vector2(_gamepad.left_stick_y, _gamepad.left_stick_x),
                 _gamepad.right_stick_x);
 
@@ -70,12 +67,12 @@ public class Manual implements IRobotModule {
             if(_brush.IsIntake())
                 _brush.Stop();
             else
-                _brush.IntakePowerWithDefense();
+                _brush.IntakePowerWithProtection();
         } else if(brushRevers && !_brushReversOld){
-            if(_brush.IsRevers())
+            if(_brush.IsReversed())
                 _brush.Stop();
             else
-                _brush.Revers();
+                _brush.Reverse();
         }
 
         if (A)
@@ -83,13 +80,13 @@ public class Manual implements IRobotModule {
         else
             _plane.DeLaunch();
 
-        if (liftUp && _intake.isPixelLocated)
+        if (liftUp && _intake.isPixelGripped())
             _lift.SetLiftPose(LiftPose.UP);
 
         if(liftDown)
             _lift.SetLiftPose(LiftPose.DOWN);
 
-        if(average && _intake.isPixelLocated)
+        if(average && _intake.isPixelGripped())
             _lift.SetLiftPose(LiftPose.AVERAGE);
 
         _brushOld = brush;

@@ -2,11 +2,11 @@ package org.woen.team18742.Tools;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class ExponationFilter {
+public class ExponentialFilter {
     private double _coef;
     private ElapsedTime _time = new ElapsedTime();
 
-    public ExponationFilter(double coef){
+    public ExponentialFilter(double coef){
         _coef = coef;
     }
 

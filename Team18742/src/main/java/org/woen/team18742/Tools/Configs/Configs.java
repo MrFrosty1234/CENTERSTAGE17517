@@ -54,32 +54,33 @@ public class Configs {
 
     @Config
     public static class Brush{
-        public static double getvolteges = 1;
-        public static double timesxz = 1500;
-        public static double times1 = 3000;
+        public static double protectionCurrentAmps = 1;
+        public static double protectionTimeThreshold = 1500;
+        public static double reverseTimeThreshold = 3000;
     }
 
     @Config
     public static class DriverTrainWheels{
-        public static double diametr = 9.8, encoderconstat = 1440;
+        public static double diameter = 9.8, encoderconstat = 1440;
     }
 
     @Config
     public static class Gyroscope{
-        public static double MergerCoef = 0.9;
+        public static double MergerCoefSeconds = 0.9;
     }
 
     @Config
     public static class Intake{
         public static double pixelSensorvoltage = 0.125, PixelCenterOpen = 0;//0.4
-        public static double servoperevorotnazad = 0.96;
-        public static final double servoperevorot = 0.35;
+        public static double servoTurnNormal = 0.96;
+        public static final double servoTurnTurned = 0.35;
         public static long AverageTime = 830;
-        public static double servoGripperreturn = 0.4;
-        public static double servoGripper = 0.13;
-        public static double servoClamp = 0.9;
-        public static double servoClampreturn = 0.42;//0.5
-        public static long ReversTime = 2000;
+        public static double servoGripperNormal = 0.4;
+        public static double servoGripperGripped = 0.13;
+        public static double servoClampClamped = 0.9;
+        public static double servoClampReleased = 0.42;//0.5
+        public static double pixelDetectTimeMs = 1000;
+        public static double ReverseTimeMs = 2000;
     }
 
     @Config

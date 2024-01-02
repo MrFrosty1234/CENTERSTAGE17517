@@ -43,8 +43,8 @@ public class TelemetryOutput implements RobotModule{
     public void update(){
         if(lift) {
             telemetry.addData("liftEncs", robot.lift.liftMotor.getCurrentPosition());
-            telemetry.addData("target",robot.lift.targetPosition.value);
-            telemetry.addData("lift pos",robot.lift.targetPosition);
+            telemetry.addData("target",robot.lift.getTargetPosition().value);
+            telemetry.addData("lift pos",robot.lift.getTargetPosition());
             telemetry.addData("lift mode", robot.lift.liftMode);
         }
         if(driveTrain){

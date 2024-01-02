@@ -65,7 +65,7 @@ public class RouteManager implements IRobotModule {
     @Override
     public void Update() {
         if (Configs.GeneralSettings.IsAutonomEnable.Get()) {
-            if (_automatic.isMovedEnd() && _lift.isATarget() && (!_isPixelWait || _intake.isPixelLocated)) {
+            if (_automatic.isMovedEnd() && _lift.isATarget() && (!_isPixelWait || _intake.PixelGripped)) {
                 if (_currentRouteAction < _route.size()) {
                     _isPixelWait = false;
                     _route.get(_currentRouteAction).run();

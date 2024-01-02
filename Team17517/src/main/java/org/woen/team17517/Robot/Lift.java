@@ -6,25 +6,20 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.util.Range;
+
 
 @Config
 public class Lift implements RobotModule {
-    public static double kP = 0.005964;
-    public static double kI = 0;
-    public static double kD = 0;
     public DcMotor liftMotor;
     public DigitalChannel buttonUp;
     public DigitalChannel buttonDown;
-    private double power = 0;
-    public LiftPosition targetPosition = LiftPosition.UNKNOWN;
+    private LiftPosition targetPosition = LiftPosition.UNKNOWN;
+    public LiftPosition getTargetPosition(){
+        return targetPosition;
+    }
     public LiftMode liftMode = LiftMode.AUTO;
-    double err1 = 0;
     UltRobot robot;
-    static int liftOffset = -LiftPosition.UP.value;
-    private final PidRegulator PIDZL1 = new PidRegulator(kP, kI, kD);
-    public boolean liftPos = true;
-
+    private int liftOffset = -LiftPosition.UP.value;
     public boolean liftAtTaget = false;
 
     public Lift(UltRobot robot) {
@@ -67,9 +62,14 @@ public class Lift implements RobotModule {
     }
 
     public void setPositionOffset(int liftOffset){
-        Lift.liftOffset = liftOffset;
+        this.liftOffset = liftOffset;
     }
-
+    public void moveUP(){
+        this.targetPosition = LiftPosition.UP;
+    }
+    public void moveDown(){
+        this.targetPosition =LiftPosition.DOWN;
+    }
     private void setPowersLimit(double x) {
         int pos = getPosition();
         if (x > 0) {
@@ -88,44 +88,20 @@ public class Lift implements RobotModule {
     }
 
     public void update() {
-        /*if (true)
-            return;
-        switch (liftMode) {
-            case AUTO: {
-                double target1 = targetPosition.value;
-                double position = getPosition();
-                err1 = target1 - position;
-                double poweryl1 = 0.2 + PIDZL1.update(err1);
-                liftMotor.setPower(Range.clip(poweryl1, -0.1, 0.7));
-                if (abs(position) > 50)
-                    liftPos = false;
-                else
-                    liftPos = true;
-            }
-            break;
-            case MANUALLIMIT:
-                setPowersLimit(power);
-                break;
-            case MANUAL:
-                setPower(power);
-                break;
-        }
-
-         */
         double liftPower = 0;
         double liftGravityPower = 0.1;
         double liftMovePower = 1;
 
-        if (robot.lift.getTopSwitch())
-            robot.lift.setPositionOffset(Lift.LiftPosition.UP.value - robot.lift.getRawPosition());
-        switch (robot.lift.targetPosition) {
+        if (getTopSwitch())
+            setPositionOffset(LiftPosition.UP.value - getRawPosition());
+        switch (targetPosition) {
             case UP:
-                liftAtTaget = robot.lift.getTopSwitch();
+                liftAtTaget = getTopSwitch();
                 liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
                 setPower(liftPower);
                 break;
             case DOWN:
-                liftAtTaget = robot.lift.getPosition() <= Lift.LiftPosition.DOWN.value;
+                liftAtTaget = getPosition() <= LiftPosition.DOWN.value;
                 liftPower = liftAtTaget ? 0 : -liftMovePower;
                 setPower(liftPower);
                 break;
@@ -138,10 +114,10 @@ public class Lift implements RobotModule {
     }
 
     public boolean isAtPosition() {
-        return liftAtTaget; //abs(err1) < 5;
+        return liftAtTaget;
     }
 
-    public enum LiftMode {
+    public enum LiftMode{
         AUTO, MANUAL, MANUALLIMIT
     }
 

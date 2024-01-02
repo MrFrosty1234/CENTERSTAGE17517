@@ -16,7 +16,6 @@ public class UltRobot {
     public Lift lift;
     public Lighting lighting;
     public VoltageSensorPoint voltageSensorPoint;
-    //public UpdateCameraAndOdometry updateCameraAndOdometry;
     public LinearOpMode linearOpMode;
     public Gyro gyro;
     public TestAprilTagPipeline testAprilTagPipeline;
@@ -25,8 +24,6 @@ public class UltRobot {
     public Odometry odometry;
     public Timer timer;
     public RobotModule[] robotModules;
-  //  public  AutonomForBase autonomForBase;
-
     private final List<LynxModule> revHubs;
 
     public UltRobot(LinearOpMode linearOpMode1) {
@@ -40,13 +37,11 @@ public class UltRobot {
         driveTrainVelocityControl = new DriveTrainVelocityControl(this);
         gyro = new Gyro(this);
         lighting = new Lighting(this);
-        //updateCameraAndOdometry = new UpdateCameraAndOdometry(this);
         testAprilTagPipeline = new TestAprilTagPipeline(this);
         odometry = new Odometry(this);
         drivetrainNew = new DrivetrainNew(this);
-       // autonomForBase = new AutonomForBase(this);
         this.robotModules = new RobotModule[]{telemetryOutput, grabber, timer, voltageSensorPoint,
-                lift, driveTrainVelocityControl, gyro, lighting, odometry, drivetrainNew,/*updateCameraAndOdometry*/};
+                lift, driveTrainVelocityControl, gyro, lighting, odometry, drivetrainNew};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }

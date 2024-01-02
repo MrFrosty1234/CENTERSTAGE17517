@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.woen.team18742.Tools.Configs.Configs;
 
-@TeleOp
+@TeleOp(name = "Enable Competition Settings")
 public class EnableCompetitions extends LinearOpMode {
     @Override
     public void runOpMode() {

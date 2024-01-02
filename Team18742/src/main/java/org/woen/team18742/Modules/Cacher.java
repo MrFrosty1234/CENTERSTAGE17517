@@ -11,7 +11,7 @@ import org.woen.team18742.Tools.Devices;
 import java.util.List;
 
 @Module
-public class Cachinger implements IRobotModule {
+public class Cacher implements IRobotModule {
     private List<LynxModule> _hubs;
 
     @Override
