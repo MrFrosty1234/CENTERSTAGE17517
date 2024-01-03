@@ -15,6 +15,7 @@ import org.woen.team18742.Tools.Devices;
 @Module
 public class Brush implements IRobotModule {
     private DcMotorEx brushMotor;
+    public byte statebrush;
     private boolean _flagDefense = true;
 
     private boolean _isReversed = false, _isIntake = false;
@@ -22,7 +23,9 @@ public class Brush implements IRobotModule {
     private ElapsedTime elapsedTime = new ElapsedTime();
 
     private Lift _lift;
-
+    private double MAX_CURRENT = 3;
+    private double  PROTECTION_TIME = 2000;
+    private double REVERS_TIME = 1000 + PROTECTION_TIME;
     @Override
     public void Init(BaseCollector collector){
         brushMotor = Devices.BrushMotor;
@@ -81,6 +84,15 @@ public class Brush implements IRobotModule {
         _isReversed = false;
         intakePowerWithProtection(false, 1);
     }
+    private void stop(){//функция для конечного автомата
+        brushMotor.setPower(0);
+    }
+    private void NormalRun(){//функция для конечного автомата
+        brushMotor.setPower(1);
+    }
+    private void reversRun(){//функция для конечного автомата
+        brushMotor.setPower(-1);
+    }
 
     public boolean IsReversed(){
         return _isReversed;
@@ -97,6 +109,33 @@ public class Brush implements IRobotModule {
     @Override
     public void Update(){
         if(!_lift.isDown())
-            Stop();
+            statebrush = 3;
+        switch(statebrush){
+            case 1: //тут нормальные щётки
+                NormalRun();
+                if (brushMotor.getCurrent(CurrentUnit.AMPS) <= MAX_CURRENT) {
+                    elapsedTime.reset();
+                }
+                if(elapsedTime.milliseconds() > PROTECTION_TIME){
+                    statebrush=2;
+                }
+                break;
+            case 2://рверс
+                reversRun();
+                if(elapsedTime.milliseconds() > REVERS_TIME){
+                    statebrush=1;
+                }
+                break;
+            case 3://выключение щёток
+
+                if(elapsedTime.milliseconds() < REVERS_TIME){
+                   reversRun();
+                }else{
+                    stop();
+                }
+                break;
+        }
     }
+
+
 }
