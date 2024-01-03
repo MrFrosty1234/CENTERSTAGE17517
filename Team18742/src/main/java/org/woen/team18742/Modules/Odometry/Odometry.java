@@ -9,15 +9,15 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Drivetrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.AutonomModule;
-import org.woen.team18742.Modules.Manager.IRobotModule;
-import org.woen.team18742.Modules.OdometrsHandler;
+import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.OdometryHandler;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.ExponentialFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 @AutonomModule
-public class Odometry implements IRobotModule {
+public class Odometry extends RobotModule {
     private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY;
 
     public Vector2 Position = new Vector2();
@@ -25,7 +25,7 @@ public class Odometry implements IRobotModule {
     private Gyroscope _gyro;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
     private CVOdometry _CVOdometry;
-    private OdometrsHandler _odometrs;
+    private OdometryHandler _odometrs;
 
     private final ExponentialFilter _filterX = new ExponentialFilter(Configs.Odometry.XCoef), _filterY = new ExponentialFilter(Configs.Odometry.YCoef);
 
@@ -37,7 +37,7 @@ public class Odometry implements IRobotModule {
 
         _driverTrain = collector.GetModule(Drivetrain.class);
         _gyro = collector.GetModule(Gyroscope.class);
-        _odometrs = collector.GetModule(OdometrsHandler.class);
+        _odometrs = collector.GetModule(OdometryHandler.class);
 
         if(collector instanceof AutonomCollector)
             _collector = (AutonomCollector) collector;
@@ -55,10 +55,10 @@ public class Odometry implements IRobotModule {
 
         double deltaX, deltaY;
 
-        if(Configs.GeneralSettings.IsUseOdometrs.Get()){
+        if(Configs.GeneralSettings.IsUseOdometers){
             double deltaRotate = _gyro.GetRadians() - _oldRotate;
 
-            double odometrXLeft = _odometrs.GetOdometrXLeft(), odometrY = _odometrs.GetOdometrY(), odometrXRight = _odometrs.GetOdometrXRigth();
+            double odometrXLeft = _odometrs.GetOdometerXLeft(), odometrY = _odometrs.GetOdometerY(), odometrXRight = _odometrs.GetOdometerXRight();
 
             deltaX = (odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
             deltaY = (odometrY - _oldOdometrY) - Configs.Odometry.RadiusOdometrY * deltaRotate;
@@ -101,9 +101,6 @@ public class Odometry implements IRobotModule {
         ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
         ToolTelemetry.AddLine("OdometryX :" + Position);
     }
-
-    @Override
-    public void Stop() {}
 
     @Override
     public void Start(){

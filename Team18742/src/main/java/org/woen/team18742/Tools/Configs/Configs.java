@@ -1,18 +1,25 @@
 package org.woen.team18742.Tools.Configs;
 
+import android.content.Context;
+
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.ftccommon.external.OnCreate;
+
+import java.lang.reflect.Field;
+
 public class Configs {
+    @Config
     public static class GeneralSettings {
-        public static final DashboardBoolean IsAutonomEnable = new DashboardBoolean("GeneralSettings", "Is autonom enable", true);
+        public static boolean IsAutonomEnable = true;
 
-        public static final DashboardBoolean IsUseOdometrs = new DashboardBoolean("GeneralSettings", "Is use odometrs", false);
+        public static boolean IsUseOdometers = false;
 
-        public static final DashboardBoolean IsCachinger = new DashboardBoolean("GeneralSettings", "Is use cachinger", true);
+        public static boolean IsCachinger = true;
 
-        public static final DashboardBoolean IsCameraDebug = new DashboardBoolean("GeneralSettings", "Is camera debug", false);
+        public static boolean IsCameraDebug = false;
 
-        public static final DashboardBoolean TelemetryOn = new DashboardBoolean("GeneralSettings", "Is telemetry on", true);
+        public static boolean TelemetryOn = true;
     }
 
     @Config

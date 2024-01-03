@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.RobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
@@ -15,7 +15,7 @@ import org.woen.team18742.Tools.PIDF;
 import org.woen.team18742.Tools.Vector2;
 
 @Module
-public class Drivetrain implements IRobotModule {
+public class Drivetrain extends RobotModule {
     private DcMotorEx _leftForwardDrive;
     private DcMotorEx _rightForwardDrive;
     private DcMotorEx _leftBackDrive;

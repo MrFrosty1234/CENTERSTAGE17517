@@ -3,7 +3,7 @@ package org.woen.team18742.Modules;
 import com.qualcomm.hardware.lynx.LynxModule;
 
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.RobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
@@ -11,7 +11,7 @@ import org.woen.team18742.Tools.Devices;
 import java.util.List;
 
 @Module
-public class Cacher implements IRobotModule {
+public class Cacher extends RobotModule {
     private List<LynxModule> _hubs;
 
     @Override
@@ -23,15 +23,9 @@ public class Cacher implements IRobotModule {
     }
 
     @Override
-    public void Start() {}
-
-    @Override
     public void Update(){
-        if(Configs.GeneralSettings.IsCachinger.Get())
+        if(Configs.GeneralSettings.IsCachinger)
             for(LynxModule i: _hubs)
                 i.getBulkData();
     }
-
-    @Override
-    public void Stop() {}
 }

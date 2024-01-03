@@ -7,12 +7,12 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
-import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.RobotModule;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.Devices;
 
 @AutonomModule
-public class VisionPortalHandler implements IRobotModule {
+public class VisionPortalHandler extends RobotModule {
     private VisionPortal _visualPortal;
 
     @Override
@@ -23,12 +23,6 @@ public class VisionPortalHandler implements IRobotModule {
 
         FtcDashboard.getInstance().startCameraStream(video, 15);
     }
-
-    @Override
-    public void Start() {}
-
-    @Override
-    public void Update() {}
 
     @Override
     public void Stop(){

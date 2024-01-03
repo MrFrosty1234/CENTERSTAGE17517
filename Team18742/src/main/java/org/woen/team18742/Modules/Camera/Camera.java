@@ -1,13 +1,12 @@
 package org.woen.team18742.Modules.Camera;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
-import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
-import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.RobotModule;
 import org.woen.team18742.Tools.Configs.Configs;
 
 @AutonomModule
-public class Camera implements IRobotModule {
+public class Camera extends RobotModule {
     private final PipeLine pipeLine = new PipeLine();
 
     public CameraStreamSource GetProcessor() {
@@ -26,21 +25,9 @@ public class Camera implements IRobotModule {
     }
 
     public CameraRobotPosition GetPosition() {
-        if (Configs.GeneralSettings.IsCameraDebug.Get())
+        if (Configs.GeneralSettings.IsCameraDebug)
             return GetEnum(Configs.Camera.RobotPos);
 
         return GetEnum(pipeLine.pos.get());
     }
-
-    @Override
-    public void Init(BaseCollector collector) {}
-
-    @Override
-    public void Start() {}
-
-    @Override
-    public void Update() {}
-
-    @Override
-    public void Stop() {}
 }

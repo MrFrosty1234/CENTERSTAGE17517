@@ -8,7 +8,7 @@ import org.woen.team18742.Collectors.BaseCollector;
 
 @Config
 public class Battery {
-    public static double ChargeDelta = 0;
+    public static double ChargeDelta = 1;
 
     public static double CorrectCharge = 14;
 

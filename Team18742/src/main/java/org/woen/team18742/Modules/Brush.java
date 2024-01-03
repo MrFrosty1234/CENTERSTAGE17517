@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Lift.Lift;
-import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.RobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 
 @Module
-public class Brush implements IRobotModule {
+public class Brush extends RobotModule {
     private DcMotorEx brushMotor;
     private boolean _flagDefense = true;
 
@@ -31,9 +31,6 @@ public class Brush implements IRobotModule {
 
         _lift = collector.GetModule(Lift.class);
     }
-
-    @Override
-    public void Start() {}
 
     private void intakePowerWithProtection(boolean brushOn, double speed) {//функция для щёток с зашитой от зажёвывания
         if (brushOn) {

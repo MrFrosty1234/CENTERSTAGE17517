@@ -3,7 +3,7 @@ package org.woen.team18742.Modules;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
-import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.RobotModule;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.PIDF;
@@ -11,7 +11,7 @@ import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 @AutonomModule
-public class Automatic implements IRobotModule {
+public class Automatic extends RobotModule {
     private Odometry _odometry;
     private Gyroscope _gyro;
     private Drivetrain _driverTrain;
@@ -67,7 +67,7 @@ public class Automatic implements IRobotModule {
         _PIDFSide.UpdateCoefs(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideD);
         _PIDFTurn.UpdateCoefs(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD);
 
-        if(Configs.GeneralSettings.IsAutonomEnable.Get()) {
+        if(Configs.GeneralSettings.IsAutonomEnable) {
             _driverTrain.SetSpeedWorldCoords(
                     new Vector2(_PIDFForward.Update(_targetPosition.X - _odometry.Position.X), _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y)),
                     _PIDFTurn.Update((_gyro.GetRadians() - _turnTarget)));
@@ -76,9 +76,6 @@ public class Automatic implements IRobotModule {
         ToolTelemetry.AddLine( "Autonom:" + _PIDFForward.Err + " " + _PIDFSide.Err + " " + _PIDFTurn.Err);
         ToolTelemetry.AddVal("turn err", _PIDFTurn.Err);
     }
-
-    @Override
-    public void Stop() {}
 
     @Override
     public void Start(){

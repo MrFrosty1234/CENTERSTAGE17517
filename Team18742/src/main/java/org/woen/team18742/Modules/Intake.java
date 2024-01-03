@@ -8,14 +8,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Lift.Lift;
-import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.RobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
-public class Intake implements IRobotModule {
+public class Intake extends RobotModule {
     private Servo servoTurn;
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
@@ -36,10 +36,6 @@ public class Intake implements IRobotModule {
 
         _brush = collector.GetModule(Brush.class);
         _lift = collector.GetModule(Lift.class);
-    }
-
-    @Override
-    public void Start() {
     }
 
     public void updateTurner() {
@@ -127,10 +123,6 @@ public class Intake implements IRobotModule {
 
         ToolTelemetry.AddLine("Pixels:" + pixelSensor1.getVoltage() + "," + pixelSensor2.getVoltage());
         ToolTelemetry.AddLine("Detected:" + isPixelDetected());
-    }
-
-    @Override
-    public void Stop() {
     }
 
     public void PixelCenterGrip(boolean gripped) {

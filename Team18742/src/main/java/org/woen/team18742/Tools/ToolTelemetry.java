@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.woen.team18742.Tools.Configs.Configs;
 
 public class ToolTelemetry {
@@ -16,7 +17,7 @@ public class ToolTelemetry {
     private static TelemetryPacket _packet = new TelemetryPacket();
 
     public static void Update(){
-        if(!Configs.GeneralSettings.TelemetryOn.Get())
+        if(!Configs.GeneralSettings.TelemetryOn)
             return;
 
         _telemetry.update();
@@ -28,19 +29,19 @@ public class ToolTelemetry {
     }
 
     public static void DrawCircle(Vector2 pos, double radius, String color){
-        if(Configs.GeneralSettings.TelemetryOn.Get())
+        if(Configs.GeneralSettings.TelemetryOn)
             _packet.fieldOverlay().fillCircle(pos.X,pos.Y,radius);
     }
 
     public static void AddLine(String str) {
-        if(Configs.GeneralSettings.TelemetryOn.Get()) {
+        if(Configs.GeneralSettings.TelemetryOn) {
             _telemetry.addLine(str);
             _packet.addLine(str);
         }
     }
 
     public static void AddVal(String name, Object val) {
-        if(Configs.GeneralSettings.TelemetryOn.Get()) {
+        if(Configs.GeneralSettings.TelemetryOn) {
             _telemetry.addData(name, val);
             _packet.put(name, val);
         }

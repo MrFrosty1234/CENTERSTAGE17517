@@ -5,7 +5,7 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Manager.AutonomModule;
-import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.RobotModule;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Vector2;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AutonomModule
-public class RouteManager implements IRobotModule {
+public class RouteManager extends RobotModule {
     private final List<Runnable> _route = new ArrayList<>();
 
     private int _currentRouteAction = 0;
@@ -64,7 +64,7 @@ public class RouteManager implements IRobotModule {
 
     @Override
     public void Update() {
-        if (Configs.GeneralSettings.IsAutonomEnable.Get()) {
+        if (Configs.GeneralSettings.IsAutonomEnable) {
             if (_automatic.isMovedEnd() && _lift.isATarget() && (!_isPixelWait || _intake.PixelGripped)) {
                 if (_currentRouteAction < _route.size()) {
                     _isPixelWait = false;
@@ -75,7 +75,4 @@ public class RouteManager implements IRobotModule {
             }
         }
     }
-
-    @Override
-    public void Stop() {}
 }
