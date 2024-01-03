@@ -8,14 +8,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Lift.Lift;
-import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
-public class Intake extends RobotModule {
+public class Intake implements IRobotModule {
     private Servo servoTurn;
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток

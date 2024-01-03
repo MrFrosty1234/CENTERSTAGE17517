@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
-import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.TeleopModule;
 import org.woen.team18742.Tools.Vector2;
 
 @TeleopModule
-public class Manual extends RobotModule {
+public class Manual implements IRobotModule {
     private boolean _brushReversOld = false, _brushOld = false;
 
     private Plane _plane;
@@ -38,7 +38,7 @@ public class Manual extends RobotModule {
     public void Update() {
         _plane.Update();
 
-        _drivetrain.DriveDirection(
+        _drivetrain.SimpleDriveDirection(
                 new Vector2(_gamepad.left_stick_y, _gamepad.left_stick_x),
                 _gamepad.right_stick_x);
 

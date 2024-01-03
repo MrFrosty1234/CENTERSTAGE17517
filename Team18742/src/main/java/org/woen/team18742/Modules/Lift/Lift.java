@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Intake;
-import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs.Configs;
@@ -14,7 +14,7 @@ import org.woen.team18742.Tools.PIDF;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
-public class Lift extends RobotModule {
+public class Lift implements IRobotModule {
     private DcMotor _liftMotor;
 
     private DigitalChannel _endSwitchUp, _endswitchDown;

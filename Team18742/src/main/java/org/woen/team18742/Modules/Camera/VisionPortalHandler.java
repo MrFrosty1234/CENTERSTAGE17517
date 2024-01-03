@@ -7,12 +7,12 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
-import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.Devices;
 
 @AutonomModule
-public class VisionPortalHandler extends RobotModule {
+public class VisionPortalHandler implements IRobotModule {
     private VisionPortal _visualPortal;
 
     @Override

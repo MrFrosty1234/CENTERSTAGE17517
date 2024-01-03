@@ -34,6 +34,14 @@ public class Vector2 {
         return new Vector2(cos(rotate) * X - sin(rotate) * Y, sin(rotate) * X + cos(rotate) * Y);
     }
 
+    public static Vector2 Multiply(Vector2 vec1, Vector2 vec2){
+        return new Vector2(vec1.X * vec2.X, vec1.Y * vec2.Y);
+    }
+
+    public static Vector2 ToVector(double val){
+        return new Vector2(val, val);
+    }
+
     public Vector2 copy(){
         return new Vector2(X, Y);
     }

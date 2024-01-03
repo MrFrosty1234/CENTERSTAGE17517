@@ -3,7 +3,7 @@ package org.woen.team18742.Modules;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
-import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.PIDF;
@@ -11,7 +11,7 @@ import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 @AutonomModule
-public class Automatic extends RobotModule {
+public class Automatic implements IRobotModule {
     private Odometry _odometry;
     private Gyroscope _gyro;
     private Drivetrain _driverTrain;

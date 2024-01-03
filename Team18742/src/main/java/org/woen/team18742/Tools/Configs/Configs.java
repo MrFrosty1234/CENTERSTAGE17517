@@ -1,12 +1,6 @@
 package org.woen.team18742.Tools.Configs;
 
-import android.content.Context;
-
 import com.acmerobotics.dashboard.config.Config;
-
-import org.firstinspires.ftc.ftccommon.external.OnCreate;
-
-import java.lang.reflect.Field;
 
 public class Configs {
     @Config
@@ -67,8 +61,8 @@ public class Configs {
     }
 
     @Config
-    public static class DriverTrainWheels{
-        public static double diameter = 9.8, encoderconstat = 1440;
+    public static class DriveTrainWheels {
+        public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 2052, MaxSpeedY = 2052, MaxSpeedTurn = 1026;
     }
 
     @Config
@@ -97,7 +91,7 @@ public class Configs {
     }
 
     @Config
-    public static class DriverTrainLeftBackPidf{
+    public static class DriverTrainSpeedXPidf{
         public static double pCof = 1;
         public static double iCof = 0;
         public static double dCof = 0;
@@ -105,7 +99,7 @@ public class Configs {
     }
 
     @Config
-    public static class DriverTrainRightBackPidf{
+    public static class DriverTrainSpeedYPidf{
         public static double pCof = 1;
         public static double iCof = 0;
         public static double dCof = 0;
@@ -113,15 +107,7 @@ public class Configs {
     }
 
     @Config
-    public static class DriverTrainRightForwardPidf{
-        public static double pCof = 1;
-        public static double iCof = 0;
-        public static double dCof = 0;
-        public static double fCof = 0;
-    }
-
-    @Config
-    public static class DriverTrainLeftForwardPidf{
+    public static class DriverTrainSpeedTurnPidf{
         public static double pCof = 1;
         public static double iCof = 0;
         public static double dCof = 0;

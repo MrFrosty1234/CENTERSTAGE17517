@@ -2,11 +2,11 @@ package org.woen.team18742.Modules.Camera;
 
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.woen.team18742.Modules.Manager.AutonomModule;
-import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Tools.Configs.Configs;
 
 @AutonomModule
-public class Camera extends RobotModule {
+public class Camera implements IRobotModule {
     private final PipeLine pipeLine = new PipeLine();
 
     public CameraStreamSource GetProcessor() {

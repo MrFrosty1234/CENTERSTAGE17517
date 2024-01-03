@@ -5,13 +5,13 @@ import static java.lang.Math.PI;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 
 @Module
-public class OdometryHandler extends RobotModule {
+public class OdometryHandler implements IRobotModule {
     private DcMotor _odometerY, _odometerXLeft, _odometerXRight;
 
     @Override

@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.ToolTelemetry;
@@ -21,7 +21,7 @@ public class BaseCollector {
     public ElapsedTime Time;
     private final Battery _battery;
 
-    private final ArrayList<RobotModule> _modules = new ArrayList<>();
+    private final ArrayList<IRobotModule> _modules = new ArrayList<>();
 
     private static ArrayList<Class<?>> _annotatedClass;
 
@@ -82,21 +82,21 @@ public class BaseCollector {
     public void Start() {
         Time.reset();
 
-        for (RobotModule i : _modules)
+        for (IRobotModule i : _modules)
             i.Start();
     }
 
     public void Update() {
         _battery.Update();
 
-        for (RobotModule i : _modules)
+        for (IRobotModule i : _modules)
             i.Update();
 
         ToolTelemetry.Update();
     }
 
     public void Stop() {
-        for (RobotModule i : _modules)
+        for (IRobotModule i : _modules)
             i.Stop();
     }
 
@@ -110,18 +110,18 @@ public class BaseCollector {
                 throw new RuntimeException("not correct constructor in module " + i.getName());
             }
 
-            if (instance instanceof RobotModule)
-                _modules.add((RobotModule) instance);
+            if (instance instanceof IRobotModule)
+                _modules.add((IRobotModule) instance);
         }
 
         ToolTelemetry.AddLine("activated modules = " + _modules.size());
 
-        for (RobotModule i : _modules)
+        for (IRobotModule i : _modules)
             i.Init(this);
     }
 
-    public <T extends RobotModule> T GetModule(Class<T> type) {
-        for (RobotModule i : _modules)
+    public <T extends IRobotModule> T GetModule(Class<T> type) {
+        for (IRobotModule i : _modules)
             if (i.getClass() == type)
                 return (T) i;
 

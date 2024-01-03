@@ -5,22 +5,25 @@ import static java.lang.Math.signum;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.Manager.RobotModule;
+import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponentialFilter;
 
 @Module
-public class Gyroscope extends RobotModule {
+public class Gyroscope implements IRobotModule {
     private IMU _imu;
     private OdometryHandler _odometrs;
     private ExponentialFilter _filter = new ExponentialFilter(Configs.Gyroscope.MergerCoefSeconds);
 
     private static boolean _isInited = false;
+
+    private ElapsedTime _deltaTime = new ElapsedTime();
 
     @Override
     public void Init(BaseCollector collector) {
@@ -36,6 +39,7 @@ public class Gyroscope extends RobotModule {
     @Override
     public void Start() {
         Reset();
+        _deltaTime.reset();
     }
 
     public double GetRadians() {
@@ -64,7 +68,17 @@ public class Gyroscope extends RobotModule {
             _radians = _filter.Update(ChopAngele(_odometrRadians - _radians), _radians);
             _degree = Math.toDegrees(_radians);
         }
+
+        SpeedTurn = (_radians - _oldRadians) / _deltaTime.seconds();
+
+        _oldRadians = _radians;
+
+        _deltaTime.reset();
     }
+
+    private double _oldRadians;
+
+    public double SpeedTurn = 0;
 
     public void Reset() {
         _imu.resetYaw();
