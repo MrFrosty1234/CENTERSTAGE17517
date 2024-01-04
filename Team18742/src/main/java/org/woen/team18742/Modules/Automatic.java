@@ -67,7 +67,7 @@ public class Automatic implements IRobotModule {
         _PIDFSide.UpdateCoefs(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideD);
         _PIDFTurn.UpdateCoefs(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD);
 
-        if(Configs.GeneralSettings.IsAutonomEnable) {
+        if(false && Configs.GeneralSettings.IsAutonomEnable) {
             _driverTrain.SetSpeedWorldCoords(
                     new Vector2(_PIDFForward.Update(_targetPosition.X - _odometry.Position.X), _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y)),
                     _PIDFTurn.Update((_gyro.GetRadians() - _turnTarget)));

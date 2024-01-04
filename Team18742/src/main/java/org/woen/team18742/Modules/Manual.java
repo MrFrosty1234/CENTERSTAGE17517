@@ -48,7 +48,7 @@ public class Manual implements IRobotModule {
         boolean brushRevers = _gamepad.circle;
         boolean grip = _gamepad.triangle;
         boolean brush = _gamepad.cross;
-        boolean zajat = _gamepad.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
+        boolean najat = _gamepad.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
         boolean average = _gamepad.dpad_right;
         double railgunopen = _gamepad.left_trigger;
         double railgunnoopen = _gamepad.right_trigger;
@@ -72,7 +72,7 @@ public class Manual implements IRobotModule {
         }
 
         if (A)
-            _plane.Launch(zajat);
+            _plane.Launch(najat);
         else
             _plane.DeLaunch();
 

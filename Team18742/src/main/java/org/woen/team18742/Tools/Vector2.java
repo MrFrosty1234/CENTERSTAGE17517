@@ -4,6 +4,8 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
+import com.acmerobotics.roadrunner.Vector2d;
+
 public class Vector2 {
     public double X;
     public double Y;
@@ -16,6 +18,11 @@ public class Vector2 {
     public Vector2(double x, double y){
         X = x;
         Y = y;
+    }
+
+    public Vector2(Vector2d vec){
+        X = vec.x;
+        Y = vec.y;
     }
 
     public double Abs(){

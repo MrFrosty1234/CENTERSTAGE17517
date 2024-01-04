@@ -19,7 +19,7 @@ public class Brush implements IRobotModule {
 
     private boolean _isReversed = false, _isIntake = false;
 
-    private ElapsedTime elapsedTime = new ElapsedTime();
+    private final ElapsedTime elapsedTime = new ElapsedTime();
 
     private Lift _lift;
 

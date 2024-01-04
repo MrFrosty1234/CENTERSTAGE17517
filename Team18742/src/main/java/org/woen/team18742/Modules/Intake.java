@@ -98,7 +98,7 @@ public class Intake implements IRobotModule {
         _clampTimer.reset();
     }
 
-    private ElapsedTime _brushReverseTimer = new ElapsedTime();
+    private final ElapsedTime _brushReverseTimer = new ElapsedTime();
 
     @Override
     public void Update() {

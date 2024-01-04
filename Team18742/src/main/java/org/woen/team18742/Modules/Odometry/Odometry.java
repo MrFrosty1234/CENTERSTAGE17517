@@ -83,7 +83,7 @@ public class Odometry implements IRobotModule {
             deltaX = deltaLfd + deltaLbd + deltaRfd + deltaRbd;
             deltaY = -deltaLfd + deltaLbd + deltaRfd - deltaRbd;
 
-            deltaY = deltaY * 0.8;
+            deltaY = deltaY * Configs.Odometry.LateralMultiplier;
 
             _leftForwardDrive = lfd;
             _leftBackDrive = lbd;
