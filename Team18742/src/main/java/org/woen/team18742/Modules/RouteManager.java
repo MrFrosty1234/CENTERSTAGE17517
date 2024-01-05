@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.AccelConstraint;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.Actions;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.HolonomicController;
 import com.acmerobotics.roadrunner.MecanumKinematics;
@@ -19,11 +18,7 @@ import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.Time;
 import com.acmerobotics.roadrunner.TimeTrajectory;
 import com.acmerobotics.roadrunner.TimeTurn;
-import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TrajectoryActionFactory;
-import com.acmerobotics.roadrunner.TrajectoryBuilder;
-import com.acmerobotics.roadrunner.TurnActionFactory;
 import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
@@ -40,9 +35,7 @@ import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Vector2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @AutonomModule
@@ -56,19 +49,12 @@ public class RouteManager implements IRobotModule {
     private Gyroscope _gyro;
     private Brush _brush;
 
-    private final MecanumKinematics _mecanumKinematics = new MecanumKinematics(
-            ToInch(Configs.Route.TrackWidth), 1 / Configs.Odometry.LateralMultiplier);
+    private final MecanumKinematics _mecanumKinematics = new MecanumKinematics(Configs.Route.TrackWidth, 1 / Configs.Odometry.LateralMultiplier);
 
-    private final TurnConstraints _turnConstraints = new TurnConstraints(
-            Configs.DriveTrainWheels.MaxSpeedTurn, -Configs.DriveTrainWheels.MaxTurnVelocity, Configs.DriveTrainWheels.MaxTurnVelocity);
+    private final TurnConstraints _turnConstraints = new TurnConstraints(Configs.DriveTrainWheels.MaxSpeedTurn, -Configs.DriveTrainWheels.MaxTurnVelocity, Configs.DriveTrainWheels.MaxTurnVelocity);
 
-    private final VelConstraint _velConstraint =
-            new MinVelConstraint(Arrays.asList(
-                    _mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX),
-                    new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn)
-            ));
-    private final AccelConstraint _accelConstraint =
-            new ProfileAccelConstraint(Configs.Route.MinProfileAccel, Configs.Route.MaxProfileAccel);
+    private final VelConstraint _velConstraint = new MinVelConstraint(Arrays.asList(_mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX), new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn)));
+    private final AccelConstraint _accelConstraint = new ProfileAccelConstraint(Configs.Route.MinProfileAccel, Configs.Route.MaxProfileAccel);
 
     private ElapsedTime _time;
     private Action _trajectory;
@@ -86,72 +72,32 @@ public class RouteManager implements IRobotModule {
 
         _time = collector.Time;
 
-        if (collector instanceof AutonomCollector)
-            _collector = (AutonomCollector) collector;
+        if (collector instanceof AutonomCollector) _collector = (AutonomCollector) collector;
     }
 
     @Override
     public void Start() {
-        if (_collector == null)
-            return;
+        if (_collector == null) return;
 
-        _trajectory = GetTrajectory(ActionBuilder(new Pose2d(_collector.StartPosition.Position.X, _collector.StartPosition.Position.Y, 0)))
-                .build();
+        _trajectory = GetTrajectory(ActionBuilder(new Pose2d(_collector.StartPosition.Position.X, _collector.StartPosition.Position.Y, 0))).build();
     }
 
-    public TrajectoryActionBuilder SetLiftUp(TrajectoryActionBuilder builder) {
-        return SetLiftUp(0, builder);
-    }
-
-    public TrajectoryActionBuilder SetLiftUp(double ds, TrajectoryActionBuilder builder) {
-        return builder.afterDisp(ds, () ->
-                _lift.SetLiftPose(LiftPose.UP)
-        );
-    }
-
-    public TrajectoryActionBuilder WaitLift(TrajectoryActionBuilder builder) {
-        return WaitLift(0, builder);
-    }
-
-    public TrajectoryActionBuilder WaitLift(double ds, TrajectoryActionBuilder builder) {
-        return builder.afterDisp(ds, () ->
-                _isLiftWait = true
-        );
-    }
-
-    public TrajectoryActionBuilder BrushOn(double ds, TrajectoryActionBuilder builder) {
-        return builder.afterDisp(ds, () ->
-                _brush.IntakePowerWithProtection()
-        );
-    }
-
-    public TrajectoryActionBuilder BrushOn(TrajectoryActionBuilder builder) {
-        return BrushOn(0, builder);
-    }
-
-    public TrajectoryActionBuilder WaitPixel(double ds, TrajectoryActionBuilder builder) {
-        return builder.afterDisp(ds, () -> _isPixelWait = true);
-    }
-
-    public TrajectoryActionBuilder WaitPixel(TrajectoryActionBuilder builder) {
-        return WaitPixel(0, builder);
-    }
-
-    public TrajectoryActionBuilder PixelDeGripped(double ds, TrajectoryActionBuilder builder) {
-        return builder.afterDisp(ds, () -> _intake.setGripper(false));
-    }
-
-    public TrajectoryActionBuilder PixelDeGripped(TrajectoryActionBuilder builder) {
-        return PixelDeGripped(0, builder);
-    }
-
-    private TrajectoryActionBuilder GetTrajectory(TrajectoryActionBuilder builder) {
+    private MyTrajectoryBuilder GetTrajectory(MyTrajectoryBuilder builder) {
         switch (_camera.GetPosition()) {
             case LEFT:
-                return WaitPixel(BrushOn(builder).splineTo(new Vector2d(0, 0), 0).splineTo(new Vector2d(10, 10), 0));
+                return builder
+                        .liftUp()
+                        .splineTo(new Vector2d(0, 0), 0)
+                        .splineTo(new Vector2d(10, 10), 0)
+                        .waitLift();
 
             case RIGHT:
-                return PixelDeGripped(WaitLift(SetLiftUp(WaitPixel(builder)).splineTo(new Vector2d(0, 0), 0)));
+                return builder
+                        .waitPixel()
+                        .liftUp()
+                        .splineTo(new Vector2d(20, 20), 0)
+                        .waitLift()
+                        .pixelDeGripped();
 
             case FORWARD:
                 return builder;
@@ -162,30 +108,21 @@ public class RouteManager implements IRobotModule {
 
     @Override
     public void Update() {
-        if (!Configs.GeneralSettings.IsAutonomEnable)
-            return;
+        if (!Configs.GeneralSettings.IsAutonomEnable) return;
 
         if (!_isTrajectoryEnd) {
             if (_isLiftWait) {
-                if (_lift.isATarget())
-                    _isLiftWait = false;
-                else
-                    return;
+                if (_lift.isATarget()) _isLiftWait = false;
+                else return;
             }
 
             if (_isPixelWait) {
-                if (_intake.isPixelGripped())
-                    _isPixelWait = false;
-                else
-                    return;
+                if (_intake.isPixelGripped()) _isPixelWait = false;
+                else return;
             }
 
             _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
         }
-    }
-
-    private static double ToInch(double val) {
-        return val * (1d / 2.54d);
     }
 
     private final class TrajectoryAction implements Action {
@@ -214,21 +151,14 @@ public class RouteManager implements IRobotModule {
                 return false;
             }
 
-            Pose2dDual<Time> txWorldTarget =
-                    _timeTrajectory.map(trajectory -> trajectory.get(time))
-                            .orElseGet(() -> _timeTurn.get().get(time));
+            Pose2dDual<Time> txWorldTarget = _timeTrajectory.map(trajectory -> trajectory.get(time)).orElseGet(() -> _timeTurn.get().get(time));
 
-            Pose2d position = new Pose2d(ToInch(_odometry.Position.X), ToInch(_odometry.Position.Y), _gyro.GetRadians());
-            PoseVelocity2d velocity = new PoseVelocity2d(
-                    new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.SpeedTurn);
+            Pose2d position = new Pose2d(_odometry.Position.X, _odometry.Position.Y, _gyro.GetRadians());
+            PoseVelocity2d velocity = new PoseVelocity2d(new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.SpeedTurn);
 
-            PoseVelocity2dDual<Time> command = new HolonomicController(
-                    Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading,
-                    Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading
-            ).compute(txWorldTarget, position, velocity);
+            PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading).compute(txWorldTarget, position, velocity);
 
-            _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(),
-                    command.linearVel.y.value()), command.angVel.value());
+            _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
             return true;
         }
@@ -238,14 +168,75 @@ public class RouteManager implements IRobotModule {
         }
     }
 
-    private TrajectoryActionBuilder ActionBuilder(Pose2d beginPose) {
-        return new TrajectoryActionBuilder(
-                TrajectoryAction::new,
-                TrajectoryAction::new,
-                beginPose, 1e-6, 0.0,
-                _turnConstraints,
-                _velConstraint, _accelConstraint,
-                0.25, 0.1
-        );
+    private MyTrajectoryBuilder ActionBuilder(Pose2d beginPose) {
+        return new MyTrajectoryBuilder(new TrajectoryActionBuilder(TrajectoryAction::new, TrajectoryAction::new, beginPose, 1e-6, 0.0, _turnConstraints, _velConstraint, _accelConstraint, 0.25, 0.1));
+    }
+
+    private final class MyTrajectoryBuilder {
+        private final TrajectoryActionBuilder _builder;
+
+        public MyTrajectoryBuilder(TrajectoryActionBuilder builder) {
+            _builder = builder;
+        }
+
+        public Action build() {
+            return _builder.build();
+        }
+
+        public MyTrajectoryBuilder splineTo(Vector2d vec, double tangent) {
+            return new MyTrajectoryBuilder(_builder.splineTo(vec, tangent));
+        }
+
+        public MyTrajectoryBuilder setReversed(boolean reversed) {
+            return new MyTrajectoryBuilder(_builder.setReversed(reversed));
+        }
+
+        public MyTrajectoryBuilder liftUp() {
+            return liftUp(0);
+        }
+
+        public MyTrajectoryBuilder liftUp(double ds) {
+            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _lift.SetLiftPose(LiftPose.UP)));
+        }
+
+        public MyTrajectoryBuilder waitLift() {
+            return waitLift(0);
+        }
+
+        public MyTrajectoryBuilder waitLift(double ds) {
+            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _isLiftWait = true));
+        }
+
+        public MyTrajectoryBuilder brushOn() {
+            return brushOn(0);
+        }
+
+        public MyTrajectoryBuilder brushOn(double ds) {
+            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _brush.IntakePowerWithProtection()));
+        }
+
+        public MyTrajectoryBuilder waitPixel() {
+            return waitPixel(0);
+        }
+
+        public MyTrajectoryBuilder waitPixel(double ds) {
+            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _isPixelWait = true));
+        }
+
+        public MyTrajectoryBuilder pixelDeGripped() {
+            return pixelDeGripped(0);
+        }
+
+        public MyTrajectoryBuilder pixelDeGripped(double ds) {
+            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _intake.setGripper(false)));
+        }
+
+        public MyTrajectoryBuilder turnTo(double heading) {
+            return new MyTrajectoryBuilder(_builder.turnTo(heading));
+        }
+
+        public MyTrajectoryBuilder waitSeconds(double time) {
+            return new MyTrajectoryBuilder(_builder.waitSeconds(time));
+        }
     }
 }
