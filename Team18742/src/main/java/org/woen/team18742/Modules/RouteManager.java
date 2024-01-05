@@ -199,6 +199,14 @@ public class RouteManager implements IRobotModule {
             return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _lift.SetLiftPose(LiftPose.UP)));
         }
 
+        public MyTrajectoryBuilder liftDown() {
+            return liftDown(0);
+        }
+
+        public MyTrajectoryBuilder liftDown(double ds) {
+            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _lift.SetLiftPose(LiftPose.DOWN)));
+        }
+
         public MyTrajectoryBuilder waitLift() {
             return waitLift(0);
         }
