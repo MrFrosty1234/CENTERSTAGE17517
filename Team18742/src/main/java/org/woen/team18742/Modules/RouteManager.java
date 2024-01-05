@@ -57,7 +57,7 @@ public class RouteManager implements IRobotModule {
     private Brush _brush;
 
     private final MecanumKinematics _mecanumKinematics = new MecanumKinematics(
-            ToInch(Configs.Route.TrackWidth), Configs.Odometry.LateralMultiplier);
+            ToInch(Configs.Route.TrackWidth), 1 / Configs.Odometry.LateralMultiplier);
 
     private final TurnConstraints _turnConstraints = new TurnConstraints(
             Configs.DriveTrainWheels.MaxSpeedTurn, -Configs.DriveTrainWheels.MaxTurnVelocity, Configs.DriveTrainWheels.MaxTurnVelocity);
@@ -72,7 +72,7 @@ public class RouteManager implements IRobotModule {
 
     private ElapsedTime _time;
     private Action _trajectory;
-    private boolean _isTrajectoryEnd = false, _isLiftWait = false;
+    private boolean _isTrajectoryEnd = false, _isLiftWait = false, _isPixelWait = false;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -99,43 +99,59 @@ public class RouteManager implements IRobotModule {
                 .build();
     }
 
-    public TrajectoryActionBuilder SetLiftUp(TrajectoryActionBuilder builder){
+    public TrajectoryActionBuilder SetLiftUp(TrajectoryActionBuilder builder) {
         return SetLiftUp(0, builder);
     }
 
     public TrajectoryActionBuilder SetLiftUp(double ds, TrajectoryActionBuilder builder) {
-        return builder.afterDisp(ds, () -> {
-            _lift.SetLiftPose(LiftPose.UP);
-        });
+        return builder.afterDisp(ds, () ->
+                _lift.SetLiftPose(LiftPose.UP)
+        );
     }
 
-    public TrajectoryActionBuilder WaitLift(TrajectoryActionBuilder builder){
+    public TrajectoryActionBuilder WaitLift(TrajectoryActionBuilder builder) {
         return WaitLift(0, builder);
     }
 
-    public TrajectoryActionBuilder WaitLift(double ds, TrajectoryActionBuilder builder){
-        return builder.afterDisp(ds, ()->{
-            _isLiftWait = true;
-        });
+    public TrajectoryActionBuilder WaitLift(double ds, TrajectoryActionBuilder builder) {
+        return builder.afterDisp(ds, () ->
+                _isLiftWait = true
+        );
     }
 
-    public TrajectoryActionBuilder BrushOn(double ds, TrajectoryActionBuilder builder){
-        return builder.afterDisp(ds, ()->{
-            _brush.IntakePowerWithProtection();
-        });
+    public TrajectoryActionBuilder BrushOn(double ds, TrajectoryActionBuilder builder) {
+        return builder.afterDisp(ds, () ->
+                _brush.IntakePowerWithProtection()
+        );
     }
 
-    public TrajectoryActionBuilder BrushOn(TrajectoryActionBuilder builder){
+    public TrajectoryActionBuilder BrushOn(TrajectoryActionBuilder builder) {
         return BrushOn(0, builder);
+    }
+
+    public TrajectoryActionBuilder WaitPixel(double ds, TrajectoryActionBuilder builder) {
+        return builder.afterDisp(ds, () -> _isPixelWait = true);
+    }
+
+    public TrajectoryActionBuilder WaitPixel(TrajectoryActionBuilder builder) {
+        return WaitPixel(0, builder);
+    }
+
+    public TrajectoryActionBuilder PixelDeGripped(double ds, TrajectoryActionBuilder builder) {
+        return builder.afterDisp(ds, () -> _intake.setGripper(false));
+    }
+
+    public TrajectoryActionBuilder PixelDeGripped(TrajectoryActionBuilder builder) {
+        return PixelDeGripped(0, builder);
     }
 
     private TrajectoryActionBuilder GetTrajectory(TrajectoryActionBuilder builder) {
         switch (_camera.GetPosition()) {
             case LEFT:
-                return builder;
+                return WaitPixel(BrushOn(builder).splineTo(new Vector2d(0, 0), 0).splineTo(new Vector2d(10, 10), 0));
 
             case RIGHT:
-                return builder;
+                return PixelDeGripped(WaitLift(SetLiftUp(WaitPixel(builder)).splineTo(new Vector2d(0, 0), 0)));
 
             case FORWARD:
                 return builder;
@@ -150,13 +166,21 @@ public class RouteManager implements IRobotModule {
             return;
 
         if (!_isTrajectoryEnd) {
-            if (_isLiftWait)
+            if (_isLiftWait) {
                 if (_lift.isATarget())
                     _isLiftWait = false;
                 else
                     return;
+            }
 
-            _isTrajectoryEnd = _trajectory.run(new TelemetryPacket());
+            if (_isPixelWait) {
+                if (_intake.isPixelGripped())
+                    _isPixelWait = false;
+                else
+                    return;
+            }
+
+            _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
         }
     }
 
