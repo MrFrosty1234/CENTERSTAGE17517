@@ -113,12 +113,18 @@ public class RouteManager implements IRobotModule {
         if (!_isTrajectoryEnd) {
             if (_isLiftWait) {
                 if (_lift.isATarget()) _isLiftWait = false;
-                else return;
+                else {
+                    _driveTrain.Stop();
+                    return;
+                }
             }
 
             if (_isPixelWait) {
                 if (_intake.isPixelGripped()) _isPixelWait = false;
-                else return;
+                else {
+                    _driveTrain.Stop();
+                    return;
+                }
             }
 
             _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
@@ -156,7 +162,8 @@ public class RouteManager implements IRobotModule {
             Pose2d position = new Pose2d(_odometry.Position.X, _odometry.Position.Y, _gyro.GetRadians());
             PoseVelocity2d velocity = new PoseVelocity2d(new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.SpeedTurn);
 
-            PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading).compute(txWorldTarget, position, velocity);
+            PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
+                    .compute(txWorldTarget, position, velocity);
 
             _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
