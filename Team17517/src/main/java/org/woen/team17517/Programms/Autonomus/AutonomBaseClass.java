@@ -1,23 +1,16 @@
 package org.woen.team17517.Programms.Autonomus;
 
-import android.icu.text.Transliterator;
-
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.woen.team17517.R;
-import org.woen.team17517.Robot.Button;
-import org.woen.team17517.Robot.Camera;
-import org.woen.team17517.Robot.OpenCV.PipeLine;
-import org.woen.team17517.Robot.UltRobot;
 
-import java.nio.Buffer;
-import java.util.HashMap;
+import org.woen.team17517.Service.Button;
+import org.woen.team17517.RobotModules.Camera;
+import org.woen.team17517.RobotModules.OpenCV.PipeLine;
+import org.woen.team17517.RobotModules.UltRobot;
+
 @Autonomous
 public class AutonomBaseClass extends LinearOpMode{
     UltRobot robot;
