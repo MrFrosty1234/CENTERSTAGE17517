@@ -70,8 +70,9 @@ public class Drivetrain implements IRobotModule {
         _speedTurnPidf.UpdateCoefs(Configs.DriverTrainSpeedTurnPidf.pCof, Configs.DriverTrainSpeedTurnPidf.iCof,
                 Configs.DriverTrainSpeedTurnPidf.dCof, 0, Configs.DriverTrainSpeedTurnPidf.fCof);
 
-        DriveDirection(new Vector2(_speedXPidf.Update(_targetSpeed.X - _odometry.Speed.X, _targetSpeed.X),
-                _speedXPidf.Update(_targetSpeed.Y - _odometry.Speed.Y, _targetSpeed.Y)), _speedTurnPidf.Update(_targetSpeedTurn - _gyro.SpeedTurn, _targetSpeedTurn));
+        if(Configs.DriveTrainWheels.isUsePids)
+            DriveDirection(new Vector2(_speedXPidf.Update(_targetSpeed.X - _odometry.Speed.X, _targetSpeed.X),
+                    _speedXPidf.Update(_targetSpeed.Y - _odometry.Speed.Y, _targetSpeed.Y)), _speedTurnPidf.Update(_targetSpeedTurn - _gyro.SpeedTurn, _targetSpeedTurn));
     }
 
     private void DriveDirection(Vector2 speed, double rotate) {
@@ -82,7 +83,10 @@ public class Drivetrain implements IRobotModule {
     }
 
     public void SimpleDriveDirection(Vector2 speed, double rotate){
-        SetCMSpeed(Vector2.Multiply(speed, new Vector2(Configs.DriveTrainWheels.MaxSpeedX, Configs.DriveTrainWheels.MaxSpeedY)), rotate * Configs.DriveTrainWheels.MaxSpeedTurn);
+        if(Configs.DriveTrainWheels.isUsePids)
+            SetCMSpeed(Vector2.Multiply(speed, new Vector2(Configs.DriveTrainWheels.MaxSpeedX, Configs.DriveTrainWheels.MaxSpeedY)), rotate * Configs.DriveTrainWheels.MaxSpeedTurn);
+        else
+            DriveDirection(speed, rotate);
     }
 
     public void SetCMSpeed(Vector2 speed, double rotate){

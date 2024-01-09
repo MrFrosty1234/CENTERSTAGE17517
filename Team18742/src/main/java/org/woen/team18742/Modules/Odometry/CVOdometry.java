@@ -25,9 +25,9 @@ public class CVOdometry {
     public boolean IsZero = true;
 
     private Vector2 _cameraPosition = new Vector2(Configs.Camera.CameraX, Configs.Camera.CameraY);
-    private final Gyroscope _gyro;
+    private Gyroscope _gyro;
 
-    public CVOdometry(BaseCollector collector){
+    public void Init(BaseCollector collector){
         _gyro = collector.GetModule(Gyroscope.class);
     }
 

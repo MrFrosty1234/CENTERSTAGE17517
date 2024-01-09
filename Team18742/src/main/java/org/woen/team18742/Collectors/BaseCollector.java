@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
+import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 import java.lang.annotation.Annotation;
@@ -28,7 +29,7 @@ public class BaseCollector {
     public BaseCollector(LinearOpMode robot) {
         Robot = robot;
 
-        //Devices.Init(robot.hardwareMap);
+        Devices.Init(robot.hardwareMap);
         ToolTelemetry.SetTelemetry(Robot.telemetry);
 
         _battery = new Battery(this);

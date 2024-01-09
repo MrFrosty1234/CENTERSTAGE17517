@@ -13,6 +13,7 @@ import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 
 @Module
+
 public class Brush implements IRobotModule {
     private DcMotorEx brushMotor;
     public byte statebrush;
@@ -36,7 +37,7 @@ public class Brush implements IRobotModule {
     }
 
     private void intakePowerWithProtection(boolean brushOn, double speed) {//функция для щёток с зашитой от зажёвывания
-        if (brushOn) {
+        /*if (brushOn) {
             if (brushMotor.getCurrent(CurrentUnit.AMPS) <= Configs.Brush.protectionCurrentAmps && _flagDefense) {
                 elapsedTime.reset();
             }
@@ -53,11 +54,14 @@ public class Brush implements IRobotModule {
             }
         } else {
             brushMotor.setPower(0);
-        }
+        }*/
+        if(brushOn)
+            brushMotor.setPower(speed);
+        else
+            brushMotor.setPower(0);
     }
 
     public void IntakePowerWithProtection() {//функция для щёток с зашитой от зажёвывания
-
         if(!_lift.isDown())
             return;
 

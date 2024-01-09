@@ -22,11 +22,11 @@ import org.woen.team18742.Tools.Vector2;
 public class Odometry implements IRobotModule {
     private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY;
 
-    public Vector2 Position = new Vector2();
+    public Vector2 Position = new Vector2(), EncoderPosition = new Vector2();
     private Drivetrain _driverTrain;
     private Gyroscope _gyro;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
-    private CVOdometry _CVOdometry;
+    //private CVOdometry _CVOdometry = new CVOdometry();
     private OdometryHandler _odometrs;
 
     private final ExponentialFilter _filterX = new ExponentialFilter(Configs.Odometry.XCoef), _filterY = new ExponentialFilter(Configs.Odometry.YCoef);
@@ -37,7 +37,7 @@ public class Odometry implements IRobotModule {
 
     @Override
     public void Init(BaseCollector collector) {
-        _CVOdometry = new CVOdometry(collector);
+        //_CVOdometry.Init(collector);
 
         _driverTrain = collector.GetModule(Drivetrain.class);
         _gyro = collector.GetModule(Gyroscope.class);
@@ -48,7 +48,7 @@ public class Odometry implements IRobotModule {
     }
 
     public VisionProcessor GetProcessor(){
-        return _CVOdometry.GetProcessor();
+        return null;//_CVOdometry.GetProcessor();
     }
 
     @Override
@@ -56,21 +56,25 @@ public class Odometry implements IRobotModule {
         _filterX.UpdateCoef(Configs.Odometry.XCoef);
         _filterY.UpdateCoef(Configs.Odometry.YCoef);
 
-        double deltaX, deltaY;
+        Vector2 shift = null;
 
         if(Configs.GeneralSettings.IsUseOdometers){
-            double deltaRotate = _gyro.GetRadians() - _oldRotate;
-
             double odometrXLeft = _odometrs.GetOdometerXLeft(), odometrY = _odometrs.GetOdometerY(), odometrXRight = _odometrs.GetOdometerXRight();
 
-            deltaX = (odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
-            deltaY = (odometrY - _oldOdometrY) - Configs.Odometry.RadiusOdometrY * deltaRotate;
+            double deltaX = -(odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
+            double deltaY = -((odometrY - _oldOdometrY) - Configs.Odometry.RadiusOdometrY * (_gyro.GetRadians() - _oldRotate));
 
             _oldOdometrXLeft = odometrXLeft;
             _oldOdometrXRight = odometrXRight;
             _oldOdometrY = odometrY;
 
             _oldRotate = _gyro.GetRadians();
+
+            shift = new Vector2(deltaX *
+                    cos(-_gyro.GetRadians()) +
+                    deltaY * sin(-_gyro.GetRadians()),
+                    -deltaX * sin(-_gyro.GetRadians()) +
+                            deltaY * cos(-_gyro.GetRadians()));
         }
         else {
             double lfd = _driverTrain.GetLeftForwardEncoder();
@@ -80,8 +84,8 @@ public class Odometry implements IRobotModule {
 
             double deltaLfd = lfd - _leftForwardDrive, deltaLbd = lbd - _leftBackDrive, deltaRfd = rfd - _rightForwardDrive, deltaRbd = rbd - _rightBackDrive;
 
-            deltaX = deltaLfd + deltaLbd + deltaRfd + deltaRbd;
-            deltaY = -deltaLfd + deltaLbd + deltaRfd - deltaRbd;
+            double deltaX = deltaLfd + deltaLbd + deltaRfd + deltaRbd;
+            double deltaY = -deltaLfd + deltaLbd + deltaRfd - deltaRbd;
 
             deltaY = deltaY * 0.8;
 
@@ -89,23 +93,28 @@ public class Odometry implements IRobotModule {
             _leftBackDrive = lbd;
             _rightBackDrive = rbd;
             _rightForwardDrive = rfd;
-        }
 
-        Vector2 shift = new Vector2(deltaX * cos(_gyro.GetRadians()) + deltaY * sin(_gyro.GetRadians()), -deltaX * sin(_gyro.GetRadians()) + deltaY * cos(_gyro.GetRadians()));
+            shift = new Vector2(deltaX *
+                    cos(_gyro.GetRadians()) +
+                    deltaY * sin(_gyro.GetRadians()),
+                    -deltaX * sin(_gyro.GetRadians()) +
+                            deltaY * cos(_gyro.GetRadians()));
+        }
 
         Position = Vector2.Plus(shift, Position);
 
         Speed.X = shift.X / _deltaTime.seconds();
         Speed.Y = shift.Y / _deltaTime.seconds();
 
-        _CVOdometry.Update();
+        //_CVOdometry.Update();
 
-        if(!_CVOdometry.IsZero) {
-            Position.X = _filterX.Update(Position.X, _CVOdometry.Position.X);
-            Position.Y = _filterY.Update(Position.Y, _CVOdometry.Position.Y);
-        }
+        //if(!_CVOdometry.IsZero) {
+        //    Position.X = _filterX.Update(Position.X, _CVOdometry.Position.X);
+        //    Position.Y = _filterY.Update(Position.Y, _CVOdometry.Position.Y);
+        //}
 
-        ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
+        ToolTelemetry.DrawCircle(Position, 10, "#000000");
+        ToolTelemetry.DrawCircle(EncoderPosition, 10, "#999999");
         ToolTelemetry.AddLine("OdometryX :" + Position);
 
         _deltaTime.reset();

@@ -3,6 +3,7 @@ package org.woen.team18742.Modules.Camera;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 
 @AutonomModule

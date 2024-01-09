@@ -3,12 +3,14 @@ package org.woen.team18742.Modules;
 import static java.lang.Math.PI;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
 public class OdometryHandler implements IRobotModule {
@@ -19,6 +21,8 @@ public class OdometryHandler implements IRobotModule {
         _odometerXLeft = Devices.OdometerXLeft;
         _odometerY = Devices.OdometerY;
         _odometerXRight = Devices.OdometerXRight;
+
+        _odometerY.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     @Override
@@ -31,7 +35,7 @@ public class OdometryHandler implements IRobotModule {
     }
 
     public double GetOdometerXRight(){
-        return _odometerXRight.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
+        return -_odometerXRight.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
     }
 
     public double GetOdometerY(){
@@ -46,5 +50,12 @@ public class OdometryHandler implements IRobotModule {
 
         _odometerY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _odometerY.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    @Override
+    public void Update() {
+        ToolTelemetry.AddLine("odometrY = " + GetOdometerY());
+        ToolTelemetry.AddLine("odometrXLeft = " + GetOdometerXLeft());
+        ToolTelemetry.AddLine("odometrXRight = " + GetOdometerXRight());
     }
 }

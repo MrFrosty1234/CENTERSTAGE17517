@@ -14,14 +14,13 @@ import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponentialFilter;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
 public class Gyroscope implements IRobotModule {
     private IMU _imu;
     private OdometryHandler _odometrs;
     private ExponentialFilter _filter = new ExponentialFilter(Configs.Gyroscope.MergerCoefSeconds);
-
-    private static boolean _isInited = false;
 
     private ElapsedTime _deltaTime = new ElapsedTime();
 
@@ -30,10 +29,7 @@ public class Gyroscope implements IRobotModule {
         _imu = Devices.IMU;
         _odometrs = collector.GetModule(OdometryHandler.class);
 
-        if(!_isInited){
-            _isInited = true;
-            _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP)));
-        }
+        _imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP)));
     }
 
     @Override
@@ -60,13 +56,12 @@ public class Gyroscope implements IRobotModule {
         _radians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
         if (Configs.GeneralSettings.IsUseOdometers) {
-            _odometrRadians = (_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
+            _odometrRadians = -(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
             _odometrDegree = Math.toDegrees(_odometrRadians);
 
-            _odometrRadians = ChopAngele(_odometrRadians);
-
-            _radians = _filter.Update(ChopAngele(_odometrRadians - _radians), _radians);
+            _radians = _filter.Update(_odometrRadians - _radians, _radians);
             _degree = Math.toDegrees(_radians);
+            ToolTelemetry.AddLine("Gyro1 = " + _odometrDegree + " Gyro = " + _degree);
         }
 
         SpeedTurn = (_radians - _oldRadians) / _deltaTime.seconds();
@@ -83,12 +78,5 @@ public class Gyroscope implements IRobotModule {
     public void Reset() {
         _imu.resetYaw();
         _filter.Reset();
-    }
-
-    public static double ChopAngele(double angle){
-        while (abs(angle) > 2 * Math.PI)
-            angle -= signum(angle) * Math.PI;
-
-        return angle;
     }
 }

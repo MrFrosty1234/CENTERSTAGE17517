@@ -29,8 +29,10 @@ public class ToolTelemetry {
     }
 
     public static void DrawCircle(Vector2 pos, double radius, String color){
-        if(Configs.GeneralSettings.TelemetryOn)
-            _packet.fieldOverlay().fillCircle(pos.X,pos.Y,radius);
+        if(Configs.GeneralSettings.TelemetryOn) {
+            _packet.fieldOverlay().setFill(color);
+            _packet.fieldOverlay().fillCircle(pos.X, pos.Y, radius);
+        }
     }
 
     public static void AddLine(String str) {

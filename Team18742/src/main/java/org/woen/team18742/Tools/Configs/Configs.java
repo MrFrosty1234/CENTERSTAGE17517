@@ -7,7 +7,7 @@ public class Configs {
     public static class GeneralSettings {
         public static boolean IsAutonomEnable = true;
 
-        public static boolean IsUseOdometers = false;
+        public static boolean IsUseOdometers = true;
 
         public static boolean IsCachinger = true;
 
@@ -25,7 +25,7 @@ public class Configs {
 
     @Config
     public static class LiftPid{
-        public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
+        public static double PCoef = 0.1, ICoef = 0.01, DCoef = 0.1;
     }
 
     @Config
@@ -35,7 +35,7 @@ public class Configs {
 
         public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
 
-        public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 8192;
+        public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 2048;
     }
 
     @Config
@@ -63,6 +63,7 @@ public class Configs {
     @Config
     public static class DriveTrainWheels {
         public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 2052, MaxSpeedY = 2052, MaxSpeedTurn = 1026;
+        public static boolean isUsePids = false;
     }
 
     @Config
