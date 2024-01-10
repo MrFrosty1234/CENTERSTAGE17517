@@ -29,6 +29,8 @@ public class BaseCollector {
     public BaseCollector(LinearOpMode robot) {
         Robot = robot;
 
+        _modules.clear();
+
         Devices.Init(robot.hardwareMap);
         ToolTelemetry.SetTelemetry(Robot.telemetry);
 
@@ -92,6 +94,9 @@ public class BaseCollector {
 
         for (IRobotModule i : _modules)
             i.Update();
+
+        for (IRobotModule i : _modules)
+            i.LastUpdate();
 
         ToolTelemetry.Update();
     }

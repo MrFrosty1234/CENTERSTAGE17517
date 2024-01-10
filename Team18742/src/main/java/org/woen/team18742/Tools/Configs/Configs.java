@@ -25,7 +25,7 @@ public class Configs {
 
     @Config
     public static class LiftPid{
-        public static double PCoef = 0.1, ICoef = 0.01, DCoef = 0.1;
+        public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
     }
 
     @Config
@@ -35,22 +35,24 @@ public class Configs {
 
         public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
 
-        public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 2048;
+        public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 8192;
+
+        public static double YLag = 0.8;
     }
 
     @Config
     public static class AutomaticForwardPid{
-        public static double PidForwardP = 0.1, PidForwardI = 0, PidForwardD = 1;
+        public static double PidForwardP = 0.1, PidForwardI = 0, PidForwardD = 0.1;
     }
 
     @Config
     public static class AutomaticSidePid{
-        public static double PidSideP = 0.2, PidSideI = 0, PidSideD = 1;
+        public static double PidSideP = 0.1, PidSideI = 0, PidSideD = 0;
     }
 
     @Config
     public static class AutomaticRotatePid{
-        public static double PidRotateP = 1, PidRotateI = 0, PidRotateD = 1;
+        public static double PidRotateP = 0.5, PidRotateI = 0, PidRotateD = 1;
     }
 
     @Config
@@ -79,7 +81,7 @@ public class Configs {
         public static long AverageTime = 830;
         public static double servoGripperNormal = 0.4;
         public static double servoGripperGripped = 0.13;
-        public static double servoClampClamped = 0.9;
+        public static double servoClampClamped = 0.84;
         public static double servoClampReleased = 0.42;//0.5
         public static double pixelDetectTimeMs = 1000;
         public static double ReverseTimeMs = 2000;

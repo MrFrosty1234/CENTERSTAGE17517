@@ -55,7 +55,7 @@ public class Intake implements IRobotModule {
 
     private ElapsedTime _normalTurnTimer = new ElapsedTime(Configs.Intake.AverageTime);
 
-    public boolean PixelGripped = false;
+    public boolean _pixelGripped = false;
 
     public void setGripper(boolean grip) {
         if (grip) {
@@ -63,13 +63,13 @@ public class Intake implements IRobotModule {
         } else {
             gripper.setPosition(Configs.Intake.servoGripperNormal);
         }
-        PixelGripped = grip;
+        _pixelGripped = grip;
 
         _lighting.setPower(grip ? 1 : 0);
     }
 
     public boolean isPixelGripped() {
-        return PixelGripped;
+        return _pixelGripped;
     }
 
 
@@ -84,7 +84,7 @@ public class Intake implements IRobotModule {
 
     ElapsedTime pixelTimer = new ElapsedTime();
 
-    public boolean isPixelDetected() {
+    private boolean isPixelDetected() {
         if (pixelSensor2.getVoltage() >= Configs.Intake.pixelSensorvoltage /*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
             pixelTimer.reset();
         return pixelTimer.milliseconds() > Configs.Intake.pixelDetectTimeMs;
@@ -109,7 +109,7 @@ public class Intake implements IRobotModule {
             _brushReverseTimer.reset();
         } else {
             _clampTimer.reset();
-            setClamp(!PixelGripped && _lift.isDown());
+            setClamp(!_pixelGripped && _lift.isDown());
         }
 
         if (isPixelGripped()) {

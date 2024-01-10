@@ -4,19 +4,21 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team18742.Collectors.AutonomCollector;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 @Autonomous
 public class AutoOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        AutonomCollector _collector = new AutonomCollector(this);
+        try {
+            AutonomCollector _collector = new AutonomCollector(this);
 
-        while(!isStarted()){
-            _collector.PreUpdate();
-        }
+            while (!isStarted()) {
+                _collector.PreUpdate();
+            }
 
-        resetRuntime();
+            resetRuntime();
 
         /*_collector.Driver.Stop();
         _collector.Driver.DriveDirection(new Vector2(0.5,0), 0);
@@ -25,12 +27,19 @@ public class AutoOpMode extends LinearOpMode {
         sleep(1000);
         _collector.Driver.Stop();*/
 
-        _collector.Start();
+            _collector.Start();
 
-        while (opModeIsActive()) {
-            _collector.Update();
+            while (opModeIsActive()) {
+                _collector.Update();
+            }
+
+            _collector.Stop();
         }
+        catch (Exception e){
+            ToolTelemetry.AddLine(e.getMessage());
+            ToolTelemetry.Update();
 
-        _collector.Stop();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

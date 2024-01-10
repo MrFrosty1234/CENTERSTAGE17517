@@ -16,7 +16,7 @@ import org.woen.team18742.Tools.Devices;
 
 public class Brush implements IRobotModule {
     private DcMotorEx brushMotor;
-    public byte statebrush;
+    public byte statebrush = 3;
     private boolean _flagDefense = true;
 
     private boolean _isReversed = false, _isIntake = false;
@@ -24,6 +24,7 @@ public class Brush implements IRobotModule {
     private ElapsedTime elapsedTime = new ElapsedTime();
 
     private Lift _lift;
+    private Intake _intake;
     private double MAX_CURRENT = 3;
     private double  PROTECTION_TIME = 2000;
     private double REVERS_TIME = 1000 + PROTECTION_TIME;
@@ -34,6 +35,7 @@ public class Brush implements IRobotModule {
         brushMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         _lift = collector.GetModule(Lift.class);
+        _intake = collector.GetModule(Intake.class);
     }
 
     private void intakePowerWithProtection(boolean brushOn, double speed) {//функция для щёток с зашитой от зажёвывания

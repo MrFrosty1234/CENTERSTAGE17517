@@ -27,6 +27,8 @@ public class TeleOp extends LinearOpMode {
         catch (Exception e){
             ToolTelemetry.AddLine(e.getMessage());
             ToolTelemetry.Update();
+
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

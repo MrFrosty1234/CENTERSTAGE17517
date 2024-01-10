@@ -58,13 +58,13 @@ public class Automatic implements IRobotModule {
     private Vector2 _targetPosition = new Vector2();
 
     public boolean isMovedEnd() {
-        return Math.abs(_PIDFForward.Err) < 2d && Math.abs(_PIDFSide.Err) < 2d && Math.abs(_PIDFTurn.Err) < 8d;
+        return Math.abs(_PIDFForward.Err) < 5d && Math.abs(_PIDFSide.Err) < 5d && Math.abs(_PIDFTurn.Err) < 8d;
     }
 
     @Override
     public void Update() {
         _PIDFForward.UpdateCoefs(Configs.AutomaticForwardPid.PidForwardP, Configs.AutomaticForwardPid.PidForwardI, Configs.AutomaticForwardPid.PidForwardD);
-        _PIDFSide.UpdateCoefs(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideD);
+        _PIDFSide.UpdateCoefs(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideI, Configs.AutomaticSidePid.PidSideD);
         _PIDFTurn.UpdateCoefs(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD);
 
         if(Configs.GeneralSettings.IsAutonomEnable) {
@@ -74,7 +74,6 @@ public class Automatic implements IRobotModule {
         }
 
         ToolTelemetry.AddLine( "Autonom:" + _PIDFForward.Err + " " + _PIDFSide.Err + " " + _PIDFTurn.Err);
-        ToolTelemetry.AddVal("turn err", _PIDFTurn.Err);
     }
 
     @Override
@@ -82,8 +81,5 @@ public class Automatic implements IRobotModule {
         _PIDFSide.Start();
         _PIDFForward.Start();
         _PIDFTurn.Start();
-
-        if(_collector != null)
-            _targetPosition = _collector.StartPosition.Position.copy();
     }
 }

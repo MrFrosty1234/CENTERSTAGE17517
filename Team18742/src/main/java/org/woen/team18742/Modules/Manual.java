@@ -76,13 +76,13 @@ public class Manual implements IRobotModule {
         else
             _plane.DeLaunch();
 
-        if (liftUp && _intake.isPixelGripped())
+        if (liftUp)
             _lift.SetLiftPose(LiftPose.UP);
 
         if(liftDown)
             _lift.SetLiftPose(LiftPose.DOWN);
 
-        if(average && _intake.isPixelGripped())
+        if(average)
             _lift.SetLiftPose(LiftPose.AVERAGE);
 
         _brushOld = brush;

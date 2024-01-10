@@ -66,9 +66,8 @@ public class Lift implements IRobotModule {
     }
 
     public boolean isATarget() {
-        //return Math.abs(_liftMotor.getTargetPosition() - _liftPose.Pose) < 30;
-        return Math.abs(_liftPIDF.Err) < 30;
-        //return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || (_liftPose == LiftPose.AVERAGE && Math.abs(_liftPid.Err) < 30);
+        //return Math.abs(_liftPIDF.Err) < 60;
+        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || (_liftPose == LiftPose.AVERAGE && Math.abs(_liftPIDF.Err) < 60);
     }
 
     public boolean isDown(){
@@ -80,6 +79,9 @@ public class Lift implements IRobotModule {
     public boolean isAverage(){return _liftPose == LiftPose.AVERAGE && isATarget();}
 
     public void SetLiftPose(LiftPose pose) {
+        if(!_intake.isPixelGripped() && pose != LiftPose.DOWN)
+            return;
+
         _liftPose = pose;
     }
 

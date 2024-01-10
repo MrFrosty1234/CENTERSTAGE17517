@@ -59,9 +59,9 @@ public class Gyroscope implements IRobotModule {
             _odometrRadians = -(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
             _odometrDegree = Math.toDegrees(_odometrRadians);
 
-            _radians = _filter.Update(_odometrRadians - _radians, _radians);
-            _degree = Math.toDegrees(_radians);
-            ToolTelemetry.AddLine("Gyro1 = " + _odometrDegree + " Gyro = " + _degree);
+            //_radians = _filter.Update(_odometrRadians - _radians, _radians);
+            //_degree = Math.toDegrees(_radians);
+            //ToolTelemetry.AddLine("Gyro1 = " + _odometrDegree + " Gyro = " + _degree);
         }
 
         SpeedTurn = (_radians - _oldRadians) / _deltaTime.seconds();
