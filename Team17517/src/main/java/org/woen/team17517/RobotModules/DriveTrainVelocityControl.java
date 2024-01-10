@@ -128,6 +128,9 @@ public class DriveTrainVelocityControl implements RobotModule {
 
         right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        vector.setCord(0,0);
+        targetH = 0;
     }
 
     private void  encUpdate()

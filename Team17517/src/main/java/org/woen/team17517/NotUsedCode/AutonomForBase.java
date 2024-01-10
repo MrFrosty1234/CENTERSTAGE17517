@@ -13,7 +13,7 @@ public class AutonomForBase {
     PipeLine pipeLine;
 
 
-    public AutonomForBase(UltRobot robot){
+   /* public AutonomForBase(UltRobot robot){
         this.robot = robot;
 
         camera = new Camera(robot.linearOpMode.hardwareMap);
@@ -81,4 +81,5 @@ public class AutonomForBase {
         robot.updateWhilePositionFalse(actions);
         robot.updateWhilePositionFalse(liftAndPixels);
     }
+    */
 }

@@ -5,18 +5,19 @@ import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.woen.team17517.Service.PIDMethod;
 import org.woen.team17517.Service.RobotModule;
-
+@Config
 public class DrivetrainNew implements RobotModule {
-
     UltRobot robot;
 
     boolean autoMode = false;
     double voltage ;
     public static double kPX = 1;
     public static double kDX = 0;
-    public static double kIX = 0;
+    public static double kIX = 1;
 
     public static double kPY = 1;
     public static double kDY = 0;
@@ -30,11 +31,11 @@ public class DrivetrainNew implements RobotModule {
     public static double u_maxH = 0;
     public static double u_maxY = 0;
 
-    private double targetX = 0;
+    public double targetX = 0;
     private double targetH = 0;
     private double targetY = 0;
 
-    double errX = 0;
+    public double errX = 0;
     double errY = 0;
     double errH = 0;
 
@@ -42,7 +43,7 @@ public class DrivetrainNew implements RobotModule {
     public static double minH = 1;
     public static double minY = 1;
 
-    private static double diameter = 0.098;
+    private static double diameter = 9.8;
     private static double trackLength = 27d/2d;
     public double maxSpeedL = diameter*PI/0.2;
     public double maxSpeedR = Math.toDegrees(maxSpeedL /trackLength);;
@@ -65,6 +66,9 @@ public class DrivetrainNew implements RobotModule {
     public DrivetrainNew(UltRobot robot) {
         this.robot = robot;
         voltage = 12;
+        targetH = 0;
+        targetX = 0;
+        targetY = 0;
     }
 
      public void update() {
@@ -92,16 +96,16 @@ public class DrivetrainNew implements RobotModule {
             double Y = pidY.PID(targetY,y,voltage);
 
 
-            if (abs(H)> maxSpeedR){
+            /*if (abs(H)> maxSpeedR){
                 H = signum(H)*maxSpeedR;            }
             if (abs(X)> maxSpeedL){
                 X = signum(X)* maxSpeedL;
             }
             if (abs(Y)> maxSpeedL){
                 Y = signum(Y)* maxSpeedL;
-            }
+            }*/
 
-
+//////////////
 
             robot.driveTrainVelocityControl.moveGlobalCord(Y, -X, H);
         }
@@ -112,9 +116,15 @@ public class DrivetrainNew implements RobotModule {
 
     @Override
     public boolean isAtPosition() {
-       if((errX < minX) && (errY < minY) && (errH < minH)){
-           return true;
-       }
-        return false;
+        if ((errX < minX) && (errY < minY) && (errH < minH)) {
+            robot.linearOpMode.telemetry.addData("errX",errX);
+            robot.linearOpMode.telemetry.addData("targetX",targetX);
+            robot.linearOpMode.telemetry.addData("true",true);
+            robot.linearOpMode.telemetry.update();
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
