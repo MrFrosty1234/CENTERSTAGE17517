@@ -44,6 +44,12 @@ public class TelemetryOutput implements RobotModule {
         if(driveTrain){
             telemetry.addData("error X", robot.drivetrainNew.errX);
             telemetry.addData("target X", robot.drivetrainNew.targetX);
+            telemetry.addData("error Y", robot.drivetrainNew.errX);
+            telemetry.addData("target Y", robot.drivetrainNew.targetX);
+            telemetry.addData("error H", robot.drivetrainNew.errX);
+            telemetry.addData("target H", robot.drivetrainNew.targetX);
+
+
         }
         if(grabber) {
             telemetry.addData("pixels count",robot.grabber.pixelsCount);

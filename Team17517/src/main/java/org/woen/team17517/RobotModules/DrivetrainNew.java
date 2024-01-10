@@ -110,9 +110,6 @@ public class DrivetrainNew implements RobotModule {
             robot.driveTrainVelocityControl.moveGlobalCord(Y, X, H);
         }
     }
-    public void speedcontrol(){
-    }
-
 
     @Override
     public boolean isAtPosition() {
