@@ -9,8 +9,8 @@ public class AutonomDriveTrainConfig extends AutonomBaseClass {
     @Override
     public Runnable[] getBlueRight(){
         return new Runnable[]{
-                ()-> robot.drivetrainNew.setTarget(-1000,0,0),
-                ()-> robot.drivetrainNew.setTarget(0,0,0),
+                ()-> robot.drivetrainNew.setTarget(500,0,0),
+                ()-> robot.drivetrainNew.setTarget(-500,0,0),
         };
     }
 }

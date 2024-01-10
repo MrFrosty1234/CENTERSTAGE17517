@@ -39,9 +39,9 @@ public class DrivetrainNew implements RobotModule {
     double errY = 0;
     double errH = 0;
 
-    public static double minX = 1;
-    public static double minH = 1;
-    public static double minY = 1;
+    public static double minX = 100;
+    public static double minH = 100;
+    public static double minY = 100;
 
     private static double diameter = 9.8;
     private static double trackLength = 27d/2d;
@@ -107,7 +107,7 @@ public class DrivetrainNew implements RobotModule {
 
 //////////////
 
-            robot.driveTrainVelocityControl.moveGlobalCord(Y, -X, H);
+            robot.driveTrainVelocityControl.moveGlobalCord(Y, X, H);
         }
     }
     public void speedcontrol(){
