@@ -14,7 +14,7 @@ import org.woen.team17517.Service.Timer;
 
 
 public class UltRobot {
-    public DriveTrain driveTrain;
+    //public DriveTrain driveTrain;
     public DrivetrainNew drivetrainNew;
     public Grabber grabber;
     public Lift lift;
@@ -34,7 +34,7 @@ public class UltRobot {
         linearOpMode = linearOpMode1;
         telemetryOutput = new TelemetryOutput(this);
         timer = new Timer(this);
-        driveTrain = new DriveTrain(this);
+        //driveTrain = new DriveTrain(this);
         grabber = new Grabber(this);
         voltageSensorPoint = new VoltageSensorPoint(this);
         lift = new Lift(this);
@@ -65,12 +65,12 @@ public class UltRobot {
 
     public void updateWhilePositionFalse(Runnable[] runnables){
         for (Runnable runnable : runnables){
-            allUpdate();
             runnable.run();
+            allUpdate();
 
             double oldTime = System.currentTimeMillis();
 
-            while(!isAtPositionAll() && System.currentTimeMillis()-oldTime<5000 && linearOpMode.opModeIsActive()){
+            while(!isAtPositionAll() && System.currentTimeMillis()-oldTime<5000d && linearOpMode.opModeIsActive()){
                 allUpdate();
             }
 

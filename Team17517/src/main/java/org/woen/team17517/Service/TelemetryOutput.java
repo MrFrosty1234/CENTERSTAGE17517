@@ -42,13 +42,14 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("lift mode", robot.lift.liftMode);
         }
         if(driveTrain){
-            telemetry.addData("error X", robot.driveTrain.xError);
-            telemetry.addData("error Y", robot.driveTrain.yError);
-            telemetry.addData("error Heading", robot.driveTrain.headingError);
-            telemetry.addData("encoder left back",robot.driveTrain.left_back_drive.getCurrentPosition());
-            telemetry.addData("encoder right back",robot.driveTrain.right_back_drive.getCurrentPosition());
-            telemetry.addData("encoder left front", robot.driveTrain.left_front_drive.getCurrentPosition());
-            telemetry.addData("encoder right front", robot.driveTrain.right_front_drive.getCurrentPosition());
+            telemetry.addData("error X", robot.drivetrainNew.errX);
+            telemetry.addData("target X", robot.drivetrainNew.targetX);
+            telemetry.addData("error Y", robot.drivetrainNew.errX);
+            telemetry.addData("target Y", robot.drivetrainNew.targetX);
+            telemetry.addData("error H", robot.drivetrainNew.errX);
+            telemetry.addData("target H", robot.drivetrainNew.targetX);
+
+
         }
         if(grabber) {
             telemetry.addData("pixels count",robot.grabber.pixelsCount);
