@@ -107,6 +107,14 @@ public class Lift implements RobotModule {
                 liftPower = liftAtTaget ? 0 : -liftMovePower;
                 setPower(liftPower);
                 break;
+            case FORAUTONOM:
+                 if(getPosition() == LiftPosition.FORAUTONOM.value)
+                     liftAtTaget = true;
+                 else
+                     liftAtTaget = false;
+                 liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
+                 setPower(liftPower);
+                 break;
             default:
                 liftAtTaget = true;
                 liftPower = 0;
@@ -125,7 +133,7 @@ public class Lift implements RobotModule {
     }
 
     public enum LiftPosition {
-        DOWN(0), UP(2733), UNKNOWN(0);
+        DOWN(0), UP(2733), UNKNOWN(0), FORAUTONOM(1000);
         public int value;
 
         LiftPosition(int value) {
