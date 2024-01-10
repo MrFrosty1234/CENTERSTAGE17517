@@ -116,7 +116,7 @@ public class DrivetrainNew implements RobotModule {
 
     @Override
     public boolean isAtPosition() {
-        if ((errX < minX) && (errY < minY) && (errH < minH)) {
+        if ((abs(errX) < minX) && (abs(errY) < minY) && (abs(errH) < minH)) {
             robot.linearOpMode.telemetry.addData("errX",errX);
             robot.linearOpMode.telemetry.addData("targetX",targetX);
             robot.linearOpMode.telemetry.addData("true",true);
