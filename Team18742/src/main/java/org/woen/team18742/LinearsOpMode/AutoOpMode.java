@@ -14,6 +14,8 @@ public class AutoOpMode extends LinearOpMode {
         try {
             AutonomCollector _collector = new AutonomCollector(this);
 
+            sleep(10000);
+
             while (!isStarted()) {
                 _collector.PreUpdate();
             }
@@ -39,7 +41,7 @@ public class AutoOpMode extends LinearOpMode {
             ToolTelemetry.AddLine(e.getMessage());
             ToolTelemetry.Update();
 
-            throw new RuntimeException(e.getMessage());
+            throw e;
         }
     }
 }

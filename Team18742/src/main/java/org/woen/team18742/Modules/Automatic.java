@@ -1,10 +1,13 @@
 package org.woen.team18742.Modules;
 
+import static java.lang.Math.PI;
+
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Odometry.Odometry;
+import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.PIDF;
 import org.woen.team18742.Tools.ToolTelemetry;
@@ -36,6 +39,7 @@ public class Automatic implements IRobotModule {
 
         _PIDFForward.Reset();
         _PIDFSide.Reset();
+        _PIDFTurn.Reset();
 
         _PIDFForward.Update(moved.X);
         _PIDFSide.Update(moved.Y);
@@ -58,7 +62,7 @@ public class Automatic implements IRobotModule {
     private Vector2 _targetPosition = new Vector2();
 
     public boolean isMovedEnd() {
-        return Math.abs(_PIDFForward.Err) < 5d && Math.abs(_PIDFSide.Err) < 5d && Math.abs(_PIDFTurn.Err) < 8d;
+        return Math.abs(_PIDFForward.Err) < 5d && Math.abs(_PIDFSide.Err) < 5d && Math.abs(_PIDFTurn.Err) < PI / 10;
     }
 
     @Override
@@ -69,8 +73,8 @@ public class Automatic implements IRobotModule {
 
         if(Configs.GeneralSettings.IsAutonomEnable) {
             _driverTrain.SetSpeedWorldCoords(
-                    new Vector2(_PIDFForward.Update(_targetPosition.X - _odometry.Position.X), _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y)),
-                    _PIDFTurn.Update((_gyro.GetRadians() - _turnTarget)));
+                    new Vector2(_PIDFForward.Update(_targetPosition.X - _odometry.Position.X) / Battery.ChargeDelta, _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y) / Battery.ChargeDelta),
+                    _PIDFTurn.Update(_gyro.GetRadians() - _turnTarget) / Battery.ChargeDelta);
         }
 
         ToolTelemetry.AddLine( "Autonom:" + _PIDFForward.Err + " " + _PIDFSide.Err + " " + _PIDFTurn.Err);

@@ -14,7 +14,7 @@ import org.woen.team18742.Tools.Configs.Configs;
 import java.util.ArrayList;
 
 public class AutonomCollector extends BaseCollector {
-    public StartRobotPosition StartPosition = StartRobotPosition.RED_BACK;
+    public static StartRobotPosition StartPosition = StartRobotPosition.RED_BACK;
 
     private static ArrayList<Class<?>> _annotatedClass;
 

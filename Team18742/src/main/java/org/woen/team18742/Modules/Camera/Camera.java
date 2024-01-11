@@ -9,9 +9,10 @@ import org.woen.team18742.Tools.ToolTelemetry;
 
 @AutonomModule
 public class Camera implements IRobotModule {
-    private final PipeLine pipeLine = new PipeLine();
+    private PipeLine pipeLine;
 
     public CameraStreamSource GetProcessor() {
+        pipeLine = new PipeLine();
         return pipeLine;
     }
 
@@ -36,5 +37,6 @@ public class Camera implements IRobotModule {
     @Override
     public void Update() {
         ToolTelemetry.AddLine("Camera = " + GetPosition());
+        //ToolTelemetry.AddLine("CameraRect = " + pipeLine.RectCenter.get().X + " " + + pipeLine.RectCenter.get().Y);
     }
 }

@@ -19,6 +19,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.woen.team18742.Tools.Configs.Configs;
+import org.woen.team18742.Tools.Vector2;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,6 +29,8 @@ import java.util.concurrent.atomic.AtomicReference;
 //@Config
 public class PipeLine implements VisionProcessor, CameraStreamSource {
     public AtomicReference<Bitmap> LastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
+
+    public AtomicReference<Vector2> RectCenter = new AtomicReference<>(new Vector2());
 
     double x = 640;
     double y = 480;
@@ -52,15 +56,11 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     public static double cBlueUp = 255;
     public static double vBlueUp = 255;
     public static boolean alyans = false;
-    double x2Finish = x;
-    double x2Start = x * 0.6;
-    double x3Finish = 0.6 * x;
-    double x3Start = 0;
     double centerOfRectX = 0;
     double centerOfRectY = 0;
     public AtomicInteger pos = new AtomicInteger(2);
 
-    public int ksize = 13;
+    public int ksize = 16;
     public boolean team = true;
 
     public void init(int width, int height, CameraCalibration calibration) {
@@ -94,20 +94,23 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
         Rect boundingRect = boundingRect(frame);//boudingRect представляем прямоугольник
 
-        if(boundingRect == null || boundingRect.area() <= 0)
+        if(boundingRect == null || boundingRect.area() <= 0) {
+            pos.set(3);
+
             return frame;
+        }
 
         centerOfRectX = boundingRect.x + boundingRect.width / 2.0;//координаты центра вычисляем
         centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
 
-        if (centerOfRectX < x2Finish && centerOfRectX > x2Start) {
-            pos.set(2);
-        }
-        else if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
-            pos.set(3);
-        }
-        else
+        RectCenter.set(new Vector2(centerOfRectX, centerOfRectY));
+
+        if (centerOfRectX < Configs.Camera.ZoneLeftEnd)
             pos.set(1);
+        else if (centerOfRectX < Configs.Camera.ZoneForwardEnd)
+            pos.set(2);
+        else
+            pos.set(3);
 
         return frame;
     }

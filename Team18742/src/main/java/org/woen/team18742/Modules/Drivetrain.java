@@ -133,7 +133,7 @@ public class Drivetrain implements IRobotModule {
     }
 
     public void SetSpeedWorldCoords(Vector2 speed, double rotate) {
-        Vector2 worldSpeed = speed.Turn(_gyro.GetRadians());
+        Vector2 worldSpeed = speed.Turn(-_gyro.GetRadians());
 
         worldSpeed.Y *= 1d + (1d - Configs.Odometry.YLag);
 

@@ -21,6 +21,8 @@ public class Configs {
         public static int RobotPos = 2;
         public static double CameraAccuracy = 130;
         public static double CameraX = 16.01, CameraY = 16.18;
+
+        public static double ZoneLeftEnd = 280, ZoneForwardEnd = 620;
     }
 
     @Config
@@ -42,12 +44,12 @@ public class Configs {
 
     @Config
     public static class AutomaticForwardPid{
-        public static double PidForwardP = 0.1, PidForwardI = 0, PidForwardD = 0.1;
+        public static double PidForwardP = 0.15, PidForwardI = 0, PidForwardD = 0.1;
     }
 
     @Config
     public static class AutomaticSidePid{
-        public static double PidSideP = 0.1, PidSideI = 0, PidSideD = 0;
+        public static double PidSideP = 0.1, PidSideI = 0, PidSideD = 0.1;
     }
 
     @Config
