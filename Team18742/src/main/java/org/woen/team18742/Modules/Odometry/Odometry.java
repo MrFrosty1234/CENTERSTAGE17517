@@ -62,6 +62,7 @@ public class Odometry implements IRobotModule {
             double odometrXLeft = _odometrs.GetOdometerXLeft(), odometrY = _odometrs.GetOdometerY(), odometrXRight = _odometrs.GetOdometerXRight();
 
             double deltaX = -(odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
+            //TODO разность (_gyro.GetRadians() - _oldRotate) может выйти за пределы 180 градусов!
             double deltaY = -((odometrY - _oldOdometrY) - Configs.Odometry.RadiusOdometrY * (_gyro.GetRadians() - _oldRotate));
 
             _oldOdometrXLeft = odometrXLeft;
