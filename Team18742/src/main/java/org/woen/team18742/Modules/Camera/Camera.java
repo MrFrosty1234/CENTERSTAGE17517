@@ -5,6 +5,7 @@ import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 @AutonomModule
 public class Camera implements IRobotModule {
@@ -30,5 +31,10 @@ public class Camera implements IRobotModule {
             return GetEnum(Configs.Camera.RobotPos);
 
         return GetEnum(pipeLine.pos.get());
+    }
+
+    @Override
+    public void Update() {
+        ToolTelemetry.AddLine("Camera = " + GetPosition());
     }
 }
