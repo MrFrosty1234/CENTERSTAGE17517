@@ -59,16 +59,11 @@ public class Manual implements IRobotModule {
         if(grip)
             _intake.releaseGripper();
 
-        if (brush && !_brushOld) {
-            if(_brush.IsIntake())
-                _brush.Stop();
-            else
-                _brush.IntakePowerWithProtection();
-        } else if(brushRevers && !_brushReversOld){
-            if(_brush.IsReversed())
-                _brush.Stop();
-            else
-                _brush.Reverse();
+        if(brush){
+            _brush.BrushEnable();
+        }
+        if(brushRevers){
+            _brush.BrushDisable();
         }
 
         if (A)
