@@ -42,14 +42,20 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("lift mode", robot.lift.liftMode);
         }
         if(driveTrain){
-            telemetry.addData("error X", robot.drivetrainNew.errX);
-            telemetry.addData("target X", robot.drivetrainNew.targetX);
-            telemetry.addData("error Y", robot.drivetrainNew.errX);
-            telemetry.addData("target Y", robot.drivetrainNew.targetX);
-            telemetry.addData("error H", robot.drivetrainNew.errX);
-            telemetry.addData("target H", robot.drivetrainNew.targetX);
+            HashMap<String,Double> targetMap = robot.drivetrainNew.getTargets();
+            HashMap<String,Double> errorMap = robot.drivetrainNew.getErrors();
+            HashMap<String,Double> positionMap = robot.drivetrainNew.getPosition();
+            telemetry.addData("error X", errorMap.get("X"));
+            telemetry.addData("target X", targetMap.get("X"));
+            telemetry.addData("pos X", positionMap.get("X"));
 
+            telemetry.addData("error Y", errorMap.get("Y"));
+            telemetry.addData("target Y", targetMap.get("Y"));
+            telemetry.addData("pos Y", positionMap.get("Y"));
 
+            telemetry.addData("error H", errorMap.get("H"));
+            telemetry.addData("target H", targetMap.get("H"));
+            telemetry.addData("pos H", positionMap.get("H"));
         }
         if(grabber) {
             telemetry.addData("pixels count",robot.grabber.pixelsCount);
