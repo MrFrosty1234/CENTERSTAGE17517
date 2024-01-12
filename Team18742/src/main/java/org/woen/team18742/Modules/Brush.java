@@ -12,6 +12,7 @@ import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
 
@@ -59,7 +60,7 @@ public class Brush implements IRobotModule {
 
     @Override
     public void Update() {
-
+        ToolTelemetry.AddLine("brush = " + brushMotor.getCurrent(CurrentUnit.AMPS));
 
         if (!_lift.isDown() || _intake.isPixelGripped())
             changeState(BrushState.STATE_OFF);

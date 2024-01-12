@@ -1,6 +1,7 @@
 package org.woen.team18742.Modules;
 
 import static java.lang.Math.PI;
+import static java.lang.Math.signum;
 
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
@@ -30,24 +31,32 @@ public class Automatic implements IRobotModule {
             _collector = (AutonomCollector) collector;
     }
 
-    private final PIDF _PIDFForward = new PIDF(Configs.AutomaticForwardPid.PidForwardP, Configs.AutomaticForwardPid.PidForwardI, Configs.AutomaticForwardPid.PidForwardD, 1);
-    private final PIDF _PIDFSide = new PIDF(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideI, Configs.AutomaticSidePid.PidSideD, 1);
-    private final PIDF _PIDFTurn = new PIDF(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD, 1);
+    private final PIDF _PIDFForward = new PIDF(Configs.AutomaticForwardPid.PidForwardP, Configs.AutomaticForwardPid.PidForwardI, Configs.AutomaticForwardPid.PidForwardD, Configs.DriveTrainWheels.speed, 1);
+    private final PIDF _PIDFSide = new PIDF(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideI, Configs.AutomaticSidePid.PidSideD, Configs.DriveTrainWheels.speed, 1);
+    private final PIDF _PIDFTurn = new PIDF(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD, Configs.DriveTrainWheels.speed, 1);
 
     public void PIDMove(Vector2 moved) {
-        _targetPosition = Vector2.Plus(_targetPosition, moved);
-
-        _PIDFForward.Reset();
-        _PIDFSide.Reset();
-        _PIDFTurn.Reset();
-
-        _PIDFForward.Update(moved.X);
-        _PIDFSide.Update(moved.Y);
+        PIDMoveToPoint(Vector2.Plus(moved, _targetPosition));
     }
 
     public void PIDMove(Vector2 moved, double rotation){
-        PIDMove(moved);
+        PIDMoveToPoint(Vector2.Plus(moved, _targetPosition));
         TurnGyro(rotation);
+    }
+
+    public void PIDMoveToPoint(Vector2 moved, double rotate){
+        PIDMoveToPoint(moved);
+        TurnGyro(rotate);
+    }
+
+    public void PIDMoveToPoint(Vector2 moved){
+        _targetPosition = moved;
+
+        _PIDFForward.Reset();
+        _PIDFSide.Reset();
+
+        _PIDFForward.Update(_targetPosition.X - _odometry.Position.X);
+        _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y);
     }
 
     public void TurnGyro(double degrees) {
@@ -55,14 +64,14 @@ public class Automatic implements IRobotModule {
 
         _turnTarget = degrees;
 
-        _PIDFTurn.Update(_turnTarget);
+        _PIDFTurn.Update(ChopAngle(_gyro.GetRadians() - _turnTarget));
     }
 
     private double _turnTarget = 0;
     private Vector2 _targetPosition = new Vector2();
 
     public boolean isMovedEnd() {
-        return Math.abs(_PIDFForward.Err) < 5d && Math.abs(_PIDFSide.Err) < 5d && Math.abs(_PIDFTurn.Err) < PI / 10;
+        return Math.abs(_PIDFForward.Err) < 10d && Math.abs(_PIDFSide.Err) < 10d && Math.abs(_PIDFTurn.Err) < PI / 10;
     }
 
     @Override
@@ -74,10 +83,18 @@ public class Automatic implements IRobotModule {
         if(Configs.GeneralSettings.IsAutonomEnable) {
             _driverTrain.SetSpeedWorldCoords(
                     new Vector2(_PIDFForward.Update(_targetPosition.X - _odometry.Position.X) / Battery.ChargeDelta, _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y) / Battery.ChargeDelta),
-                    _PIDFTurn.Update(_gyro.GetRadians() - _turnTarget) / Battery.ChargeDelta);
+                    _PIDFTurn.Update(ChopAngle(_gyro.GetRadians() - _turnTarget)) / Battery.ChargeDelta);
         }
 
         ToolTelemetry.AddLine( "Autonom:" + _PIDFForward.Err + " " + _PIDFSide.Err + " " + _PIDFTurn.Err);
+    }
+
+    public double ChopAngle(double angle){
+        while (Math.abs(angle) > PI){
+            angle -= 2 * PI * signum(angle);
+        }
+
+        return angle;
     }
 
     @Override

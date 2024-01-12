@@ -27,7 +27,7 @@ public class Configs {
 
     @Config
     public static class LiftPid{
-        public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
+        public static double PCoef = 0.01, ICoef = 0, DCoef = 0;
     }
 
     @Config
@@ -44,17 +44,17 @@ public class Configs {
 
     @Config
     public static class AutomaticForwardPid{
-        public static double PidForwardP = 0.15, PidForwardI = 0, PidForwardD = 0.1;
+        public static double PidForwardP = 0.03, PidForwardI = 0, PidForwardD = 0;
     }
 
     @Config
     public static class AutomaticSidePid{
-        public static double PidSideP = 0.1, PidSideI = 0, PidSideD = 0.1;
+        public static double PidSideP = 0.03, PidSideI = 0, PidSideD = 0;
     }
 
     @Config
     public static class AutomaticRotatePid{
-        public static double PidRotateP = 0.5, PidRotateI = 0, PidRotateD = 1;
+        public static double PidRotateP = 2, PidRotateI = 0, PidRotateD = 0.5;
     }
 
     @Config
@@ -66,7 +66,7 @@ public class Configs {
 
     @Config
     public static class DriveTrainWheels {
-        public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 2052, MaxSpeedY = 2052, MaxSpeedTurn = 1026;
+        public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 2052, MaxSpeedY = 2052, MaxSpeedTurn = 1026, speed = 0.5;
         public static boolean isUsePids = false;
     }
 
@@ -82,9 +82,9 @@ public class Configs {
         public static final double servoTurnTurned = 0.35;
         public static long AverageTime = 830;
         public static double servoGripperNormal = 0.4;
-        public static double servoGripperGripped = 0.13;
+        public static double servoGripperGripped = 0.11;
         public static double servoClampClamped = 0.84;
-        public static double servoClampReleased = 0.42;//0.5
+        public static double servoClampReleased = 0.41;//0.5
         public static double pixelDetectTimeMs = 1000;
         public static double ReverseTimeMs = 2000;
     }

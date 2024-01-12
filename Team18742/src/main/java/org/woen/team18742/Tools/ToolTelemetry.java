@@ -17,7 +17,7 @@ public class ToolTelemetry {
     private static TelemetryPacket _packet = new TelemetryPacket();
 
     public static void Update(){
-        if(!Configs.GeneralSettings.TelemetryOn)
+        if(!Configs.GeneralSettings.TelemetryOn || _telemetry == null)
             return;
 
         _telemetry.update();
@@ -29,21 +29,21 @@ public class ToolTelemetry {
     }
 
     public static void DrawCircle(Vector2 pos, double radius, String color){
-        if(Configs.GeneralSettings.TelemetryOn) {
+        if(Configs.GeneralSettings.TelemetryOn || _telemetry != null) {
             _packet.fieldOverlay().setFill(color);
             _packet.fieldOverlay().fillCircle(pos.X, pos.Y, radius);
         }
     }
 
     public static void AddLine(String str) {
-        if(Configs.GeneralSettings.TelemetryOn) {
+        if(Configs.GeneralSettings.TelemetryOn || _telemetry != null) {
             _telemetry.addLine(str);
             _packet.addLine(str);
         }
     }
 
     public static void AddVal(String name, Object val) {
-        if(Configs.GeneralSettings.TelemetryOn) {
+        if(Configs.GeneralSettings.TelemetryOn ||_telemetry != null) {
             _telemetry.addData(name, val);
             _packet.put(name, val);
         }

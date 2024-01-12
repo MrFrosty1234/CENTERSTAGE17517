@@ -2,8 +2,8 @@ package org.woen.team18742.Modules.Lift;
 
 public enum LiftPose {
     UP(600),
-    AVERAGE(300),
-    DOWN(-20);
+    AVERAGE(220),
+    DOWN(-40);
 
     private LiftPose(double pose){
         Pose = pose;

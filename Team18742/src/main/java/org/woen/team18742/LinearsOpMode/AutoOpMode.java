@@ -2,23 +2,27 @@ package org.woen.team18742.LinearsOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Autonomous
 public class AutoOpMode extends LinearOpMode {
+    private ElapsedTime _time = new ElapsedTime();
 
     @Override
     public void runOpMode() {
         try {
-            AutonomCollector _collector = new AutonomCollector(this);
+            _time.reset();
 
-            sleep(10000);
+            AutonomCollector _collector = new AutonomCollector(this);
 
             while (!isStarted()) {
                 _collector.PreUpdate();
             }
+
+            while (_time.seconds() < 7 && isStarted());
 
             resetRuntime();
 

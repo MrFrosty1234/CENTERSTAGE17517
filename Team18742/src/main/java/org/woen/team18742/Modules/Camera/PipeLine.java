@@ -19,6 +19,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.woen.team18742.Collectors.AutonomCollector;
+import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Vector2;
 
@@ -60,7 +62,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     double centerOfRectY = 0;
     public AtomicInteger pos = new AtomicInteger(2);
 
-    public int ksize = 16;
+    public int ksize = 18;
     public boolean team = true;
 
     public void init(int width, int height, CameraCalibration calibration) {
@@ -76,14 +78,14 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
         blur(frame, frame, new Size(10, 10));//размытие для компенсации шумов с камеры
         // можно иф для установки цвета команды и только 1 инрейндж
-        inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
+        if(AutonomCollector.StartPosition == StartRobotPosition.RED_BACK)
+            inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), frame);
 
         //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
-        inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
+        if(AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK)
+            inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), frame);
 
-
-
-        Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
+        //Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
 
         erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Сжать
         dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Раздуть

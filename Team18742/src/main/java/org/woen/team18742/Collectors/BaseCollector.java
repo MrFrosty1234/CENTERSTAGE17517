@@ -31,8 +31,8 @@ public class BaseCollector {
 
         _modules.clear();
 
-        Devices.Init(robot.hardwareMap);
         ToolTelemetry.SetTelemetry(Robot.telemetry);
+        Devices.Init(robot.hardwareMap);
 
         _battery = new Battery(this);
         Time = new ElapsedTime();
