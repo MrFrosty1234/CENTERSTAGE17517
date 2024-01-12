@@ -70,11 +70,13 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     }
 
     @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
-        //
+    public Object processFrame(Mat frm, long captureTimeNanos) {
+        Mat frame = frm.clone();
 
         cvtColor(frame, frame, COLOR_RGB2HSV);//конвертация в хсв
         resize(frame, frame, new Size(x, y));// установка разрешения
+
+        frm = frm.submat(Configs.Camera.PruningStart, (int)y, 0, (int)x);
 
         blur(frame, frame, new Size(10, 10));//размытие для компенсации шумов с камеры
         // можно иф для установки цвета команды и только 1 инрейндж
@@ -102,7 +104,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
             else
                 pos.set(1);
 
-            return frame;
+            return frm;
         }
 
         centerOfRectX = boundingRect.x + boundingRect.width / 2.0;//координаты центра вычисляем
@@ -117,12 +119,11 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         else
             pos.set(3);
 
-        return frame;
+        return frm;
     }
 
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
-
     }
 
     @Override

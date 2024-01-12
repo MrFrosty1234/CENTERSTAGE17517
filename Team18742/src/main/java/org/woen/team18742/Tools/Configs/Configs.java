@@ -23,6 +23,8 @@ public class Configs {
         public static double CameraX = 16.01, CameraY = 16.18;
 
         public static double ZoneLeftEnd = 280, ZoneForwardEnd = 620;
+
+        public static int PruningStart = 200;
     }
 
     @Config

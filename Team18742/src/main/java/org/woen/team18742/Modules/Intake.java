@@ -55,7 +55,7 @@ public class Intake implements IRobotModule {
 
     private ElapsedTime _normalTurnTimer = new ElapsedTime(Configs.Intake.AverageTime);
 
-    public boolean _pixelGripped = false;
+    private boolean _pixelGripped = false;
 
     public void setGripper(boolean grip) {
         if (grip) {
