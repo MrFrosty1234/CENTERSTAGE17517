@@ -70,7 +70,7 @@ public class UltRobot {
 
             double oldTime = System.currentTimeMillis();
 
-            while(!isAtPositionAll() && System.currentTimeMillis()-oldTime<5000d && linearOpMode.opModeIsActive()){
+            while(!isAtPositionAll() && linearOpMode.opModeIsActive()){
                 allUpdate();
             }
 

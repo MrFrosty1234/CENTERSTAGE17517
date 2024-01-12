@@ -36,6 +36,7 @@ public class Odometry implements RobotModule {
 
         left_front_drive.setDirection(DcMotor.Direction.FORWARD);
         left_back_drive.setDirection(DcMotor.Direction.FORWARD);
+
         right_front_drive.setDirection(DcMotor.Direction.REVERSE);
         right_back_drive.setDirection(DcMotor.Direction.REVERSE);
     }
@@ -48,8 +49,8 @@ public class Odometry implements RobotModule {
         int rbd = right_back_drive.getCurrentPosition();
         double angle = robot.gyro.getAngle();
 
-        double deltaX = wheelsToXPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
-        double deltaY = wheelsToYPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
+        double deltaX = wheelsToXPosition((lfd - lfdold)*0, lbd - lbdold, (rfd - rfdold)*0, rbd - rbdold);
+        double deltaY = wheelsToYPosition(lfd - lfdold, lbd - lbdold, 0*(rfd - rfdold), (rbd - rbdold)*0);
         deltaY = deltaY * 0.85602812451;
         x += deltaX * cos(toRadians(-angle)) + deltaY * sin(toRadians(-angle));
         y += -deltaX * sin(toRadians(-angle)) + deltaY * cos(toRadians(-angle));
@@ -61,10 +62,10 @@ public class Odometry implements RobotModule {
     }
 
     public double wheelsToXPosition(double lfd, double lbd, double rfd, double rbd) {
-        return ((lfd + lbd + rfd + rbd) / 4) / encoderToCm;
+        return ((lfd*0 + lbd + rfd*0 + rbd) / 2);
     }
 
     public double wheelsToYPosition(double lfd, double lbd, double rfd, double rbd) {
-        return ((-lfd + lbd + rfd - rbd) / 4) / encoderToCm;
+        return ((lfd - lbd + 0*rfd - 0*rbd) / 2);
     }
 }
