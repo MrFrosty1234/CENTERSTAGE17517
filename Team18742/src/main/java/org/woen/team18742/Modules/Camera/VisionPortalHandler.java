@@ -27,6 +27,8 @@ public class VisionPortalHandler implements IRobotModule {
 
     @Override
     public void Stop(){
+        while (_visualPortal.getCameraState() == VisionPortal.CameraState.OPENING_CAMERA_DEVICE);
+
         _visualPortal.close();
         FtcDashboard.getInstance().stopCameraStream();
     }

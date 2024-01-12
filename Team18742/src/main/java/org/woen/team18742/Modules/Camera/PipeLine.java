@@ -96,8 +96,11 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
         Rect boundingRect = boundingRect(frame);//boudingRect представляем прямоугольник
 
-        if(boundingRect == null || boundingRect.area() <= 0) {
-            pos.set(3);
+        if(boundingRect.area() <= 0) {
+            if(AutonomCollector.StartPosition == StartRobotPosition.RED_BACK)
+                pos.set(3);
+            else
+                pos.set(1);
 
             return frame;
         }
@@ -107,9 +110,9 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
         RectCenter.set(new Vector2(centerOfRectX, centerOfRectY));
 
-        if (centerOfRectX < Configs.Camera.ZoneLeftEnd)
+        if (centerOfRectX < (AutonomCollector.StartPosition == StartRobotPosition.RED_BACK ? Configs.Camera.ZoneLeftEnd: x - Configs.Camera.ZoneLeftEnd))
             pos.set(1);
-        else if (centerOfRectX < Configs.Camera.ZoneForwardEnd)
+        else if (centerOfRectX < (AutonomCollector.StartPosition == StartRobotPosition.RED_BACK ? Configs.Camera.ZoneForwardEnd: x - Configs.Camera.ZoneForwardEnd))
             pos.set(2);
         else
             pos.set(3);
