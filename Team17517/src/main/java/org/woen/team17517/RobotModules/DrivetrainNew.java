@@ -18,11 +18,11 @@ public class DrivetrainNew implements RobotModule {
 
     boolean autoMode = false;
     double voltage ;
-    public static double kPX = 2;
+    public static double kPX = 1.2;
     public static double kDX = 0;
     public static double kIX = 2;
 
-    public static double kPY = 2;
+    public static double kPY = 1.2;
     public static double kDY = 0;
     public static double kIY = 2;
 

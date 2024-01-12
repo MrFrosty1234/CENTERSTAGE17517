@@ -81,7 +81,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static double ksRat = 0.000479;
     public static double ksY = 0.0004;
     public static double ksX = 0.00045;
-    public static double kSlide = 0.85;
+    public static double kSlide = 0.5;
 
     private double targetH = 0;
     private Vector2D vector = new Vector2D(0,0);
