@@ -27,7 +27,7 @@ public class Brush implements IRobotModule {
     private Lift _lift;
     private Intake _intake;
     private double MAX_CURRENT = 3;
-    private double PROTECTION_TIME = 2000;
+    private double PROTECTION_TIME = 500;
     private double REVERS_TIME = 1000;
 
     @Override
@@ -62,7 +62,7 @@ public class Brush implements IRobotModule {
 
 
         if (!_lift.isDown() || _intake.isPixelGripped())
-            statebrush = BrushState.STATE_OFF;
+            changeState(BrushState.STATE_OFF);
 
         switch (statebrush) {
             case STATE_ON: //тут нормальные щётки
