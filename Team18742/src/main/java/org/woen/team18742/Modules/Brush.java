@@ -61,8 +61,9 @@ public class Brush implements IRobotModule {
     public void Update() {
 
 
-        if (!_lift.isDown())
+        if (!_lift.isDown() || _intake.isPixelGripped())
             statebrush = BrushState.STATE_OFF;
+
         switch (statebrush) {
             case STATE_ON: //тут нормальные щётки
                 NormalRun();
@@ -96,6 +97,7 @@ public class Brush implements IRobotModule {
 
     public void BrushDisable() {
         changeState(BrushState.STATE_OFF);
+
     }
 
     public void BrushReverse() {

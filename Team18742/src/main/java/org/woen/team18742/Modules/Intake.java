@@ -98,25 +98,14 @@ public class Intake implements IRobotModule {
         _clampTimer.reset();
     }
 
-    private ElapsedTime _brushReverseTimer = new ElapsedTime();
-
     @Override
     public void Update() {
         if (isPixelDetected()) {
             setGripper(true);
             setClamp(_clampTimer.milliseconds() < clampTimerconst && _lift.isDown());
-
-            _brushReverseTimer.reset();
         } else {
             _clampTimer.reset();
             setClamp(!_pixelGripped && _lift.isDown());
-        }
-
-        if (isPixelGripped()) {
-            if (_brushReverseTimer.milliseconds() < Configs.Intake.ReverseTimeMs)
-                _brush.Reverse();
-            else
-                _brush.Stop();
         }
 
         updateTurner();
