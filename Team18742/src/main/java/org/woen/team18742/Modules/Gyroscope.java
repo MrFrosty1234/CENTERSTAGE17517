@@ -1,5 +1,6 @@
 package org.woen.team18742.Modules;
 
+import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 
@@ -78,5 +79,13 @@ public class Gyroscope implements IRobotModule {
     public void Reset() {
         _imu.resetYaw();
         _filter.Reset();
+    }
+
+    public static double ChopAngle(double angle){
+        while (Math.abs(angle) > PI){
+            angle -= 2 * PI * signum(angle);
+        }
+
+        return angle;
     }
 }
