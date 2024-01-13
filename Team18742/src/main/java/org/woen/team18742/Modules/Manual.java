@@ -79,8 +79,11 @@ public class Manual implements IRobotModule {
             _lift.SetLiftPose(LiftPose.DOWN);
 
         if(average)
-            _lift.SetLiftPose(LiftPose.AVERAGE);
+            _lift.SetLiftPose(LiftPose.MEGA_AVERAGE);
+    }
 
-
+    @Override
+    public void Start() {
+        _intake.setGripper(false);
     }
 }

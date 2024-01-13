@@ -31,6 +31,12 @@ public class Automatic implements IRobotModule {
             _collector = (AutonomCollector) collector;
     }
 
+    public void SetSpeed(double speed){
+        _PIDFTurn.SrtLimitU(speed);
+        _PIDFForward.SrtLimitU(speed);
+        _PIDFSide.SrtLimitU(speed);
+    }
+
     private final PIDF _PIDFForward = new PIDF(Configs.AutomaticForwardPid.PidForwardP, Configs.AutomaticForwardPid.PidForwardI, Configs.AutomaticForwardPid.PidForwardD, Configs.DriveTrainWheels.speed, 1);
     private final PIDF _PIDFSide = new PIDF(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideI, Configs.AutomaticSidePid.PidSideD, Configs.DriveTrainWheels.speed, 1);
     private final PIDF _PIDFTurn = new PIDF(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD, Configs.DriveTrainWheels.speed, 1);

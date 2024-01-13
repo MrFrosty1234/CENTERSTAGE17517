@@ -22,9 +22,9 @@ public class Configs {
         public static double CameraAccuracy = 130;
         public static double CameraX = 16.01, CameraY = 16.18;
 
-        public static double ZoneLeftEnd = 280, ZoneForwardEnd = 620;
+        public static double ZoneLeftEnd = 320, ZoneForwardEnd = 620;
 
-        public static int PruningStart = 240;
+        public static int PruningStart = 290;
 
         public static int ksize = 10;
 
@@ -101,7 +101,7 @@ public class Configs {
         public static long AverageTime = 830;
         public static double servoGripperNormal = 0.4;
         public static double servoGripperGripped = 0.11;
-        public static double servoClampClamped = 0.86;
+        public static double servoClampClamped = 0.9;
         public static double servoClampReleased = 0.47 ;//0.5
         public static double pixelDetectTimeMs = 1000;
         public static double ReverseTimeMs = 2000;

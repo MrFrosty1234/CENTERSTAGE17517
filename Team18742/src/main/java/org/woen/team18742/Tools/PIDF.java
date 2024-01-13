@@ -84,4 +84,8 @@ public class PIDF {
 
         return u;
     }
+
+    public void SrtLimitU(double u){
+        _limitU = u;
+    }
 }
