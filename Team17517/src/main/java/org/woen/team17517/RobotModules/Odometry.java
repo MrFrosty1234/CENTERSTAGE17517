@@ -20,10 +20,10 @@ public class Odometry implements RobotModule {
     double rbdold = 0;
     UltRobot robot;
 
-    private final DcMotor left_front_drive;
-    private final DcMotor left_back_drive;
-    private final DcMotor right_front_drive;
-    private final DcMotor right_back_drive;
+    public final DcMotor left_front_drive;
+    public final DcMotor left_back_drive;
+    public final DcMotor right_front_drive;
+    public final DcMotor right_back_drive;
 
     public Odometry(UltRobot robot) {
         this.robot = robot;

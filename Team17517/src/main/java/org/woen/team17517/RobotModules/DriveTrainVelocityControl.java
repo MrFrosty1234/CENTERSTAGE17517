@@ -133,7 +133,7 @@ public class DriveTrainVelocityControl implements RobotModule {
         targetH = 0;
     }
 
-    private void  encUpdate()
+     private void  encUpdate()
     {
         this.yEnc = (left_back_drive.getVelocity()+ 0*left_front_drive.getVelocity()+
                 right_front_drive.getVelocity()*0+ right_back_drive.getVelocity())/2.0;
