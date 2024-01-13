@@ -20,6 +20,7 @@ public class TelemetryOutput implements RobotModule {
     public static boolean velocity = false;
     public static boolean odometryAndCamera = false;
     public static boolean ftcMap = false;
+    public static boolean encoders = false;
     double dlin =40;
     double shir =40;
     public double [] rectXPoints = new double[2];
@@ -82,10 +83,17 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("powerH",powerMap.get("powerH"));
         }
         if(odometryAndCamera){
-            telemetry.addLine("Camera position:")
-                    .addData("x", robot.testAprilTagPipeline.fieldCameraPos.get(0))
-                    .addData("y", robot.testAprilTagPipeline.fieldCameraPos.get(1))
-                    .addData("z", robot.testAprilTagPipeline.fieldCameraPos.get(2));
+            telemetry.addLine("Camera position:");
+            telemetry.addData("x", robot.testAprilTagPipeline.fieldCameraPos.get(0));
+            telemetry.addData("y", robot.testAprilTagPipeline.fieldCameraPos.get(1));
+            telemetry.addData("z", robot.testAprilTagPipeline.fieldCameraPos.get(2));
+        }
+        if(encoders){
+            telemetry.addLine("Encoders:");
+            telemetry.addData("lbd", robot.odometry.left_back_drive.getCurrentPosition());
+            telemetry.addData("lfd", robot.odometry.left_front_drive.getCurrentPosition());
+            telemetry.addData("rbd", robot.odometry.right_back_drive.getCurrentPosition());
+            telemetry.addData("rfd", robot.odometry.right_front_drive.getCurrentPosition());
         }
         if(ftcMap){
             packet = new TelemetryPacket();
