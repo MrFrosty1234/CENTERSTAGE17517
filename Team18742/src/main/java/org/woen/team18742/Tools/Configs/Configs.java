@@ -24,7 +24,23 @@ public class Configs {
 
         public static double ZoneLeftEnd = 280, ZoneForwardEnd = 620;
 
-        public static int PruningStart = 200;
+        public static int PruningStart = 240;
+
+        public static int ksize = 10;
+
+        public static double hRedDown = 4;
+        public static double cRedDown = 127.7;
+        public static double vRedDowm = 154.4;
+        public static double hRedUp = 30;
+        public static double cRedUp = 255;
+        public static double vRedUp = 255;
+
+        public static double hBlueDown = 95;
+        public static double cBlueDown = 170;
+        public static double vBlueDowm = 0;
+        public static double hBlueUp = 255;
+        public static double cBlueUp = 255;
+        public static double vBlueUp = 255;
     }
 
     @Config
@@ -79,14 +95,14 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.125, PixelCenterOpen = 0;//0.4
+        public static double pixelSensorvoltage = 0.135, PixelCenterOpen = 0;//0.4
         public static double servoTurnNormal = 0.96;
         public static final double servoTurnTurned = 0.35;
         public static long AverageTime = 830;
         public static double servoGripperNormal = 0.4;
         public static double servoGripperGripped = 0.11;
-        public static double servoClampClamped = 0.84;
-        public static double servoClampReleased = 0.41;//0.5
+        public static double servoClampClamped = 0.86;
+        public static double servoClampReleased = 0.47 ;//0.5
         public static double pixelDetectTimeMs = 1000;
         public static double ReverseTimeMs = 2000;
     }

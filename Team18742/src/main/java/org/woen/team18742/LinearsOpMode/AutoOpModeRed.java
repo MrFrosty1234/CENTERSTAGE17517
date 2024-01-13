@@ -19,7 +19,7 @@ public class AutoOpModeRed extends LinearOpMode {
 
             AutonomCollector _collector = new AutonomCollector(this);
 
-            AutonomCollector.StartPosition = StartRobotPosition.RED_BACK;
+            AutonomCollector.StartPosition = StartRobotPosition.BLUE_BACK;
 
             while (!isStarted()) {
                 _collector.PreUpdate();

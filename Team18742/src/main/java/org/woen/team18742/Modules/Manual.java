@@ -64,6 +64,7 @@ public class Manual implements IRobotModule {
         }
         if(brushRevers){
             _brush.BrushDisable();
+            _brush.RevTimeRes();
         }
 
         if (A)
@@ -80,7 +81,6 @@ public class Manual implements IRobotModule {
         if(average)
             _lift.SetLiftPose(LiftPose.AVERAGE);
 
-        _brushOld = brush;
-        _brushReversOld = brushRevers;
+
     }
 }

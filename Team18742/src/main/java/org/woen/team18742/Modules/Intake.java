@@ -22,7 +22,6 @@ public class Intake implements IRobotModule {
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private DcMotor _lighting;
 
-    private Brush _brush;
     private Lift _lift;
 
     @Override
@@ -34,7 +33,6 @@ public class Intake implements IRobotModule {
         servoTurn = Devices.Servopere;
         _lighting = Devices.LightingMotor;
 
-        _brush = collector.GetModule(Brush.class);
         _lift = collector.GetModule(Lift.class);
     }
 

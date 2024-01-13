@@ -79,7 +79,7 @@ public class Drivetrain implements IRobotModule {
         _leftForwardDrive.setPower(speed.X - speed.Y + rotate);
         _rightBackDrive.setPower(speed.X - speed.Y - rotate);
         _leftBackDrive.setPower(speed.X + speed.Y + rotate);
-        _rightForwardDrive.setPower(speed.X + speed.Y - rotate);
+         _rightForwardDrive.setPower(speed.X + speed.Y - rotate);
     }
 
     public void SimpleDriveDirection(Vector2 speed, double rotate){

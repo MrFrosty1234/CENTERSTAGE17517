@@ -62,16 +62,16 @@ public class RouteManager implements IRobotModule {
                 switch (_camera.GetPosition()){
                     case FORWARD:
                     {
-                        _route.add(()->_automatic.PIDMove(new Vector2(-55, 0), 0));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-48, 0), 0));
                         _route.add(()->_automatic.PIDMove(new Vector2(0, 30)));
-                        _route.add(()->_automatic.PIDMove(new Vector2(-80, 0)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-65, 0)));
                         break;
                     }
 
                     case RIGHT:
                     {
-                        _route.add(()->_automatic.PIDMove(new Vector2(-39, 27), 0));
-                        _route.add(()->_automatic.PIDMove(new Vector2(10, -35)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-39, 29), 0));
+                        _route.add(()->_automatic.PIDMove(new Vector2(15, -40)));
                         _route.add(()->_automatic.PIDMove(new Vector2(5, 0)));
                         _route.add(() -> _automatic.PIDMove(new Vector2(-80, 5)));
                         break;
@@ -81,9 +81,9 @@ public class RouteManager implements IRobotModule {
                     {
                         _route.add(()->_automatic.PIDMove(new Vector2(-20, 5)));
                         _route.add(()->_automatic.PIDMove(new Vector2(-30, 0), PI / 2));
-                        _route.add(()->_automatic.PIDMove(new Vector2(0, -20)));
-                        _route.add(()->_automatic.PIDMove(new Vector2(0, 20)));
-                        _route.add(()->_automatic.PIDMove(new Vector2(-70, 5)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-10, -15)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(10, 15)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-50, 5)));
                         break;
                     }
                 }
@@ -92,15 +92,15 @@ public class RouteManager implements IRobotModule {
 
                 switch (_camera.GetPosition()) {
                     case FORWARD:
-                        _route.add(() -> _automatic.PIDMove(new Vector2(69, -95)));
+                        _route.add(() -> _automatic.PIDMove(new Vector2(76, -98)));
                         break;
 
                     case RIGHT:
-                        _route.add(() -> _automatic.PIDMove(new Vector2(53, -95)));
+                        _route.add(() -> _automatic.PIDMove(new Vector2(53, -102)));
                         break;
 
                     case LEFT:
-                        _route.add(() -> _automatic.PIDMove(new Vector2(86, -95)));
+                        _route.add(() -> _automatic.PIDMove(new Vector2(86, -98)));
                         break;
                 }
 
@@ -110,7 +110,7 @@ public class RouteManager implements IRobotModule {
                 _route.add(() -> Wait(500));
                 _route.add(() -> _lift.SetLiftPose(LiftPose.DOWN));
 
-                _route.add(()->_automatic.PIDMoveToPoint(new Vector2(-122, -215), PI / 2));
+                _route.add(()->_automatic.PIDMoveToPoint(new Vector2(-123, -215), PI / 2));
                 _route.add(() -> _automatic.PIDMove(new Vector2(0, -30)));
 
                 break;
@@ -120,45 +120,45 @@ public class RouteManager implements IRobotModule {
                 switch (_camera.GetPosition()){
                     case FORWARD:
                     {
-                        _route.add(()->_automatic.PIDMove(new Vector2(-55, 0), 0));
-                        _route.add(()->_automatic.PIDMove(new Vector2(0, -30)));
-                        _route.add(()->_automatic.PIDMove(new Vector2(-80, 0)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-54, 0), 0));
+                        _route.add(()->_automatic.PIDMove(new Vector2(0, -40)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-45, 0)));
                         break;
                     }
 
-                    case RIGHT:
+                    case LEFT:
                     {
-                        _route.add(()->_automatic.PIDMove(new Vector2(-39, -27), 0));
-                        _route.add(()->_automatic.PIDMove(new Vector2(10, 35)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-39, -29), 0));
+                        _route.add(()->_automatic.PIDMove(new Vector2(15, 40)));
                         _route.add(()->_automatic.PIDMove(new Vector2(5, 0)));
                         _route.add(() -> _automatic.PIDMove(new Vector2(-80, -5)));
                         break;
                     }
 
-                    case LEFT:
+                    case RIGHT:
                     {
-                        _route.add(()->_automatic.PIDMove(new Vector2(-20, -5)));
-                        _route.add(()->_automatic.PIDMove(new Vector2(-30, 0), PI / 2));
-                        _route.add(()->_automatic.PIDMove(new Vector2(0, 20)));
-                        _route.add(()->_automatic.PIDMove(new Vector2(0, -20)));
-                        _route.add(()->_automatic.PIDMove(new Vector2(-70, -5)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-20, -9)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-30, 0), -PI / 2));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-10, 18)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(10, -18)));
+                        _route.add(()->_automatic.PIDMove(new Vector2(-60, -5)));
                         break;
                     }
                 }
 
-                _route.add(()->_automatic.PIDMoveToPoint(new Vector2(-130, 130), PI / 2));
+                _route.add(()->_automatic.PIDMoveToPoint(new Vector2(-130, 130), -PI / 2));
 
                 switch (_camera.GetPosition()) {
                     case FORWARD:
-                        _route.add(() -> _automatic.PIDMove(new Vector2(69, 95)));
-                        break;
-
-                    case RIGHT:
-                        _route.add(() -> _automatic.PIDMove(new Vector2(53, 95)));
+                        _route.add(() -> _automatic.PIDMove(new Vector2(59, 98)));
                         break;
 
                     case LEFT:
-                        _route.add(() -> _automatic.PIDMove(new Vector2(86, 95)));
+                        _route.add(() -> _automatic.PIDMove(new Vector2(36, 102)));
+                        break;
+
+                    case RIGHT:
+                        _route.add(() -> _automatic.PIDMove(new Vector2(72, 98)));
                         break;
                 }
 
@@ -168,7 +168,7 @@ public class RouteManager implements IRobotModule {
                 _route.add(() -> Wait(500));
                 _route.add(() -> _lift.SetLiftPose(LiftPose.DOWN));
 
-                _route.add(()->_automatic.PIDMoveToPoint(new Vector2(-122, 215), PI / 2));
+                _route.add(()->_automatic.PIDMoveToPoint(new Vector2(-135, 215), -PI / 2));
                 _route.add(() -> _automatic.PIDMove(new Vector2(0, 30)));
 
                 break;
