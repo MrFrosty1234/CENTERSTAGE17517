@@ -30,7 +30,7 @@ public class TeleOP extends LinearOpMode {
 
         while (opModeIsActive()) {
             forwardSpeed = -gamepad1.left_stick_y;
-            sideSpeed = -gamepad1.left_stick_x;
+            sideSpeed = gamepad1.left_stick_x;
             angleSpeed = gamepad1.right_stick_x;
 
             forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(forwardSpeed);

@@ -109,18 +109,23 @@ public class DrivetrainNew implements RobotModule {
             errY = targetY - y;
             errH = targetH - h;
 
-            while (errH >= 180) {
+          /*  while (errH >= 180) {
                 errH = errH - 360;
             }
 
             while (errH < -180) {
                 errH = errH + 360;
             }
-            double H = pidH.PID(targetH,h,voltage)+200*signum(errH);
-            double X = pidX.PID(targetX,x,voltage)+200*signum(errX);
-            double Y = pidY.PID(targetY,y,voltage)+200*signum(errY);
 
-            robot.driveTrainVelocityControl.moveGlobalCord(Y, X, H);
+           */
+
+            double X = pidX.PID(targetX,x,voltage)+00*signum(errX);
+            double Y = pidY.PID(targetY,y,voltage)+00*signum(errY);
+            double H = pidH.PID(targetH,h,voltage)+00*signum(errH);
+
+
+
+            robot.driveTrainVelocityControl.moveGlobalCord(-Y, X, H);
         }
     }
 

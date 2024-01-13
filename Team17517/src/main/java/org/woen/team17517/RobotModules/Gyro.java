@@ -25,7 +25,7 @@ public class Gyro implements RobotModule {
         Orientation hubRotation = xyzOrientation(xRotation, yRotation, headingRotation);
 
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(hubRotation);
-        gyro.initialize(new IMU.Parameters(orientationOnRobot));
+        gyro.initialize(new IMU.    Parameters(orientationOnRobot));
         reset();
     }
     public void reset(){
