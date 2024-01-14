@@ -56,6 +56,14 @@ public class Brush implements IRobotModule {
     enum BrushState {
         STATE_ON, STATE_PROT, STATE_OFF, STATE_REV_OFF;
     }
+    public boolean isBrusnOn(){
+        if(BrushState.STATE_ON == statebrush){
+            return true;
+        }
+            else{
+                return false;
+        }
+    }
 
 
     @Override
