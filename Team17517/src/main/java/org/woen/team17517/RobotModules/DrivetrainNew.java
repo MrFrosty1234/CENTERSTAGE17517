@@ -155,7 +155,6 @@ public class DrivetrainNew implements RobotModule {
             if (u_maxY> 2004){
                 u_maxY = 2004;
             }
-
             if (abs(Y) > u_maxY){
                 Y = u_maxY * Math.signum(u_maxY);
             }
