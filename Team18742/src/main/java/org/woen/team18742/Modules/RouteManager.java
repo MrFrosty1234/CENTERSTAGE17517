@@ -200,7 +200,7 @@ public class RouteManager implements IRobotModule {
                     }
                 }
 
-                _route.add(()->_automatic.PIDMoveToPoint(new Vector2(-65, -82), PI / 2));
+                _route.add(()->_automatic.PIDMoveToPoint(new Vector2(-65, -52), PI / 2));
 
                 switch (_camera.GetPosition()){
                     default:
