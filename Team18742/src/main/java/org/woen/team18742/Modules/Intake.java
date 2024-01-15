@@ -21,7 +21,7 @@ public class Intake implements IRobotModule {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private DcMotor _lighting;
-
+private Brush _brush;
     private Lift _lift;
 
     @Override
@@ -34,6 +34,7 @@ public class Intake implements IRobotModule {
         _lighting = Devices.LightingMotor;
 
         _lift = collector.GetModule(Lift.class);
+        _brush = collector.GetModule(Brush.class);
     }
 
     public void updateTurner() {
@@ -83,7 +84,7 @@ public class Intake implements IRobotModule {
     ElapsedTime pixelTimer = new ElapsedTime();
 
     private boolean isPixelDetected() {
-        if (pixelSensor2.getVoltage() >= Configs.Intake.pixelSensorvoltage /*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
+        if (pixelSensor2.getVoltage() >= Configs.Intake.pixelSensorvoltage || !_brush.isBrusnOn()/*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
             pixelTimer.reset();
         return pixelTimer.milliseconds() > Configs.Intake.pixelDetectTimeMs;
     }

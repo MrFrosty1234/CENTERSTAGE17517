@@ -1,6 +1,7 @@
 package org.woen.team18742.Modules;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Lift.Lift;
@@ -11,7 +12,7 @@ import org.woen.team18742.Tools.Vector2;
 
 @TeleopModule
 public class Manual implements IRobotModule {
-    private boolean _brushReversOld = false, _brushOld = false;
+    private boolean _gripOld = false, _waitLiftDown = false;
 
     private Plane _plane;
 
@@ -21,6 +22,8 @@ public class Manual implements IRobotModule {
     private Intake _intake;
     private Lift _lift;
     private Drivetrain _drivetrain;
+
+    private ElapsedTime _timeGrip = new ElapsedTime();
 
     @Override
     public void Init(BaseCollector collector) {
@@ -32,6 +35,8 @@ public class Manual implements IRobotModule {
         _intake = collector.GetModule(Intake.class);
         _lift = collector.GetModule(Lift.class);
         _drivetrain = collector.GetModule(Drivetrain.class);
+
+        LiftPose.AVERAGE.Pose = 400;
     }
 
     @Override
@@ -56,8 +61,12 @@ public class Manual implements IRobotModule {
         _plane.BezpolezniRailgunUp(railgunopen * 0.3);
         _plane.BezpolezniRailgunDown(railgunnoopen * 0.3);
 
-        if(grip)
+        if(grip && !_gripOld) {
             _intake.releaseGripper();
+
+            _timeGrip.reset();
+            _waitLiftDown = true;
+        }
 
         if(brush){
             _brush.BrushEnable();
@@ -74,16 +83,19 @@ public class Manual implements IRobotModule {
 
         if (liftUp)
             _lift.SetLiftPose(LiftPose.UP);
-
-        if(liftDown)
+        else if(average)
+            _lift.SetLiftPose(LiftPose.AVERAGE);
+        else if(_timeGrip.milliseconds() > 800 && _waitLiftDown) {
             _lift.SetLiftPose(LiftPose.DOWN);
+            _waitLiftDown = false;
+        }
 
-        if(average)
-            _lift.SetLiftPose(LiftPose.MEGA_AVERAGE);
+        _gripOld = grip;
     }
 
     @Override
     public void Start() {
         _intake.setGripper(false);
+        _timeGrip.reset();
     }
 }

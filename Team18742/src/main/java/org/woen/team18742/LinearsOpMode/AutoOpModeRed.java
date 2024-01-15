@@ -23,10 +23,10 @@ public class AutoOpModeRed extends LinearOpMode {
 
             AutonomCollector _collector = new AutonomCollector(this);
 
-            if(gamepad1.dpad_down)
+            //if(gamepad1.dpad_down)
                 AutonomCollector.StartPosition = StartRobotPosition.BLUE_BACK;
-            else
-                AutonomCollector.StartPosition = StartRobotPosition.BLUE_FORWAD;
+            //else
+                //AutonomCollector.StartPosition = StartRobotPosition.BLUE_FORWAD;
 
             while (!isStarted()) {
                 _collector.PreUpdate();

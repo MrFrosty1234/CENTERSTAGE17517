@@ -28,6 +28,7 @@ public class AutonomCollector extends BaseCollector {
     }
 
     public void PreUpdate(){
+        /*
         if(Robot.gamepad1.dpad_left)
             StartPosition = StartRobotPosition.BLUE_BACK;
         else if(Robot.gamepad1.dpad_right)
@@ -35,6 +36,6 @@ public class AutonomCollector extends BaseCollector {
         else if(Robot.gamepad1.dpad_up)
             StartPosition = StartRobotPosition.RED_BACK;
         else if(Robot.gamepad1.dpad_down)
-            StartPosition = StartRobotPosition.RED_FORWARD;
+            StartPosition = StartRobotPosition.RED_FORWARD;*/
     }
 }

@@ -2,7 +2,7 @@ package org.woen.team18742.Modules.Lift;
 
 public enum LiftPose {
     UP(600),
-    AVERAGE(200),
+    AVERAGE(190),
     MEGA_AVERAGE(400),
     DOWN(-40);
 
