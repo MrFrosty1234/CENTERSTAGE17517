@@ -1,5 +1,7 @@
 package org.woen.team18742.Modules.Odometry;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -10,24 +12,31 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseRaw;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Gyroscope;
+import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
 
-public class CVOdometry {
+@Module
+public class CVOdometry implements IRobotModule {
     private AprilTagProcessor  _aprilTagProcessor = null;
 
-    public Vector2 Position = new Vector2();
+    public Vector2 Position = new Vector2(), Speed = new Vector2(), OldPosition = new Vector2();
     public boolean IsZero = true;
 
     private Vector2 _cameraPosition = new Vector2(Configs.Camera.CameraX, Configs.Camera.CameraY);
-    private final Gyroscope _gyro;
+    private Gyroscope _gyro;
 
-    public CVOdometry(BaseCollector collector){
+    private final ElapsedTime _deltaTime = new ElapsedTime();
+
+    @Override
+    public void Init(BaseCollector collector){
         _gyro = collector.GetModule(Gyroscope.class);
     }
 
@@ -37,6 +46,15 @@ public class CVOdometry {
         return _aprilTagProcessor;
     }
 
+    @Override
+    public void Start() {
+        _deltaTime.reset();
+
+        Position = AutonomCollector.StartPosition.Position.copy();
+        OldPosition = AutonomCollector.StartPosition.Position.copy();
+    }
+
+    @Override
     public void Update() {
         _cameraPosition.X = Configs.Camera.CameraX;
         _cameraPosition.Y = Configs.Camera.CameraY;
@@ -88,7 +106,15 @@ public class CVOdometry {
 
         Position = Vector2.Minus(Position, _cameraPosition.Turn(_gyro.GetRadians()));
 
+        Vector2 DeltaPosition = Vector2.Minus(OldPosition, Position);
+
+        Speed.X = DeltaPosition.X / _deltaTime.seconds();
+        Speed.Y = DeltaPosition.Y / _deltaTime.seconds();
+
         ToolTelemetry.AddLine("CVOdometry = " + Position);
         ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
+
+        OldPosition = Position;
+        _deltaTime.reset();
     }
 }

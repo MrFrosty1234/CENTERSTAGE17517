@@ -7,7 +7,7 @@ public class Configs {
     public static class GeneralSettings {
         public static boolean IsAutonomEnable = true;
 
-        public static boolean IsUseOdometers = false;
+        public static boolean IsUseOdometers = true;
 
         public static boolean IsCachinger = true;
 
@@ -21,6 +21,26 @@ public class Configs {
         public static int RobotPos = 2;
         public static double CameraAccuracy = 130;
         public static double CameraX = 16.01, CameraY = 16.18;
+
+        public static double ZoneLeftEnd = 320, ZoneForwardEnd = 620;
+
+        public static int PruningStart = 290;
+
+        public static int ksize = 10;
+
+        public static double hRedDown = 4;
+        public static double cRedDown = 127.7;
+        public static double vRedDowm = 154.4;
+        public static double hRedUp = 30;
+        public static double cRedUp = 255;
+        public static double vRedUp = 255;
+
+        public static double hBlueDown = 95;
+        public static double cBlueDown = 170;
+        public static double vBlueDowm = 0;
+        public static double hBlueUp = 255;
+        public static double cBlueUp = 255;
+        public static double vBlueUp = 255;
     }
 
     @Config
@@ -33,25 +53,30 @@ public class Configs {
         public static double YCoef = 0.9;
         public static double XCoef = 0.9;
 
+        public static double YSpeedCoef = 0.9;
+        public static double XSpeedCoef = 0.9;
+
         public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
 
         public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 8192;
         public static double LateralMultiplier = 0.8;
+
+        public static double YLag = 0.8;
     }
 
     @Config
     public static class AutomaticForwardPid{
-        public static double PidForwardP = 0.1, PidForwardI = 0, PidForwardD = 1;
+        public static double PidForwardP = 0.03, PidForwardI = 0, PidForwardD = 0;
     }
 
     @Config
     public static class AutomaticSidePid{
-        public static double PidSideP = 0.2, PidSideI = 0, PidSideD = 1;
+        public static double PidSideP = 0.03, PidSideI = 0, PidSideD = 0;
     }
 
     @Config
     public static class AutomaticRotatePid{
-        public static double PidRotateP = 1, PidRotateI = 0, PidRotateD = 1;
+        public static double PidRotateP = 2, PidRotateI = 0, PidRotateD = 0.5;
     }
 
     @Config
@@ -63,7 +88,8 @@ public class Configs {
 
     @Config
     public static class DriveTrainWheels {
-        public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 2052, MaxSpeedY = 2052, MaxSpeedTurn = 1026;
+        public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 2052, MaxSpeedY = 2052, MaxSpeedTurn = 1026, speed = 0.5;
+        public static boolean isUsePids = false;
         public static double MaxTurnVelocity = 1; //random
     }
 
@@ -74,14 +100,14 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.125, PixelCenterOpen = 0;//0.4
+        public static double pixelSensorvoltage = 0.15, PixelCenterOpen = 0;//0.4
         public static double servoTurnNormal = 0.96;
         public static final double servoTurnTurned = 0.35;
         public static long AverageTime = 830;
         public static double servoGripperNormal = 0.4;
-        public static double servoGripperGripped = 0.13;
+        public static double servoGripperGripped = 0.122;
         public static double servoClampClamped = 0.9;
-        public static double servoClampReleased = 0.42;//0.5
+        public static double servoClampReleased = 0.47 ;//0.5
         public static double pixelDetectTimeMs = 1000;
         public static double ReverseTimeMs = 2000;
     }
@@ -90,30 +116,6 @@ public class Configs {
     public static class Plane{
         public static double servoplaneOtkrit = 0.07;
         public static double servoplaneneOtkrit = 0.17;
-    }
-
-    @Config
-    public static class DriverTrainSpeedXPidf{
-        public static double pCof = 1;
-        public static double iCof = 0;
-        public static double dCof = 0;
-        public static double fCof = 0;
-    }
-
-    @Config
-    public static class DriverTrainSpeedYPidf{
-        public static double pCof = 1;
-        public static double iCof = 0;
-        public static double dCof = 0;
-        public static double fCof = 0;
-    }
-
-    @Config
-    public static class DriverTrainSpeedTurnPidf{
-        public static double pCof = 1;
-        public static double iCof = 0;
-        public static double dCof = 0;
-        public static double fCof = 0;
     }
 
     @Config

@@ -9,5 +9,7 @@ public interface IRobotModule {
 
     public default void Update(){}
 
+    public default void LastUpdate(){}
+
     public default void Stop(){}
 }

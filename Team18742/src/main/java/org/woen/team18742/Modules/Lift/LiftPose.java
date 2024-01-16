@@ -1,9 +1,10 @@
 package org.woen.team18742.Modules.Lift;
 
 public enum LiftPose {
-    UP(560),
-    AVERAGE(300),
-    DOWN(-1);
+    UP(600),
+    AVERAGE(190),
+    MEGA_AVERAGE(400),
+    DOWN(-40);
 
     private LiftPose(double pose){
         Pose = pose;

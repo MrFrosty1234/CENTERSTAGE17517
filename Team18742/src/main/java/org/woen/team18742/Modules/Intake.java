@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
@@ -21,8 +22,7 @@ public class Intake implements IRobotModule {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private DcMotor _lighting;
-
-    private Brush _brush;
+private Brush _brush;
     private Lift _lift;
 
     @Override
@@ -34,8 +34,8 @@ public class Intake implements IRobotModule {
         servoTurn = Devices.Servopere;
         _lighting = Devices.LightingMotor;
 
-        _brush = collector.GetModule(Brush.class);
         _lift = collector.GetModule(Lift.class);
+        _brush = collector.GetModule(Brush.class);
     }
 
     public void updateTurner() {
@@ -84,8 +84,8 @@ public class Intake implements IRobotModule {
 
     ElapsedTime pixelTimer = new ElapsedTime();
 
-    public boolean isPixelDetected() {
-        if (pixelSensor2.getVoltage() >= Configs.Intake.pixelSensorvoltage /*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
+    private boolean isPixelDetected() {
+        if (pixelSensor2.getVoltage() >= Configs.Intake.pixelSensorvoltage || !_brush.isBrusnOn()/*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
             pixelTimer.reset();
         return pixelTimer.milliseconds() > Configs.Intake.pixelDetectTimeMs;
     }
@@ -98,25 +98,14 @@ public class Intake implements IRobotModule {
         _clampTimer.reset();
     }
 
-    private final ElapsedTime _brushReverseTimer = new ElapsedTime();
-
     @Override
     public void Update() {
         if (isPixelDetected()) {
             setGripper(true);
             setClamp(_clampTimer.milliseconds() < clampTimerconst && _lift.isDown());
-
-            _brushReverseTimer.reset();
         } else {
             _clampTimer.reset();
             setClamp(!_pixelGripped && _lift.isDown());
-        }
-
-        if (isPixelGripped()) {
-            if (_brushReverseTimer.milliseconds() < Configs.Intake.ReverseTimeMs)
-                _brush.Reverse();
-            else
-                _brush.Stop();
         }
 
         updateTurner();
@@ -127,6 +116,5 @@ public class Intake implements IRobotModule {
 
     public void PixelCenterGrip(boolean gripped) {
         gripper.setPosition(gripped ? Configs.Intake.PixelCenterOpen : Configs.Intake.servoGripperNormal);
-        _pixelGripped = true;
     }
 }

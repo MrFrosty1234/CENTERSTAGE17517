@@ -19,6 +19,12 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
+import org.woen.team18742.Collectors.AutonomCollector;
+import org.woen.team18742.Modules.StartRobotPosition;
+import org.woen.team18742.Tools.Configs.Configs;
+import org.woen.team18742.Tools.Vector2;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,6 +33,8 @@ import java.util.concurrent.atomic.AtomicReference;
 //@Config
 public class PipeLine implements VisionProcessor, CameraStreamSource {
     public AtomicReference<Bitmap> LastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
+
+    public AtomicReference<Vector2> RectCenter = new AtomicReference<>(new Vector2());
 
     double x = 640;
     double y = 480;
@@ -38,29 +46,12 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     double b2 = 296;
     Mat img_range_red = new Mat();
     Mat img_range_blue = new Mat();
-    public static double hRedDown = 4;
-    public static double cRedDown = 127.7;
-    public static double vRedDowm = 154.4;
-    public static double hRedUp = 30;
-    public static double cRedUp = 255;
-    public static double vRedUp = 255;
 
-    public static double hBlueDown = 85;
-    public static double cBlueDown = 53.8;
-    public static double vBlueDowm = 148.8;
-    public static double hBlueUp = 98.5;
-    public static double cBlueUp = 255;
-    public static double vBlueUp = 255;
     public static boolean alyans = false;
-    double x2Finish = x;
-    double x2Start = x * 0.6;
-    double x3Finish = 0.6 * x;
-    double x3Start = 0;
     double centerOfRectX = 0;
     double centerOfRectY = 0;
     public AtomicInteger pos = new AtomicInteger(2);
 
-    public int ksize = 13;
     public boolean team = true;
 
     public void init(int width, int height, CameraCalibration calibration) {
@@ -69,52 +60,65 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
-        //
-
         cvtColor(frame, frame, COLOR_RGB2HSV);//конвертация в хсв
         resize(frame, frame, new Size(x, y));// установка разрешения
 
+        frame = frame.submat(Configs.Camera.PruningStart, (int) y, 0, (int) x);
+
         blur(frame, frame, new Size(10, 10));//размытие для компенсации шумов с камеры
         // можно иф для установки цвета команды и только 1 инрейндж
-        inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
+        if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
+            inRange(frame, new Scalar(Configs.Camera.hRedDown, Configs.Camera.cRedDown, Configs.Camera.vRedDowm), new Scalar(Configs.Camera.hRedUp, Configs.Camera.cRedUp, Configs.Camera.vRedUp), frame);
 
         //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
-        inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
 
+        if (AutonomCollector.StartPosition == StartRobotPosition.RED_BACK || AutonomCollector.StartPosition == StartRobotPosition.RED_FORWARD)
+            inRange(frame, new Scalar(Configs.Camera.hBlueDown, Configs.Camera.cBlueDown, Configs.Camera.vBlueDowm), new Scalar(Configs.Camera.hBlueUp, Configs.Camera.cBlueUp, Configs.Camera.vBlueUp), frame);
 
+        //Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
 
-        Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
+        erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Сжать
+        dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Раздуть
 
-        erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Сжать
-        dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Раздуть
-
-        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
+        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);//выводим картинку в дашборд
         Utils.matToBitmap(frame, b);
         LastFrame.set(b);
 
-        Rect boundingRect = boundingRect(frame);//boudingRect рисуем прямоугольник
+        Moments moments = Imgproc.moments(frame);
 
-        if(boundingRect == null || boundingRect.area() <= 0)
+        Rect boundingRect = boundingRect(frame);//boudingRect представляем прямоугольник
+
+        if (boundingRect.area() <= 0) {
+            if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
+                pos.set(1);
+            else
+                pos.set(3);
+
             return frame;
+        }
 
-        centerOfRectX = boundingRect.x + boundingRect.width / 2.0;//координаты центра вычисляем
+        centerOfRectX = moments.m10/moments.m00;//координаты центра вычисляем
         centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
 
-        if (centerOfRectX < x2Finish && centerOfRectX > x2Start) {
+        RectCenter.set(new Vector2(centerOfRectX, centerOfRectY));
+
+        if (centerOfRectX < Configs.Camera.ZoneLeftEnd)
+            if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
+                pos.set(3);
+            else
+                pos.set(1);
+        else if (centerOfRectX < Configs.Camera.ZoneForwardEnd)
             pos.set(2);
-        }
-        else if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
-            pos.set(3);
-        }
-        else
+        else if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
             pos.set(1);
+        else
+            pos.set(3);
 
         return frame;
     }
 
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
-
     }
 
     @Override

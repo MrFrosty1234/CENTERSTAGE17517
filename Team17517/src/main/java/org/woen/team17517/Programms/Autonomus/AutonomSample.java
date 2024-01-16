@@ -2,9 +2,6 @@ package org.woen.team17517.Programms.Autonomus;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.woen.team17517.Robot.Lift;
-import org.woen.team17517.Robot.Timer;
-
 @Autonomous
 public class AutonomSample extends AutonomBaseClass {
     @Override
