@@ -9,10 +9,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Lift.Lift;
+import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.Timer;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
@@ -96,7 +98,11 @@ private Brush _brush;
     void releaseGripper() {
         setGripper(false);
         _clampTimer.reset();
+
+        _liftTimer.Start(500, ()->_lift.SetLiftPose(LiftPose.DOWN));
     }
+
+    private final Timer _liftTimer = new Timer();
 
     @Override
     public void Update() {
