@@ -13,4 +13,8 @@ public class TimerHandler {
         for(Timer i : _timers)
             i.Update();
     }
+
+    public TimerHandler(){
+        _timers.clear();
+    }
 }

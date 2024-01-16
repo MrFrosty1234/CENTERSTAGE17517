@@ -19,11 +19,7 @@ public class AutoOpModeBlue extends LinearOpMode {
 
             AutonomCollector _collector = new AutonomCollector(this);
 
-           // if(gamepad1.dpad_down)
-                AutonomCollector.StartPosition = StartRobotPosition.RED_BACK;
-            //else
-
-            //AutonomCollector.StartPosition = StartRobotPosition.RED_FORWARD;
+           AutonomCollector.StartPosition = StartRobotPosition.RED_BACK;
 
             while (!isStarted()) {
                 _collector.PreUpdate();

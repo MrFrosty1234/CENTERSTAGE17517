@@ -53,6 +53,9 @@ public class Configs {
         public static double YCoef = 0.9;
         public static double XCoef = 0.9;
 
+        public static double YSpeedCoef = 0.9;
+        public static double XSpeedCoef = 0.9;
+
         public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
 
         public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 8192;
@@ -111,29 +114,5 @@ public class Configs {
     public static class Plane{
         public static double servoplaneOtkrit = 0.07;
         public static double servoplaneneOtkrit = 0.17;
-    }
-
-    @Config
-    public static class DriverTrainSpeedXPidf{
-        public static double pCof = 1;
-        public static double iCof = 0;
-        public static double dCof = 0;
-        public static double fCof = 0;
-    }
-
-    @Config
-    public static class DriverTrainSpeedYPidf{
-        public static double pCof = 1;
-        public static double iCof = 0;
-        public static double dCof = 0;
-        public static double fCof = 0;
-    }
-
-    @Config
-    public static class DriverTrainSpeedTurnPidf{
-        public static double pCof = 1;
-        public static double iCof = 0;
-        public static double dCof = 0;
-        public static double fCof = 0;
     }
 }

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;

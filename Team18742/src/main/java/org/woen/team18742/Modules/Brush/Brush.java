@@ -1,4 +1,4 @@
-package org.woen.team18742.Modules;
+package org.woen.team18742.Modules.Brush;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;

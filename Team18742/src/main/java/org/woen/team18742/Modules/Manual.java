@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.IRobotModule;
@@ -12,7 +13,7 @@ import org.woen.team18742.Tools.Vector2;
 
 @TeleopModule
 public class Manual implements IRobotModule {
-    private boolean _gripOld = false, _waitLiftDown = false;
+    private boolean _gripOld = false;
 
     private Plane _plane;
 
@@ -22,8 +23,6 @@ public class Manual implements IRobotModule {
     private Intake _intake;
     private Lift _lift;
     private Drivetrain _drivetrain;
-
-    private ElapsedTime _timeGrip = new ElapsedTime();
 
     @Override
     public void Init(BaseCollector collector) {
@@ -49,7 +48,6 @@ public class Manual implements IRobotModule {
 
         boolean A = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;
-        boolean liftDown = _gamepad.dpad_down;
         boolean brushRevers = _gamepad.circle;
         boolean grip = _gamepad.triangle;
         boolean brush = _gamepad.cross;
@@ -63,9 +61,6 @@ public class Manual implements IRobotModule {
 
         if(grip && !_gripOld) {
             _intake.releaseGripper();
-
-            _timeGrip.reset();
-            _waitLiftDown = true;
         }
 
         if(brush){
@@ -85,10 +80,6 @@ public class Manual implements IRobotModule {
             _lift.SetLiftPose(LiftPose.UP);
         else if(average)
             _lift.SetLiftPose(LiftPose.AVERAGE);
-        else if(_timeGrip.milliseconds() > 800 && _waitLiftDown) {
-            _lift.SetLiftPose(LiftPose.DOWN);
-            _waitLiftDown = false;
-        }
 
         _gripOld = grip;
     }
@@ -96,6 +87,5 @@ public class Manual implements IRobotModule {
     @Override
     public void Start() {
         _intake.setGripper(false);
-        _timeGrip.reset();
     }
 }
