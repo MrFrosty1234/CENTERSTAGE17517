@@ -138,4 +138,17 @@ public class Configs {
         public static double Lateral = 1; // random
         public static double Heading = 1; // random
     }
+
+    @Config
+    public static class Motors{
+        public static double DefultP = 0.1;
+        public static double DefultI = 0;
+        public static double DefultD = 0;
+        public static double DefultF = 0;
+    }
+
+    @Config
+    public static class Battery{
+        public static double CorrectCharge = 14;
+    }
 }
