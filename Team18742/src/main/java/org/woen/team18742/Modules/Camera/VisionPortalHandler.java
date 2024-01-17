@@ -16,18 +16,18 @@ public class VisionPortalHandler implements IRobotModule {
 
     @Override
     public void Init(BaseCollector collector){
-        CameraStreamSource video = collector.GetModule(Camera.class).GetProcessor();
+        //CameraStreamSource video = collector.GetModule(Camera.class).GetProcessor();
 
-        _visualPortal = new VisionPortal.Builder().addProcessors((VisionProcessor) video).setCamera(Devices.Camera).build();
+        //_visualPortal = new VisionPortal.Builder().addProcessors((VisionProcessor) video).setCamera(Devices.Camera).build();
 
-        FtcDashboard.getInstance().startCameraStream(video, 15);
+        //FtcDashboard.getInstance().startCameraStream(video, 15);
     }
 
     @Override
     public void Stop(){
-        while (_visualPortal.getCameraState() == VisionPortal.CameraState.OPENING_CAMERA_DEVICE);
+        //while (_visualPortal.getCameraState() == VisionPortal.CameraState.OPENING_CAMERA_DEVICE);
 
-        _visualPortal.close();
-        FtcDashboard.getInstance().stopCameraStream();
+        //_visualPortal.close();
+        //FtcDashboard.getInstance().stopCameraStream();
     }
 }
