@@ -8,7 +8,7 @@ import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
-import org.woen.team18742.Tools.TimerHandler;
+import org.woen.team18742.Tools.Timers.TimerHandler;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 import java.lang.annotation.Annotation;
