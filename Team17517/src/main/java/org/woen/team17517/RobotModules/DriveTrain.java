@@ -52,9 +52,11 @@ public class DriveTrain implements RobotModule{
     public static double minErrY;
     public static double minErrH;
 
-    public static double u_maxX = 0;
-    public static double u_maxH = 0;
-    public static double u_maxY = 0;
+    public static double u_X = 0;
+    public static double u_H = 0;
+    public static double u_Y = 0;
+    public static double u_max = 0;
+
 
     private PIDMethod pidX = new PIDMethod(kPX,kIX,kDX,ImaxX);
     private PIDMethod pidY = new PIDMethod(kPY,kIY,kDY,ImaxY);
@@ -69,10 +71,18 @@ public class DriveTrain implements RobotModule{
         return targetMap;
     }
     ElapsedTime timer = new ElapsedTime();
-    public void setTarget(double x, double y, double h) {
+    public void setTargetglobal(double x, double y, double h) {
         targetX = x;
         targetH = h;
         targetY = y;
+        timer.reset();
+        timer.seconds();
+    }
+
+    public void setTargetrobot(double x, double y, double h) {
+        targetX = targetX + robot.odometryNew.getX();
+        targetH = targetH + robot.odometryNew.getH();
+        targetY = targetY + robot.odometryNew.getY();
         timer.reset();
         timer.seconds();
     }
@@ -90,34 +100,34 @@ public class DriveTrain implements RobotModule{
             targetH -= 360*Math.signum(targetH - posH);
         }
 
-        u_maxX = timer.seconds() * kt;
+        u_X = timer.seconds() * kt;
 
-        if (u_maxX> 2004){
-            u_maxX = 2004;
+        if (u_X > u_max){
+            u_X = u_max;
         }
 
-        if (abs(X) > u_maxX){
-            X = u_maxX * Math.signum(u_maxX);
+        if (abs(X) > u_X){
+            X = u_X * Math.signum(u_X);
         }
 
-        u_maxH = timer.seconds() * kt;
+        u_H = timer.seconds() * kt;
 
-        if (u_maxH> 2004){
-            u_maxH = 2004;
+        if (u_H > u_max){
+            u_H = u_max;
         }
 
-        if (abs(X) > u_maxH){
-            X = u_maxH * Math.signum(u_maxH);
+        if (abs(X) > u_H){
+            X = u_H * Math.signum(u_H);
         }
 
 
-        u_maxY = timer.seconds() * kt;
+        u_Y = timer.seconds() * kt;
 
-        if (u_maxY> 2004){
-            u_maxY = 2004;
+        if (u_Y > u_max){
+            u_Y = u_max;
         }
-        if (abs(Y) > u_maxY){
-            Y = u_maxY * Math.signum(u_maxY);
+        if (abs(Y) > u_Y){
+            Y = u_Y * Math.signum(u_Y);
         }
 
         pidX.setCoefficent(kPX,kIX,kDX,0,ImaxX);
