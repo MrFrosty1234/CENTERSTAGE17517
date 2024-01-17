@@ -42,7 +42,7 @@ public class Lift implements IRobotModule {
         _endswitchDown.setMode(DigitalChannel.Mode.INPUT);
     }
 
-    private void ResetLift(){
+    private void ResetLift() {
         _liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -54,32 +54,42 @@ public class Lift implements IRobotModule {
         _endingUpState = _endSwitchUp.getState();
         _endingDownState = _endswitchDown.getState();
 
-        if(!_intake.IsTurnNormal() && _liftPose == LiftPose.DOWN)
+        if (_liftPose != LiftPose.DOWN)
+            _liftMotor.setPower(_liftPIDF.Update(_liftPose.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta);
+        else if (!_intake.IsTurnNormal()) {
             _liftMotor.setPower(Math.max(_liftPIDF.Update(LiftPose.AVERAGE.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
-        else
-            _liftMotor.setPower(Math.max(_liftPIDF.Update(_liftPose.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
+        } else {
+            if (!_endingDownState)
+                _liftMotor.setPower(0.007);
+            else
+                _liftMotor.setPower(0);
+        }
 
-        ToolTelemetry.AddLine("Lift end1 = " + _endingUpState + " end = " + _endingDownState);
+        ToolTelemetry.AddLine("Lift end1 = " + _endingUpState + " end = " + _endingDownState + " incoder = " + _liftMotor.getCurrentPosition());
 
-        if(_endingDownState)
+        if (_endingDownState)
             ResetLift();
     }
 
     public boolean isATarget() {
         //return Math.abs(_liftPIDF.Err) < 60;
-        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || (_liftPose == LiftPose.AVERAGE && Math.abs(_liftPIDF.Err) < 60);
+        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || ((_liftPose == LiftPose.MEGA_AVERAGE || _liftPose == LiftPose.AVERAGE) && Math.abs(_liftPIDF.Err) < 80);
     }
 
-    public boolean isDown(){
+    public boolean isDown() {
         return _liftPose == LiftPose.DOWN && isATarget();
     }
-    public boolean isUp(){
+
+    public boolean isUp() {
         return _liftPose == LiftPose.UP && isATarget();
     }
-    public boolean isAverage(){return _liftPose == LiftPose.AVERAGE && isATarget();}
+
+    public boolean isAverage() {
+        return (_liftPose == LiftPose.AVERAGE || _liftPose == LiftPose.MEGA_AVERAGE) && isATarget();
+    }
 
     public void SetLiftPose(LiftPose pose) {
-        if(!_intake.isPixelGripped() && pose != LiftPose.DOWN)
+        if (!_intake.isPixelGripped() && pose != LiftPose.DOWN)
             return;
 
         _liftPose = pose;

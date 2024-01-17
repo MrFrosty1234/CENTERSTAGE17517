@@ -7,11 +7,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Lift.Lift;
+import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.Timer;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
@@ -21,8 +24,7 @@ public class Intake implements IRobotModule {
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
     private DcMotor _lighting;
-
-    private Brush _brush;
+private Brush _brush;
     private Lift _lift;
 
     @Override
@@ -34,8 +36,8 @@ public class Intake implements IRobotModule {
         servoTurn = Devices.Servopere;
         _lighting = Devices.LightingMotor;
 
-        _brush = collector.GetModule(Brush.class);
         _lift = collector.GetModule(Lift.class);
+        _brush = collector.GetModule(Brush.class);
     }
 
     public void updateTurner() {
@@ -85,7 +87,7 @@ public class Intake implements IRobotModule {
     ElapsedTime pixelTimer = new ElapsedTime();
 
     private boolean isPixelDetected() {
-        if (pixelSensor2.getVoltage() >= Configs.Intake.pixelSensorvoltage /*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
+        if (pixelSensor2.getVoltage() >= Configs.Intake.pixelSensorvoltage || !_brush.isBrusnOn()/*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
             pixelTimer.reset();
         return pixelTimer.milliseconds() > Configs.Intake.pixelDetectTimeMs;
     }
@@ -96,7 +98,11 @@ public class Intake implements IRobotModule {
     void releaseGripper() {
         setGripper(false);
         _clampTimer.reset();
+
+        _liftTimer.Start(500, ()->_lift.SetLiftPose(LiftPose.DOWN));
     }
+
+    private final Timer _liftTimer = new Timer();
 
     @Override
     public void Update() {

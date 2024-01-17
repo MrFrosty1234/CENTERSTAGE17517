@@ -26,6 +26,7 @@ public class UltRobot {
     public TelemetryOutput telemetryOutput;
     public DriveTrainVelocityControl driveTrainVelocityControl;
     public Odometry odometry;
+    public OdometryNew odometryNew;
     public Timer timer;
     public RobotModule[] robotModules;
     private final List<LynxModule> revHubs;
@@ -44,8 +45,9 @@ public class UltRobot {
         testAprilTagPipeline = new TestAprilTagPipeline(this);
         odometry = new Odometry(this);
         drivetrainNew = new DrivetrainNew(this);
+        odometryNew = new OdometryNew(this);
         this.robotModules = new RobotModule[]{telemetryOutput, grabber, timer, voltageSensorPoint,
-                lift, driveTrainVelocityControl, gyro, lighting, odometry, drivetrainNew};
+                lift, driveTrainVelocityControl, gyro, lighting, odometry, odometryNew, drivetrainNew};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }

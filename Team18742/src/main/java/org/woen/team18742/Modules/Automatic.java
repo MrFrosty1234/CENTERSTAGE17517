@@ -7,7 +7,8 @@ import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
-import org.woen.team18742.Modules.Odometry.Odometry;
+import org.woen.team18742.Modules.Odometry.OdometrsOdometry;
+import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.PIDF;
@@ -16,19 +17,20 @@ import org.woen.team18742.Tools.Vector2;
 
 @AutonomModule
 public class Automatic implements IRobotModule {
-    private Odometry _odometry;
+    private OdometryHandler _odometry;
     private Gyroscope _gyro;
     private Drivetrain _driverTrain;
-    private AutonomCollector _collector;
-
     @Override
     public void Init(BaseCollector collector) {
-        _odometry = collector.GetModule(Odometry.class);
+        _odometry = collector.GetModule(OdometryHandler.class);
         _gyro = collector.GetModule(Gyroscope.class);
         _driverTrain = collector.GetModule(Drivetrain.class);
+    }
 
-        if(collector instanceof AutonomCollector)
-            _collector = (AutonomCollector) collector;
+    public void SetSpeed(double speed){
+        _PIDFTurn.SrtLimitU(speed);
+        _PIDFForward.SrtLimitU(speed);
+        _PIDFSide.SrtLimitU(speed);
     }
 
     private final PIDF _PIDFForward = new PIDF(Configs.AutomaticForwardPid.PidForwardP, Configs.AutomaticForwardPid.PidForwardI, Configs.AutomaticForwardPid.PidForwardD, Configs.DriveTrainWheels.speed, 1);
@@ -64,7 +66,7 @@ public class Automatic implements IRobotModule {
 
         _turnTarget = degrees;
 
-        _PIDFTurn.Update(ChopAngle(_gyro.GetRadians() - _turnTarget));
+        _PIDFTurn.Update(Gyroscope.ChopAngle(_gyro.GetRadians() - _turnTarget));
     }
 
     private double _turnTarget = 0;
@@ -83,18 +85,10 @@ public class Automatic implements IRobotModule {
         if(Configs.GeneralSettings.IsAutonomEnable) {
             _driverTrain.SetSpeedWorldCoords(
                     new Vector2(_PIDFForward.Update(_targetPosition.X - _odometry.Position.X) / Battery.ChargeDelta, _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y) / Battery.ChargeDelta),
-                    _PIDFTurn.Update(ChopAngle(_gyro.GetRadians() - _turnTarget)) / Battery.ChargeDelta);
+                    _PIDFTurn.Update(Gyroscope.ChopAngle(_gyro.GetRadians() - _turnTarget)) / Battery.ChargeDelta);
         }
 
         ToolTelemetry.AddLine( "Autonom:" + _PIDFForward.Err + " " + _PIDFSide.Err + " " + _PIDFTurn.Err);
-    }
-
-    public double ChopAngle(double angle){
-        while (Math.abs(angle) > PI){
-            angle -= 2 * PI * signum(angle);
-        }
-
-        return angle;
     }
 
     @Override

@@ -8,8 +8,6 @@ import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
-import org.woen.team18742.Modules.Manager.Module;
-import org.woen.team18742.Modules.Odometry.Odometry;
 import org.woen.team18742.Tools.Devices;
 
 @AutonomModule

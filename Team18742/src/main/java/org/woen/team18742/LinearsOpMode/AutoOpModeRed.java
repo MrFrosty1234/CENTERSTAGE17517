@@ -5,8 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.AutonomCollector;
+import org.woen.team18742.Modules.Drivetrain;
 import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.ToolTelemetry;
+import org.woen.team18742.Tools.Vector2;
 
 @Autonomous
 public class AutoOpModeRed extends LinearOpMode {
@@ -17,9 +19,11 @@ public class AutoOpModeRed extends LinearOpMode {
             
             time.reset();
 
+            AutonomCollector.StartPosition = StartRobotPosition.BLUE_BACK;
+
             AutonomCollector _collector = new AutonomCollector(this);
 
-            AutonomCollector.StartPosition = StartRobotPosition.RED_BACK;
+            AutonomCollector.StartPosition = StartRobotPosition.BLUE_BACK;
 
             while (!isStarted()) {
                 _collector.PreUpdate();

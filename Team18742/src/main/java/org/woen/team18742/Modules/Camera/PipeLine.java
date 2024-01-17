@@ -19,6 +19,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Configs.Configs;
@@ -44,25 +46,12 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     double b2 = 296;
     Mat img_range_red = new Mat();
     Mat img_range_blue = new Mat();
-    public static double hRedDown = 4;
-    public static double cRedDown = 127.7;
-    public static double vRedDowm = 154.4;
-    public static double hRedUp = 30;
-    public static double cRedUp = 255;
-    public static double vRedUp = 255;
 
-    public static double hBlueDown = 85;
-    public static double cBlueDown = 53.8;
-    public static double vBlueDowm = 148.8;
-    public static double hBlueUp = 98.5;
-    public static double cBlueUp = 255;
-    public static double vBlueUp = 255;
     public static boolean alyans = false;
     double centerOfRectX = 0;
     double centerOfRectY = 0;
     public AtomicInteger pos = new AtomicInteger(2);
 
-    public int ksize = 18;
     public boolean team = true;
 
     public void init(int width, int height, CameraCalibration calibration) {
@@ -70,56 +59,62 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     }
 
     @Override
-    public Object processFrame(Mat frm, long captureTimeNanos) {
-        Mat frame = frm.clone();
-
+    public Object processFrame(Mat frame, long captureTimeNanos) {
         cvtColor(frame, frame, COLOR_RGB2HSV);//конвертация в хсв
         resize(frame, frame, new Size(x, y));// установка разрешения
 
-        frm = frm.submat(Configs.Camera.PruningStart, (int)y, 0, (int)x);
+        frame = frame.submat(Configs.Camera.PruningStart, (int) y, 0, (int) x);
 
         blur(frame, frame, new Size(10, 10));//размытие для компенсации шумов с камеры
         // можно иф для установки цвета команды и только 1 инрейндж
-        if(AutonomCollector.StartPosition == StartRobotPosition.RED_BACK)
-            inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), frame);
+        if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
+            inRange(frame, new Scalar(Configs.Camera.hRedDown, Configs.Camera.cRedDown, Configs.Camera.vRedDowm), new Scalar(Configs.Camera.hRedUp, Configs.Camera.cRedUp, Configs.Camera.vRedUp), frame);
 
         //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
-        if(AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK)
-            inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), frame);
+
+        if (AutonomCollector.StartPosition == StartRobotPosition.RED_BACK || AutonomCollector.StartPosition == StartRobotPosition.RED_FORWARD)
+            inRange(frame, new Scalar(Configs.Camera.hBlueDown, Configs.Camera.cBlueDown, Configs.Camera.vBlueDowm), new Scalar(Configs.Camera.hBlueUp, Configs.Camera.cBlueUp, Configs.Camera.vBlueUp), frame);
 
         //Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
 
-        erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Сжать
-        dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(ksize, ksize))); // Раздуть
+        erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Сжать
+        dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Раздуть
 
         Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);//выводим картинку в дашборд
         Utils.matToBitmap(frame, b);
         LastFrame.set(b);
 
+        Moments moments = Imgproc.moments(frame);
+
         Rect boundingRect = boundingRect(frame);//boudingRect представляем прямоугольник
 
-        if(boundingRect.area() <= 0) {
-            if(AutonomCollector.StartPosition == StartRobotPosition.RED_BACK)
-                pos.set(3);
-            else
+        if (boundingRect.area() <= 0) {
+            if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
                 pos.set(1);
+            else
+                pos.set(3);
 
-            return frm;
+            return frame;
         }
 
-        centerOfRectX = boundingRect.x + boundingRect.width / 2.0;//координаты центра вычисляем
+        centerOfRectX = moments.m10/moments.m00;//координаты центра вычисляем
         centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
 
         RectCenter.set(new Vector2(centerOfRectX, centerOfRectY));
 
-        if (centerOfRectX < (AutonomCollector.StartPosition == StartRobotPosition.RED_BACK ? Configs.Camera.ZoneLeftEnd: x - Configs.Camera.ZoneLeftEnd))
-            pos.set(1);
-        else if (centerOfRectX < (AutonomCollector.StartPosition == StartRobotPosition.RED_BACK ? Configs.Camera.ZoneForwardEnd: x - Configs.Camera.ZoneForwardEnd))
+        if (centerOfRectX < Configs.Camera.ZoneLeftEnd)
+            if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
+                pos.set(3);
+            else
+                pos.set(1);
+        else if (centerOfRectX < Configs.Camera.ZoneForwardEnd)
             pos.set(2);
+        else if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
+            pos.set(1);
         else
             pos.set(3);
 
-        return frm;
+        return frame;
     }
 
     @Override
