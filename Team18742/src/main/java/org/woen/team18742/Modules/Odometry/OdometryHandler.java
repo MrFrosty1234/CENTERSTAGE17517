@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
@@ -37,9 +38,9 @@ public class OdometryHandler implements IRobotModule {
 
         _odometerY.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        _odometry = collector.GetModule(OdometrsOdometry.class);
-        _cvOdometry = collector.GetModule(CVOdometry.class);
-        _encoderOdometry = collector.GetModule(EncoderOdometry.class);
+        //_odometry = collector.GetModule(OdometrsOdometry.class);
+        //_cvOdometry = collector.GetModule(CVOdometry.class);
+        //_encoderOdometry = collector.GetModule(EncoderOdometry.class);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class OdometryHandler implements IRobotModule {
 
     @Override
     public void Update() {
-        _filterX.UpdateCoef(Configs.Odometry.XCoef);
+        /*_filterX.UpdateCoef(Configs.Odometry.XCoef);
         _filterY.UpdateCoef(Configs.Odometry.YCoef);
         _filterSpeedX.UpdateCoef(Configs.Odometry.XSpeedCoef);
         _filterSpeedY.UpdateCoef(Configs.Odometry.YSpeedCoef);
@@ -96,6 +97,6 @@ public class OdometryHandler implements IRobotModule {
         Position.X = _filterX.Update(Position.X, pos.X);
         Position.Y = _filterX.Update(Position.Y, pos.Y);
         Speed.X = _filterX.Update(Speed.X, speed.X);
-        Speed.Y = _filterX.Update(Speed.Y, speed.Y);
+        Speed.Y = _filterX.Update(Speed.Y, speed.Y);*/
     }
 }
