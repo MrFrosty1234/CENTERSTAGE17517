@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team17517.Service.PIDMethod;
 import org.woen.team17517.Service.RobotModule;
+import org.woen.team17517.Service.Vector2D;
 
 import java.util.HashMap;
 
@@ -63,15 +64,13 @@ public class DriveTrain implements RobotModule{
     private PIDMethod pidH = new PIDMethod(kPH,kIH,kDH,ImaxH);
     private static double kt = 5;
 
-    private double x;
-    private double y;
-    private double h;
+
 
     public HashMap<String,Double> getPosition(){
         HashMap<String,Double> positionMap = new HashMap<>();
-        positionMap.put("X",x);
-        positionMap.put("Y",y);
-        positionMap.put("H",h);
+        positionMap.put("X",posX);
+        positionMap.put("Y",posY);
+        positionMap.put("H",posH);
 
         return positionMap;
     }
@@ -108,6 +107,9 @@ public class DriveTrain implements RobotModule{
         errorMap.put("Y",errY);
         return errorMap;
     }
+
+
+
 
     public void update(){
         voltage = robot.voltageSensorPoint.getVol();
@@ -161,6 +163,19 @@ public class DriveTrain implements RobotModule{
         H = pidH.PID(targetH,posH,voltage);
 
         robot.driveTrainVelocityControl.moveRobotCord(X,Y,H);
+    }
+    private Vector2D vectorNew = new Vector2D();
+
+
+    public void moveLocalForward(double targetY){
+        Vector2D vectorForward = new Vector2D(0, targetY);
+        vectorForward.vectorRat(posH);
+        robot.driveTrainVelocityControl.moveGlobalCord(vectorForward, targetY);
+    }
+    public void moveLocalX(double targetX){
+        Vector2D vectorX = new Vector2D(targetX,0);
+        vectorX.vectorRat(posH);
+        robot.driveTrainVelocityControl.moveGlobalCord(vectorX, targetX);
     }
     public boolean isAtPosition(){
         return Math.abs(errH)<minErrH && Math.abs(errX)<minErrX && Math.abs(errY)<minErrY;
