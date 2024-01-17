@@ -39,8 +39,8 @@ public class Vector2D
     public Vector2D vectorRat(double angle){
         double radius = vectorRadius(x,y);
         double angleNew = vectorRadians(x,y)-angle;
-        double xNew = cos(angleNew*radius);
-        double yNew = sin(angleNew*radius);
+        double xNew = cos(angleNew)*radius;
+        double yNew = sin(angleNew)*radius;
         return new Vector2D(xNew,yNew);
     }
 

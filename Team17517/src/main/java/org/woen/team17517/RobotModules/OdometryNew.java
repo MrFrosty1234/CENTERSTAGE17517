@@ -9,7 +9,7 @@ public class OdometryNew implements RobotModule {
     UltRobot robot;
     private double voltage;
     private Vector2D vector = new Vector2D();
-    double h;
+    private double h;
     public OdometryNew(UltRobot robot){
         this.robot = robot;
 
