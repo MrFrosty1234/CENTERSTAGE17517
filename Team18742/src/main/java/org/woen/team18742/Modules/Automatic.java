@@ -7,7 +7,8 @@ import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
-import org.woen.team18742.Modules.Odometry.Odometry;
+import org.woen.team18742.Modules.Odometry.OdometrsOdometry;
+import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.PIDF;
@@ -16,19 +17,14 @@ import org.woen.team18742.Tools.Vector2;
 
 @AutonomModule
 public class Automatic implements IRobotModule {
-    private Odometry _odometry;
+    private OdometryHandler _odometry;
     private Gyroscope _gyro;
     private Drivetrain _driverTrain;
-    private AutonomCollector _collector;
-
     @Override
     public void Init(BaseCollector collector) {
-        _odometry = collector.GetModule(Odometry.class);
+        _odometry = collector.GetModule(OdometryHandler.class);
         _gyro = collector.GetModule(Gyroscope.class);
         _driverTrain = collector.GetModule(Drivetrain.class);
-
-        if(collector instanceof AutonomCollector)
-            _collector = (AutonomCollector) collector;
     }
 
     public void SetSpeed(double speed){

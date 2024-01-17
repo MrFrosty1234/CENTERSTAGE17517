@@ -1,4 +1,4 @@
-package org.woen.team18742.Modules;
+package org.woen.team18742.Modules.Brush;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;

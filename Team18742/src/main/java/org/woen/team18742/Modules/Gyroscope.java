@@ -12,10 +12,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
+import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponentialFilter;
-import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
 public class Gyroscope implements IRobotModule {
@@ -57,7 +57,7 @@ public class Gyroscope implements IRobotModule {
         _radians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
         if (Configs.GeneralSettings.IsUseOdometers) {
-            _odometrRadians = -(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
+            _odometrRadians = ChopAngle(-(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2);
             _odometrDegree = Math.toDegrees(_odometrRadians);
 
             //_radians = _filter.Update(_odometrRadians - _radians, _radians);

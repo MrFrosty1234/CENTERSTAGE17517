@@ -19,6 +19,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Configs.Configs;
@@ -82,6 +84,8 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         Utils.matToBitmap(frame, b);
         LastFrame.set(b);
 
+        Moments moments = Imgproc.moments(frame);
+
         Rect boundingRect = boundingRect(frame);//boudingRect представляем прямоугольник
 
         if (boundingRect.area() <= 0) {
@@ -93,7 +97,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
             return frame;
         }
 
-        centerOfRectX = boundingRect.x + boundingRect.width / 2.0;//координаты центра вычисляем
+        centerOfRectX = moments.m10/moments.m00;//координаты центра вычисляем
         centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
 
         RectCenter.set(new Vector2(centerOfRectX, centerOfRectY));

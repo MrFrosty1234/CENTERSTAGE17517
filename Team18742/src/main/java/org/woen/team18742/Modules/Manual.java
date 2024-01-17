@@ -1,8 +1,10 @@
 package org.woen.team18742.Modules;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.IRobotModule;
@@ -11,7 +13,7 @@ import org.woen.team18742.Tools.Vector2;
 
 @TeleopModule
 public class Manual implements IRobotModule {
-    private boolean _brushReversOld = false, _brushOld = false;
+    private boolean _gripOld = false;
 
     private Plane _plane;
 
@@ -32,6 +34,8 @@ public class Manual implements IRobotModule {
         _intake = collector.GetModule(Intake.class);
         _lift = collector.GetModule(Lift.class);
         _drivetrain = collector.GetModule(Drivetrain.class);
+
+        LiftPose.AVERAGE.Pose = 400;
     }
 
     @Override
@@ -44,7 +48,6 @@ public class Manual implements IRobotModule {
 
         boolean A = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;
-        boolean liftDown = _gamepad.dpad_down;
         boolean brushRevers = _gamepad.circle;
         boolean grip = _gamepad.triangle;
         boolean brush = _gamepad.cross;
@@ -56,8 +59,9 @@ public class Manual implements IRobotModule {
         _plane.BezpolezniRailgunUp(railgunopen * 0.3);
         _plane.BezpolezniRailgunDown(railgunnoopen * 0.3);
 
-        if(grip)
+        if(grip && !_gripOld) {
             _intake.releaseGripper();
+        }
 
         if(brush){
             _brush.BrushEnable();
@@ -74,12 +78,10 @@ public class Manual implements IRobotModule {
 
         if (liftUp)
             _lift.SetLiftPose(LiftPose.UP);
+        else if(average)
+            _lift.SetLiftPose(LiftPose.AVERAGE);
 
-        if(liftDown)
-            _lift.SetLiftPose(LiftPose.DOWN);
-
-        if(average)
-            _lift.SetLiftPose(LiftPose.MEGA_AVERAGE);
+        _gripOld = grip;
     }
 
     @Override

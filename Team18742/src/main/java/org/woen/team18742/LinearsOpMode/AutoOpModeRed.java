@@ -23,10 +23,7 @@ public class AutoOpModeRed extends LinearOpMode {
 
             AutonomCollector _collector = new AutonomCollector(this);
 
-            if(gamepad1.dpad_down)
-                AutonomCollector.StartPosition = StartRobotPosition.BLUE_BACK;
-            else
-                AutonomCollector.StartPosition = StartRobotPosition.BLUE_FORWAD;
+            AutonomCollector.StartPosition = StartRobotPosition.BLUE_BACK;
 
             while (!isStarted()) {
                 _collector.PreUpdate();
@@ -37,15 +34,6 @@ public class AutoOpModeRed extends LinearOpMode {
             resetRuntime();
 
             _collector.Start();
-
-            /*Drivetrain drivetrain = _collector.GetModule(Drivetrain.class);
-
-            drivetrain.Stop();
-            drivetrain.SimpleDriveDirection(new Vector2(0.5,0), 0);
-            sleep(1700);
-            drivetrain.SimpleDriveDirection(new Vector2(-0.2,0),0);
-            sleep(1000);
-            drivetrain.Stop();*/
 
             while (opModeIsActive()) {
                 _collector.Update();
