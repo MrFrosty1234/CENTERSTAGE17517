@@ -63,6 +63,19 @@ public class DriveTrain implements RobotModule{
     private PIDMethod pidH = new PIDMethod(kPH,kIH,kDH,ImaxH);
     private static double kt = 5;
 
+    private double x;
+    private double y;
+    private double h;
+
+    public HashMap<String,Double> getPosition(){
+        HashMap<String,Double> positionMap = new HashMap<>();
+        positionMap.put("X",x);
+        positionMap.put("Y",y);
+        positionMap.put("H",h);
+
+        return positionMap;
+    }
+
     public HashMap<String,Double> getTargets() {
         HashMap<String,Double> targetMap = new HashMap<>();
         targetMap.put("X",targetX);
@@ -79,12 +92,21 @@ public class DriveTrain implements RobotModule{
         timer.seconds();
     }
 
+
     public void setTargetrobot(double x, double y, double h) {
         targetX = targetX + robot.odometryNew.getX();
         targetH = targetH + robot.odometryNew.getH();
         targetY = targetY + robot.odometryNew.getY();
         timer.reset();
         timer.seconds();
+    }
+
+    public HashMap<String,Double> getErrors() {
+        HashMap<String,Double> errorMap = new HashMap<>();
+        errorMap.put("X",errX);
+        errorMap.put("H",errH);
+        errorMap.put("Y",errY);
+        return errorMap;
     }
 
     public void update(){
