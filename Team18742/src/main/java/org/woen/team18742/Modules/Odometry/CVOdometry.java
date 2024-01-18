@@ -27,10 +27,10 @@ import java.util.ArrayList;
 public class CVOdometry implements IRobotModule {
     private AprilTagProcessor  _aprilTagProcessor = null;
 
-    public Vector2 Position = new Vector2(), Speed = new Vector2(), OldPosition = new Vector2();
+    public Vector2 Position = new Vector2(), ShiftPosition = new Vector2();
     public boolean IsZero = true;
 
-    private Vector2 _cameraPosition = new Vector2(Configs.Camera.CameraX, Configs.Camera.CameraY);
+    private Vector2 _cameraPosition = new Vector2(Configs.Camera.CameraX, Configs.Camera.CameraY), _oldPosition = new Vector2();
     private Gyroscope _gyro;
 
     private final ElapsedTime _deltaTime = new ElapsedTime();
@@ -51,7 +51,7 @@ public class CVOdometry implements IRobotModule {
         _deltaTime.reset();
 
         Position = AutonomCollector.StartPosition.Position.copy();
-        OldPosition = AutonomCollector.StartPosition.Position.copy();
+        _oldPosition = AutonomCollector.StartPosition.Position.copy();
     }
 
     @Override
@@ -102,19 +102,16 @@ public class CVOdometry implements IRobotModule {
         IsZero = false;
 
         Position.X = xSum / suitableDetections;
-        Position.Y = -ySum / suitableDetections;
+        Position.Y = ySum / suitableDetections;
 
         Position = Vector2.Minus(Position, _cameraPosition.Turn(_gyro.GetRadians()));
 
-        Vector2 DeltaPosition = Vector2.Minus(OldPosition, Position);
-
-        Speed.X = DeltaPosition.X / _deltaTime.seconds();
-        Speed.Y = DeltaPosition.Y / _deltaTime.seconds();
+        ShiftPosition = Vector2.Minus(_oldPosition, Position);
 
         ToolTelemetry.AddLine("CVOdometry = " + Position);
         ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
 
-        OldPosition = Position;
+        _oldPosition = Position;
         _deltaTime.reset();
     }
 }

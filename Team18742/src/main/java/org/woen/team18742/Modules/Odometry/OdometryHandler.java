@@ -24,13 +24,12 @@ public class OdometryHandler implements IRobotModule {
     private EncoderOdometry _encoderOdometry;
 
     private final ExponentialFilter _filterX = new ExponentialFilter(Configs.Odometry.XCoef), _filterY = new ExponentialFilter(Configs.Odometry.YCoef);
-    private final ExponentialFilter _filterSpeedX = new ExponentialFilter(Configs.Odometry.XSpeedCoef), _filterSpeedY = new ExponentialFilter(Configs.Odometry.YSpeedCoef);
 
     public Vector2 Position = new Vector2();
     public Vector2 Speed = new Vector2();
 
     @Override
-    public void Init(BaseCollector collector){
+    public void Init(BaseCollector collector) {
         _odometerXLeft = Devices.OdometerXLeft;
         _odometerY = Devices.OdometerY;
         _odometerXRight = Devices.OdometerXRight;
@@ -48,19 +47,19 @@ public class OdometryHandler implements IRobotModule {
         Position = AutonomCollector.StartPosition.Position.copy();
     }
 
-    public double GetOdometerXLeft(){
+    public double GetOdometerXLeft() {
         return _odometerXLeft.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
     }
 
-    public double GetOdometerXRight(){
+    public double GetOdometerXRight() {
         return -_odometerXRight.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
     }
 
-    public double GetOdometerY(){
+    public double GetOdometerY() {
         return _odometerY.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
     }
 
-    public void Reset(){
+    public void Reset() {
         _odometerXLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _odometerXLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         _odometerXRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -71,31 +70,29 @@ public class OdometryHandler implements IRobotModule {
 
         _filterX.Reset();
         _filterY.Reset();
-        _filterSpeedX.Reset();
-        _filterSpeedY.Reset();
     }
 
     @Override
     public void Update() {
         _filterX.UpdateCoef(Configs.Odometry.XCoef);
         _filterY.UpdateCoef(Configs.Odometry.YCoef);
-        _filterSpeedX.UpdateCoef(Configs.Odometry.XSpeedCoef);
-        _filterSpeedY.UpdateCoef(Configs.Odometry.YSpeedCoef);
 
         ToolTelemetry.AddLine("odometrY = " + GetOdometerY());
         ToolTelemetry.AddLine("odometrXLeft = " + GetOdometerXLeft());
         ToolTelemetry.AddLine("odometrXRight = " + GetOdometerXRight());
 
         ToolTelemetry.DrawCircle(_encoderOdometry.Position, 5, "#000000");
-        ToolTelemetry.DrawCircle(_odometry.Position, 5, "#555555");
-        ToolTelemetry.DrawCircle(_cvOdometry.Position, 5, "#AAAAAA");
+        ToolTelemetry.DrawCircle(_odometry.Position, 5, "#FF0000");
+        ToolTelemetry.DrawCircle(_cvOdometry.Position, 5, "#00FF00");
 
-        Vector2 pos = Configs.GeneralSettings.IsUseOdometers ? _odometry.Position : _encoderOdometry.Position;
-        Vector2 speed = Configs.GeneralSettings.IsUseOdometers ? _odometry.Speed : _encoderOdometry.Speed;
+        Vector2 pos = Configs.GeneralSettings.IsUseOdometers ? Vector2.Plus(Position, _odometry.ShiftPosition) : Vector2.Plus(Position, _encoderOdometry.ShiftPosition);
 
-        Position.X = _filterX.Update(Position.X, pos.X);
-        Position.Y = _filterY.Update(Position.Y, pos.Y);
-        Speed.X = _filterX.Update(Speed.X, speed.X);
-        Speed.Y = _filterX.Update(Speed.Y, speed.Y);
+        if (!_cvOdometry.IsZero) {
+            Position.X = _filterX.UpdateRaw(pos.X, Position.X - _cvOdometry.Position.X);
+            Position.Y = _filterY.UpdateRaw(pos.Y, Position.Y - _cvOdometry.Position.Y);
+        } else
+            Position = pos;
+
+        ToolTelemetry.DrawCircle(Position, 5, "#0000FF");
     }
 }

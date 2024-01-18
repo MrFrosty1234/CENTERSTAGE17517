@@ -59,7 +59,13 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     }
 
     @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
+    public Object processFrame(Mat frm, long captureTimeNanos) {
+        Bitmap b = Bitmap.createBitmap(frm.width(), frm.height(), Bitmap.Config.RGB_565);//выводим картинку в дашборд
+        Utils.matToBitmap(frm, b);
+        LastFrame.set(b);
+
+        Mat frame = frm.clone();
+
         cvtColor(frame, frame, COLOR_RGB2HSV);//конвертация в хсв
         resize(frame, frame, new Size(x, y));// установка разрешения
 
@@ -80,10 +86,6 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Сжать
         dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Раздуть
 
-        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);//выводим картинку в дашборд
-        Utils.matToBitmap(frame, b);
-        LastFrame.set(b);
-
         Moments moments = Imgproc.moments(frame);
 
         Rect boundingRect = boundingRect(frame);//boudingRect представляем прямоугольник
@@ -94,7 +96,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
             else
                 pos.set(3);
 
-            return frame;
+            return frm;
         }
 
         centerOfRectX = moments.m10/moments.m00;//координаты центра вычисляем
@@ -114,7 +116,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         else
             pos.set(3);
 
-        return frame;
+        return frm;
     }
 
     @Override

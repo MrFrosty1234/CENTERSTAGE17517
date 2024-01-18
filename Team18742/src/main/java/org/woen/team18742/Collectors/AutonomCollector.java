@@ -19,6 +19,8 @@ public class AutonomCollector extends BaseCollector {
             _annotatedClass = GetAnnotatedClasses(AutonomModule.class);
 
         AddAdditionModules(_annotatedClass);
+
+        Init();
     }
 
     public void PreUpdate(){

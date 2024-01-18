@@ -113,6 +113,11 @@ public class BaseCollector {
             i.Stop();
     }
 
+    public void Init(){
+        for (IRobotModule i : _modules)
+            i.Init(this);
+    }
+
     protected void AddAdditionModules(ArrayList<Class<?>> modules) {
         for (Class<?> i : modules) {
             Object instance;
@@ -128,9 +133,6 @@ public class BaseCollector {
         }
 
         ToolTelemetry.AddLine("activated modules = " + _modules.size());
-
-        for (IRobotModule i : _modules)
-            i.Init(this);
     }
 
     public <T extends IRobotModule> T GetModule(Class<T> type) {
