@@ -2,6 +2,7 @@ package org.woen.team18742.Modules.Camera;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
@@ -36,5 +37,9 @@ public class VisionPortalHandler implements IRobotModule {
 
         _visualPortal.close();
         FtcDashboard.getInstance().stopCameraStream();
+    }
+
+    public boolean IsCameraOpened(){
+        return _visualPortal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_READY;
     }
 }

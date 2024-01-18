@@ -5,43 +5,21 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.AutonomCollector;
+import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Autonomous
-public class AutoOpModeBlue extends LinearOpMode {
+public class AutoOpModeBlue extends LineraOpModeBase {
     @Override
-    public void runOpMode() {
-        try {
-            ElapsedTime time = new ElapsedTime();
+    protected BaseCollector GetCollector() {
+        AutonomCollector.StartPosition = StartRobotPosition.BLUE_BACK;
 
-            time.reset();
+        return new BaseCollector(this);
+    }
 
-            AutonomCollector _collector = new AutonomCollector(this);
-
-           AutonomCollector.StartPosition = StartRobotPosition.RED_BACK;
-
-            while (!isStarted()) {
-                _collector.PreUpdate();
-            }
-
-            while (time.seconds() < 7.5 && isStarted());
-
-            resetRuntime();
-
-            _collector.Start();
-
-            while (opModeIsActive()) {
-                _collector.Update();
-            }
-
-            _collector.Stop();
-        }
-        catch (Exception e){
-            ToolTelemetry.AddLine(e.getMessage());
-            ToolTelemetry.Update();
-
-            throw e;
-        }
+    @Override
+    protected double GetStartTime() {
+        return 5;
     }
 }
