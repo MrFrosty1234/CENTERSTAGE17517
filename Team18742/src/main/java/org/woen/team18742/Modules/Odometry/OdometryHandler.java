@@ -94,7 +94,7 @@ public class OdometryHandler implements IRobotModule {
         Vector2 speed = Configs.GeneralSettings.IsUseOdometers ? _odometry.Speed : _encoderOdometry.Speed;
 
         Position.X = _filterX.Update(Position.X, pos.X);
-        Position.Y = _filterX.Update(Position.Y, pos.Y);
+        Position.Y = _filterY.Update(Position.Y, pos.Y);
         Speed.X = _filterX.Update(Speed.X, speed.X);
         Speed.Y = _filterX.Update(Speed.Y, speed.Y);
     }

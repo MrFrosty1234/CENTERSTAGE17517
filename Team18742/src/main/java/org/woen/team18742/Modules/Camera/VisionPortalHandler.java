@@ -8,6 +8,7 @@ import org.firstinspires.ftc.vision.VisionProcessor;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Odometry.CVOdometry;
 import org.woen.team18742.Tools.Devices;
 
 @AutonomModule
@@ -18,7 +19,7 @@ public class VisionPortalHandler implements IRobotModule {
     public void Init(BaseCollector collector){
         CameraStreamSource video = collector.GetModule(Camera.class).GetProcessor();
 
-        _visualPortal = new VisionPortal.Builder().addProcessors((VisionProcessor) video).setCamera(Devices.Camera).build();
+        _visualPortal = new VisionPortal.Builder().addProcessors((VisionProcessor) video, collector.GetModule(CVOdometry.class).GetProcessor()).setCamera(Devices.Camera).build();
 
         FtcDashboard.getInstance().startCameraStream(video, 15);
     }
