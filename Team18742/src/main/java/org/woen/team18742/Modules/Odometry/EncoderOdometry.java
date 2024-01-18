@@ -11,6 +11,7 @@ import org.woen.team18742.Modules.Drivetrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
+import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Vector2;
 
@@ -61,6 +62,6 @@ public class EncoderOdometry implements IRobotModule {
     public void Start() {
         _deltaTime.reset();
 
-        Position = AutonomCollector.StartPosition.Position.copy();
+        Position = Bios.GetStartPosition().Position.copy();
     }
 }

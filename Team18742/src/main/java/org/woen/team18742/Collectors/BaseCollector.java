@@ -131,8 +131,6 @@ public class BaseCollector {
             if (instance instanceof IRobotModule)
                 _modules.add((IRobotModule) instance);
         }
-
-        ToolTelemetry.AddLine("activated modules = " + _modules.size());
     }
 
     public <T extends IRobotModule> T GetModule(Class<T> type) {

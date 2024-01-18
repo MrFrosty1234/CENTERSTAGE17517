@@ -33,6 +33,7 @@ import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Odometry.OdometryHandler;
+import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Vector2;
 
@@ -80,7 +81,7 @@ public class RouteManager implements IRobotModule {
     public void Start() {
         if (_collector == null) return;
 
-        _trajectory = GetTrajectory(ActionBuilder(new Pose2d(_collector.StartPosition.Position.X, _collector.StartPosition.Position.Y, 0))).build();
+        _trajectory = GetTrajectory(ActionBuilder(new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, 0))).build();
     }
 
     private MyTrajectoryBuilder GetTrajectory(MyTrajectoryBuilder builder) {

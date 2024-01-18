@@ -2,18 +2,24 @@ package org.woen.team18742.Modules.Odometry;
 
 import static java.lang.Math.PI;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
+import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponentialFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
+
+import java.security.spec.EllipticCurve;
 
 @Module
 public class OdometryHandler implements IRobotModule {
@@ -27,6 +33,9 @@ public class OdometryHandler implements IRobotModule {
 
     public Vector2 Position = new Vector2();
     public Vector2 Speed = new Vector2();
+    private Vector2 _oldPosition = new Vector2();
+
+    private final ElapsedTime _deltaTime = new ElapsedTime();
 
     @Override
     public void Init(BaseCollector collector) {
@@ -44,7 +53,7 @@ public class OdometryHandler implements IRobotModule {
     @Override
     public void Start() {
         Reset();
-        Position = AutonomCollector.StartPosition.Position.copy();
+        Position = Bios.GetStartPosition().Position.copy();
     }
 
     public double GetOdometerXLeft() {
@@ -70,6 +79,7 @@ public class OdometryHandler implements IRobotModule {
 
         _filterX.Reset();
         _filterY.Reset();
+        _deltaTime.reset();
     }
 
     @Override
@@ -94,5 +104,11 @@ public class OdometryHandler implements IRobotModule {
             Position = pos;
 
         ToolTelemetry.DrawCircle(Position, 5, "#0000FF");
+
+        Speed.X = _oldPosition.X - Position.X / _deltaTime.seconds();
+        Speed.Y = _oldPosition.Y - Position.Y / _deltaTime.seconds();
+
+        _oldPosition = Position.copy();
+        _deltaTime.reset();
     }
 }

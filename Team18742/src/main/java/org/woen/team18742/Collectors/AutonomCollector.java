@@ -8,8 +8,6 @@ import org.woen.team18742.Modules.StartRobotPosition;
 import java.util.ArrayList;
 
 public class AutonomCollector extends BaseCollector {
-    public static StartRobotPosition StartPosition = StartRobotPosition.RED_BACK;
-
     private static ArrayList<Class<?>> _annotatedClass;
 
     public AutonomCollector(LinearOpMode robot) {

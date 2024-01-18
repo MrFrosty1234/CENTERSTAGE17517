@@ -3,12 +3,11 @@ package org.woen.team18742.LinearsOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.StartRobotPosition;
+import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.ToolTelemetry;
 
-public class LineraOpModeBase extends LinearOpMode {
+public class LinearOpModeBase extends LinearOpMode {
 
     protected BaseCollector GetCollector(){
         return null;
@@ -18,9 +17,16 @@ public class LineraOpModeBase extends LinearOpMode {
         return 0;
     }
 
+    private void BiosUpdate(Bios bios){
+        bios.Update();
+        ToolTelemetry.Update();
+    }
+
     @Override
     public void runOpMode() {
         try {
+            Bios bios = new Bios(gamepad1);
+
             ElapsedTime time = new ElapsedTime();
 
             time.reset();
@@ -31,8 +37,11 @@ public class LineraOpModeBase extends LinearOpMode {
 
             double startTime = GetStartTime();
 
-            while (!isStarted());
-            while (time.seconds() < startTime && isStarted());
+            while (!isStarted())
+                BiosUpdate(bios);
+
+            while (time.seconds() < startTime && isStarted())
+                BiosUpdate(bios);
 
             resetRuntime();
 
@@ -43,6 +52,7 @@ public class LineraOpModeBase extends LinearOpMode {
             }
 
             _collector.Stop();
+            bios.Stop();
         }
         catch (Exception e){
             ToolTelemetry.AddLine(e.getMessage());
