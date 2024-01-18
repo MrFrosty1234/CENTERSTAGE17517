@@ -185,7 +185,6 @@ public class DriveTrainVelocityControl implements RobotModule {
     }
     public void moveRobotCord(Vector2D vector, double targetAngle){
          this.vector.setCord(vector.getX(),vector.getY());
-         this.vector.setCord(vector.getX(),vector.getY());
          targetH = targetAngle;
     }
     public void moveRobotCord(double x, double y, double h){
@@ -193,14 +192,13 @@ public class DriveTrainVelocityControl implements RobotModule {
         targetH = h;
     }
     public void moveGlobalCord(Vector2D vector, double targetH){
-        vector.vectorRat(robot.odometry.heading);
+        vector.vectorRat(robot.odometryNew.getH());
         this.vector.setCord(vector.getX(),vector.getY());
         this.targetH = targetH;
     }
     public void moveGlobalCord(double x, double y, double targetH){
-        Vector2D vectorGot = new Vector2D(x,y);
-        vectorGot.vectorRat(robot.odometry.heading);
-        this.vector.setCord(vectorGot.getX(),vectorGot.getY());
+        vector.setCord(x,y);
+        vector.vectorRat(-robot.odometryNew.getH());
         this.targetH = targetH;
     }
 
