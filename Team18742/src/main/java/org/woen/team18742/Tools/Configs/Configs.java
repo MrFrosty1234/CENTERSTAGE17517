@@ -19,10 +19,10 @@ public class Configs {
     @Config
     public static class Camera{
         public static int RobotPos = 2;
-        public static double CameraAccuracy = 130;
+        public static double CameraAccuracy = 150;
         public static double CameraX = 16.01, CameraY = 16.18;
 
-        public static double ZoneLeftEnd = 320, ZoneForwardEnd = 620;
+        public static double ZoneLeftEnd = 220, ZoneForwardEnd = 550;
 
         public static int PruningStart = 290;
 
@@ -50,8 +50,8 @@ public class Configs {
 
     @Config
     public static class Odometry{
-        public static double YCoef = 0.9;
-        public static double XCoef = 0.9;
+        public static double YCoef = 0.5;
+        public static double XCoef = 0.5;
 
         public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
 
@@ -92,7 +92,7 @@ public class Configs {
 
     @Config
     public static class Gyroscope{
-        public static double MergerCoefSeconds = 0.9;
+        public static double MergerCoefSeconds = 0.7;
     }
 
     @Config
@@ -124,24 +124,24 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 1; // random
-        public static double Lateral = 1; // random
-        public static double Heading = 1; // random
+        public static double Axial = 0.01; // random
+        public static double Lateral = 0.01; // random
+        public static double Heading = 0.01; // random
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 1; // random
-        public static double Lateral = 1; // random
-        public static double Heading = 1; // random
+        public static double Axial = 0.01; // random
+        public static double Lateral = 0.01; // random
+        public static double Heading = 0.01; // random
     }
 
     @Config
     public static class Motors{
-        public static double DefultP = 0.1;
-        public static double DefultI = 0;
-        public static double DefultD = 0;
-        public static double DefultF = 0;
+        public static double DefultP = 0.000001;
+        public static double DefultI = 0.00013;
+        public static double DefultD = 0.005;
+        public static double DefultF = 0.004;
     }
 
     @Config

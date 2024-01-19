@@ -13,23 +13,25 @@ import org.woen.team18742.Modules.Odometry.OdometrsOdometry;
 import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.Motor.Motor;
+import org.woen.team18742.Tools.Motor.ReductorType;
 import org.woen.team18742.Tools.PIDF;
 import org.woen.team18742.Tools.Vector2;
 
 @Module
 public class Drivetrain implements IRobotModule {
-    private DcMotorEx _leftForwardDrive;
-    private DcMotorEx _rightForwardDrive;
-    private DcMotorEx _leftBackDrive;
-    private DcMotorEx _rightBackDrive;
+    private Motor _leftForwardDrive;
+    private Motor _rightForwardDrive;
+    private Motor _leftBackDrive;
+    private Motor _rightBackDrive;
     private Gyroscope _gyro;
 
     @Override
     public void Init(BaseCollector collector) {
-        _leftForwardDrive = Devices.LeftForwardDrive;
-        _rightBackDrive = Devices.RightBackDrive;
-        _rightForwardDrive = Devices.RightForwardDrive;
-        _leftBackDrive = Devices.LeftBackDrive;
+        _leftForwardDrive = new Motor(Devices.LeftForwardDrive, ReductorType.TWENTY);
+        _rightBackDrive = new Motor(Devices.RightBackDrive, ReductorType.TWENTY);
+        _rightForwardDrive = new Motor(Devices.RightForwardDrive, ReductorType.TWENTY);
+        _leftBackDrive = new Motor(Devices.LeftBackDrive, ReductorType.TWENTY);
 
         _leftForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

@@ -34,9 +34,9 @@ public class OdometrsOdometry implements IRobotModule {
     public void Update() {
         double odometrXLeft = _odometrs.GetOdometerXLeft(), odometrY = _odometrs.GetOdometerY(), odometrXRight = _odometrs.GetOdometerXRight();
 
-        double deltaX = -(odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
+        double deltaX = (odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
 
-        double deltaY = -((odometrY - _oldOdometrY) - Configs.Odometry.RadiusOdometrY * Gyroscope.ChopAngle(_gyro.GetRadians() - _oldRotate));
+        double deltaY = (odometrY - _oldOdometrY) - Configs.Odometry.RadiusOdometrY * Gyroscope.ChopAngle(_gyro.GetRadians() - _oldRotate);
 
         _oldOdometrXLeft = odometrXLeft;
         _oldOdometrXRight = odometrXRight;

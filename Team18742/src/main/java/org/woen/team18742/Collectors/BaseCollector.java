@@ -8,6 +8,7 @@ import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.Motor.MotorsHandler;
 import org.woen.team18742.Tools.Timers.TimerHandler;
 import org.woen.team18742.Tools.ToolTelemetry;
 
@@ -28,12 +29,13 @@ public class BaseCollector {
     private static ArrayList<Class<?>> _annotatedClass;
 
     private TimerHandler _timers;
+    private MotorsHandler _motors;
 
     public BaseCollector(LinearOpMode robot) {
         Robot = robot;
-        ToolTelemetry.SetTelemetry(Robot.telemetry);
 
         _timers = new TimerHandler();
+        _motors = new MotorsHandler();
 
         _modules.clear();
 
@@ -46,8 +48,6 @@ public class BaseCollector {
             _annotatedClass = GetAnnotatedClasses(Module.class);
 
         AddAdditionModules(_annotatedClass);
-
-        ToolTelemetry.Update();
     }
 
     private static ArrayList<Class<?>> _classes;
@@ -90,11 +90,14 @@ public class BaseCollector {
     public void Start() {
         Time.reset();
 
+        _motors.Start();
+
         for (IRobotModule i : _modules)
             i.Start();
     }
 
     public void Update() {
+        _motors.Update();
         _battery.Update();
 
         for (IRobotModule i : _modules)
@@ -102,8 +105,6 @@ public class BaseCollector {
 
         for (IRobotModule i : _modules)
             i.LastUpdate();
-
-        ToolTelemetry.Update();
 
         _timers.Update();
     }

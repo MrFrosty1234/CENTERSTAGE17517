@@ -32,7 +32,16 @@ public class ToolTelemetry {
     public static void DrawCircle(Vector2 pos, double radius, String color){
         if(Configs.GeneralSettings.TelemetryOn || _telemetry != null) {
             _packet.fieldOverlay().setFill(color);
+            _packet.fieldOverlay().setRotation(0);
             _packet.fieldOverlay().fillCircle(DistanceUnit.INCH.fromCm(pos.X), DistanceUnit.INCH.fromCm(pos.Y), radius);
+        }
+    }
+
+    public static void DrawRect(Vector2 pos, Vector2 size, double rotate, String color){
+        if(Configs.GeneralSettings.TelemetryOn || _telemetry != null) {
+            _packet.fieldOverlay().setFill(color);
+            _packet.fieldOverlay().setRotation(rotate);
+            _packet.fieldOverlay().fillRect(DistanceUnit.INCH.fromCm(pos.X), DistanceUnit.INCH.fromCm(pos.Y), size.X, size.Y);
         }
     }
 

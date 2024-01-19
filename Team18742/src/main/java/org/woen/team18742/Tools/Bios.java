@@ -34,8 +34,12 @@ public class Bios {
         if(!_oldDown && down)
             _selectedVariant = (_selectedVariant + 1) % _startRobotPositionVariants.length;
 
-        if(!_oldUp && up)
-            _selectedVariant = Math.max(_selectedVariant - 1, 0);
+        if(!_oldUp && up){
+            _selectedVariant--;
+
+            if(_selectedVariant < 0)
+                _selectedVariant = _startRobotPositionVariants.length - 1;
+        }
 
         ToolTelemetry.AddLine("startPosition = " + _startRobotPositionVariants[_selectedVariant].first);
 

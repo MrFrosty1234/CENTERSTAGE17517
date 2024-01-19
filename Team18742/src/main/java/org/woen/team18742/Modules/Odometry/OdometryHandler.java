@@ -91,19 +91,16 @@ public class OdometryHandler implements IRobotModule {
         ToolTelemetry.AddLine("odometrXLeft = " + GetOdometerXLeft());
         ToolTelemetry.AddLine("odometrXRight = " + GetOdometerXRight());
 
-        ToolTelemetry.DrawCircle(_encoderOdometry.Position, 5, "#000000");
-        ToolTelemetry.DrawCircle(_odometry.Position, 5, "#FF0000");
-        ToolTelemetry.DrawCircle(_cvOdometry.Position, 5, "#00FF00");
-
         Vector2 pos = Configs.GeneralSettings.IsUseOdometers ? Vector2.Plus(Position, _odometry.ShiftPosition) : Vector2.Plus(Position, _encoderOdometry.ShiftPosition);
 
         if (!_cvOdometry.IsZero) {
-            Position.X = _filterX.UpdateRaw(pos.X, Position.X - _cvOdometry.Position.X);
-            Position.Y = _filterY.UpdateRaw(pos.Y, Position.Y - _cvOdometry.Position.Y);
+            Position.X = _filterX.UpdateRaw(pos.X, _cvOdometry.Position.X - Position.X);
+            Position.Y = _filterY.UpdateRaw(pos.Y, _cvOdometry.Position.Y - Position.Y);
         } else
             Position = pos;
 
         ToolTelemetry.DrawCircle(Position, 5, "#0000FF");
+        ToolTelemetry.AddLine("position = " + Position.X + " " + Position.Y);
 
         Speed.X = _oldPosition.X - Position.X / _deltaTime.seconds();
         Speed.Y = _oldPosition.Y - Position.Y / _deltaTime.seconds();

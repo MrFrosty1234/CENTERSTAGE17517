@@ -23,11 +23,8 @@ public class MeepMeep18742 {
                 .build();
 
         myBot.runAction(myBot.getDrive()
-                .actionBuilder(new Pose2d(0, 0, 0))
-                .splineTo(new Vector2d(100 * INCH_TO_CM, 30 * INCH_TO_CM), 0)
-                .lineToX(30 * INCH_TO_CM)
-                .turn(PI / 2)
-                .lineToY(-30 * INCH_TO_CM)
+                .actionBuilder(new Pose2d(62.6 / 2.54, 135.7 / 2.54, -PI / 2))
+                .splineTo(new Vector2d(52 / 2.54, 50 / 2.54), -PI / 2)
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)

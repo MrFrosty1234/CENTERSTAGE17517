@@ -1,5 +1,7 @@
 package org.woen.team18742.Modules;
 
+import static java.lang.Math.PI;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
@@ -24,6 +26,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
@@ -44,7 +47,6 @@ import java.util.Optional;
 public class RouteManager implements IRobotModule {
     private Lift _lift;
     private Intake _intake;
-    private AutonomCollector _collector;
     private Camera _camera;
     private Drivetrain _driveTrain;
     private OdometryHandler _odometry;
@@ -73,39 +75,17 @@ public class RouteManager implements IRobotModule {
         _brush = collector.GetModule(Brush.class);
 
         _time = collector.Time;
-
-        if (collector instanceof AutonomCollector) _collector = (AutonomCollector) collector;
     }
 
     @Override
     public void Start() {
-        if (_collector == null) return;
-
-        _trajectory = GetTrajectory(ActionBuilder(new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, 0))).build();
+        _trajectory = GetTrajectory(ActionBuilder(new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, Bios.GetStartPosition().Rotation))).build();
     }
 
     private MyTrajectoryBuilder GetTrajectory(MyTrajectoryBuilder builder) {
-        switch (_camera.GetPosition()) {
-            case LEFT:
-                return builder
-                        .liftUp()
-                        .splineTo(new Vector2d(0, 0), 0)
-                        .splineTo(new Vector2d(10, 10), 0)
-                        .waitLift();
+        return builder.splineTo(new Vector2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y - 50), -PI / 2);
 
-            case RIGHT:
-                return builder
-                        .waitPixel()
-                        .liftUp()
-                        .splineTo(new Vector2d(20, 20), 0)
-                        .waitLift()
-                        .pixelDeGripped();
-
-            case FORWARD:
-                return builder;
-        }
-
-        throw new RuntimeException("not successful get team element position");
+        //throw new RuntimeException("not successful get team element position");
     }
 
     @Override
@@ -131,6 +111,8 @@ public class RouteManager implements IRobotModule {
 
             _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
         }
+        else
+            _driveTrain.Stop();
     }
 
     private final class TrajectoryAction implements Action {
@@ -167,7 +149,7 @@ public class RouteManager implements IRobotModule {
             PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
                     .compute(txWorldTarget, position, velocity);
 
-            _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
+            _driveTrain.SimpleDriveDirection(new Vector2(-command.linearVel.x.value(), -command.linearVel.y.value()), -command.angVel.value());
 
             return true;
         }

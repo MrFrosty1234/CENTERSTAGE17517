@@ -25,6 +25,8 @@ public class LinearOpModeBase extends LinearOpMode {
     @Override
     public void runOpMode() {
         try {
+            ToolTelemetry.SetTelemetry(telemetry);
+
             Bios bios = new Bios(gamepad1);
 
             ElapsedTime time = new ElapsedTime();
@@ -35,13 +37,10 @@ public class LinearOpModeBase extends LinearOpMode {
 
             ToolTelemetry.Update();
 
-            double startTime = GetStartTime();
-
             while (!isStarted())
                 BiosUpdate(bios);
 
-            while (time.seconds() < startTime && isStarted())
-                BiosUpdate(bios);
+            waitForStart();
 
             resetRuntime();
 
@@ -49,6 +48,7 @@ public class LinearOpModeBase extends LinearOpMode {
 
             while (opModeIsActive()) {
                 _collector.Update();
+                ToolTelemetry.Update();
             }
 
             _collector.Stop();

@@ -2,10 +2,12 @@ package org.woen.team18742.Tools.Motor;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.PIDF;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 public class Motor {
     private final DcMotorEx _motor;
@@ -38,8 +40,20 @@ public class Motor {
         _velocityPid.Start();
     }
 
-    public void SetMode(DcMotor.RunMode mode){
+    public void setDirection(DcMotorSimple.Direction dir){
+        _motor.setDirection(dir);
+    }
+
+    public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior power){
+        _motor.setZeroPowerBehavior(power);
+    }
+
+    public void setMode(DcMotor.RunMode mode){
         _motor.setMode(mode);
+    }
+
+    public double getCurrentPosition(){
+        return _motor.getCurrentPosition();
     }
 
     public void Update(){
@@ -54,9 +68,7 @@ public class Motor {
 
     private double _targetEncoderSpeed = 0, _targetVoltageSpeed = 0;
 
-    public void SetPower(double speed){
-        _velocityPid.Reset();
-
+    public void setPower(double speed){
         _targetEncoderSpeed = speed * _encoderType.Ticks;
         _targetVoltageSpeed = Configs.Battery.CorrectCharge * speed;
     }

@@ -67,7 +67,7 @@ public class CVOdometry implements IRobotModule {
         int suitableDetections = 0;
 
         for (AprilTagDetection detection : detections) {
-            if (detection.rawPose != null && detection.decisionMargin > Configs.Camera.CameraAccuracy) {
+            if (detection.rawPose != null && detection.decisionMargin < Configs.Camera.CameraAccuracy) {
                 // Считать позицию тэга относительно камеры и записать её в VectorF
                 AprilTagPoseRaw rawTagPose = detection.rawPose;
                 VectorF rawTagPoseVector = new VectorF(
@@ -105,12 +105,9 @@ public class CVOdometry implements IRobotModule {
         Position.X = xSum / suitableDetections;
         Position.Y = ySum / suitableDetections;
 
-        Position = Vector2.Minus(Position, _cameraPosition.Turn(_gyro.GetRadians()));
+        Position = Vector2.Minus(Position, _cameraPosition.Turn(-_gyro.GetRadians()));
 
         ShiftPosition = Vector2.Minus(_oldPosition, Position);
-
-        ToolTelemetry.AddLine("CVOdometry = " + Position);
-        ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
 
         _oldPosition = Position;
         _deltaTime.reset();

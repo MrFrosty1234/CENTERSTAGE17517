@@ -37,7 +37,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
     public AtomicReference<Vector2> RectCenter = new AtomicReference<>(new Vector2());
 
-    double x = 640;
+    double x = 590;
     double y = 480;
     double r1 = 5;
     double g1 = 69;
