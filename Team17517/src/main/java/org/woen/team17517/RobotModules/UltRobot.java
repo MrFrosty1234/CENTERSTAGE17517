@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.woen.team17517.NotUsedCode.DrivetrainNew;
 import org.woen.team17517.NotUsedCode.Odometry;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
+import org.woen.team17517.RobotModules.DriveTrain.OdometryNew;
 import org.woen.team17517.RobotModules.OpenCV.TestAprilTagPipeline;
 
 import java.util.List;

@@ -184,16 +184,16 @@ public class DriveTrainVelocityControl implements RobotModule {
     {
         return target/encConstant* gearboxRatio *diameter*Math.PI;
     }
-    public void moveRobotCord(Vector2D vector, double targetAngle){
+    public void moveRobotCord(Vector2D vector, double h){
          this.vector.setCord(vector.getX(),vector.getY());
-         targetH = targetAngle;
+         targetH = h;
     }
     public void moveRobotCord(double x, double y, double h){
         this.vector.setCord(x,y);
         targetH = h;
     }
     public void moveGlobalCord(Vector2D vector, double targetH){
-        vector.vectorRat(robot.odometryNew.getH());
+        vector.vectorRat(-robot.odometryNew.getH());
         this.vector.setCord(vector.getX(),vector.getY());
         this.targetH = targetH;
     }
