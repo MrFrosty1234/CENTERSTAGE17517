@@ -1,9 +1,10 @@
-package org.woen.team17517.RobotModules;
+package org.woen.team17517.RobotModules.DriveTrain;
 
 import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.PIDMethod;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
@@ -12,12 +13,13 @@ import java.util.HashMap;
 
 public class DriveTrain implements RobotModule{
     UltRobot robot;
+    private double voltage = 12;
+
     public DriveTrain(UltRobot robot){
         this.robot = robot;
         voltage = 12;
         targetH = 0;
-        targetX = 0;
-        targetY = 0;
+        targetVector.setCord(0,0);
     }
     public static double kPX = 0;
     public static double kDX = 0;
@@ -35,13 +37,12 @@ public class DriveTrain implements RobotModule{
     public static double ImaxH = 0;
     public static double ImaxY = 0;
 
-    private double targetX = 0;
     private double targetH = 0;
-    private double targetY = 0;
-    private double voltage;
-    private double posX = 0;
-    private double posY = 0;
+    private Vector2D targetVector = new Vector2D(0,0);
+
     private double posH = 0;
+    private Vector2D positionVector = new Vector2D(0,0);
+
     private double X;
     private double Y;
     private double H;
@@ -53,9 +54,9 @@ public class DriveTrain implements RobotModule{
     public static double minErrY;
     public static double minErrH;
 
-    public static double u_X = 0;
-    public static double u_H = 0;
-    public static double u_Y = 0;
+    public static double u_X = 2000;
+    public static double u_H = 2000;
+    public static double u_Y = 2400;
     public static double u_max = 0;
 
 
@@ -68,8 +69,8 @@ public class DriveTrain implements RobotModule{
 
     public HashMap<String,Double> getPosition(){
         HashMap<String,Double> positionMap = new HashMap<>();
-        positionMap.put("X",posX);
-        positionMap.put("Y",posY);
+        positionMap.put("X",positionVector.getX());
+        positionMap.put("Y",positionVector.getY());
         positionMap.put("H",posH);
 
         return positionMap;
@@ -77,28 +78,24 @@ public class DriveTrain implements RobotModule{
 
     public HashMap<String,Double> getTargets() {
         HashMap<String,Double> targetMap = new HashMap<>();
-        targetMap.put("X",targetX);
+        targetMap.put("X",targetVector.getX());
         targetMap.put("H",targetH);
-        targetMap.put("Y",targetY);
+        targetMap.put("Y",targetVector.getY());
         return targetMap;
     }
     ElapsedTime timer = new ElapsedTime();
-    public void setTargetglobal(double x, double y, double h) {
-        targetX = x;
+    public void moveGlobal(double x, double y, double h) {
+        targetVector.setCord(x,y);
         targetH = h;
-        targetY = y;
+        
         timer.reset();
         timer.seconds();
     }
-
-
-    public void setTargetrobot(double x, double y, double h) {
-        targetX = targetX + robot.odometryNew.getX();
-        targetH = targetH + robot.odometryNew.getH();
-        targetY = targetY + robot.odometryNew.getY();
-        timer.reset();
-        timer.seconds();
+    public void moveRobot(double x, double y, double h){
+        targetVector = Vector2D.vectorSum(positionVector,new Vector2D(x,y));
+        targetH = posH + h;
     }
+
 
     public HashMap<String,Double> getErrors() {
         HashMap<String,Double> errorMap = new HashMap<>();
@@ -108,22 +105,48 @@ public class DriveTrain implements RobotModule{
         return errorMap;
     }
 
-
-
+    public void moveRobotX(double x){
+        targetVector = Vector2D.vectorSum(positionVector, new Vector2D(x,0));
+    }
+    public void moveRobotY(double y){
+        targetVector = Vector2D.vectorSum(positionVector, new Vector2D(0,y));
+    }
+    public void moveRobotH(double h){
+        targetH = posH+h;
+    }
+    public void moveGlobalX(double x){
+        targetVector = positionVector;
+        targetVector.setCord(x,targetVector.getY());
+    }
+    public void moveGlobalY(double y){
+        targetVector = positionVector;
+        targetVector.setCord(targetVector.getX(),y);
+    }
+    public void moveGlobalH(double h){
+        targetH = h;
+    }
 
     public void update(){
         voltage = robot.voltageSensorPoint.getVol();
-        posX = robot.odometryNew.getX();
-        posY = robot.odometryNew.getY();
+        positionVector.setCord(robot.odometryNew.getX(),robot.odometryNew.getY());
         posH = robot.odometryNew.getH();
 
-        errX = targetX - posX;
-        errY = targetY - posY;
+        errX = targetVector.getX() - positionVector.getX();
+        errY = targetVector.getY() - positionVector.getY();
         errH = targetH - posH;
         while (Math.abs(errH)>360){
             targetH -= 360*Math.signum(targetH - posH);
         }
 
+
+
+        pidX.setCoefficent(kPX,kIX,kDX,0,ImaxX);
+        pidY.setCoefficent(kPY,kIY,kDY,0,ImaxY);
+        pidH.setCoefficent(kPH,kIH,kDH,0,ImaxH);
+
+        X = pidX.PID(targetVector.getX(),positionVector.getX(),voltage);
+        Y = pidY.PID(targetVector.getY(), positionVector.getY(),voltage);
+        H = pidH.PID(targetH,posH,voltage);
         u_X = timer.seconds() * kt;
 
         if (u_X > u_max){
@@ -154,28 +177,7 @@ public class DriveTrain implements RobotModule{
             Y = u_Y * Math.signum(u_Y);
         }
 
-        pidX.setCoefficent(kPX,kIX,kDX,0,ImaxX);
-        pidY.setCoefficent(kPY,kIY,kDY,0,ImaxY);
-        pidH.setCoefficent(kPH,kIH,kDH,0,ImaxH);
-
-        X = pidX.PID(targetX,posX,voltage);
-        Y = pidY.PID(targetY,posY,voltage);
-        H = pidH.PID(targetH,posH,voltage);
-
         robot.driveTrainVelocityControl.moveRobotCord(X,Y,H);
-    }
-    private Vector2D vectorNew = new Vector2D();
-
-
-    public void moveLocalForward(double targetY){
-        Vector2D vectorForward = new Vector2D(0, targetY);
-        vectorForward.vectorRat(posH);
-        robot.driveTrainVelocityControl.moveGlobalCord(vectorForward, targetY);
-    }
-    public void moveLocalX(double targetX){
-        Vector2D vectorX = new Vector2D(targetX,0);
-        vectorX.vectorRat(posH);
-        robot.driveTrainVelocityControl.moveGlobalCord(vectorX, targetX);
     }
     public boolean isAtPosition(){
         return Math.abs(errH)<minErrH && Math.abs(errX)<minErrX && Math.abs(errY)<minErrY;
