@@ -23,6 +23,7 @@ public class Drivetrain implements IRobotModule {
     private DcMotorEx _leftBackDrive;
     private DcMotorEx _rightBackDrive;
     private Gyroscope _gyro;
+    private OdometryHandler _odometryRoma;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -30,7 +31,7 @@ public class Drivetrain implements IRobotModule {
         _rightBackDrive = Devices.RightBackDrive;
         _rightForwardDrive = Devices.RightForwardDrive;
         _leftBackDrive = Devices.LeftBackDrive;
-
+        _odometryRoma = collector.GetModule(OdometryHandler.class);
         _leftForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -100,7 +101,6 @@ public class Drivetrain implements IRobotModule {
         _leftBackDrive.setPower(0);
         _rightForwardDrive.setPower(0);
     }
-
     public void SetSpeedWorldCoords(Vector2 speed, double rotate) {
         Vector2 worldSpeed = speed.Turn(-_gyro.GetRadians());
 
