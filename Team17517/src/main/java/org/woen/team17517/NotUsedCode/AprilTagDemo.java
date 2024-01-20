@@ -15,6 +15,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
+@Autonomous
 public class AprilTagDemo extends LinearOpMode {
     static final double FEET_PER_METER = 3.28084;
     final float DECIMATION_HIGH = 3;
