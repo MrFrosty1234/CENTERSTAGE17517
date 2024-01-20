@@ -67,7 +67,7 @@ public class Gyroscope implements IRobotModule {
        // SpeedTurn = deltaRadians / _deltaTime.seconds();
 
         if (Configs.GeneralSettings.IsUseOdometers) {
-            double odometerTurn = ChopAngle(-(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2 + Bios.GetStartPosition().Rotation);
+            double odometerTurn = -(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
 
             //double odometrRadians = ChopAngle(_allRadians + ChopAngle(odometerTurn - _oldOdometryRadians));
 
@@ -75,19 +75,23 @@ public class Gyroscope implements IRobotModule {
 
             //_allRadians = _filter.UpdateRaw(radians, ChopAngle(odometrRadians - _allRadians));
 
-            _allRadians = (odometerTurn + ChopAngle(_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Bios.GetStartPosition().Rotation)) / 2;
+            _allRadians = ChopAngle(odometerTurn + _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) / 2);
 
           //  ToolTelemetry.DrawRect(_odometrs.Position, new Vector2(15, 15), odometerTurn, "#00FF00");
           //  ToolTelemetry.DrawRect(_odometrs.Position, new Vector2(15, 15), _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS), "#0000FF");
         }
         else
-            _allRadians = ChopAngle(_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Bios.GetStartPosition().Rotation);
+            _allRadians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+        _allRadians = ChopAngle(_allRadians + Bios.GetStartPosition().Rotation);
 
         _allDegree = Math.toDegrees(_allRadians);
 
         ToolTelemetry.AddLine("rotation = " + _allDegree);
 
-        SpeedTurn = (_oldRadians - _allRadians) / _deltaTime.seconds();
+        SpeedTurn = (_allRadians - _oldRadians) / _deltaTime.seconds();
+
+        _oldRadians = _allRadians;
 
         _deltaTime.reset();
     }

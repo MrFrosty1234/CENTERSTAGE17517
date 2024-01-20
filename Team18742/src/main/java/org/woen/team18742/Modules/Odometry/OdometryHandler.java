@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Bios;
@@ -37,6 +38,8 @@ public class OdometryHandler implements IRobotModule {
 
     private final ElapsedTime _deltaTime = new ElapsedTime();
 
+    private Gyroscope _gyro;
+
     @Override
     public void Init(BaseCollector collector) {
         _odometerXLeft = Devices.OdometerXLeft;
@@ -48,6 +51,7 @@ public class OdometryHandler implements IRobotModule {
         _odometry = collector.GetModule(OdometrsOdometry.class);
         _cvOdometry = collector.GetModule(CVOdometry.class);
         _encoderOdometry = collector.GetModule(EncoderOdometry.class);
+        _gyro = collector.GetModule(Gyroscope.class);
     }
 
     @Override
@@ -102,8 +106,12 @@ public class OdometryHandler implements IRobotModule {
         ToolTelemetry.DrawCircle(Position, 5, "#0000FF");
         ToolTelemetry.AddLine("position = " + Position.X + " " + Position.Y);
 
-        Speed.X = _oldPosition.X - Position.X / _deltaTime.seconds();
-        Speed.Y = _oldPosition.Y - Position.Y / _deltaTime.seconds();
+        Speed.X = (_oldPosition.X - Position.X) / _deltaTime.seconds();
+        Speed.Y = (_oldPosition.Y - Position.Y) / _deltaTime.seconds();
+
+        Speed = Speed.Turn(Gyroscope.ChopAngle(-_gyro.GetRadians() + PI / 2));
+
+        ToolTelemetry.AddLine("speed = " + Speed.X + " " + Speed.Y);
 
         _oldPosition = Position.copy();
         _deltaTime.reset();

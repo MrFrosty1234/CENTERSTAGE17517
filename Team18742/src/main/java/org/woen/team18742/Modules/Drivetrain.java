@@ -16,6 +16,7 @@ import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.Motor.Motor;
 import org.woen.team18742.Tools.Motor.ReductorType;
 import org.woen.team18742.Tools.PIDF;
+import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 @Module
@@ -50,21 +51,21 @@ public class Drivetrain implements IRobotModule {
     }
 
     private void DriveDirection(Vector2 speed, double rotate) {
-        _leftForwardDrive.setPower(speed.X - speed.Y + rotate);
-        _rightBackDrive.setPower(speed.X - speed.Y - rotate);
-        _leftBackDrive.setPower(speed.X + speed.Y + rotate);
-         _rightForwardDrive.setPower(speed.X + speed.Y - rotate);
+        _leftForwardDrive.setPower(-speed.X + speed.Y + rotate);
+        _rightBackDrive.setPower(-speed.X + speed.Y - rotate);
+        _leftBackDrive.setPower(-speed.X - speed.Y + rotate);
+         _rightForwardDrive.setPower(-speed.X - speed.Y - rotate);
     }
 
     public void SimpleDriveDirection(Vector2 speed, double rotate){
-        if(Configs.DriveTrainWheels.isUsePids)
-            SetCMSpeed(Vector2.Multiply(speed, new Vector2(Configs.DriveTrainWheels.MaxSpeedX, Configs.DriveTrainWheels.MaxSpeedY)), rotate * Configs.DriveTrainWheels.MaxSpeedTurn);
-        else
-            DriveDirection(speed, rotate);
+        DriveDirection(speed, rotate);
     }
 
-    public void SetCMSpeed(Vector2 speed, double rotate){
+    public void SetCMSpeed(Vector2 cmSpeed, double rotate){
+        ToolTelemetry.AddLine("cmSpeed = " + cmSpeed.X + " " + cmSpeed.Y);
 
+        DriveDirection(new Vector2((cmSpeed.X / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat) / Configs.DriveTrainWheels.encoderconstat,
+                (cmSpeed.Y / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat) / Configs.DriveTrainWheels.encoderconstat), rotate);
     }
 
     public void ResetEncoders() {

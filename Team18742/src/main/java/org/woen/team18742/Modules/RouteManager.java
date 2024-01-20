@@ -60,7 +60,7 @@ public class RouteManager implements IRobotModule {
     private final VelConstraint _velConstraint = new MinVelConstraint(Arrays.asList(_mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX), new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn)));
     private final AccelConstraint _accelConstraint = new ProfileAccelConstraint(Configs.Route.MinProfileAccel, Configs.Route.MaxProfileAccel);
 
-    private ElapsedTime _time;
+    private ElapsedTime _time = new ElapsedTime();
     private Action _trajectory;
     private boolean _isTrajectoryEnd = false, _isLiftWait = false, _isPixelWait = false;
 
@@ -73,17 +73,17 @@ public class RouteManager implements IRobotModule {
         _odometry = collector.GetModule(OdometryHandler.class);
         _gyro = collector.GetModule(Gyroscope.class);
         _brush = collector.GetModule(Brush.class);
-
-        _time = collector.Time;
     }
 
     @Override
     public void Start() {
         _trajectory = GetTrajectory(ActionBuilder(new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, Bios.GetStartPosition().Rotation))).build();
+
+        _time.reset();
     }
 
     private MyTrajectoryBuilder GetTrajectory(MyTrajectoryBuilder builder) {
-        return builder.splineTo(new Vector2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y - 50), -PI / 2);
+        return builder.splineTo(new Vector2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y - 30), -PI / 2);
 
         //throw new RuntimeException("not successful get team element position");
     }
@@ -149,7 +149,7 @@ public class RouteManager implements IRobotModule {
             PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
                     .compute(txWorldTarget, position, velocity);
 
-            _driveTrain.SimpleDriveDirection(new Vector2(-command.linearVel.x.value(), -command.linearVel.y.value()), -command.angVel.value());
+            _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
             return true;
         }

@@ -85,9 +85,9 @@ public class Configs {
 
     @Config
     public static class DriveTrainWheels {
-        public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 2052, MaxSpeedY = 2052, MaxSpeedTurn = 1026, speed = 0.5;
+        public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 150, MaxSpeedY = 110, MaxSpeedTurn = 7, speed = 0.5;
         public static boolean isUsePids = false;
-        public static double MaxTurnVelocity = 1; //random
+        public static double MaxTurnVelocity = 3; //random
     }
 
     @Config
@@ -117,23 +117,23 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double TrackWidth = 1; // random
-        public static double MinProfileAccel = -1; // random
-        public static double MaxProfileAccel = 1; // random
+        public static double TrackWidth = 15; // random
+        public static double MinProfileAccel = -3; // random
+        public static double MaxProfileAccel = 3; // random
     }
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 0.01; // random
-        public static double Lateral = 0.01; // random
-        public static double Heading = 0.01; // random
+        public static double Axial = 0; // random
+        public static double Lateral = 0; // random
+        public static double Heading = 0; // random
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 0.01; // random
-        public static double Lateral = 0.01; // random
-        public static double Heading = 0.01; // random
+        public static double Axial = 0; // random
+        public static double Lateral = 0; // random
+        public static double Heading = 0; // random
     }
 
     @Config
