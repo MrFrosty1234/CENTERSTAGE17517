@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team17517.RobotModules.UltRobot;
 
-@Autonomous
+
 public class AutonomDriveTrainKoff extends LinearOpMode {
     UltRobot robot;
     @Override
