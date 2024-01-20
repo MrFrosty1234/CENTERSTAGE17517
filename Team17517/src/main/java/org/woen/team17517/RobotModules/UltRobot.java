@@ -7,14 +7,12 @@ import org.woen.team17517.NotUsedCode.DrivetrainNew;
 import org.woen.team17517.NotUsedCode.Odometry;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
-import org.woen.team17517.RobotModules.Lift.Grabber;
+import org.woen.team17517.RobotModules.Grabber.Grabber;
 import org.woen.team17517.RobotModules.Lift.Lift;
 import org.woen.team17517.RobotModules.Navigative.Gyro;
 import org.woen.team17517.RobotModules.Navigative.OdometryNew;
 import org.woen.team17517.RobotModules.OpenCV.TestAprilTagPipeline;
-
 import java.util.List;
-
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.TelemetryOutput;
 import org.woen.team17517.Service.Timer;
