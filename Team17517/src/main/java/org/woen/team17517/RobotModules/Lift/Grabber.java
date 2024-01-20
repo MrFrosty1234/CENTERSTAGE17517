@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 
@@ -69,10 +70,9 @@ public class Grabber implements RobotModule {
     }
 
     public void update() {
-        /*
         pixelLeftSensorVoltage = pixelSensorLeft.getVoltage();
         pixelRightSensorVoltage = pixelSensorRight.getVoltage();
-        double motorCurrent = pixelMotor.getCurrent(AMPS);
+        double motorCurrent = pixelMotor.getCurrent(CurrentUnit.AMPS);
 
         switch (grabberMode) {
             case FULLPROTECTION: {
@@ -95,14 +95,14 @@ public class Grabber implements RobotModule {
 
                 pixelsCountOld = pixelsCount;
 
-                if((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
+                if((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftAtTaget && !ampsProtection) {
                     pixelMotor.setPower(targetPower);
-                    robot.lift.liftPos = !robot.lift.liftPos;
+                    robot.lift.liftAtTaget = !robot.lift.liftAtTaget;
                 } else
                     pixelMotor.setPower(0);
-                if ((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftPos && !ampsProtection) {
+                if ((pixelSensorLeft.getVoltage() > voltage || pixelSensorRight.getVoltage() > voltage) && robot.lift.liftAtTaget && !ampsProtection) {
                     pixelMotor.setPower(targetPower);
-                    robot.lift.liftPos = !robot.lift.liftPos;
+                    robot.lift.liftAtTaget = !robot.lift.liftAtTaget;
                 } else
                     pixelMotor.setPower(0);
 
@@ -130,7 +130,6 @@ public class Grabber implements RobotModule {
             }
 
         }
-         */
     }
 
     public void enable(boolean motorPowerControll) {
