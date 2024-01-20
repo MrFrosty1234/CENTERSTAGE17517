@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules;
+package org.woen.team17517.RobotModules.DriveTrain;
 
 import static java.lang.Math.PI;
 import com.acmerobotics.dashboard.config.Config;
@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.PIDMethod;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
@@ -183,24 +184,22 @@ public class DriveTrainVelocityControl implements RobotModule {
     {
         return target/encConstant* gearboxRatio *diameter*Math.PI;
     }
-    public void moveRobotCord(Vector2D vector, double targetAngle){
+    public void moveRobotCord(Vector2D vector, double h){
          this.vector.setCord(vector.getX(),vector.getY());
-         this.vector.setCord(vector.getX(),vector.getY());
-         targetH = targetAngle;
+         targetH = h;
     }
     public void moveRobotCord(double x, double y, double h){
         this.vector.setCord(x,y);
         targetH = h;
     }
     public void moveGlobalCord(Vector2D vector, double targetH){
-        vector.vectorRat(robot.odometry.heading);
+        vector.vectorRat(-robot.odometryNew.getH());
         this.vector.setCord(vector.getX(),vector.getY());
         this.targetH = targetH;
     }
     public void moveGlobalCord(double x, double y, double targetH){
-        Vector2D vectorGot = new Vector2D(x,y);
-        vectorGot.vectorRat(robot.odometry.heading);
-        this.vector.setCord(vectorGot.getX(),vectorGot.getY());
+        vector.setCord(x,y);
+        vector.vectorRat(-robot.odometryNew.getH());
         this.targetH = targetH;
     }
 
