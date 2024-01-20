@@ -1,7 +1,7 @@
 package org.woen.team17517.NotUsedCode;
 
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.woen.team17517.RobotModules.Camera;
+import org.woen.team17517.RobotModules.OpenCV.Camera;
 import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 
