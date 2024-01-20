@@ -15,6 +15,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 
 @Config
 public class PipeLine implements VisionProcessor {
@@ -26,21 +28,28 @@ public class PipeLine implements VisionProcessor {
     double r2 = 60;
     double g2 = 129;
     double b2 = 296;
+
     Mat img_range_red = new Mat();
+    Mat img_range_red1 = new Mat();
+    Mat img_range_red2 = new Mat();
     Mat img_range_blue = new Mat();
-    public static double hRedDown = 10;
-    public static double cRedDown = 30;
-    public static double vRedDowm = 110;
-    public static double hRedUp = 30;
+    public static double hRedDown1 = 170;
+    public static double hRedDown2 = 0;
+    public static double cRedDown = 160;
+    public static double vRedDowm = 100;
+    public static double hRedUp1 = 180;
+    public static double hRedUp2 = 10;
     public static double cRedUp = 255;
     public static double vRedUp = 255;
 
     public static double hBlueDown = 90;
-    public static double cBlueDown = 53.8;
-    public static double vBlueDowm = 95;
-    public static double hBlueUp = 100;
+    public static double cBlueDown = 180;
+    public static double vBlueDowm = 120;
+    public static double hBlueUp = 140;
     public static double cBlueUp = 255;
     public static double vBlueUp = 255;
+
+    public double cx = 0;
 
     double x1Finish = x * 0.4;
     double x1Start = x * 0;
@@ -66,23 +75,28 @@ public class PipeLine implements VisionProcessor {
         new Mat(frame, new Rect(0,0,(int)x,(int)y/2)).copyTo(frame);
 
 
-        inRange(frame, new Scalar(hRedDown, cRedDown, vRedDowm), new Scalar(hRedUp, cRedUp, vRedUp), img_range_red);
+        inRange(frame, new Scalar(hRedDown1, cRedDown, vRedDowm), new Scalar(hRedUp1, cRedUp, vRedUp), img_range_red1);
         inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
+        inRange(frame, new Scalar(hRedDown2, cRedDown, vRedDowm), new Scalar(hRedUp2, cRedUp, vRedUp), img_range_red2);
 
+        Core.bitwise_or(img_range_red2,img_range_red1,img_range_red);
         Core.bitwise_or(img_range_red,img_range_blue,frame);
 
-        Rect boundingRect = boundingRect(frame);
 
-        centerOfRectX = boundingRect.x + boundingRect.width / 2.0;
-        centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
 
-        if (centerOfRectX < x1Finish && centerOfRectX > x1Start) {
+        Moments moments = Imgproc.moments(frame);
+
+        cx = moments.m10/moments.m00;
+        double cy = moments.m01/moments.m00;
+
+
+        if (cx <= 240) {
             pos = 1;
         }
-        if (centerOfRectX < x2Finish && centerOfRectX > x2Start) {
+        if (cx < 443 && cx >= 240) {
             pos = 2;
         }
-        if (centerOfRectX < x3Finish && centerOfRectX > x3Start) {
+        if (cx >= 443) {
             pos = 3;
         }
 

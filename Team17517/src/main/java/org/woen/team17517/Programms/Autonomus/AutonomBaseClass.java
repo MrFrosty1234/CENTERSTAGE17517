@@ -4,10 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 import org.woen.team17517.Service.Button;
-import org.woen.team17517.RobotModules.Camera;
+import org.woen.team17517.RobotModules.OpenCV.Camera;
 import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 
@@ -19,6 +20,8 @@ public class AutonomBaseClass extends LinearOpMode{
     DcMotor right_front_drive;
     DcMotor right_back_drive;
 
+
+    public int positionOfPixel = 1;
     boolean dpadUp = false;
     boolean dpadDown = false;
     boolean dpadRight = false;
@@ -33,7 +36,7 @@ public class AutonomBaseClass extends LinearOpMode{
     Button rigtTrigerButton = new Button();
 
     Camera camera;
-    VisionPortal visionPortal;
+
     PipeLine pipeLine;
 
     int positionEllment = 0;
@@ -118,8 +121,24 @@ public class AutonomBaseClass extends LinearOpMode{
         right_front_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_front_drive");
         right_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_back_drive");
 
+        pipeLine = new PipeLine();
+
+        VisionPortal visionPortal;
+
+        visionPortal = new VisionPortal.Builder().setCamera(hardwareMap.get(WebcamName.class, "Webcam 1")).addProcessors(pipeLine).build();
+        sleep(1500);
+
+
+
 
         waitForStart();
+
+
+        positionOfPixel = pipeLine.pos;
+        telemetry.addData("Position", pipeLine.pos);
+        telemetry.update();
+        sleep(1000);
+        visionPortal.close();
         switch (startTeam) {
             case BlUE:
                 switch (startPosition){
@@ -130,6 +149,7 @@ public class AutonomBaseClass extends LinearOpMode{
                         robot.updateWhilePositionFalse(getBlueRight());
                         break;
                 }
+                break;
             case RED:
                 switch (startPosition) {
                     case LEFT:
@@ -139,6 +159,7 @@ public class AutonomBaseClass extends LinearOpMode{
                         robot.updateWhilePositionFalse(getRedRight());
                         break;
                 }
+                break;
         }
         robot.allUpdate();
     }

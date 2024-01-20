@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.woen.team17517.RobotModules.Grabber;
-import org.woen.team17517.RobotModules.Lift;
+import org.woen.team17517.RobotModules.Grabber.Grabber;
+import org.woen.team17517.RobotModules.Lift.LiftPosition;
 import org.woen.team17517.RobotModules.UltRobot;
 
 @TeleOp
@@ -30,7 +30,7 @@ public class TeleOP extends LinearOpMode {
 
         while (opModeIsActive()) {
             forwardSpeed = -gamepad1.left_stick_y;
-            sideSpeed = -gamepad1.left_stick_x;
+            sideSpeed = gamepad1.left_stick_x;
             angleSpeed = gamepad1.right_stick_x;
 
             forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(forwardSpeed);
@@ -53,14 +53,14 @@ public class TeleOP extends LinearOpMode {
                 grabber.setPower(0);
 
 
-            if (gamepad1.a || (robot.lift.getTargetPosition() == Lift.LiftPosition.UP && !liftAtTaget))
+            if (gamepad1.a || (robot.lift.getTargetPosition() == LiftPosition.UP && !liftAtTaget))
                 robot.grabber.closeGraber();
             if (gamepad1.b) robot.grabber.openGraber();
 
 
             if (robot.lift.isAtPosition()) {
 
-                if (robot.lift.getTargetPosition() == Lift.LiftPosition.UP)
+                if (robot.lift.getTargetPosition() == LiftPosition.UP)
                     perekidPosition = Grabber.PerekidPosition.FINISH;
                 else perekidPosition = Grabber.PerekidPosition.START;
 
