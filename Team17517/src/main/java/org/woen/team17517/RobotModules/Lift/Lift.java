@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules;
+package org.woen.team17517.RobotModules.Lift;
 
 import static java.lang.Math.abs;
 
@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
+import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 
 
@@ -128,16 +129,5 @@ public class Lift implements RobotModule {
         return liftAtTaget;
     }
 
-    public enum LiftMode{
-        AUTO, MANUAL, MANUALLIMIT
-    }
 
-    public enum LiftPosition {
-        DOWN(0), UP(2733), UNKNOWN(0), FORAUTONOM(1000);
-        public int value;
-
-        LiftPosition(int value) {
-            this.value = value;
-        }
-    }
 }

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 import org.woen.team17517.Service.Button;
-import org.woen.team17517.RobotModules.Camera;
+import org.woen.team17517.RobotModules.OpenCV.Camera;
 import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 

@@ -5,8 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team17517.NotUsedCode.DrivetrainNew;
 import org.woen.team17517.NotUsedCode.Odometry;
+import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
-import org.woen.team17517.RobotModules.DriveTrain.OdometryNew;
+import org.woen.team17517.RobotModules.Lift.Grabber;
+import org.woen.team17517.RobotModules.Lift.Lift;
+import org.woen.team17517.RobotModules.Navigative.Gyro;
+import org.woen.team17517.RobotModules.Navigative.OdometryNew;
 import org.woen.team17517.RobotModules.OpenCV.TestAprilTagPipeline;
 
 import java.util.List;
@@ -17,7 +21,7 @@ import org.woen.team17517.Service.Timer;
 
 
 public class UltRobot {
-    //public DriveTrain driveTrain;
+    public DriveTrain driveTrain;
     public DrivetrainNew drivetrainNew;
     public Grabber grabber;
     public Lift lift;
@@ -38,7 +42,6 @@ public class UltRobot {
         linearOpMode = linearOpMode1;
         telemetryOutput = new TelemetryOutput(this);
         timer = new Timer(this);
-        //driveTrain = new DriveTrain(this);
         grabber = new Grabber(this);
         voltageSensorPoint = new VoltageSensorPoint(this);
         lift = new Lift(this);
@@ -49,8 +52,9 @@ public class UltRobot {
         odometry = new Odometry(this);
         drivetrainNew = new DrivetrainNew(this);
         odometryNew = new OdometryNew(this);
+        driveTrain = new DriveTrain(this);
         this.robotModules = new RobotModule[]{telemetryOutput, grabber, timer, voltageSensorPoint,
-                lift, driveTrainVelocityControl, gyro, lighting, odometry, odometryNew, drivetrainNew};
+                lift, driveTrainVelocityControl, driveTrain, gyro, lighting, odometry, odometryNew, drivetrainNew};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }

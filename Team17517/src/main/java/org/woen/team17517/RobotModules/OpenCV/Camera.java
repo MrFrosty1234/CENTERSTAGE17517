@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules;
+package org.woen.team17517.RobotModules.OpenCV;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
