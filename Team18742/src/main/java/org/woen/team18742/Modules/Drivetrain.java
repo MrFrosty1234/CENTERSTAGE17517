@@ -57,15 +57,22 @@ public class Drivetrain implements IRobotModule {
          _rightForwardDrive.setPower(-speed.X - speed.Y - rotate);
     }
 
+    private void DriveEncoderDirection(Vector2 speed, double rotate) {
+        _leftForwardDrive.setEncoderPower(-speed.X + speed.Y + rotate);
+        _rightBackDrive.setEncoderPower(-speed.X + speed.Y - rotate);
+        _leftBackDrive.setEncoderPower(-speed.X - speed.Y + rotate);
+        _rightForwardDrive.setEncoderPower(-speed.X - speed.Y - rotate);
+    }
+
     public void SimpleDriveDirection(Vector2 speed, double rotate){
         DriveDirection(speed, rotate);
     }
 
     public void SetCMSpeed(Vector2 cmSpeed, double rotate){
-        ToolTelemetry.AddLine("cmSpeed = " + cmSpeed.X + " " + cmSpeed.Y);
+        cmSpeed.Y *= 1d + (1d - Configs.Odometry.YLag);
 
-        DriveDirection(new Vector2((cmSpeed.X / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat) / Configs.DriveTrainWheels.encoderconstat,
-                (cmSpeed.Y / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat) / Configs.DriveTrainWheels.encoderconstat), rotate);
+        DriveEncoderDirection(new Vector2(cmSpeed.X / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat,
+                cmSpeed.Y / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat), -rotate * Configs.DriveTrainWheels.Radius / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat / 4);
     }
 
     public void ResetEncoders() {

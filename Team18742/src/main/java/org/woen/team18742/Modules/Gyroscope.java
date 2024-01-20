@@ -91,6 +91,8 @@ public class Gyroscope implements IRobotModule {
 
         SpeedTurn = (_allRadians - _oldRadians) / _deltaTime.seconds();
 
+        ToolTelemetry.AddLine("speed rotation = " + SpeedTurn);
+
         _oldRadians = _allRadians;
 
         _deltaTime.reset();

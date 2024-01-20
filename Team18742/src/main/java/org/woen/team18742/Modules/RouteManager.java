@@ -79,11 +79,13 @@ public class RouteManager implements IRobotModule {
     public void Start() {
         _trajectory = GetTrajectory(ActionBuilder(new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, Bios.GetStartPosition().Rotation))).build();
 
+        _driveTrain.SetCMSpeed(new Vector2(5, 0), 0);
+
         _time.reset();
     }
 
     private MyTrajectoryBuilder GetTrajectory(MyTrajectoryBuilder builder) {
-        return builder.splineTo(new Vector2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y - 30), -PI / 2);
+        return builder.splineToConstantHeading(new Vector2d(Bios.GetStartPosition().Position.X + 20, Bios.GetStartPosition().Position.Y - 20), -PI / 2);
 
         //throw new RuntimeException("not successful get team element position");
     }
@@ -176,6 +178,10 @@ public class RouteManager implements IRobotModule {
 
         public MyTrajectoryBuilder splineTo(Vector2d vec, double tangent) {
             return new MyTrajectoryBuilder(_builder.splineTo(vec, tangent));
+        }
+
+        public MyTrajectoryBuilder splineToConstantHeading(Vector2d vec, double tangent){
+            return new MyTrajectoryBuilder(_builder.splineToConstantHeading(vec, tangent));
         }
 
         public MyTrajectoryBuilder setReversed(boolean reversed) {

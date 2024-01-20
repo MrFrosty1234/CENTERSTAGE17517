@@ -72,4 +72,9 @@ public class Motor {
         _targetEncoderSpeed = speed * _encoderType.Ticks;
         _targetVoltageSpeed = Configs.Battery.CorrectCharge * speed;
     }
+
+    public void setEncoderPower(double speed){
+        _targetEncoderSpeed = speed;
+        _targetVoltageSpeed = Configs.Battery.CorrectCharge * (speed / _encoderType.Ticks);
+    }
 }
