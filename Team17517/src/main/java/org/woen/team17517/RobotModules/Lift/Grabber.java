@@ -204,9 +204,7 @@ public class Grabber implements RobotModule {
         return pixelIn;
     }
 
-    public enum GrabberMode {
-        FULLPROTECTION, NOTFULLPROTECTION, MANUALMODE;
-    }
+
 
     public enum PixelsPosition {
         AUTONOM, MANUAL;
