@@ -4,8 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.woen.team17517.RobotModules.Lift.Grabber;
-import org.woen.team17517.RobotModules.Lift.Lift;
+import org.woen.team17517.RobotModules.Grabber.Grabber;
 import org.woen.team17517.RobotModules.Lift.LiftPosition;
 import org.woen.team17517.RobotModules.UltRobot;
 
