@@ -12,11 +12,6 @@ public class LinearOpModeBase extends LinearOpMode {
     protected BaseCollector GetCollector(){
         return null;
     }
-
-    protected double GetStartTime(){
-        return 0;
-    }
-
     private void BiosUpdate(Bios bios){
         bios.Update();
         ToolTelemetry.Update();
@@ -26,24 +21,14 @@ public class LinearOpModeBase extends LinearOpMode {
     public void runOpMode() {
         try {
             ToolTelemetry.SetTelemetry(telemetry);
-
             Bios bios = new Bios(gamepad1);
-
-            ElapsedTime time = new ElapsedTime();
-
-            time.reset();
-
             BaseCollector _collector = GetCollector();
-
-            ToolTelemetry.Update();
 
             while (!isStarted())
                 BiosUpdate(bios);
 
-            waitForStart();
-
             resetRuntime();
-
+            bios.Stop();
             _collector.Start();
 
             while (opModeIsActive()) {
@@ -52,7 +37,6 @@ public class LinearOpModeBase extends LinearOpMode {
             }
 
             _collector.Stop();
-            bios.Stop();
         }
         catch (Exception e){
             ToolTelemetry.AddLine(e.getMessage());
