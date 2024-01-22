@@ -14,8 +14,8 @@ public class AutonomDriveTrainKoff extends LinearOpMode {
         robot = new UltRobot(this);
         waitForStart();
         while (opModeIsActive()) {
-            robot.updateWhilePositionFalse(new Runnable[]{()->robot.drivetrainNew.setTarget(-1000,0,0),
-                                    ()->robot.drivetrainNew.setTarget(1000,0,0)});
+            robot.updateWhilePositionFalse(new Runnable[]{()->robot.drivetrainNew.setTarget(500,0,0),
+                                                            ()->robot.drivetrainNew.setTarget(-500,0,0)});
         }
     }
 

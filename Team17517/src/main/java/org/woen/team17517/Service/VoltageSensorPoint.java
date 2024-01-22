@@ -1,8 +1,9 @@
-package org.woen.team17517.RobotModules;
+package org.woen.team17517.Service;
 
 
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 
 public class VoltageSensorPoint implements RobotModule

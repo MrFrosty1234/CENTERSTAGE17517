@@ -1,6 +1,7 @@
 package org.woen.team18742.Modules;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
@@ -9,11 +10,15 @@ import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.TeleopModule;
+import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.Vector2;
 
 @TeleopModule
 public class Manual implements IRobotModule {
     private boolean _gripOld = false;
+
+    private Servo podtyaga1;
+    private Servo podtyaga2;
 
     private Plane _plane;
 
@@ -53,11 +58,9 @@ public class Manual implements IRobotModule {
         boolean brush = _gamepad.cross;
         boolean zajat = _gamepad.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
         boolean average = _gamepad.dpad_right;
-        double railgunopen = _gamepad.left_trigger;
-        double railgunnoopen = _gamepad.right_trigger;
+        double servotyaga = _gamepad.left_trigger;
+        double motortyaga = _gamepad.right_trigger;
 
-        _plane.BezpolezniRailgunUp(railgunopen * 0.3);
-        _plane.BezpolezniRailgunDown(railgunnoopen * 0.3);
 
         if(grip && !_gripOld) {
             _intake.releaseGripper();
@@ -82,7 +85,27 @@ public class Manual implements IRobotModule {
             _lift.SetLiftPose(LiftPose.AVERAGE);
 
         _gripOld = grip;
+
+         podtyaga1 = Devices.podtyaga1;
+         podtyaga2 = Devices.podtyaga2;
+         double nulevayapodtyaga1 = 0.43;
+         double nulevayapodtyaga2 = 0.43;
+         double rasstrelennayatyga1 = 0.23;
+         double rasstrelennayatyga2 = 0.23;
+        if(servotyaga > 0)
+        {
+            podtyaga1.setPosition(rasstrelennayatyga1);
+            podtyaga2.setPosition(rasstrelennayatyga2);
+        }
+        else
+        {
+            podtyaga1.setPosition(nulevayapodtyaga1);
+            podtyaga2.setPosition(nulevayapodtyaga2);
+        }
+
     }
+
+
 
     @Override
     public void Start() {

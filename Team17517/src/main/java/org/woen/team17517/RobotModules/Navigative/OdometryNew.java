@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules.DriveTrain;
+package org.woen.team17517.RobotModules.Navigative;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -60,7 +60,7 @@ public class OdometryNew implements RobotModule {
                 0*right_front_drive.getCurrentPosition()+ 0*right_back_drive.getCurrentPosition())/2.0)*kSlide;
         h = robot.gyro.getAngle();
     }
-    private  double kSlide = 0.5;
+    private  double kSlide = 1;
     private final DcMotorEx left_front_drive;
     private final DcMotorEx left_back_drive;
     private final DcMotorEx right_front_drive;
