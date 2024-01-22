@@ -4,11 +4,18 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.roadrunner.Vector2d;
+
 
 public class Vector2 {
     public double X;
     public double Y;
+
+    public Vector2d GetRoadVector(){
+        return new Vector2d(X, Y);
+    }
 
     public Vector2(){
         X = 0;
@@ -49,7 +56,9 @@ public class Vector2 {
         return new Vector2(val, val);
     }
 
-    public Vector2 copy(){
+    @NonNull
+    @Override
+    public Vector2 clone() {
         return new Vector2(X, Y);
     }
 

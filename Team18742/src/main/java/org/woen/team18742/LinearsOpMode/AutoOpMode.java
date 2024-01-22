@@ -11,9 +11,4 @@ public class AutoOpMode extends LinearOpModeBase {
     protected BaseCollector GetCollector() {
         return new AutonomCollector(this);
     }
-
-    @Override
-    protected double GetStartTime() {
-        return 0;
-    }
 }

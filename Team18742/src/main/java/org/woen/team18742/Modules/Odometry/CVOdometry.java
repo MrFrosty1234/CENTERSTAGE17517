@@ -51,8 +51,8 @@ public class CVOdometry implements IRobotModule {
     public void Start() {
         _deltaTime.reset();
 
-        Position = Bios.GetStartPosition().Position.copy();
-        _oldPosition = Bios.GetStartPosition().Position.copy();
+        Position = Bios.GetStartPosition().Position.clone();
+        _oldPosition = Bios.GetStartPosition().Position.clone();
     }
 
     @Override

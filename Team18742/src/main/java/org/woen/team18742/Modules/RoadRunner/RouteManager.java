@@ -1,4 +1,4 @@
-package org.woen.team18742.Modules;
+package org.woen.team18742.Modules.RoadRunner;
 
 import static java.lang.Math.PI;
 
@@ -31,6 +31,9 @@ import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Camera.Camera;
+import org.woen.team18742.Modules.Drivetrain;
+import org.woen.team18742.Modules.Gyroscope;
+import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.AutonomModule;
@@ -77,17 +80,13 @@ public class RouteManager implements IRobotModule {
 
     @Override
     public void Start() {
-        _trajectory = GetTrajectory(ActionBuilder(new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, Bios.GetStartPosition().Rotation))).build();
+        _trajectory = Trajectory.GetTrajectory (ActionBuilder(
+                new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, Bios.GetStartPosition().Rotation)),
+                _camera).build();
 
         _driveTrain.SetCMSpeed(new Vector2(5, 0), 0);
 
         _time.reset();
-    }
-
-    private MyTrajectoryBuilder GetTrajectory(MyTrajectoryBuilder builder) {
-        return builder.splineToConstantHeading(new Vector2d(Bios.GetStartPosition().Position.X + 20, Bios.GetStartPosition().Position.Y - 20), -PI / 2);
-
-        //throw new RuntimeException("not successful get team element position");
     }
 
     @Override
@@ -165,7 +164,7 @@ public class RouteManager implements IRobotModule {
         return new MyTrajectoryBuilder(new TrajectoryActionBuilder(TrajectoryAction::new, TrajectoryAction::new, beginPose, 1e-6, 0.0, _turnConstraints, _velConstraint, _accelConstraint, 0.25, 0.1));
     }
 
-    private final class MyTrajectoryBuilder {
+    public final class MyTrajectoryBuilder {
         private final TrajectoryActionBuilder _builder;
 
         public MyTrajectoryBuilder(TrajectoryActionBuilder builder) {

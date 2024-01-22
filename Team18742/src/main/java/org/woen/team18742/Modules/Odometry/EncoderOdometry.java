@@ -18,7 +18,6 @@ import org.woen.team18742.Tools.Vector2;
 @Module
 public class EncoderOdometry implements IRobotModule {
     private Drivetrain _driverTrain;
-    private Vector2  EncoderPosition = new Vector2();
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
     private Gyroscope _gyro;
     public Vector2 Position = new Vector2(), ShiftPosition = new Vector2();
@@ -62,6 +61,6 @@ public class EncoderOdometry implements IRobotModule {
     public void Start() {
         _deltaTime.reset();
 
-        Position = Bios.GetStartPosition().Position.copy();
+        Position = Bios.GetStartPosition().Position.clone();
     }
 }

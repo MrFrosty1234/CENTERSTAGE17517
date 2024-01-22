@@ -19,7 +19,7 @@ public class Devices {
 
     public static DcMotorEx LeftForwardDrive, LeftBackDrive, RightForwardDrive, RightBackDrive;
 
-    public static DcMotor OdometerXLeft, OdometerY, OdometerXRight;
+    public static DcMotorEx OdometerXLeft, OdometerY, OdometerXRight;
 
     public static DcMotor LiftMotor, LightingMotor;
 
@@ -50,8 +50,8 @@ public class Devices {
 
         BrushMotor = map.get(DcMotorEx.class, "brushMotor");
 
-        OdometerXLeft = map.get(DcMotor.class, "OdometrXLeft");
-        OdometerY = map.get(DcMotor.class, "OdometrY");
+        OdometerXLeft = map.get(DcMotorEx.class, "OdometrXLeft");
+        OdometerY = map.get(DcMotorEx.class, "OdometrY");
         OdometerXRight = BrushMotor;
 
         Camera = map.get(WebcamName.class, "Webcam 1");

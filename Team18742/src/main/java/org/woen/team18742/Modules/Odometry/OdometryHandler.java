@@ -5,6 +5,7 @@ import static java.lang.Math.PI;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -24,7 +25,7 @@ import java.security.spec.EllipticCurve;
 
 @Module
 public class OdometryHandler implements IRobotModule {
-    private DcMotor _odometerY, _odometerXLeft, _odometerXRight;
+    private DcMotorEx _odometerY, _odometerXLeft, _odometerXRight;
 
     private OdometrsOdometry _odometry;
     private CVOdometry _cvOdometry;
@@ -34,11 +35,8 @@ public class OdometryHandler implements IRobotModule {
 
     public Vector2 Position = new Vector2();
     public Vector2 Speed = new Vector2();
-    private Vector2 _oldPosition = new Vector2();
 
     private final ElapsedTime _deltaTime = new ElapsedTime();
-
-    private Gyroscope _gyro;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -51,13 +49,24 @@ public class OdometryHandler implements IRobotModule {
         _odometry = collector.GetModule(OdometrsOdometry.class);
         _cvOdometry = collector.GetModule(CVOdometry.class);
         _encoderOdometry = collector.GetModule(EncoderOdometry.class);
-        _gyro = collector.GetModule(Gyroscope.class);
     }
 
     @Override
     public void Start() {
         Reset();
-        Position = Bios.GetStartPosition().Position.copy();
+        Position = Bios.GetStartPosition().Position.clone();
+    }
+
+    public double GetSpeedOdometerXLeft() {
+        return _odometerXLeft.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
+    }
+
+    public double GetSpeedOdometerXRight() {
+        return -_odometerXRight.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
+    }
+
+    public double GetSpeedOdometerY() {
+        return _odometerY.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
     }
 
     public double GetOdometerXLeft() {
@@ -91,10 +100,6 @@ public class OdometryHandler implements IRobotModule {
         _filterX.UpdateCoef(Configs.Odometry.XCoef);
         _filterY.UpdateCoef(Configs.Odometry.YCoef);
 
-        ToolTelemetry.AddLine("odometrY = " + GetOdometerY());
-        ToolTelemetry.AddLine("odometrXLeft = " + GetOdometerXLeft());
-        ToolTelemetry.AddLine("odometrXRight = " + GetOdometerXRight());
-
         Vector2 pos = Configs.GeneralSettings.IsUseOdometers ? Vector2.Plus(Position, _odometry.ShiftPosition) : Vector2.Plus(Position, _encoderOdometry.ShiftPosition);
 
         if (!_cvOdometry.IsZero) {
@@ -106,14 +111,10 @@ public class OdometryHandler implements IRobotModule {
         ToolTelemetry.DrawCircle(Position, 5, "#0000FF");
         ToolTelemetry.AddLine("position = " + Position.X + " " + Position.Y);
 
-        Speed.X = (_oldPosition.X - Position.X) / _deltaTime.seconds();
-        Speed.Y = (_oldPosition.Y - Position.Y) / _deltaTime.seconds();
-
-        Speed = Speed.Turn(Gyroscope.ChopAngle(-_gyro.GetRadians() + PI / 2));
+        Speed = _odometry.Speed;
 
         ToolTelemetry.AddLine("speed = " + Speed.X + " " + Speed.Y);
 
-        _oldPosition = Position.copy();
         _deltaTime.reset();
     }
 }

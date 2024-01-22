@@ -16,9 +16,9 @@ import org.woen.team18742.Tools.Vector2;
 
 @Module
 public class OdometrsOdometry implements IRobotModule {
-    private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY;
+    private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY, _oldOdometrSpeedXLeft, _oldOdometrSpeedXRight, _oldOdometrSpeedY;
 
-    public Vector2 Position = new Vector2(), ShiftPosition = new Vector2();
+    public Vector2 Position = new Vector2(), ShiftPosition = new Vector2(), Speed = new Vector2();
     private Gyroscope _gyro;
     private OdometryHandler _odometrs;
 
@@ -33,10 +33,18 @@ public class OdometrsOdometry implements IRobotModule {
     @Override
     public void Update() {
         double odometrXLeft = _odometrs.GetOdometerXLeft(), odometrY = _odometrs.GetOdometerY(), odometrXRight = _odometrs.GetOdometerXRight();
+        double odometrSpeedXLeft = _odometrs.GetSpeedOdometerXLeft(), odometrSpeedY = _odometrs.GetSpeedOdometerY(), odometrSpeedXRight = _odometrs.GetSpeedOdometerXRight();
 
         double deltaX = (odometrXLeft - _oldOdometrXLeft + odometrXRight - _oldOdometrXRight) / 2;
 
         double deltaY = (odometrY - _oldOdometrY) - Configs.Odometry.RadiusOdometrY * Gyroscope.ChopAngle(_gyro.GetRadians() - _oldRotate);
+
+        Speed.X = (odometrSpeedXLeft - _oldOdometrSpeedXLeft + odometrSpeedXRight - _oldOdometrSpeedXRight) / 2;
+        Speed.Y = (odometrSpeedY - _oldOdometrSpeedY) - Configs.Odometry.RadiusOdometrY * Gyroscope.ChopAngle(_gyro.GetRadians() - _oldRotate);
+
+        _oldOdometrSpeedXLeft = odometrSpeedXLeft;
+        _oldOdometrSpeedXRight = odometrSpeedXRight;
+        _oldOdometrSpeedY = odometrSpeedY;
 
         _oldOdometrXLeft = odometrXLeft;
         _oldOdometrXRight = odometrXRight;
@@ -59,6 +67,6 @@ public class OdometrsOdometry implements IRobotModule {
     public void Start() {
         _deltaTime.reset();
 
-        Position = Bios.GetStartPosition().Position.copy();
+        Position = Bios.GetStartPosition().Position.clone();
     }
 }
