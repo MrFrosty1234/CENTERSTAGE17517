@@ -65,24 +65,29 @@ public class DriveTrain implements RobotModule{
     private PIDMethod pidH = new PIDMethod(kPH,kIH,kDH,ImaxH);
     private static double kt = 5;
 
-
-
+    HashMap<String,Double> positionMap = new HashMap<>();
+    HashMap<String,Double> targetMap = new HashMap<>();
+    HashMap<String,Double> errorMap = new HashMap<>();
     public HashMap<String,Double> getPosition(){
-        HashMap<String,Double> positionMap = new HashMap<>();
         positionMap.put("X",positionVector.getX());
         positionMap.put("Y",positionVector.getY());
         positionMap.put("H",posH);
-
         return positionMap;
     }
-
     public HashMap<String,Double> getTargets() {
-        HashMap<String,Double> targetMap = new HashMap<>();
         targetMap.put("X",targetVector.getX());
         targetMap.put("H",targetH);
         targetMap.put("Y",targetVector.getY());
         return targetMap;
     }
+    public HashMap<String,Double> getErrors() {
+
+        errorMap.put("X",errX);
+        errorMap.put("H",errH);
+        errorMap.put("Y",errY);
+        return errorMap;
+    }
+
     ElapsedTime timer = new ElapsedTime();
     public void moveGlobal(double x, double y, double h) {
         targetVector.setCord(x,y);
@@ -97,13 +102,6 @@ public class DriveTrain implements RobotModule{
     }
 
 
-    public HashMap<String,Double> getErrors() {
-        HashMap<String,Double> errorMap = new HashMap<>();
-        errorMap.put("X",errX);
-        errorMap.put("H",errH);
-        errorMap.put("Y",errY);
-        return errorMap;
-    }
 
     public void moveRobotX(double x){
         targetVector = Vector2D.vectorSum(positionVector, new Vector2D(x,0));
@@ -115,12 +113,10 @@ public class DriveTrain implements RobotModule{
         targetH = posH+h;
     }
     public void moveGlobalX(double x){
-        targetVector = positionVector;
-        targetVector.setCord(x,targetVector.getY());
+        targetVector.setCord(x,positionVector.getY());
     }
     public void moveGlobalY(double y){
-        targetVector = positionVector;
-        targetVector.setCord(targetVector.getX(),y);
+        targetVector.setCord(positionVector.getX(),y);
     }
     public void moveGlobalH(double h){
         targetH = h;

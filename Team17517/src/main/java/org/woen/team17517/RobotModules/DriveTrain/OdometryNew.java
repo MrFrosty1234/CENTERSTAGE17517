@@ -74,11 +74,12 @@ public class OdometryNew implements RobotModule {
     public double getH(){
         return h;
     }
-    private Vector2D vectorNew = new Vector2D();
+    public Vector2D getVector(){return vector;}
+    private Vector2D vectorCleanPosition = new Vector2D();
     public void update(){
         encUpdate();
-        vectorNew.setCord(xEnc,yEnc);
-        vectorNew.vectorRat(h);
-        vector = Vector2D.vectorSum(vector,vectorNew);
+        vectorCleanPosition.setCord(xEnc,yEnc);
+        vectorCleanPosition.vectorRat(h);
+        vector = Vector2D.vectorSum(vector, vectorCleanPosition);
     }
 }
