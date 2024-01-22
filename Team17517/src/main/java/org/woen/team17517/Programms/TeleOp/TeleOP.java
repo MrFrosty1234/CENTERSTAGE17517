@@ -61,26 +61,23 @@ public class TeleOP extends LinearOpMode {
                     robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
                     break;
                 case CENTRE:
-                    double h;
-                    double x;
-                    double y;
+                    double targetH;
+                    double targetX;
+                    double targetY;
                     Vector2D targetVector = new Vector2D();
-                    Vector2D positionVector = new Vector2D();
-                    double hPosition = 0;
+                    Vector2D positionVector = robot.odometryNew.getPositionVector();
+                    double hPosition = robot.odometryNew.getH();
 
-                    y = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y);
-                    x = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_x);
-                    h = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x);
-                    targetVector.setCord(x,y);
+                    targetY = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y);
+                    targetX = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_x);
+                    targetH = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x);
 
-                    positionVector.setCord(robot.odometryNew.getX(),robot.odometryNew.getY());
-                    hPosition = robot.odometryNew.getH();
-
+                    targetVector.setCord(targetX,targetY);
                     targetVector.vectorRat(hPosition);
                     targetVector = Vector2D.vectorSum(targetVector,positionVector);
-                    h += hPosition;
+                    targetH += hPosition;
 
-                    robot.driveTrainVelocityControl.moveGlobalCord(targetVector, h);
+                    robot.driveTrainVelocityControl.moveGlobalCord(targetVector, targetH);
                     break;
             }
 

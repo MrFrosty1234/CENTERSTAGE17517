@@ -87,44 +87,49 @@ public class DriveTrain implements RobotModule{
         errorMap.put("Y",errY);
         return errorMap;
     }
-
+    public void reset(){
+        timer.reset();
+        timer.seconds();
+    }
     ElapsedTime timer = new ElapsedTime();
     public void moveGlobal(double x, double y, double h) {
         targetVector.setCord(x,y);
         targetH = h;
-        
-        timer.reset();
-        timer.seconds();
+        reset();
+    }
+    public void moveGlobalY(double y){
+        targetVector.setCord(positionVector.getX(),y);
+        reset();
+    }
+    public void moveGlobalH(double h){
+        targetH = h;
+        reset();
     }
     public void moveRobot(double x, double y, double h){
         targetVector = Vector2D.vectorSum(positionVector,new Vector2D(x,y));
         targetH = posH + h;
+        reset();
     }
-
-
 
     public void moveRobotX(double x){
         targetVector = Vector2D.vectorSum(positionVector, new Vector2D(x,0));
+        reset();
     }
     public void moveRobotY(double y){
         targetVector = Vector2D.vectorSum(positionVector, new Vector2D(0,y));
+        reset();
     }
     public void moveRobotH(double h){
         targetH = posH+h;
     }
     public void moveGlobalX(double x){
         targetVector.setCord(x,positionVector.getY());
-    }
-    public void moveGlobalY(double y){
-        targetVector.setCord(positionVector.getX(),y);
-    }
-    public void moveGlobalH(double h){
-        targetH = h;
+        reset();
     }
 
     public void update(){
         voltage = robot.voltageSensorPoint.getVol();
-        positionVector.setCord(robot.odometryNew.getX(),robot.odometryNew.getY());
+        positionVector = robot.odometryNew.getPositionVector();
         posH = robot.odometryNew.getH();
 
         errX = targetVector.getX() - positionVector.getX();
@@ -173,7 +178,7 @@ public class DriveTrain implements RobotModule{
             Y = u_Y * Math.signum(u_Y);
         }
 
-        robot.driveTrainVelocityControl.moveRobotCord(X,Y,H);
+        robot.driveTrainVelocityControl.moveGlobalCord(X,Y,H);
     }
     public boolean isAtPosition(){
         return Math.abs(errH)<minErrH && Math.abs(errX)<minErrX && Math.abs(errY)<minErrY;

@@ -74,7 +74,7 @@ public class OdometryNew implements RobotModule {
     public double getH(){
         return h;
     }
-    public Vector2D getVector(){return vector;}
+    public Vector2D getPositionVector(){return vector;}
     private Vector2D vectorCleanPosition = new Vector2D();
     public void update(){
         encUpdate();
