@@ -1,13 +1,13 @@
 
-package org.woen.team17517.RobotModules;
+package org.woen.team17517.NotUsedCode;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.PIDMethod;
 import org.woen.team17517.Service.RobotModule;
 
@@ -68,14 +68,12 @@ public class DrivetrainNew implements RobotModule {
     PIDMethod pidX = new PIDMethod(kPX, kIX, kDX, u_maxX);
     PIDMethod pidY = new PIDMethod(kPY, kIY, kDY, u_maxY);
     PIDMethod pidH = new PIDMethod(kPH, kIH, kDH, u_maxH);
-    ElapsedTime timer = new ElapsedTime();
+
     public void setTarget(double x, double y, double h) {
         targetX = x;
         targetH = h;
         targetY = y;
         autoMode = true;
-        timer.reset();
-        timer.seconds();
     }
 
   //  void enableAutoMode(boolean )
@@ -91,18 +89,13 @@ public class DrivetrainNew implements RobotModule {
     private double x;
     private double y;
     private double h;
-    private static double kt = 5;
-
-
     public HashMap<String,Double> getPosition(){
         HashMap<String,Double> positionMap = new HashMap<>();
         positionMap.put("X",x);
         positionMap.put("Y",y);
         positionMap.put("H",h);
-
         return positionMap;
     }
-
      public void update() {
         voltage = robot.voltageSensorPoint.getVol();
         pidH.setCoefficent(kPH,kIH,kDH,0,u_maxH);
@@ -127,37 +120,6 @@ public class DrivetrainNew implements RobotModule {
             double H = pidH.PID(targetH,h,voltage)+200*signum(errH);
             double X = pidX.PID(targetX,x,voltage)+200*signum(errX);
             double Y = pidY.PID(targetY,y,voltage)+200*signum(errY);
-
-
-            u_maxX = timer.seconds() * kt;
-
-            if (u_maxX> 2004){
-                u_maxX = 2004;
-            }
-
-           if (abs(X) > u_maxX){
-               X = u_maxX * Math.signum(u_maxX);
-           }
-
-            u_maxH = timer.seconds() * kt;
-
-            if (u_maxH> 2004){
-                u_maxH = 2004;
-            }
-
-            if (abs(X) > u_maxH){
-                X = u_maxH * Math.signum(u_maxH);
-            }
-
-
-            u_maxY = timer.seconds() * kt;
-
-            if (u_maxY> 2004){
-                u_maxY = 2004;
-            }
-            if (abs(Y) > u_maxY){
-                Y = u_maxY * Math.signum(u_maxY);
-            }
 
             robot.driveTrainVelocityControl.moveGlobalCord(Y, X, H);
         }

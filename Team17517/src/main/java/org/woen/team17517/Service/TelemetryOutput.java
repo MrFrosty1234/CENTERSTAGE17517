@@ -94,6 +94,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("lfd", robot.odometry.left_front_drive.getCurrentPosition());
             telemetry.addData("rbd", robot.odometry.right_back_drive.getCurrentPosition());
             telemetry.addData("rfd", robot.odometry.right_front_drive.getCurrentPosition());
+            telemetry.addData("h", robot.odometry.heading);
         }
         if(ftcMap){
             packet = new TelemetryPacket();

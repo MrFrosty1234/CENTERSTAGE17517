@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules;
+package org.woen.team17517.RobotModules.Navigative;
 
 import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
 
@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 
 public class Gyro implements RobotModule {
@@ -25,7 +26,7 @@ public class Gyro implements RobotModule {
         Orientation hubRotation = xyzOrientation(xRotation, yRotation, headingRotation);
 
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(hubRotation);
-        gyro.initialize(new IMU.Parameters(orientationOnRobot));
+        gyro.initialize(new IMU.    Parameters(orientationOnRobot));
         reset();
     }
     public void reset(){

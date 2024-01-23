@@ -1,6 +1,8 @@
-package org.woen.team17517.RobotModules;
+package org.woen.team17517.RobotModules.Navigative;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
 
@@ -9,7 +11,7 @@ public class OdometryNew implements RobotModule {
     UltRobot robot;
     private double voltage;
     private Vector2D vector = new Vector2D();
-    double h;
+    private double h;
     public OdometryNew(UltRobot robot){
         this.robot = robot;
 
@@ -58,7 +60,7 @@ public class OdometryNew implements RobotModule {
                 0*right_front_drive.getCurrentPosition()+ 0*right_back_drive.getCurrentPosition())/2.0)*kSlide;
         h = robot.gyro.getAngle();
     }
-    private  double kSlide = 0.5;
+    private  double kSlide = 1;
     private final DcMotorEx left_front_drive;
     private final DcMotorEx left_back_drive;
     private final DcMotorEx right_front_drive;
@@ -72,11 +74,12 @@ public class OdometryNew implements RobotModule {
     public double getH(){
         return h;
     }
-    private Vector2D vectorNew = new Vector2D();
+    public Vector2D getPositionVector(){return vector;}
+    private Vector2D vectorCleanPosition = new Vector2D();
     public void update(){
         encUpdate();
-        vectorNew.setCord(xEnc,yEnc);
-        vectorNew.vectorRat(h);
-        vector = Vector2D.vectorSum(vector,vectorNew);
+        vectorCleanPosition.setCord(xEnc,yEnc);
+        vectorCleanPosition.vectorRat(h);
+        vector = Vector2D.vectorSum(vector, vectorCleanPosition);
     }
 }
