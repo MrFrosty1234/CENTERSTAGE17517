@@ -38,8 +38,8 @@ public class EncoderOdometry implements IRobotModule {
 
         double deltaLfd = lfd - _leftForwardDrive, deltaLbd = lbd - _leftBackDrive, deltaRfd = rfd - _rightForwardDrive, deltaRbd = rbd - _rightBackDrive;
 
-        double deltaX = -(deltaLfd + deltaLbd + deltaRfd + deltaRbd);
-        double deltaY = -(-deltaLfd + deltaLbd + deltaRfd - deltaRbd);
+        double deltaX = (deltaLfd + deltaLbd + deltaRfd + deltaRbd) / 4;
+        double deltaY = (-deltaLfd + deltaLbd + deltaRfd - deltaRbd) / 4;
 
         deltaY = deltaY * Configs.Odometry.YLag;
 

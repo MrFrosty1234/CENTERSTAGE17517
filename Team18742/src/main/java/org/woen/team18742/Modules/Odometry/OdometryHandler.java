@@ -33,10 +33,17 @@ public class OdometryHandler implements IRobotModule {
 
     private final ExponentialFilter _filterX = new ExponentialFilter(Configs.Odometry.XCoef), _filterY = new ExponentialFilter(Configs.Odometry.YCoef);
 
-    public Vector2 Position = new Vector2();
     public Vector2 Speed = new Vector2();
 
+    public Vector2 Position = new Vector2();
+
+    private final Vector2 _maxSpeed = new Vector2();
+
+    private double _oldOdometerY = 0, _oldOdometerXLeft = 0, _oldOdometerXRight = 0;
+
     private final ElapsedTime _deltaTime = new ElapsedTime();
+
+    private static boolean _isInited = false;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -54,19 +61,29 @@ public class OdometryHandler implements IRobotModule {
     @Override
     public void Start() {
         Reset();
+
         Position = Bios.GetStartPosition().Position.clone();
     }
 
     public double GetSpeedOdometerXLeft() {
-        return _odometerXLeft.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
+        double hardwareSpeed = _odometerXLeft.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr,
+        mathSpeed = (GetOdometerXLeft() - _oldOdometerXLeft) / _deltaTime.seconds();
+
+        return hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / Configs.Odometry.EncoderconstatOdometr) * Configs.Odometry.EncoderconstatOdometr;
     }
 
     public double GetSpeedOdometerXRight() {
-        return -_odometerXRight.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
+        double hardwareSpeed = -_odometerXRight.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr,
+                mathSpeed = (GetOdometerXRight() - _oldOdometerXRight) / _deltaTime.seconds();
+
+        return hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / Configs.Odometry.EncoderconstatOdometr) * Configs.Odometry.EncoderconstatOdometr;
     }
 
     public double GetSpeedOdometerY() {
-        return _odometerY.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
+        double hardwareSpeed = _odometerY.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr,
+                mathSpeed = (GetOdometerY() - _oldOdometerY) / _deltaTime.seconds();
+
+        return hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / Configs.Odometry.EncoderconstatOdometr) * Configs.Odometry.EncoderconstatOdometr;
     }
 
     public double GetOdometerXLeft() {
@@ -96,9 +113,13 @@ public class OdometryHandler implements IRobotModule {
     }
 
     @Override
-    public void Update() {
+    public void LastUpdate() {
         _filterX.UpdateCoef(Configs.Odometry.XCoef);
         _filterY.UpdateCoef(Configs.Odometry.YCoef);
+
+        _oldOdometerY = GetOdometerY();
+        _oldOdometerXLeft = GetOdometerXLeft();
+        _oldOdometerXRight = GetOdometerXRight();
 
         Vector2 pos = Configs.GeneralSettings.IsUseOdometers ? Vector2.Plus(Position, _odometry.ShiftPosition) : Vector2.Plus(Position, _encoderOdometry.ShiftPosition);
 
@@ -113,7 +134,14 @@ public class OdometryHandler implements IRobotModule {
 
         Speed = _odometry.Speed;
 
-        ToolTelemetry.AddLine("speed = " + Speed.X + " " + Speed.Y);
+        if(Speed.X > _maxSpeed.X)
+            _maxSpeed.X = Speed.X;
+
+        if(Speed.Y > _maxSpeed.Y)
+            _maxSpeed.Y = Speed.Y;
+
+        ToolTelemetry.AddLine("drive speed = " + Speed);
+        ToolTelemetry.AddLine("max drive speed = " + _maxSpeed);
 
         _deltaTime.reset();
     }

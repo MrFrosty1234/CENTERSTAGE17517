@@ -1,7 +1,6 @@
 package org.woen.team18742.Modules;
 
 import static java.lang.Math.PI;
-import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -18,17 +17,16 @@ import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponentialFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
-import org.woen.team18742.Tools.Vector2;
-
-import kotlin._Assertions;
 
 @Module
 public class Gyroscope implements IRobotModule {
     private IMU _imu;
     private OdometryHandler _odometrs;
-    private ExponentialFilter _filter = new ExponentialFilter(Configs.Gyroscope.MergerCoefSeconds);
+    private final ExponentialFilter _filter = new ExponentialFilter(Configs.Gyroscope.MergerCoefSeconds);
 
-    private ElapsedTime _deltaTime = new ElapsedTime();
+    private final ElapsedTime _deltaTime = new ElapsedTime();
+
+    private double _oldRadians, _allRadians, _allDegree, _radianSpeed, _degreeSpeed;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -52,53 +50,41 @@ public class Gyroscope implements IRobotModule {
         return _allDegree;
     }
 
-    private double _oldRadians, _oldOdometryRadians, _allRadians, _allDegree, _deltaRadians;
+    public double GetSpeedRadians() {
+        return _radianSpeed;
+    }
+
+    public double GetSpeedDegrees() {
+        return _degreeSpeed;
+    }
 
     @Override
     public void Update() {
         _filter.UpdateCoef(Configs.Gyroscope.MergerCoefSeconds);
 
-//        double deltaRadians = ChopAngle(_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - _oldRadians);
-
-//        _oldRadians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-
-        //double radians = ChopAngle(_allRadians + deltaRadians);
-
-       // SpeedTurn = deltaRadians / _deltaTime.seconds();
-
         if (Configs.GeneralSettings.IsUseOdometers) {
             double odometerTurn = -(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
-
-            //double odometrRadians = ChopAngle(_allRadians + ChopAngle(odometerTurn - _oldOdometryRadians));
-
-            //_oldOdometryRadians = odometerTurn;
-
-            //_allRadians = _filter.UpdateRaw(radians, ChopAngle(odometrRadians - _allRadians));
+            _radianSpeed = -(_odometrs.GetSpeedOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetSpeedOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
 
             _allRadians = ChopAngle(odometerTurn + _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) / 2);
-
-          //  ToolTelemetry.DrawRect(_odometrs.Position, new Vector2(15, 15), odometerTurn, "#00FF00");
-          //  ToolTelemetry.DrawRect(_odometrs.Position, new Vector2(15, 15), _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS), "#0000FF");
         }
-        else
+        else {
             _allRadians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            _radianSpeed = (_allRadians - _oldRadians) / _deltaTime.seconds();
+        }
 
         _allRadians = ChopAngle(_allRadians + Bios.GetStartPosition().Rotation);
 
         _allDegree = Math.toDegrees(_allRadians);
+        _degreeSpeed = Math.toDegrees(_radianSpeed);
 
         ToolTelemetry.AddLine("rotation = " + _allDegree);
-
-        SpeedTurn = (_allRadians - _oldRadians) / _deltaTime.seconds();
-
-        ToolTelemetry.AddLine("speed rotation = " + SpeedTurn);
+        ToolTelemetry.AddLine("speed rotation = " + _degreeSpeed);
 
         _oldRadians = _allRadians;
 
         _deltaTime.reset();
     }
-
-    public double SpeedTurn = 0;
 
     public void Reset() {
         _imu.resetYaw();

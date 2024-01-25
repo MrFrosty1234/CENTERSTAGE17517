@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Manager.BulkInit;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Modules.Odometry.OdometrsOdometry;
@@ -21,33 +22,33 @@ import org.woen.team18742.Tools.Vector2;
 
 @Module
 public class Drivetrain implements IRobotModule {
-    private Motor _leftForwardDrive;
-    private Motor _rightForwardDrive;
-    private Motor _leftBackDrive;
-    private Motor _rightBackDrive;
+    private static Motor _leftForwardDrive;
+    private static Motor _rightForwardDrive;
+    private static Motor _leftBackDrive;
+    private static Motor _rightBackDrive;
     private Gyroscope _gyro;
 
-    @Override
-    public void Init(BaseCollector collector) {
+    @BulkInit
+    public static void BulkInit(){
         _leftForwardDrive = new Motor(Devices.LeftForwardDrive, ReductorType.TWENTY);
         _rightBackDrive = new Motor(Devices.RightBackDrive, ReductorType.TWENTY);
         _rightForwardDrive = new Motor(Devices.RightForwardDrive, ReductorType.TWENTY);
         _leftBackDrive = new Motor(Devices.LeftBackDrive, ReductorType.TWENTY);
 
+        ResetEncoders();
+    }
+
+    @Override
+    public void Init(BaseCollector collector) {
         _leftForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        _rightForwardDrive.setDirection(REVERSE);
-        _rightBackDrive.setDirection(REVERSE);
+        _leftForwardDrive.setDirection(REVERSE);
+        _leftBackDrive.setDirection(REVERSE);
 
         _gyro = collector.GetModule(Gyroscope.class);
-    }
-
-    @Override
-    public void Start() {
-        ResetEncoders();
     }
 
     private void DriveDirection(Vector2 speed, double rotate) {
@@ -58,10 +59,10 @@ public class Drivetrain implements IRobotModule {
     }
 
     private void DriveEncoderDirection(Vector2 speed, double rotate) {
-        _leftForwardDrive.setEncoderPower(-speed.X + speed.Y + rotate);
-        _rightBackDrive.setEncoderPower(-speed.X + speed.Y - rotate);
-        _leftBackDrive.setEncoderPower(-speed.X - speed.Y + rotate);
-        _rightForwardDrive.setEncoderPower(-speed.X - speed.Y - rotate);
+        _leftForwardDrive.setEncoderPower(speed.X - speed.Y + rotate);
+        _rightBackDrive.setEncoderPower(speed.X - speed.Y - rotate);
+        _leftBackDrive.setEncoderPower(speed.X + speed.Y + rotate);
+        _rightForwardDrive.setEncoderPower(speed.X + speed.Y - rotate);
     }
 
     public void SimpleDriveDirection(Vector2 speed, double rotate){
@@ -69,16 +70,13 @@ public class Drivetrain implements IRobotModule {
     }
 
     public void SetCMSpeed(Vector2 cmSpeed, double rotate){
-        cmSpeed.Y *= 1d + (1d - Configs.Odometry.YLag);
-
-        cmSpeed.X = cmSpeed.X / 4;
-        cmSpeed.Y = cmSpeed.Y / 4;
+        cmSpeed.Y *= 1d / Configs.Odometry.YLag;
 
         DriveEncoderDirection(new Vector2(cmSpeed.X / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat,
                 cmSpeed.Y / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat), -rotate * Configs.DriveTrainWheels.Radius / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat / 4);
     }
 
-    public void ResetEncoders() {
+    public static void ResetEncoders() {
         _leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         _leftForwardDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -117,7 +115,7 @@ public class Drivetrain implements IRobotModule {
     public void SetSpeedWorldCoords(Vector2 speed, double rotate) {
         Vector2 worldSpeed = speed.Turn(-_gyro.GetRadians());
 
-        worldSpeed.Y *= 1d + (1d - Configs.Odometry.YLag);
+        worldSpeed.Y *= 1d / Configs.Odometry.YLag;
 
         SimpleDriveDirection(worldSpeed, rotate);
     }

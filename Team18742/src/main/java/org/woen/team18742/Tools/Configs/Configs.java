@@ -86,7 +86,6 @@ public class Configs {
     @Config
     public static class DriveTrainWheels {
         public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 150, MaxSpeedY = 110, MaxSpeedTurn = 7, speed = 0.5;
-        public static boolean isUsePids = false;
         public static double MaxTurnVelocity = 3; //random
         public static double Radius = 15.7;
     }
@@ -107,7 +106,6 @@ public class Configs {
         public static double servoClampClamped = 0.9;
         public static double servoClampReleased = 0.47 ;//0.5
         public static double pixelDetectTimeMs = 1000;
-        public static double ReverseTimeMs = 2000;
     }
 
     @Config

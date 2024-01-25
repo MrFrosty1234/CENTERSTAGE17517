@@ -4,6 +4,7 @@ import android.util.Pair;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.woen.team18742.Modules.Manager.BulkInit;
 import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Configs.DataManager;
 
@@ -21,7 +22,10 @@ public class Bios {
 
     public Bios(Gamepad gamepad){
         _gamepad = gamepad;
+    }
 
+    @BulkInit
+    public static void BulkInit(){
         _selectedVariant = DataManager.ReadInt(_key, 0);
     }
 

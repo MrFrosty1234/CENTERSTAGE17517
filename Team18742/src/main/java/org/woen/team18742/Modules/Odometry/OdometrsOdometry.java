@@ -16,7 +16,7 @@ import org.woen.team18742.Tools.Vector2;
 
 @Module
 public class OdometrsOdometry implements IRobotModule {
-    private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY, _oldOdometrSpeedXLeft, _oldOdometrSpeedXRight, _oldOdometrSpeedY;
+    private double _oldRotate = 0, _oldOdometrXLeft, _oldOdometrXRight, _oldOdometrY;
 
     public Vector2 Position = new Vector2(), ShiftPosition = new Vector2(), Speed = new Vector2();
     private Gyroscope _gyro;
@@ -39,12 +39,8 @@ public class OdometrsOdometry implements IRobotModule {
 
         double deltaY = (odometrY - _oldOdometrY) - Configs.Odometry.RadiusOdometrY * Gyroscope.ChopAngle(_gyro.GetRadians() - _oldRotate);
 
-        Speed.X = (odometrSpeedXLeft - _oldOdometrSpeedXLeft + odometrSpeedXRight - _oldOdometrSpeedXRight) / 2;
-        Speed.Y = (odometrSpeedY - _oldOdometrSpeedY) - Configs.Odometry.RadiusOdometrY * Gyroscope.ChopAngle(_gyro.GetRadians() - _oldRotate);
-
-        _oldOdometrSpeedXLeft = odometrSpeedXLeft;
-        _oldOdometrSpeedXRight = odometrSpeedXRight;
-        _oldOdometrSpeedY = odometrSpeedY;
+        Speed.X = (odometrSpeedXLeft + odometrSpeedXRight) / 2;
+        Speed.Y = odometrSpeedY - Configs.Odometry.RadiusOdometrY * Gyroscope.ChopAngle(_gyro.GetRadians() - _oldRotate);
 
         _oldOdometrXLeft = odometrXLeft;
         _oldOdometrXRight = odometrXRight;

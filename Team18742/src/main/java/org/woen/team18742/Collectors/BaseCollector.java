@@ -4,15 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.woen.team18742.Modules.Manager.BulkInit;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.Motor.MotorsHandler;
 import org.woen.team18742.Tools.Timers.TimerHandler;
-import org.woen.team18742.Tools.ToolTelemetry;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -75,6 +76,18 @@ public class BaseCollector {
                 } catch (Exception e) {
                     throw new RuntimeException("not successful find " + i + " class");
                 }
+            }
+
+            for(Class<?> i: _classes){
+                for(Method j: i.getMethods())
+                    if(j.isAnnotationPresent(BulkInit.class)) {
+                        try {
+                            j.invoke(null);
+                        }
+                        catch (Exception e){
+                            throw new RuntimeException("failed to invoke method: " + j.getName());
+                        }
+                    }
             }
         }
 

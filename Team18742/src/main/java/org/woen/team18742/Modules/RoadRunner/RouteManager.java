@@ -84,8 +84,6 @@ public class RouteManager implements IRobotModule {
                 new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, Bios.GetStartPosition().Rotation)),
                 _camera).build();
 
-        _driveTrain.SetCMSpeed(new Vector2(5, 0), 0);
-
         _time.reset();
     }
 
@@ -145,7 +143,7 @@ public class RouteManager implements IRobotModule {
             Pose2dDual<Time> txWorldTarget = _timeTrajectory.map(trajectory -> trajectory.get(time)).orElseGet(() -> _timeTurn.get().get(time));
 
             Pose2d position = new Pose2d(_odometry.Position.X, _odometry.Position.Y, _gyro.GetRadians());
-            PoseVelocity2d velocity = new PoseVelocity2d(new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.SpeedTurn);
+            PoseVelocity2d velocity = new PoseVelocity2d(new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.GetSpeedRadians());
 
             PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
                     .compute(txWorldTarget, position, velocity);
