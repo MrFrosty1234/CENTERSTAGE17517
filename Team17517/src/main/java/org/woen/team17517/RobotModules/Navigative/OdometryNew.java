@@ -26,7 +26,6 @@ public class OdometryNew implements RobotModule {
 
         reset();
 
-
     }
     private void reset()
     {
@@ -61,17 +60,20 @@ public class OdometryNew implements RobotModule {
                 0*right_front_drive.getCurrentPosition()+ 0*right_back_drive.getCurrentPosition())/2.0)*kSlide;
         h = robot.gyro.getAngle();
     }
+
     private double startTime = System.currentTimeMillis();
     private void odometerUpdate(){
         this.xEnc = (left_front_drive.getCurrentPosition()+ right_front_drive.getCurrentPosition())/2d;
         this.yEnc = left_back_drive.getCurrentPosition();
-        if (System.currentTimeMillis() - startTime<2000){
+        if (System.currentTimeMillis() - startTime>2000){
             h = robot.gyro.getAngle();
+            startTime = System.currentTimeMillis();
         }else {
             h = (left_front_drive.getCurrentPosition()-right_front_drive.getCurrentPosition())/2d;
         }
     }
-    private  double kSlide = 1;
+
+    private double kSlide = 1;
     private final DcMotorEx left_front_drive;
     private final DcMotorEx left_back_drive;
     private final DcMotorEx right_front_drive;
