@@ -108,7 +108,7 @@ public class CVOdometry implements IRobotModule {
 
         Position = Vector2.Minus(Position, _cameraPosition.Turn(-_gyro.GetRadians()));
 
-        ToolTelemetry.DrawCircle(_cameraPosition.Turn(-_gyro.GetRadians()), 5, new Color(0, 0, 0).toString());
+        ToolTelemetry.DrawCircle(_cameraPosition.Turn(-_gyro.GetRadians()), 5, new Color(0, 0, 0));
 
         ShiftPosition = Vector2.Minus(_oldPosition, Position);
 

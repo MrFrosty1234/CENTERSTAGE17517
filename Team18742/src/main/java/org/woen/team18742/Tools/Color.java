@@ -33,4 +33,10 @@ public class Color {
 
         return "#" + rString + gString + bString;
     }
+
+    @NonNull
+    @Override
+    public Color clone() {
+        return new Color(R, G, B);
+    }
 }

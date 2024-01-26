@@ -29,12 +29,20 @@ public class ToolTelemetry {
         _packet = new TelemetryPacket();
     }
 
+    public static void DrawCircle(Vector2 pos, double radius, Color color) {
+        DrawCircle(pos, radius, color.toString());
+    }
+
     public static void DrawCircle(Vector2 pos, double radius, String color){
         if(Configs.GeneralSettings.TelemetryOn) {
             _packet.fieldOverlay().setFill(color);
             _packet.fieldOverlay().setRotation(0);
             _packet.fieldOverlay().fillCircle(DistanceUnit.INCH.fromCm(pos.X), DistanceUnit.INCH.fromCm(pos.Y), radius);
         }
+    }
+
+    public static void DrawRect(Vector2 pos, Vector2 size, double rotate, Color color){
+        DrawRect(pos, size, rotate, color.toString());
     }
 
     public static void DrawRect(Vector2 pos, Vector2 size, double rotate, String color){

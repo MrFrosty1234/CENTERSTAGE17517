@@ -15,6 +15,7 @@ import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Bios;
+import org.woen.team18742.Tools.Color;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponentialFilter;
@@ -114,8 +115,8 @@ public class OdometryHandler implements IRobotModule {
         } else
             Position = pos;
 
-        ToolTelemetry.DrawCircle(Position, 5, "#0000FF");
-        ToolTelemetry.AddLine("position = " + Position.X + " " + Position.Y);
+        ToolTelemetry.DrawCircle(Position, 5, new Color(0, 0, 255));
+        ToolTelemetry.AddLine("position = " + Position);
 
         Speed = Configs.GeneralSettings.IsUseOdometers ? _odometry.Speed : _encoderOdometry.Speed;
 
