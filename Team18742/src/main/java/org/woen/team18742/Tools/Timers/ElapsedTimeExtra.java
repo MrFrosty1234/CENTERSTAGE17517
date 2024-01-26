@@ -7,6 +7,8 @@ public class ElapsedTimeExtra extends ElapsedTime {
         _isPause = true;
 
         _pauseTime.reset();
+
+        _nsPauseStart = nsNow();
     }
 
     public void start(){
@@ -18,6 +20,15 @@ public class ElapsedTimeExtra extends ElapsedTime {
         nsStartTime += _pauseTime.nanoseconds();
     }
 
+    @Override
+    public long nanoseconds() {
+        if(_isPause)
+            return _nsPauseStart;
+
+        return super.nanoseconds();
+    }
+
     private final ElapsedTime _pauseTime = new ElapsedTime();
+    private long _nsPauseStart;
     private boolean _isPause = false;
 }

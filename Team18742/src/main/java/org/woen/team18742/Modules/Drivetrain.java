@@ -35,10 +35,10 @@ public class Drivetrain implements IRobotModule {
         _rightForwardDrive = new Motor(Devices.RightForwardDrive, ReductorType.TWENTY);
         _leftBackDrive = new Motor(Devices.LeftBackDrive, ReductorType.TWENTY);
 
-        _leftForwardEncoder = new EncoderControl(Devices.LeftForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.diameter);
-        _rightBackEncoder = new EncoderControl(Devices.RightBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.diameter);
-        _rightForwardEncoder = new EncoderControl(Devices.RightForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.diameter);
-        _leftBackEncoder = new EncoderControl(Devices.LeftBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.diameter);
+        _leftForwardEncoder = new EncoderControl(Devices.LeftForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _rightBackEncoder = new EncoderControl(Devices.RightBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _rightForwardEncoder = new EncoderControl(Devices.RightForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _leftBackEncoder = new EncoderControl(Devices.LeftBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
 
         ResetEncoders();
     }
@@ -91,10 +91,8 @@ public class Drivetrain implements IRobotModule {
     }
 
     public void SetCMSpeed(Vector2 cmSpeed, double rotate){
-        cmSpeed.Y *= 1d / Configs.Odometry.YLag;
-
-        DriveEncoderDirection(new Vector2(cmSpeed.X / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat,
-                cmSpeed.Y / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat), -rotate * Configs.DriveTrainWheels.Radius / (PI * Configs.DriveTrainWheels.diameter) * Configs.DriveTrainWheels.encoderconstat / 4);
+        DriveEncoderDirection(new Vector2(cmSpeed.X / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat,
+                cmSpeed.Y / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat), -rotate * Configs.DriveTrainWheels.Radius / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat / 4);
     }
 
     public static void ResetEncoders() {

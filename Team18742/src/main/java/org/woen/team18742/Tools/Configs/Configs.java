@@ -56,7 +56,6 @@ public class Configs {
         public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
 
         public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 8192;
-        public static double LateralMultiplier = 0.8;
 
         public static double YLag = 0.8;
     }
@@ -85,7 +84,7 @@ public class Configs {
 
     @Config
     public static class DriveTrainWheels {
-        public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 150, MaxSpeedY = 110, MaxSpeedTurn = 7, speed = 0.5;
+        public static double wheelDiameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 150, MaxSpeedTurn = 7, speed = 0.5;
         public static double MaxTurnVelocity = 3; //random
         public static double Radius = 15.7;
     }
@@ -116,7 +115,6 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double TrackWidth = 15; // random
         public static double MinProfileAccel = -3; // random
         public static double MaxProfileAccel = 3; // random
     }
