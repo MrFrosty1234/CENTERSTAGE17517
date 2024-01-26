@@ -18,6 +18,7 @@ import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Bios;
+import org.woen.team18742.Tools.Color;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
@@ -106,6 +107,8 @@ public class CVOdometry implements IRobotModule {
         Position.Y = ySum / suitableDetections;
 
         Position = Vector2.Minus(Position, _cameraPosition.Turn(-_gyro.GetRadians()));
+
+        ToolTelemetry.DrawCircle(_cameraPosition.Turn(-_gyro.GetRadians()), 5, new Color(0, 0, 0).toString());
 
         ShiftPosition = Vector2.Minus(_oldPosition, Position);
 

@@ -18,6 +18,8 @@ public class Motor {
 
     private boolean _isCustomPid = false;
 
+    private final VelocityControl _velControl;
+
     public Motor(DcMotorEx motor, ReductorType type, PIDF pid){
         this(motor, type);
 
@@ -34,10 +36,13 @@ public class Motor {
         _velocityPid = new PIDF(Configs.Motors.DefultP, Configs.Motors.DefultI, Configs.Motors.DefultD, 0, Configs.Motors.DefultF, 1, 1);
 
         MotorsHandler.AddMotor(this);
+
+        _velControl = new VelocityControl(motor);
     }
 
     public void Start(){
         _velocityPid.Start();
+        _velControl.Start();
     }
 
     public void setDirection(DcMotorSimple.Direction dir){
@@ -57,11 +62,13 @@ public class Motor {
     }
 
     public void Update(){
+        _velControl.Update();
+
         if(!_isCustomPid)
             _velocityPid.UpdateCoefs(Configs.Motors.DefultP, Configs.Motors.DefultI, Configs.Motors.DefultD, 0, Configs.Motors.DefultF);
 
         double voltageSpeed = _targetVoltageSpeed / Battery.Voltage;
-        double pidSpeed = _velocityPid.Update(_targetEncoderSpeed - _motor.getVelocity(), _targetEncoderSpeed);
+        double pidSpeed = _velocityPid.Update(_targetEncoderSpeed - _velControl.GetSpeed(), _targetEncoderSpeed);
 
         _motor.setPower((voltageSpeed + pidSpeed) / 2);
     }

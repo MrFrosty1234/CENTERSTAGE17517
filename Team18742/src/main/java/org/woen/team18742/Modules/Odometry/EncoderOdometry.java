@@ -20,7 +20,7 @@ public class EncoderOdometry implements IRobotModule {
     private Drivetrain _driverTrain;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
     private Gyroscope _gyro;
-    public Vector2 Position = new Vector2(), ShiftPosition = new Vector2();
+    public Vector2 Position = new Vector2(), ShiftPosition = new Vector2(), Speed = new Vector2();
     private final ElapsedTime _deltaTime = new ElapsedTime();
 
     @Override
@@ -47,6 +47,9 @@ public class EncoderOdometry implements IRobotModule {
         _leftBackDrive = lbd;
         _rightBackDrive = rbd;
         _rightForwardDrive = rfd;
+
+        Speed.X = (_driverTrain.GetSpeedLeftForwardEncoder() + _driverTrain.GetSpeedLeftBackEncoder() + _driverTrain.GetSpeedRightForwardEncoder() + _driverTrain.GetSpeedRightBackEncoder()) / 4;
+        Speed.Y = (-_driverTrain.GetSpeedLeftForwardEncoder() + _driverTrain.GetSpeedLeftBackEncoder() + _driverTrain.GetSpeedRightForwardEncoder() - _driverTrain.GetSpeedRightBackEncoder()) / 4;
 
         ShiftPosition = new Vector2(deltaX *
                 cos(-_gyro.GetRadians()) +

@@ -41,6 +41,7 @@ import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
+import org.woen.team18742.Tools.Timers.ElapsedTimeExtra;
 import org.woen.team18742.Tools.Vector2;
 
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public class RouteManager implements IRobotModule {
     private final VelConstraint _velConstraint = new MinVelConstraint(Arrays.asList(_mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX), new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn)));
     private final AccelConstraint _accelConstraint = new ProfileAccelConstraint(Configs.Route.MinProfileAccel, Configs.Route.MaxProfileAccel);
 
-    private ElapsedTime _time = new ElapsedTime();
+    private final ElapsedTimeExtra _time = new ElapsedTimeExtra();
     private Action _trajectory;
     private boolean _isTrajectoryEnd = false, _isLiftWait = false, _isPixelWait = false;
 
@@ -82,7 +83,7 @@ public class RouteManager implements IRobotModule {
     public void Start() {
         _trajectory = Trajectory.GetTrajectory (ActionBuilder(
                 new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, Bios.GetStartPosition().Rotation)),
-                _camera).build();
+                _camera.GetPosition()).build();
 
         _time.reset();
     }
@@ -93,7 +94,10 @@ public class RouteManager implements IRobotModule {
 
         if (!_isTrajectoryEnd) {
             if (_isLiftWait) {
-                if (_lift.isATarget()) _isLiftWait = false;
+                if (_lift.isATarget()){
+                    _isLiftWait = false;
+                    _time.start();
+                }
                 else {
                     _driveTrain.Stop();
                     return;
@@ -101,7 +105,10 @@ public class RouteManager implements IRobotModule {
             }
 
             if (_isPixelWait) {
-                if (_intake.isPixelGripped()) _isPixelWait = false;
+                if (_intake.isPixelGripped()) {
+                    _isPixelWait = false;
+                    _time.start();
+                }
                 else {
                     _driveTrain.Stop();
                     return;
@@ -202,11 +209,10 @@ public class RouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder waitLift() {
-            return waitLift(0);
-        }
-
-        public MyTrajectoryBuilder waitLift(double ds) {
-            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _isLiftWait = true));
+            return new MyTrajectoryBuilder(_builder.stopAndAdd(()->{
+                _time.pause();
+                _isLiftWait = true;
+            }));
         }
 
         public MyTrajectoryBuilder brushOn() {
@@ -218,11 +224,10 @@ public class RouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder waitPixel() {
-            return waitPixel(0);
-        }
-
-        public MyTrajectoryBuilder waitPixel(double ds) {
-            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _isPixelWait = true));
+            return new MyTrajectoryBuilder(_builder.stopAndAdd(()->{
+                _time.pause();
+                _isPixelWait = true;
+            }));
         }
 
         public MyTrajectoryBuilder pixelDeGripped() {

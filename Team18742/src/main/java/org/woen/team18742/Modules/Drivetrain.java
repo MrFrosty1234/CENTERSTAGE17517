@@ -14,6 +14,7 @@ import org.woen.team18742.Modules.Odometry.OdometrsOdometry;
 import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.Motor.EncoderControl;
 import org.woen.team18742.Tools.Motor.Motor;
 import org.woen.team18742.Tools.Motor.ReductorType;
 import org.woen.team18742.Tools.PIDF;
@@ -22,10 +23,9 @@ import org.woen.team18742.Tools.Vector2;
 
 @Module
 public class Drivetrain implements IRobotModule {
-    private static Motor _leftForwardDrive;
-    private static Motor _rightForwardDrive;
-    private static Motor _leftBackDrive;
-    private static Motor _rightBackDrive;
+    private static Motor _leftForwardDrive, _rightForwardDrive, _leftBackDrive, _rightBackDrive;
+    private static EncoderControl _leftForwardEncoder, _rightForwardEncoder, _leftBackEncoder, _rightBackEncoder;
+
     private Gyroscope _gyro;
 
     @BulkInit
@@ -35,7 +35,28 @@ public class Drivetrain implements IRobotModule {
         _rightForwardDrive = new Motor(Devices.RightForwardDrive, ReductorType.TWENTY);
         _leftBackDrive = new Motor(Devices.LeftBackDrive, ReductorType.TWENTY);
 
+        _leftForwardEncoder = new EncoderControl(Devices.LeftForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.diameter);
+        _rightBackEncoder = new EncoderControl(Devices.RightBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.diameter);
+        _rightForwardEncoder = new EncoderControl(Devices.RightForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.diameter);
+        _leftBackEncoder = new EncoderControl(Devices.LeftBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.diameter);
+
         ResetEncoders();
+    }
+
+    @Override
+    public void Start() {
+        _leftForwardEncoder.Start();
+        _rightBackEncoder.Start();
+        _rightForwardEncoder.Start();
+        _leftBackEncoder.Start();
+    }
+
+    @Override
+    public void Update() {
+        _leftForwardEncoder.Update();
+        _rightBackEncoder.Update();
+        _rightForwardEncoder.Update();
+        _leftBackEncoder.Update();
     }
 
     @Override
@@ -55,7 +76,7 @@ public class Drivetrain implements IRobotModule {
         _leftForwardDrive.setPower(-speed.X + speed.Y + rotate);
         _rightBackDrive.setPower(-speed.X + speed.Y - rotate);
         _leftBackDrive.setPower(-speed.X - speed.Y + rotate);
-         _rightForwardDrive.setPower(-speed.X - speed.Y - rotate);
+        _rightForwardDrive.setPower(-speed.X - speed.Y - rotate);
     }
 
     private void DriveEncoderDirection(Vector2 speed, double rotate) {
@@ -77,31 +98,42 @@ public class Drivetrain implements IRobotModule {
     }
 
     public static void ResetEncoders() {
-        _leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _leftForwardDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _rightForwardDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        _rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _leftForwardDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _rightForwardDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        _leftForwardEncoder.Reset();
+        _rightBackEncoder.Reset();
+        _rightForwardEncoder.Reset();
+        _leftBackEncoder.Reset();
     }
 
     public double GetLeftBackEncoder() {
-        return _leftBackDrive.getCurrentPosition() / Configs.DriveTrainWheels.encoderconstat * PI * Configs.DriveTrainWheels.diameter;
+        return _leftBackEncoder.GetPosition();
     }
 
     public double GetLeftForwardEncoder() {
-        return _leftForwardDrive.getCurrentPosition() / Configs.DriveTrainWheels.encoderconstat * PI * Configs.DriveTrainWheels.diameter;
+        return _leftForwardEncoder.GetPosition();
     }
 
     public double GetRightBackEncoder() {
-        return _rightBackDrive.getCurrentPosition() / Configs.DriveTrainWheels.encoderconstat * PI * Configs.DriveTrainWheels.diameter;
+        return _rightBackEncoder.GetPosition();
     }
 
     public double GetRightForwardEncoder() {
-        return _rightForwardDrive.getCurrentPosition() / Configs.DriveTrainWheels.encoderconstat * PI * Configs.DriveTrainWheels.diameter;
+        return _rightForwardEncoder.GetPosition();
+    }
+
+    public double GetSpeedLeftBackEncoder() {
+        return _leftBackEncoder.getVelocity();
+    }
+
+    public double GetSpeedLeftForwardEncoder() {
+        return _leftForwardEncoder.getVelocity();
+    }
+
+    public double GetSpeedRightBackEncoder() {
+        return _rightBackEncoder.getVelocity();
+    }
+
+    public double GetSpeedRightForwardEncoder() {
+        return _rightForwardEncoder.getVelocity();
     }
 
     @Override

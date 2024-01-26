@@ -18,6 +18,7 @@ import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponentialFilter;
+import org.woen.team18742.Tools.Motor.EncoderControl;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
@@ -25,7 +26,7 @@ import java.security.spec.EllipticCurve;
 
 @Module
 public class OdometryHandler implements IRobotModule {
-    private DcMotorEx _odometerY, _odometerXLeft, _odometerXRight;
+    private EncoderControl _odometerY, _odometerXLeft, _odometerXRight;
 
     private OdometrsOdometry _odometry;
     private CVOdometry _cvOdometry;
@@ -39,19 +40,13 @@ public class OdometryHandler implements IRobotModule {
 
     private final Vector2 _maxSpeed = new Vector2();
 
-    private double _oldOdometerY = 0, _oldOdometerXLeft = 0, _oldOdometerXRight = 0;
-
-    private final ElapsedTime _deltaTime = new ElapsedTime();
-
-    private static boolean _isInited = false;
-
     @Override
     public void Init(BaseCollector collector) {
-        _odometerXLeft = Devices.OdometerXLeft;
-        _odometerY = Devices.OdometerY;
-        _odometerXRight = Devices.OdometerXRight;
+        _odometerXLeft = new EncoderControl(Devices.OdometerXLeft, Configs.Odometry.EncoderconstatOdometr, Configs.Odometry.DiametrOdometr);
+        _odometerY = new EncoderControl(Devices.OdometerY, Configs.Odometry.EncoderconstatOdometr, Configs.Odometry.DiametrOdometr);
+        _odometerXRight = new EncoderControl(Devices.OdometerXRight, Configs.Odometry.EncoderconstatOdometr, Configs.Odometry.DiametrOdometr);
 
-        _odometerY.setDirection(DcMotorSimple.Direction.FORWARD);
+        Devices.OdometerY.setDirection(DcMotorSimple.Direction.FORWARD);
 
         _odometry = collector.GetModule(OdometrsOdometry.class);
         _cvOdometry = collector.GetModule(CVOdometry.class);
@@ -62,54 +57,44 @@ public class OdometryHandler implements IRobotModule {
     public void Start() {
         Reset();
 
+        _odometerY.Start();
+        _odometerXRight.Start();
+        _odometerXLeft.Start();
+
         Position = Bios.GetStartPosition().Position.clone();
     }
 
     public double GetSpeedOdometerXLeft() {
-        double hardwareSpeed = _odometerXLeft.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr,
-        mathSpeed = (GetOdometerXLeft() - _oldOdometerXLeft) / _deltaTime.seconds();
-
-        return hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / Configs.Odometry.EncoderconstatOdometr) * Configs.Odometry.EncoderconstatOdometr;
+        return _odometerXLeft.getVelocity();
     }
 
     public double GetSpeedOdometerXRight() {
-        double hardwareSpeed = -_odometerXRight.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr,
-                mathSpeed = (GetOdometerXRight() - _oldOdometerXRight) / _deltaTime.seconds();
-
-        return hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / Configs.Odometry.EncoderconstatOdometr) * Configs.Odometry.EncoderconstatOdometr;
+        return _odometerXRight.getVelocity();
     }
 
     public double GetSpeedOdometerY() {
-        double hardwareSpeed = _odometerY.getVelocity() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr,
-                mathSpeed = (GetOdometerY() - _oldOdometerY) / _deltaTime.seconds();
-
-        return hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / Configs.Odometry.EncoderconstatOdometr) * Configs.Odometry.EncoderconstatOdometr;
+        return _odometerY.getVelocity();
     }
 
     public double GetOdometerXLeft() {
-        return _odometerXLeft.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
+        return _odometerXLeft.GetPosition();
     }
 
     public double GetOdometerXRight() {
-        return -_odometerXRight.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
+        return -_odometerXRight.GetPosition();
     }
 
     public double GetOdometerY() {
-        return _odometerY.getCurrentPosition() / Configs.Odometry.EncoderconstatOdometr * PI * Configs.Odometry.DiametrOdometr;
+        return _odometerY.GetPosition();
     }
 
     public void Reset() {
-        _odometerXLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _odometerXLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _odometerXRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _odometerXRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        _odometerY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _odometerY.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        _odometerXLeft.Reset();
+        _odometerXRight.Reset();
+        _odometerY.Reset();
 
         _filterX.Reset();
         _filterY.Reset();
-        _deltaTime.reset();
     }
 
     @Override
@@ -117,9 +102,9 @@ public class OdometryHandler implements IRobotModule {
         _filterX.UpdateCoef(Configs.Odometry.XCoef);
         _filterY.UpdateCoef(Configs.Odometry.YCoef);
 
-        _oldOdometerY = GetOdometerY();
-        _oldOdometerXLeft = GetOdometerXLeft();
-        _oldOdometerXRight = GetOdometerXRight();
+        _odometerY.Update();
+        _odometerXRight.Update();
+        _odometerXLeft.Update();
 
         Vector2 pos = Configs.GeneralSettings.IsUseOdometers ? Vector2.Plus(Position, _odometry.ShiftPosition) : Vector2.Plus(Position, _encoderOdometry.ShiftPosition);
 
@@ -132,17 +117,15 @@ public class OdometryHandler implements IRobotModule {
         ToolTelemetry.DrawCircle(Position, 5, "#0000FF");
         ToolTelemetry.AddLine("position = " + Position.X + " " + Position.Y);
 
-        Speed = _odometry.Speed;
+        Speed = Configs.GeneralSettings.IsUseOdometers ? _odometry.Speed : _encoderOdometry.Speed;
 
-        if(Speed.X > _maxSpeed.X)
+        if (Speed.X > _maxSpeed.X)
             _maxSpeed.X = Speed.X;
 
-        if(Speed.Y > _maxSpeed.Y)
+        if (Speed.Y > _maxSpeed.Y)
             _maxSpeed.Y = Speed.Y;
 
         ToolTelemetry.AddLine("drive speed = " + Speed);
         ToolTelemetry.AddLine("max drive speed = " + _maxSpeed);
-
-        _deltaTime.reset();
     }
 }
