@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.AccelConstraint;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.HolonomicController;
+import com.acmerobotics.roadrunner.Math;
 import com.acmerobotics.roadrunner.MecanumKinematics;
 import com.acmerobotics.roadrunner.MinVelConstraint;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -46,9 +47,11 @@ import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Timers.ElapsedTimeExtra;
+import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @AutonomModule
@@ -65,7 +68,7 @@ public class RouteManager implements IRobotModule {
 
     private final TurnConstraints _turnConstraints = new TurnConstraints(Configs.DriveTrainWheels.MaxSpeedTurn, -Configs.DriveTrainWheels.MaxTurnVelocity, Configs.DriveTrainWheels.MaxTurnVelocity);
 
-    private final VelConstraint _velConstraint = new MinVelConstraint(Arrays.asList(_mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX * Configs.Odometry.YLag), new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn)));
+    private final VelConstraint _velConstraint = new MinVelConstraint(Arrays.asList(_mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX), new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn)));
     private final AccelConstraint _accelConstraint = new ProfileAccelConstraint(Configs.Route.MinProfileAccel, Configs.Route.MaxProfileAccel);
 
     private final ElapsedTimeExtra _time = new ElapsedTimeExtra();
@@ -99,6 +102,10 @@ public class RouteManager implements IRobotModule {
                 }
             }
         }
+
+        for(Action[] i: _allTrajectory)
+            for(Action j: i)
+                j.preview(null);
     }
 
     @Override
@@ -149,7 +156,7 @@ public class RouteManager implements IRobotModule {
                 }
             }
 
-            _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
+            _isTrajectoryEnd = !_trajectory.run(null);
         } else
             _driveTrain.Stop();
     }
@@ -159,20 +166,34 @@ public class RouteManager implements IRobotModule {
         private final Optional<TimeTurn> _timeTurn;
         private final double _duration;
 
+        private double xPoints[], yPoints[];
+
         public TrajectoryAction(TimeTurn t) {
             _timeTrajectory = Optional.empty();
             _timeTurn = Optional.of(t);
             _duration = _timeTurn.get().duration;
         }
 
-        public TrajectoryAction(TimeTrajectory t) {
-            _timeTrajectory = Optional.of(t);
+        public TrajectoryAction(TimeTrajectory timeTrajectory) {
+            _timeTrajectory = Optional.of(timeTrajectory);
             _timeTurn = Optional.empty();
             _duration = _timeTrajectory.get().duration;
+
+            List<Double> disps = Math.range(0, timeTrajectory.path.length(), Math.max(2, Math.ceil(timeTrajectory.path.length() / 2)));
+
+            xPoints = new double[disps.size()];
+            yPoints = new double[disps.size()];
+
+            for(int i = 0; i < disps.size(); i++){
+                Pose2d pose = timeTrajectory.path.get(disps.get(i), 1).value();
+
+                xPoints[i] = pose.position.x;
+                yPoints[i] = pose.position.y;
+            }
         }
 
         @Override
-        public boolean run(@NonNull TelemetryPacket p) {
+        public boolean run(TelemetryPacket p) {
             double time = _time.seconds();
 
             if (time >= _duration) {
@@ -190,11 +211,18 @@ public class RouteManager implements IRobotModule {
 
             _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
+            ToolTelemetry.GetCanvas().setStroke("#4CAF50FF");
+            ToolTelemetry.GetCanvas().setStrokeWidth(1);
+            ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+
             return true;
         }
 
         @Override
-        public void preview(@NonNull Canvas fieldOverlay) {
+        public void preview(Canvas fieldOverlay) {
+            ToolTelemetry.GetCanvas().setStroke("#4CAF507A");
+            ToolTelemetry.GetCanvas().setStrokeWidth(1);
+            ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
         }
     }
 

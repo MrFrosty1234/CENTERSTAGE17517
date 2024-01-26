@@ -1,6 +1,7 @@
 package org.woen.team18742.Tools;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -27,6 +28,10 @@ public class ToolTelemetry {
         ftcDashboard.sendTelemetryPacket(_packet);
 
         _packet = new TelemetryPacket();
+    }
+
+    public static Canvas GetCanvas(){
+        return _packet.fieldOverlay();
     }
 
     public static void DrawCircle(Vector2 pos, double radius, Color color) {
