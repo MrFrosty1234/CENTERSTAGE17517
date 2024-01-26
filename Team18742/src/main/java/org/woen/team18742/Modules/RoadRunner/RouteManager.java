@@ -198,7 +198,7 @@ public class RouteManager implements IRobotModule {
         }
     }
 
-    private static MyTrajectoryBuilder ActionBuilder(Pose2d beginPose) {
+    private MyTrajectoryBuilder ActionBuilder(Pose2d beginPose) {
         return new MyTrajectoryBuilder(new TrajectoryActionBuilder(TrajectoryAction::new, TrajectoryAction::new, beginPose, 1e-6, 0.0, _turnConstraints, _velConstraint, _accelConstraint, 0.25, 0.1));
     }
 
