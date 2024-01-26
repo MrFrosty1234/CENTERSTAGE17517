@@ -25,20 +25,24 @@ import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.sun.tools.javac.code.Attribute;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Camera.Camera;
+import org.woen.team18742.Modules.Camera.CameraRobotPosition;
 import org.woen.team18742.Modules.Drivetrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.AutonomModule;
+import org.woen.team18742.Modules.Manager.BulkInit;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Odometry.OdometryHandler;
+import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Timers.ElapsedTimeExtra;
@@ -68,6 +72,10 @@ public class RouteManager implements IRobotModule {
     private Action _trajectory;
     private boolean _isTrajectoryEnd = false, _isLiftWait = false, _isPixelWait = false;
 
+    private final Action[][] _allTrajectory = new Action[StartRobotPosition.values().length][CameraRobotPosition.values().length];
+
+    private static boolean _isInited = false;
+
     @Override
     public void Init(BaseCollector collector) {
         _lift = collector.GetModule(Lift.class);
@@ -77,13 +85,41 @@ public class RouteManager implements IRobotModule {
         _odometry = collector.GetModule(OdometryHandler.class);
         _gyro = collector.GetModule(Gyroscope.class);
         _brush = collector.GetModule(Brush.class);
+
+        if (!_isInited) {
+            _isInited = true;
+
+            for (int i = 0; i < _allTrajectory.length; i++) {
+                for (int j = 0; j < _allTrajectory[0].length; j++) {
+                    StartRobotPosition pos = StartRobotPosition.values()[i];
+                    CameraRobotPosition camPos = CameraRobotPosition.values()[j];
+
+                    _allTrajectory[i][j] = Trajectory.GetTrajectory(ActionBuilder(
+                            new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), camPos).build();
+                }
+            }
+        }
     }
 
     @Override
     public void Start() {
-        _trajectory = Trajectory.GetTrajectory (ActionBuilder(
-                new Pose2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y, Bios.GetStartPosition().Rotation)),
-                _camera.GetPosition()).build();
+        int indexStartPos = 0, indexCamera = 0;
+
+        for (int i = 0; i < StartRobotPosition.values().length; i++)
+            if (StartRobotPosition.values()[i] == Bios.GetStartPosition()) {
+                indexStartPos = i;
+                break;
+            }
+
+        CameraRobotPosition cameraPos = _camera.GetPosition();
+
+        for (int i = 0; i < CameraRobotPosition.values().length; i++)
+            if (CameraRobotPosition.values()[i] == cameraPos) {
+                indexCamera = i;
+                break;
+            }
+
+        _trajectory = _allTrajectory[indexStartPos][indexCamera];
 
         _time.reset();
     }
@@ -94,11 +130,10 @@ public class RouteManager implements IRobotModule {
 
         if (!_isTrajectoryEnd) {
             if (_isLiftWait) {
-                if (_lift.isATarget()){
+                if (_lift.isATarget()) {
                     _isLiftWait = false;
                     _time.start();
-                }
-                else {
+                } else {
                     _driveTrain.Stop();
                     return;
                 }
@@ -108,20 +143,18 @@ public class RouteManager implements IRobotModule {
                 if (_intake.isPixelGripped()) {
                     _isPixelWait = false;
                     _time.start();
-                }
-                else {
+                } else {
                     _driveTrain.Stop();
                     return;
                 }
             }
 
             _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
-        }
-        else
+        } else
             _driveTrain.Stop();
     }
 
-    private final class TrajectoryAction implements Action {
+    private class TrajectoryAction implements Action {
         private final Optional<TimeTrajectory> _timeTrajectory;
         private final Optional<TimeTurn> _timeTurn;
         private final double _duration;
@@ -165,7 +198,7 @@ public class RouteManager implements IRobotModule {
         }
     }
 
-    private MyTrajectoryBuilder ActionBuilder(Pose2d beginPose) {
+    private static MyTrajectoryBuilder ActionBuilder(Pose2d beginPose) {
         return new MyTrajectoryBuilder(new TrajectoryActionBuilder(TrajectoryAction::new, TrajectoryAction::new, beginPose, 1e-6, 0.0, _turnConstraints, _velConstraint, _accelConstraint, 0.25, 0.1));
     }
 
@@ -184,7 +217,7 @@ public class RouteManager implements IRobotModule {
             return new MyTrajectoryBuilder(_builder.splineTo(vec, tangent));
         }
 
-        public MyTrajectoryBuilder splineToConstantHeading(Vector2d vec, double tangent){
+        public MyTrajectoryBuilder splineToConstantHeading(Vector2d vec, double tangent) {
             return new MyTrajectoryBuilder(_builder.splineToConstantHeading(vec, tangent));
         }
 
@@ -209,7 +242,7 @@ public class RouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder waitLift() {
-            return new MyTrajectoryBuilder(_builder.stopAndAdd(()->{
+            return new MyTrajectoryBuilder(_builder.stopAndAdd(() -> {
                 _time.pause();
                 _isLiftWait = true;
             }));
@@ -224,7 +257,7 @@ public class RouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder waitPixel() {
-            return new MyTrajectoryBuilder(_builder.stopAndAdd(()->{
+            return new MyTrajectoryBuilder(_builder.stopAndAdd(() -> {
                 _time.pause();
                 _isPixelWait = true;
             }));
