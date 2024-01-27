@@ -15,10 +15,7 @@ import org.woen.team18742.Tools.Vector2;
 
 @TeleopModule
 public class Manual implements IRobotModule {
-    private boolean _gripOld = false;
-
-    private Servo podtyaga1;
-    private Servo podtyaga2;
+    private boolean _gripOld = false, _brushOld = false;
 
     private Plane _plane;
 
@@ -28,6 +25,7 @@ public class Manual implements IRobotModule {
     private Intake _intake;
     private Lift _lift;
     private Drivetrain _drivetrain;
+    private Suspension _suspension;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -39,6 +37,7 @@ public class Manual implements IRobotModule {
         _intake = collector.GetModule(Intake.class);
         _lift = collector.GetModule(Lift.class);
         _drivetrain = collector.GetModule(Drivetrain.class);
+        _suspension = collector.GetModule(Suspension.class);
 
         LiftPose.AVERAGE.Pose = 400;
     }
@@ -53,25 +52,24 @@ public class Manual implements IRobotModule {
 
         boolean A = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;
-        boolean brushRevers = _gamepad.circle;
         boolean grip = _gamepad.triangle;
         boolean brush = _gamepad.cross;
         boolean zajat = _gamepad.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
         boolean average = _gamepad.dpad_right;
         double servotyaga = _gamepad.left_trigger;
-        double motortyaga = _gamepad.right_trigger;
 
 
         if(grip && !_gripOld) {
             _intake.releaseGripper();
         }
 
-        if(brush){
-            _brush.BrushEnable();
-        }
-        if(brushRevers){
-            _brush.BrushDisable();
-            _brush.RevTimeRes();
+        if(brush && !_brushOld){
+            if(_brush.isBrusnOn())
+                _brush.BrushEnable();
+            else {
+                _brush.BrushDisable();
+                _brush.RevTimeRes();
+            }
         }
 
         if (A)
@@ -84,28 +82,14 @@ public class Manual implements IRobotModule {
         else if(average)
             _lift.SetLiftPose(LiftPose.AVERAGE);
 
-        _gripOld = grip;
-
-         podtyaga1 = Devices.podtyaga1;
-         podtyaga2 = Devices.podtyaga2;
-         double nulevayapodtyaga1 = 0.43;
-         double nulevayapodtyaga2 = 0.43;
-         double rasstrelennayatyga1 = 0.23;
-         double rasstrelennayatyga2 = 0.23;
-        if(servotyaga > 0)
-        {
-            podtyaga1.setPosition(rasstrelennayatyga1);
-            podtyaga2.setPosition(rasstrelennayatyga2);
-        }
+        if(servotyaga > 0.2)
+            _suspension.Active();
         else
-        {
-            podtyaga1.setPosition(nulevayapodtyaga1);
-            podtyaga2.setPosition(nulevayapodtyaga2);
-        }
+            _suspension.Disable();
 
+        _gripOld = grip;
+        _brushOld = brush;
     }
-
-
 
     @Override
     public void Start() {

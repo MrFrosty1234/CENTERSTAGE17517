@@ -4,6 +4,14 @@ import com.acmerobotics.dashboard.config.Config;
 
 public class Configs {
     @Config
+    public static class Suspension{
+        public static double nulevayapodtyaga1 = 0.43;
+        public static double nulevayapodtyaga2 = 0.43;
+        public static double rasstrelennayatyga1 = 0.23;
+        public static double rasstrelennayatyga2 = 0.23;
+    }
+
+    @Config
     public static class GeneralSettings {
         public static boolean IsAutonomEnable = true;
 
