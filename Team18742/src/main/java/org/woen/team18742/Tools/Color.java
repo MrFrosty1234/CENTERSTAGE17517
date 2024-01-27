@@ -3,6 +3,15 @@ package org.woen.team18742.Tools;
 import androidx.annotation.NonNull;
 
 public class Color {
+    public static Color RED = new Color(255, 0, 0);
+    public static Color BLUE = new Color(0, 0, 255);
+    public static Color GREEN = new Color(0, 255, 0);
+    public static Color GRAY = new Color(128, 128, 128);
+    public static Color BLACK = new Color(0, 0, 0);
+    public static Color WHITE = new Color(255, 255, 255);
+    public static Color YELLOW = new Color(255, 255, 0);
+    public static Color ORANGE = new Color(255, 128, 0);
+
     public int R, G, B;
 
     public Color(int r, int g, int b){

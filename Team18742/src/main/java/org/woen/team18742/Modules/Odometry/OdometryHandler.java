@@ -115,8 +115,8 @@ public class OdometryHandler implements IRobotModule {
         } else
             Position = pos;
 
-        ToolTelemetry.DrawCircle(Position, 5, new Color(0, 0, 255));
-        ToolTelemetry.AddLine("position = " + Position);
+        ToolTelemetry.DrawCircle(Position, 5, Color.BLUE);
+        ToolTelemetry.AddLine("position " + Position);
 
         Speed = Configs.GeneralSettings.IsUseOdometers ? _odometry.Speed : _encoderOdometry.Speed;
 
@@ -126,7 +126,7 @@ public class OdometryHandler implements IRobotModule {
         if (Speed.Y > _maxSpeed.Y)
             _maxSpeed.Y = Speed.Y;
 
-        ToolTelemetry.AddLine("drive speed = " + Speed);
-        ToolTelemetry.AddLine("max drive speed = " + _maxSpeed);
+        ToolTelemetry.AddLine("drive speed " + Speed);
+        ToolTelemetry.AddLine("max drive speed " + _maxSpeed);
     }
 }
