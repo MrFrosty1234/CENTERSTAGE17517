@@ -1,6 +1,7 @@
 package org.woen.team17517.RobotModules.Navigative;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
@@ -24,7 +25,6 @@ public class OdometryNew implements RobotModule {
         voltage = 12;
 
         reset();
-
 
     }
     private void reset()
@@ -60,7 +60,20 @@ public class OdometryNew implements RobotModule {
                 0*right_front_drive.getCurrentPosition()+ 0*right_back_drive.getCurrentPosition())/2.0)*kSlide;
         h = robot.gyro.getAngle();
     }
-    private  double kSlide = 1;
+
+    private double startTime = System.currentTimeMillis();
+    private void odometerUpdate(){
+        this.xEnc = (left_front_drive.getCurrentPosition()+ right_front_drive.getCurrentPosition())/2d;
+        this.yEnc = left_back_drive.getCurrentPosition();
+        if (System.currentTimeMillis() - startTime>2000){
+            h = robot.gyro.getAngle();
+            startTime = System.currentTimeMillis();
+        }else {
+            h = (left_front_drive.getCurrentPosition()-right_front_drive.getCurrentPosition())/2d;
+        }
+    }
+
+    private double kSlide = 1;
     private final DcMotorEx left_front_drive;
     private final DcMotorEx left_back_drive;
     private final DcMotorEx right_front_drive;
@@ -77,7 +90,7 @@ public class OdometryNew implements RobotModule {
     public Vector2D getPositionVector(){return vector;}
     private Vector2D vectorCleanPosition = new Vector2D();
     public void update(){
-        encUpdate();
+        odometerUpdate();
         vectorCleanPosition.setCord(xEnc,yEnc);
         vectorCleanPosition.vectorRat(h);
         vector = Vector2D.vectorSum(vector, vectorCleanPosition);
