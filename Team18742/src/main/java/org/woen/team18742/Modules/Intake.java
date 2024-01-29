@@ -87,7 +87,7 @@ private Brush _brush;
     ElapsedTime pixelTimer = new ElapsedTime();
 
     private boolean isPixelDetected() {
-        if (pixelSensor2.getVoltage() >= Configs.Intake.pixelSensorvoltage || !_brush.isBrusnOn()/*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
+        if (pixelSensor1.getVoltage() >= Configs.Intake.pixelSensorvoltage || !_brush.isBrusnOn()/*&& pixelSensor2.getVoltage() >= pixelSensorvoltage*/)
             pixelTimer.reset();
         return pixelTimer.milliseconds() > Configs.Intake.pixelDetectTimeMs;
     }
