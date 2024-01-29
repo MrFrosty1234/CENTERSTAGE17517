@@ -55,9 +55,9 @@ public class Lift implements IRobotModule {
         _endingDownState = _endswitchDown.getState();
 
         if (_liftPose != LiftPose.DOWN)
-            _liftMotor.setPower(_liftPIDF.Update(_liftPose.encoderPose() - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta);
+            _liftMotor.setPower(_liftPIDF.Update(_liftPose.encoderPose() - _liftMotor.getCurrentPosition()));
         else if (!_intake.IsTurnNormal()) {
-            _liftMotor.setPower(Math.max(_liftPIDF.Update(LiftPose.MIDDLE_UPPER.encoderPose() - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
+            _liftMotor.setPower(Math.max(_liftPIDF.Update(Configs.LiftPoses.POSE_SERVO_CLEARANCE - _liftMotor.getCurrentPosition()), Configs.LiftPid.DOWN_MOVE_POWER));
         } else {
             if (!_endingDownState)
                 _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER);
