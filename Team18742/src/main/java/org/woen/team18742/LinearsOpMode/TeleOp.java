@@ -1,7 +1,9 @@
 package org.woen.team18742.LinearsOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerImpl;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Collectors.TeleOpCollector;
 import org.woen.team18742.Tools.ToolTelemetry;
@@ -15,6 +17,7 @@ public class TeleOp extends LinearOpMode {
 
             ToolTelemetry.Update();
 
+            OpModeManagerImpl.getOpModeManagerOfActivity(AppUtil.getInstance().getActivity()).startActiveOpMode();
             waitForStart();
             resetRuntime();
 
