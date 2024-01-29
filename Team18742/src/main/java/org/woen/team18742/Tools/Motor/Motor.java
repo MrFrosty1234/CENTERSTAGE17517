@@ -10,7 +10,7 @@ import org.woen.team18742.Tools.PIDF;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 public class Motor {
-    private final DcMotorEx _motor;
+    public final DcMotorEx Motor;
 
     private PIDF _velocityPid;
 
@@ -29,7 +29,7 @@ public class Motor {
     }
 
     public Motor(DcMotorEx motor, ReductorType type){
-        _motor = motor;
+        Motor = motor;
 
         _encoderType = type;
 
@@ -46,19 +46,19 @@ public class Motor {
     }
 
     public void setDirection(DcMotorSimple.Direction dir){
-        _motor.setDirection(dir);
+        Motor.setDirection(dir);
     }
 
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior power){
-        _motor.setZeroPowerBehavior(power);
+        Motor.setZeroPowerBehavior(power);
     }
 
     public void setMode(DcMotor.RunMode mode){
-        _motor.setMode(mode);
+        Motor.setMode(mode);
     }
 
     public double getCurrentPosition(){
-        return _motor.getCurrentPosition();
+        return Motor.getCurrentPosition();
     }
 
     public void Update(){
@@ -68,9 +68,9 @@ public class Motor {
             _velocityPid.UpdateCoefs(Configs.Motors.DefultP, Configs.Motors.DefultI, Configs.Motors.DefultD, 0, Configs.Motors.DefultF);
 
         double voltageSpeed = _targetVoltageSpeed / Battery.Voltage;
-        double pidSpeed = _velocityPid.Update(_targetEncoderSpeed - _velControl.GetSpeed(), _targetEncoderSpeed);
+        double pidSpeed = _velocityPid.Update(_targetEncoderSpeed - _velControl.GetVelocity(), _targetEncoderSpeed);
 
-        _motor.setPower((voltageSpeed + pidSpeed) / 2);
+        Motor.setPower((voltageSpeed + pidSpeed) / 2);
     }
 
     private double _targetEncoderSpeed = 0, _targetVoltageSpeed = 0;
@@ -83,5 +83,9 @@ public class Motor {
     public void setEncoderPower(double speed){
         _targetEncoderSpeed = speed;
         _targetVoltageSpeed = Configs.Battery.CorrectCharge * (speed / _encoderType.Ticks);
+    }
+    
+    public VelocityControl GetVelocityController(){
+        return _velControl;
     }
 }

@@ -66,15 +66,15 @@ public class OdometryHandler implements IRobotModule {
     }
 
     public double GetSpeedOdometerXLeft() {
-        return _odometerXLeft.getVelocity();
+        return _odometerXLeft.GetVelocity();
     }
 
     public double GetSpeedOdometerXRight() {
-        return _odometerXRight.getVelocity();
+        return _odometerXRight.GetVelocity();
     }
 
     public double GetSpeedOdometerY() {
-        return _odometerY.getVelocity();
+        return _odometerY.GetVelocity();
     }
 
     public double GetOdometerXLeft() {

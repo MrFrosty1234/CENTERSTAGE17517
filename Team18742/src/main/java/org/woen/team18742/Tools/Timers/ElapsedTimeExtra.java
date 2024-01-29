@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class ElapsedTimeExtra extends ElapsedTime {
     public void pause(){
+        _nsPauseStart = nanoseconds();
+
         _isPause = true;
 
         _pauseTime.reset();
-
-        _nsPauseStart = nsNow();
     }
 
     public void start(){
@@ -31,4 +31,8 @@ public class ElapsedTimeExtra extends ElapsedTime {
     private final ElapsedTime _pauseTime = new ElapsedTime();
     private long _nsPauseStart;
     private boolean _isPause = false;
+
+    public boolean IsPause(){
+        return _isPause;
+    }
 }

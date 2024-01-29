@@ -20,7 +20,7 @@ public class Configs {
     public static class Camera{
         public static int RobotPos = 2;
         public static double CameraAccuracy = 150;
-        public static double CameraX = 16.01, CameraY = 16.18;
+        public static double CameraX = -16.01, CameraY = 16.18;
 
         public static double ZoneLeftEnd = 220, ZoneForwardEnd = 550;
 

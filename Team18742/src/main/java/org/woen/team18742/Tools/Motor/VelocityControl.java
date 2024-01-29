@@ -13,7 +13,7 @@ public class VelocityControl {
 
     private double _oldPosition = 0, _speed = 0;
 
-    public double GetSpeed(){
+    public double GetVelocity(){
         return _speed;
     }
 

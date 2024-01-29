@@ -21,12 +21,20 @@ public class EncoderControl {
         _ticks = ticksInEncoder;
     }
 
+    public EncoderControl(Motor encoder, ReductorType type, double diameter){
+        this(encoder.Motor, type.Ticks, diameter);
+    }
+
+    public EncoderControl(Motor encoder, double ticksInEncoder, double diameter){
+        this(encoder.Motor, ticksInEncoder, diameter);
+    }
+
     public double GetPosition(){
         return _encoder.getCurrentPosition() / _ticks * Math.PI * _diameter;
     }
 
-    public double getVelocity(){
-        return _velControl.GetSpeed() / _ticks * Math.PI * _diameter;
+    public double GetVelocity(){
+        return _velControl.GetVelocity() / _ticks * Math.PI * _diameter;
     }
 
     public void Start(){
