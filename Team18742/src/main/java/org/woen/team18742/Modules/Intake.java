@@ -29,8 +29,7 @@ private Brush _brush;
 
     @Override
     public void Init(BaseCollector collector) {
-        pixelSensor1 = Devices.PixelSensor1;
-        pixelSensor2 = Devices.PixelSensor2;
+        pixelSensor1 = Devices.PixelSensor;
         gripper = Devices.Gripper;
         clamp = Devices.Clamp;
         servoTurn = Devices.Servopere;
