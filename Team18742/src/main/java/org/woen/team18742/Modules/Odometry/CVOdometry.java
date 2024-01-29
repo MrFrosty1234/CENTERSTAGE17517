@@ -15,6 +15,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Gyroscope;
+import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
@@ -23,7 +24,7 @@ import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
 
-@Module
+@AutonomModule
 public class CVOdometry implements IRobotModule {
     private AprilTagProcessor  _aprilTagProcessor = null;
 
