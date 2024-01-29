@@ -21,7 +21,7 @@ public class Brush implements IRobotModule {
     private DcMotorEx brushMotor;
     private BrushState statebrush = BrushState.STATE_OFF;
     private boolean _flagDefense = true;
-
+public byte trueStateBrush = 3;
     private boolean _isReversed = false, _isIntake = false;
 
     private ElapsedTime ProtTime = new ElapsedTime();
@@ -44,14 +44,17 @@ public class Brush implements IRobotModule {
 
     private void stop() {//функция для конечного автомата
         brushMotor.setPower(0);
+        trueStateBrush = 3;
     }
 
     private void NormalRun() {//функция для конечного автомата
         brushMotor.setPower(1);
+        trueStateBrush=1;
     }
 
     private void reversRun() {//функция для конечного автомата
         brushMotor.setPower(-1);
+        trueStateBrush=2;
     }
 
     enum BrushState {
