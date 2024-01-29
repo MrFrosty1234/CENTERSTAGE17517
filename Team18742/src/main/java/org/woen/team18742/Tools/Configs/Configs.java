@@ -1,6 +1,7 @@
 package org.woen.team18742.Tools.Configs;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Configs {
     @Config
@@ -53,7 +54,18 @@ public class Configs {
 
     @Config
     public static class LiftPid{
-        public static double PCoef = 0.01, ICoef = 0, DCoef = 0;
+        public static double PCoef = 0.01, ICoef = 0, DCoef = 0, GCoef = 0.1;
+        public static double DOWN_MOVE_POWER = 0, DOWN_AT_TARGET_POWER = 0;
+    }
+
+    @Config
+    public static class LiftPoses{
+        public static int POSE_UP = 900;
+        public static int POSE_MIDDLE_UPPER = 900;
+        public static int POSE_MIDDLE_LOWER = 900;
+        public static int POSE_SERVO_CLEARANCE = 900;
+        public static int POSE_DOWN = -40;
+        public static int POSE_DOWN_ENDSWITCH_THRESHOLD = 10;
     }
 
     @Config
@@ -88,9 +100,10 @@ public class Configs {
 
     @Config
     public static class Brush{
-        public static double protectionCurrentAmps = 1;
-        public static double protectionTimeThreshold = 1500;
-        public static double reverseTimeThreshold = 3000;
+        public static double protectionCurrentAmps = 3.3;
+        public static double protectionTimeThresholdMs = 700;
+        public static double reverseTimeThresholdMs = 900;
+        public static double brushPower = 0.9;
     }
 
     @Config
@@ -106,21 +119,32 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.15, PixelCenterOpen = 0;//0.4
-        public static double servoTurnNormal = 0.96;
-        public static final double servoTurnTurned = 0.35;
+        public static double pixelSensorvoltage = 0.137, PixelCenterOpen = 0;//0.4 pixelSensorVoltage = 0.15
+        public static double servoTurnNormal = 0.68;
+        public static final double servoTurnTurned = 0.06 ;
         public static long AverageTime = 830;
-        public static double servoGripperNormal = 0.4;
-        public static double servoGripperGripped = 0.122;
-        public static double servoClampClamped = 0.9;
-        public static double servoClampReleased = 0.47 ;//0.5
-        public static double pixelDetectTimeMs = 1000;
-        public static double ReverseTimeMs = 2000;
+        public static double servoGripperNormal = 0.95;
+        public static double servoGripperGripped = 0.765;
+        public static double servoClampClamped = 0.65;
+        public static double servoClampReleased = 0.41 ;//0.38? //TODO THIS BREAKS THE ROBOT WHEN GOING THROUGH TRUSS
+        public static double pixelDetectTimeMs = 200;
     }
 
     @Config
     public static class Plane{
         public static double servoplaneOtkrit = 0.07;
         public static double servoplaneneOtkrit = 0.17;
+    }
+
+    @Config
+    public static class StackBrush{
+        public static double LEFT_SERVO_STOP = 0.464;
+        public static double LEFT_SERVO_FWD = 0.0;
+        public static double LEFT_SERVO_REV = 1.0;
+        public static double RIGHT_SERVO_STOP = 0.418;
+        public static double RIGHT_SERVO_FWD = 1.0;
+        public static double RIGHT_SERVO_REV = 0.0;
+        public static double SERVO_LIFT_DOWN = 0.617;
+        public static double SERVO_LIFT_UP = 0.875;
     }
 }
