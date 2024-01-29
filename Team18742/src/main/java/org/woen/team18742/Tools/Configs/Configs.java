@@ -103,7 +103,8 @@ public class Configs {
         public static double protectionCurrentAmps = 3.3;
         public static double protectionTimeThresholdMs = 700;
         public static double reverseTimeThresholdMs = 900;
-        public static double brushPower = 0.9;
+        public static double brushPower = 1.0;
+        public static double brushPowerReverse = -1.0;
     }
 
     @Config
