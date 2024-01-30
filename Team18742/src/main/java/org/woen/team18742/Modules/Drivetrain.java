@@ -35,10 +35,10 @@ public class Drivetrain implements IRobotModule {
         _rightForwardDrive = new Motor(Devices.RightForwardDrive, ReductorType.TWENTY);
         _leftBackDrive = new Motor(Devices.LeftBackDrive, ReductorType.TWENTY);
 
-        _leftForwardEncoder = new EncoderControl(_leftForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
-        _rightBackEncoder = new EncoderControl(_rightBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
-        _rightForwardEncoder = new EncoderControl(_rightForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
-        _leftBackEncoder = new EncoderControl(_leftBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _leftForwardEncoder = new EncoderControl(Devices.LeftForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _rightBackEncoder = new EncoderControl(Devices.RightBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _rightForwardEncoder = new EncoderControl(Devices.RightForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _leftBackEncoder = new EncoderControl(Devices.LeftBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
 
         ResetEncoders();
     }

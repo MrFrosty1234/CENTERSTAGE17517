@@ -21,14 +21,6 @@ public class EncoderControl {
         _ticks = ticksInEncoder;
     }
 
-    public EncoderControl(Motor encoder, ReductorType type, double diameter){
-        this(encoder.Motor, type.Ticks, diameter);
-    }
-
-    public EncoderControl(Motor encoder, double ticksInEncoder, double diameter){
-        this(encoder.Motor, ticksInEncoder, diameter);
-    }
-
     public double GetPosition(){
         return _encoder.getCurrentPosition() / _ticks * Math.PI * _diameter;
     }

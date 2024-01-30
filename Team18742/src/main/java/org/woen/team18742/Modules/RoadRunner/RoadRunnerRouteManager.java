@@ -157,7 +157,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         private final Optional<TimeTurn> _timeTurn;
         private final double _duration;
 
-        private double xPoints[], yPoints[];
+       //private double xPoints[], yPoints[];
 
         public TrajectoryAction(TimeTurn t) {
             _timeTrajectory = Optional.empty();
@@ -170,7 +170,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
             _timeTurn = Optional.empty();
             _duration = _timeTrajectory.get().duration;
 
-            List<Double> disps = Math.range(0, timeTrajectory.path.length(), Math.max(2, Math.ceil(timeTrajectory.path.length() / 2)));
+            /*List<Double> disps = Math.range(0, timeTrajectory.path.length(), Math.max(2, Math.ceil(timeTrajectory.path.length() / 2)));
 
             xPoints = new double[disps.size()];
             yPoints = new double[disps.size()];
@@ -180,7 +180,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
                 xPoints[i] = pose.position.x;
                 yPoints[i] = pose.position.y;
-            }
+            }*/
         }
 
         @Override
@@ -202,18 +202,18 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
             _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
-            ToolTelemetry.GetCanvas().setStroke("#4CAF50FF");
-            ToolTelemetry.GetCanvas().setStrokeWidth(1);
-            ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+//            ToolTelemetry.GetCanvas().setStroke("#4CAF50FF");
+  //          ToolTelemetry.GetCanvas().setStrokeWidth(1);
+    //        ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
 
             return true;
         }
 
         @Override
         public void preview(Canvas fieldOverlay) {
-            ToolTelemetry.GetCanvas().setStroke("#4CAF507A");
-            ToolTelemetry.GetCanvas().setStrokeWidth(1);
-            ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+            //ToolTelemetry.GetCanvas().setStroke("#4CAF507A");
+            //ToolTelemetry.GetCanvas().setStrokeWidth(1);
+            //ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
         }
     }
 

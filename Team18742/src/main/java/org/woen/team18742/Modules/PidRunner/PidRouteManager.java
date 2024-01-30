@@ -44,6 +44,7 @@ public class PidRouteManager implements IRobotModule {
     public void Start(ArrayList<Runnable> route){
         _route = route;
         _isEnable = true;
+        _automatic.Start();
     }
 
     public boolean IsEnd(){
@@ -53,6 +54,7 @@ public class PidRouteManager implements IRobotModule {
     @Override
     public void Stop(){
         _isEnable = false;
+        _automatic.Disable();
     }
 
     @Override
@@ -64,8 +66,9 @@ public class PidRouteManager implements IRobotModule {
 
                 _currentRouteAction++;
             }
-            else
-                _isEnable = false;
+            else {
+                Stop();
+            }
         }
     }
 }

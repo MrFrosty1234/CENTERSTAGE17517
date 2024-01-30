@@ -57,7 +57,7 @@ public class Configs {
 
         public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 8192;
 
-        public static double YLag = 0.8;
+        public static double YLag = 0.95;
     }
 
     @Config
