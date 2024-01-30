@@ -1,7 +1,6 @@
 package org.woen.team17517.RobotModules.Navigative;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
@@ -16,7 +15,7 @@ public class OdometryNew implements RobotModule {
     public OdometryNew(UltRobot robot){
         this.robot = robot;
 
-        left_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_front_drive");
+        odometrRight = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_front_drive");
         odometrLeft =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "odometrLeft");
 
         right_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
@@ -29,14 +28,14 @@ public class OdometryNew implements RobotModule {
     }
     private void reset()
     {
-        left_front_drive.setDirection(DcMotor.Direction.FORWARD);
+        odometrRight.setDirection(DcMotor.Direction.FORWARD);
         odometrLeft.setDirection(DcMotor.Direction.FORWARD);
 
         right_front_drive.setDirection(DcMotor.Direction.REVERSE);
         right_back_drive.setDirection(DcMotor.Direction.REVERSE);
 
-        left_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        odometrRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odometrRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         odometrLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odometrLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -54,27 +53,27 @@ public class OdometryNew implements RobotModule {
     private double xEnc;
     private void  encUpdate()
     {
-        this.yEnc = (odometrLeft.getCurrentPosition()+ 0*left_front_drive.getCurrentPosition()+
+        this.yEnc = (odometrLeft.getCurrentPosition()+ 0* odometrRight.getCurrentPosition()+
                 right_front_drive.getCurrentPosition()*0+ right_back_drive.getCurrentPosition())/2.0;
-        this.xEnc = ((-odometrLeft.getCurrentPosition()+ left_front_drive.getCurrentPosition()-
+        this.xEnc = ((-odometrLeft.getCurrentPosition()+ odometrRight.getCurrentPosition()-
                 0*right_front_drive.getCurrentPosition()+ 0*right_back_drive.getCurrentPosition())/2.0)*kSlide;
         h = robot.gyro.getAngle();
     }
 
     private double startTime = System.currentTimeMillis();
     private void odometerUpdate(){
-        this.yEnc = (left_front_drive.getCurrentPosition() + odometrLeft.getCurrentPosition())/2d;
+        this.yEnc = (odometrRight.getCurrentPosition() + odometrLeft.getCurrentPosition())/2d;
         this.xEnc = right_back_drive.getCurrentPosition();
         if (true){
             h = robot.gyro.getAngle();
             startTime = System.currentTimeMillis();
         }else {
-            h = (left_front_drive.getCurrentPosition()-right_front_drive.getCurrentPosition())/2d;
+            h = (odometrRight.getCurrentPosition()-right_front_drive.getCurrentPosition())/2d;
         }
     }
 
     private double kSlide = 1;
-    private final DcMotorEx left_front_drive;
+    private final DcMotorEx odometrRight;
     private final DcMotorEx odometrLeft;
     private final DcMotorEx right_front_drive;
     private final DcMotorEx right_back_drive;
