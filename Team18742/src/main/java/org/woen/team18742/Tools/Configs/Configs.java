@@ -20,7 +20,7 @@ public class Configs {
     public static class Camera{
         public static int RobotPos = 2;
         public static double CameraAccuracy = 150;
-        public static double CameraX = -16.01, CameraY = 16.18;
+        public static double CameraX = 16.01, CameraY = -16.18;
 
         public static double ZoneLeftEnd = 220, ZoneForwardEnd = 550;
 
@@ -57,7 +57,8 @@ public class Configs {
 
         public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 8192;
 
-        public static double YLag = 0.95;
+        public static double YLag = 0.7;
+        public static double RotateLag = 0.89;
     }
 
     @Config
@@ -84,8 +85,8 @@ public class Configs {
 
     @Config
     public static class DriveTrainWheels {
-        public static double wheelDiameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 150, MaxSpeedTurn = 7, speed = 0.5;
-        public static double MaxTurnVelocity = 3; //random
+        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 150, MaxSpeedTurn = Math.toRadians(130), speed = 0.5;
+        public static double MaxTurnAccel = 3; //random
         public static double Radius = 15.7;
     }
 
@@ -96,15 +97,15 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.15, PixelCenterOpen = 0;//0.4
-        public static double servoTurnNormal = 0.96;
-        public static final double servoTurnTurned = 0.35;
+        public static double pixelSensorvoltage = 0.137, PixelCenterOpen = 0;//0.4 pixelSensorVoltage = 0.15
+        public static double servoTurnNormal = 0.68;
+        public static final double servoTurnTurned = 0.06 ;
         public static long AverageTime = 830;
-        public static double servoGripperNormal = 0.4;
-        public static double servoGripperGripped = 0.122;
-        public static double servoClampClamped = 0.9;
-        public static double servoClampReleased = 0.47 ;//0.5
-        public static double pixelDetectTimeMs = 1000;
+        public static double servoGripperNormal = 0.95;
+        public static double servoGripperGripped = 0.765;
+        public static double servoClampClamped = 0.65;
+        public static double servoClampReleased = 0.41 ;//0.38? //TODO THIS BREAKS THE ROBOT WHEN GOING THROUGH TRUSS
+        public static double pixelDetectTimeMs = 200;
     }
 
     @Config
@@ -115,15 +116,15 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double MinProfileAccel = -3; // random
-        public static double MaxProfileAccel = 3; // random
+        public static double MinProfileAccel = -100; // random
+        public static double MaxProfileAccel = 100; // random
     }
 
     @Config
     public static class PositionConnection{
         public static double Axial = 0; // random
         public static double Lateral = 0; // random
-        public static double Heading = 0; // random
+        public static double Heading = 0.4; // random
     }
 
     @Config
@@ -138,7 +139,7 @@ public class Configs {
         public static double DefultP = 0.000001;
         public static double DefultI = 0.00013;
         public static double DefultD = 0.005;
-        public static double DefultF = 0.004;
+        public static double DefultF = 0.0004;
     }
 
     @Config

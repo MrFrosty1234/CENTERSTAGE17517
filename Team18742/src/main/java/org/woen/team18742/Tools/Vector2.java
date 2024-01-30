@@ -27,6 +27,11 @@ public class Vector2 {
         Y = y;
     }
 
+    public Vector2(double val){
+        X = val;
+        Y = val;
+    }
+
     public Vector2(Vector2d vec){
         X = vec.x;
         Y = vec.y;
@@ -64,6 +69,6 @@ public class Vector2 {
 
     @Override
     public String toString(){
-        return "X = " + X + "Y = " + Y;
+        return "X = " + X + " Y = " + Y;
     }
 }

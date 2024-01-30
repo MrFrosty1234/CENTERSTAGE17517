@@ -1,17 +1,8 @@
 package org.woen.team18742.Modules.Odometry;
 
-import static java.lang.Math.PI;
-
-import androidx.annotation.NonNull;
-
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Bios;
@@ -23,15 +14,13 @@ import org.woen.team18742.Tools.Motor.EncoderControl;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
-import java.security.spec.EllipticCurve;
-
 @Module
 public class OdometryHandler implements IRobotModule {
     private EncoderControl _odometerY, _odometerXLeft, _odometerXRight;
 
     private OdometrsOdometry _odometry;
     private CVOdometry _cvOdometry;
-    private EncoderOdometry _encoderOdometry;
+    private DriveEncoderOdometry _encoderOdometry;
 
     private final ExponentialFilter _filterX = new ExponentialFilter(Configs.Odometry.XCoef), _filterY = new ExponentialFilter(Configs.Odometry.YCoef);
 
@@ -51,7 +40,7 @@ public class OdometryHandler implements IRobotModule {
 
         _odometry = collector.GetModule(OdometrsOdometry.class);
         _cvOdometry = collector.GetModule(CVOdometry.class);
-        _encoderOdometry = collector.GetModule(EncoderOdometry.class);
+        _encoderOdometry = collector.GetModule(DriveEncoderOdometry.class);
     }
 
     @Override
@@ -70,7 +59,7 @@ public class OdometryHandler implements IRobotModule {
     }
 
     public double GetSpeedOdometerXRight() {
-        return _odometerXRight.GetVelocity();
+        return -_odometerXRight.GetVelocity();
     }
 
     public double GetSpeedOdometerY() {
@@ -102,6 +91,10 @@ public class OdometryHandler implements IRobotModule {
     public void LastUpdate() {
         _filterX.UpdateCoef(Configs.Odometry.XCoef);
         _filterY.UpdateCoef(Configs.Odometry.YCoef);
+
+        ToolTelemetry.AddVal("YOdometr = ", GetSpeedOdometerY());
+        ToolTelemetry.AddVal("XROdometr = ", GetSpeedOdometerXRight());
+        ToolTelemetry.AddVal("XLOdometr = ", GetSpeedOdometerXLeft());
 
         _odometerY.Update();
         _odometerXRight.Update();

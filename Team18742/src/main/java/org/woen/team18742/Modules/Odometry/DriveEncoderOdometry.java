@@ -5,7 +5,6 @@ import static java.lang.Math.sin;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Drivetrain;
 import org.woen.team18742.Modules.Gyroscope;
@@ -16,7 +15,7 @@ import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Vector2;
 
 @Module
-public class EncoderOdometry implements IRobotModule {
+public class DriveEncoderOdometry implements IRobotModule {
     private Drivetrain _driverTrain;
     private double _leftForwardDrive = 0, _leftBackDrive = 0, _rightForwardDrive = 0, _rightBackDrive = 0;
     private Gyroscope _gyro;

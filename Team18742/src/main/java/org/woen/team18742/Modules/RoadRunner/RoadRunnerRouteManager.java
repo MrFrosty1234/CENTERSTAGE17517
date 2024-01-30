@@ -1,5 +1,7 @@
 package org.woen.team18742.Modules.RoadRunner;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.AccelConstraint;
@@ -61,18 +63,18 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
     private final MecanumKinematics _mecanumKinematics = new MecanumKinematics(Configs.DriveTrainWheels.Radius * 2, 1 / Configs.Odometry.YLag);
 
-    private final TurnConstraints _turnConstraints = new TurnConstraints(Configs.DriveTrainWheels.MaxSpeedTurn, -Configs.DriveTrainWheels.MaxTurnVelocity, Configs.DriveTrainWheels.MaxTurnVelocity);
+    private final TurnConstraints _turnConstraints = new TurnConstraints(Configs.DriveTrainWheels.MaxSpeedTurn, -Configs.DriveTrainWheels.MaxTurnAccel, Configs.DriveTrainWheels.MaxTurnAccel);
 
     private final VelConstraint _velConstraint = new MinVelConstraint(Arrays.asList(_mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX), new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn)));
     private final AccelConstraint _accelConstraint = new ProfileAccelConstraint(Configs.Route.MinProfileAccel, Configs.Route.MaxProfileAccel);
 
-    private final ElapsedTimeExtra _time = new ElapsedTimeExtra();
+    private static final ElapsedTimeExtra _time = new ElapsedTimeExtra();
     private Action _trajectory;
     private boolean _isTrajectoryEnd = false;
 
     private List<BooleanSupplier> _waiters = new ArrayList<>();
 
-    private final Action[][] _allTrajectory = new Action[StartRobotPosition.values().length][CameraRobotPosition.values().length];
+    private static final Action[][] _allTrajectory = new Action[StartRobotPosition.values().length][CameraRobotPosition.values().length];
 
     private static boolean _isInited = false;
 
@@ -87,7 +89,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         _brush = collector.GetModule(Brush.class);
         _automaticPid = collector.GetModule(PidRouteManager.class);
 
-        if (!_isInited) {
+        /*if (!_isInited) {
             _isInited = true;
 
             for (int i = 0; i < _allTrajectory.length; i++) {
@@ -99,16 +101,12 @@ public class RoadRunnerRouteManager implements IRobotModule {
                             new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), camPos).build();
                 }
             }
-        }
-
-        for(Action[] i: _allTrajectory)
-            for(Action j: i)
-                j.preview(null);
+        }*/
     }
 
     @Override
     public void Start() {
-        int indexStartPos = 0, indexCamera = 0;
+        /*int indexStartPos = 0, indexCamera = 0;
 
         for (int i = 0; i < StartRobotPosition.values().length; i++)
             if (StartRobotPosition.values()[i] == Bios.GetStartPosition()) {
@@ -122,9 +120,12 @@ public class RoadRunnerRouteManager implements IRobotModule {
             if (CameraRobotPosition.values()[i] == cameraPos) {
                 indexCamera = i;
                 break;
-            }
+            }*/
 
-        _trajectory = _allTrajectory[indexStartPos][indexCamera];
+        StartRobotPosition pos = Bios.GetStartPosition();
+
+        _trajectory = Trajectory.GetTrajectory(ActionBuilder(
+                new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), _camera.GetPosition()).build();//_allTrajectory[indexStartPos][indexCamera];
 
         _time.reset();
     }
@@ -147,7 +148,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
             else
                 _time.start();
 
-            _isTrajectoryEnd = !_trajectory.run(null);
+            _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
         } else
             _driveTrain.Stop();
     }
@@ -184,7 +185,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         @Override
-        public boolean run(TelemetryPacket p) {
+        public boolean run(@NonNull TelemetryPacket p) {
             double time = _time.seconds();
 
             if (time >= _duration) {
@@ -200,7 +201,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
             PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
                     .compute(txWorldTarget, position, velocity);
 
-            _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
+            _driveTrain.SetCMSpeed(new Vector2(-command.linearVel.x.value(), -command.linearVel.y.value()), command.angVel.value());
 
 //            ToolTelemetry.GetCanvas().setStroke("#4CAF50FF");
   //          ToolTelemetry.GetCanvas().setStrokeWidth(1);
@@ -210,7 +211,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         @Override
-        public void preview(Canvas fieldOverlay) {
+        public void preview(@NonNull Canvas fieldOverlay) {
             //ToolTelemetry.GetCanvas().setStroke("#4CAF507A");
             //ToolTelemetry.GetCanvas().setStrokeWidth(1);
             //ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
@@ -304,6 +305,10 @@ public class RoadRunnerRouteManager implements IRobotModule {
                 _waiters.add(()->_automaticPid.IsEnd());
                 _time.pause();
             }));
+        }
+
+        public MyTrajectoryBuilder strafeTo(Vector2d pos){
+            return new MyTrajectoryBuilder(_builder.strafeTo(pos));
         }
     }
 }

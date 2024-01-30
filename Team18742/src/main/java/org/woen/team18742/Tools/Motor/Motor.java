@@ -67,22 +67,21 @@ public class Motor {
         if(!_isCustomPid)
             _velocityPid.UpdateCoefs(Configs.Motors.DefultP, Configs.Motors.DefultI, Configs.Motors.DefultD, 0, Configs.Motors.DefultF);
 
-        double voltageSpeed = _targetVoltageSpeed / Battery.Voltage;
         double pidSpeed = _velocityPid.Update(_targetEncoderSpeed - _velControl.GetVelocity(), _targetEncoderSpeed);
 
-        Motor.setPower((voltageSpeed + pidSpeed) / 2);
+        Motor.setPower(pidSpeed / Battery.ChargeDelta);
     }
 
-    private double _targetEncoderSpeed = 0, _targetVoltageSpeed = 0;
+    private double _targetEncoderSpeed = 0;//, _targetVoltageSpeed = 0;
 
     public void setPower(double speed){
         _targetEncoderSpeed = speed * _encoderType.Ticks;
-        _targetVoltageSpeed = Configs.Battery.CorrectCharge * speed;
+       // _targetVoltageSpeed = Configs.Battery.CorrectCharge * speed;
     }
 
     public void setEncoderPower(double speed){
         _targetEncoderSpeed = speed;
-        _targetVoltageSpeed = Configs.Battery.CorrectCharge * (speed / _encoderType.Ticks);
+        //_targetVoltageSpeed = Configs.Battery.CorrectCharge * (speed / _encoderType.Ticks);
     }
     
     public VelocityControl GetVelocityController(){

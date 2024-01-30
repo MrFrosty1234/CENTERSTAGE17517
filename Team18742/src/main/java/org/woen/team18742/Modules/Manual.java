@@ -1,5 +1,9 @@
 package org.woen.team18742.Modules;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.toDegrees;
+import static java.lang.Math.toRadians;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -42,9 +46,14 @@ public class Manual implements IRobotModule {
     public void Update() {
         _plane.Update();
 
-        _drivetrain.SimpleDriveDirection(
+        /*_drivetrain.SimpleDriveDirection(
                 new Vector2(_gamepad.left_stick_y, _gamepad.left_stick_x),
-                _gamepad.right_stick_x);
+                _gamepad.right_stick_x);*/
+
+
+        _drivetrain.SetCMSpeed(
+                new Vector2(_gamepad.left_stick_y * 100, _gamepad.left_stick_x * 100),
+                _gamepad.right_stick_x * toRadians(150));
 
         boolean A = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;
@@ -59,14 +68,14 @@ public class Manual implements IRobotModule {
         _plane.BezpolezniRailgunUp(railgunopen * 0.3);
         _plane.BezpolezniRailgunDown(railgunnoopen * 0.3);
 
-        if(grip && !_gripOld) {
+        if (grip && !_gripOld) {
             _intake.releaseGripper();
         }
 
-        if(brush){
+        if (brush) {
             _brush.BrushEnable();
         }
-        if(brushRevers){
+        if (brushRevers) {
             _brush.BrushDisable();
             _brush.RevTimeRes();
         }
@@ -78,7 +87,7 @@ public class Manual implements IRobotModule {
 
         if (liftUp)
             _lift.SetLiftPose(LiftPose.UP);
-        else if(average)
+        else if (average)
             _lift.SetLiftPose(LiftPose.AVERAGE);
 
         _gripOld = grip;

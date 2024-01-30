@@ -13,28 +13,31 @@ public class VelocityControl {
 
     private double _oldPosition = 0, _speed = 0;
 
-    public double GetVelocity(){
+    public double GetVelocity() {
         return _speed;
     }
 
-    public VelocityControl(DcMotorEx encoder){
+    public VelocityControl(DcMotorEx encoder) {
         _encoder = encoder;
     }
 
-    public void Update(){
+
+    private double mathSpeed = 0d;
+
+    public void Update() {
         double encoderPosition = _encoder.getCurrentPosition();
 
-        double hardwareSpeed = _encoder.getVelocity(),
-                mathSpeed = (encoderPosition - _oldPosition) / _deltaTime.seconds();
+        double hardwareSpeed = _encoder.getVelocity();
 
-        _oldPosition = encoderPosition;
-
-        _speed = hardwareSpeed + Math.round(mathSpeed - hardwareSpeed);
-
-        _deltaTime.reset();
+        if (_deltaTime.seconds() > 0.085) {
+            mathSpeed = (encoderPosition - _oldPosition) / _deltaTime.seconds();
+            _deltaTime.reset();
+            _oldPosition = encoderPosition;
+        }
+        _speed = hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / (double) 0x10000) * (double) 0x10000;
     }
 
-    public void Start(){
+    public void Start() {
         _deltaTime.reset();
     }
 }

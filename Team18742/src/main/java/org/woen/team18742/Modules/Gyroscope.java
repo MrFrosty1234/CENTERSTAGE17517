@@ -66,7 +66,9 @@ public class Gyroscope implements IRobotModule {
             double odometerTurn = -(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
             _radianSpeed = -(_odometrs.GetSpeedOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetSpeedOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
 
-            _allRadians = ChopAngle(odometerTurn + _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) / 2);
+
+
+            _allRadians = ChopAngle(odometerTurn*0d + _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) / 2d*2d);
         }
         else {
             _allRadians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);

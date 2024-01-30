@@ -23,28 +23,15 @@ import org.woen.team18742.Tools.Vector2;
 
 @Module
 public class Drivetrain implements IRobotModule {
-    private static Motor _leftForwardDrive, _rightForwardDrive, _leftBackDrive, _rightBackDrive;
-    private static EncoderControl _leftForwardEncoder, _rightForwardEncoder, _leftBackEncoder, _rightBackEncoder;
+    private Motor _leftForwardDrive, _rightForwardDrive, _leftBackDrive, _rightBackDrive;
+    private EncoderControl _leftForwardEncoder, _rightForwardEncoder, _leftBackEncoder, _rightBackEncoder;
 
     private Gyroscope _gyro;
 
-    @BulkInit
-    public static void BulkInit(){
-        _leftForwardDrive = new Motor(Devices.LeftForwardDrive, ReductorType.TWENTY);
-        _rightBackDrive = new Motor(Devices.RightBackDrive, ReductorType.TWENTY);
-        _rightForwardDrive = new Motor(Devices.RightForwardDrive, ReductorType.TWENTY);
-        _leftBackDrive = new Motor(Devices.LeftBackDrive, ReductorType.TWENTY);
-
-        _leftForwardEncoder = new EncoderControl(Devices.LeftForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
-        _rightBackEncoder = new EncoderControl(Devices.RightBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
-        _rightForwardEncoder = new EncoderControl(Devices.RightForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
-        _leftBackEncoder = new EncoderControl(Devices.LeftBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
-
-        ResetEncoders();
-    }
-
     @Override
     public void Start() {
+        ResetEncoders();
+
         _leftForwardEncoder.Start();
         _rightBackEncoder.Start();
         _rightForwardEncoder.Start();
@@ -61,6 +48,16 @@ public class Drivetrain implements IRobotModule {
 
     @Override
     public void Init(BaseCollector collector) {
+        _leftForwardDrive = new Motor(Devices.LeftForwardDrive, ReductorType.TWENTY);
+        _rightBackDrive = new Motor(Devices.RightBackDrive, ReductorType.TWENTY);
+        _rightForwardDrive = new Motor(Devices.RightForwardDrive, ReductorType.TWENTY);
+        _leftBackDrive = new Motor(Devices.LeftBackDrive, ReductorType.TWENTY);
+
+        _leftForwardEncoder = new EncoderControl(Devices.LeftForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _rightBackEncoder = new EncoderControl(Devices.RightBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _rightForwardEncoder = new EncoderControl(Devices.RightForwardDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+        _leftBackEncoder = new EncoderControl(Devices.LeftBackDrive, ReductorType.TWENTY, Configs.DriveTrainWheels.wheelDiameter);
+
         _leftForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -93,11 +90,14 @@ public class Drivetrain implements IRobotModule {
     public void SetCMSpeed(Vector2 cmSpeed, double rotate){
         cmSpeed.Y *= 1d / Configs.Odometry.YLag;
 
+    //    cmSpeed = Vector2.Multiply(cmSpeed, new Vector2(0.25));
+
         DriveEncoderDirection(new Vector2(cmSpeed.X / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat,
-                cmSpeed.Y / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat), -rotate * Configs.DriveTrainWheels.Radius / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat / 4);
+                cmSpeed.Y / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat),
+                (-rotate * (Configs.DriveTrainWheels.Radius * 2d) / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat) / Configs.Odometry.RotateLag);
     }
 
-    public static void ResetEncoders() {
+    public void ResetEncoders() {
         _leftForwardEncoder.Reset();
         _rightBackEncoder.Reset();
         _rightForwardEncoder.Reset();
