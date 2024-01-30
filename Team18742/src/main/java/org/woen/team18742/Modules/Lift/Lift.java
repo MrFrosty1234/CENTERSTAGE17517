@@ -49,20 +49,20 @@ public class Lift implements IRobotModule {
 
     @Override
     public void Update() {
-        _liftPIDF.UpdateCoefs(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef);
+        _liftPIDF.UpdateCoefs(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef,Configs.LiftPid.GCoef,0);
 
         _endingUpState = _endSwitchUp.getState();
         _endingDownState = _endswitchDown.getState();
 
         if (_liftPose != LiftPose.DOWN)
-            _liftMotor.setPower(_liftPIDF.Update(_liftPose.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta);
+            _liftMotor.setPower(_liftPIDF.Update(_liftPose.encoderPose() - _liftMotor.getCurrentPosition()));
         else if (!_intake.IsTurnNormal()) {
-            _liftMotor.setPower(Math.max(_liftPIDF.Update(LiftPose.AVERAGE.Pose - _liftMotor.getCurrentPosition()) / Battery.ChargeDelta, 0.007));
+            _liftMotor.setPower(Math.max(_liftPIDF.Update(Configs.LiftPoses.POSE_SERVO_CLEARANCE - _liftMotor.getCurrentPosition()), Configs.LiftPid.DOWN_MOVE_POWER));
         } else {
             if (!_endingDownState)
-                _liftMotor.setPower(0.007);
+                _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER);
             else
-                _liftMotor.setPower(0);
+                _liftMotor.setPower(Configs.LiftPid.DOWN_AT_TARGET_POWER);
         }
 
         ToolTelemetry.AddLine("Lift end1 = " + _endingUpState + " end = " + _endingDownState + " incoder = " + _liftMotor.getCurrentPosition());
@@ -73,11 +73,11 @@ public class Lift implements IRobotModule {
 
     public boolean isATarget() {
         //return Math.abs(_liftPIDF.Err) < 60;
-        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || ((_liftPose == LiftPose.MEGA_AVERAGE || _liftPose == LiftPose.AVERAGE) && Math.abs(_liftPIDF.Err) < 80);
+        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || ((_liftPose == LiftPose.MIDDLE_LOWER || _liftPose == LiftPose.MIDDLE_UPPER) && Math.abs(_liftPIDF.Err) < 80);
     }
 
     public boolean isDown() {
-        return _liftPose == LiftPose.DOWN && isATarget();
+        return _liftPose == LiftPose.DOWN && (_endingDownState || _liftMotor.getCurrentPosition() < Configs.LiftPoses.POSE_DOWN_ENDSWITCH_THRESHOLD);
     }
 
     public boolean isUp() {
@@ -85,7 +85,7 @@ public class Lift implements IRobotModule {
     }
 
     public boolean isAverage() {
-        return (_liftPose == LiftPose.AVERAGE || _liftPose == LiftPose.MEGA_AVERAGE) && isATarget();
+        return (_liftPose == LiftPose.MIDDLE_UPPER || _liftPose == LiftPose.MIDDLE_LOWER) && isATarget();
     }
 
     public void SetLiftPose(LiftPose pose) {

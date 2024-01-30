@@ -104,7 +104,7 @@ public class RouteManager implements IRobotModule {
                         break;
                 }
 
-                _route.add(() -> _lift.SetLiftPose(LiftPose.AVERAGE));
+                _route.add(() -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
                 _route.add(() -> Wait(1500));
                 _route.add(() -> _intake.releaseGripper());
                 _route.add(() -> Wait(500));
@@ -164,7 +164,7 @@ public class RouteManager implements IRobotModule {
                         break;
                 }
 
-                _route.add(() -> _lift.SetLiftPose(LiftPose.AVERAGE));
+                _route.add(() -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
                 _route.add(() -> Wait(1500));
                 _route.add(() -> _intake.releaseGripper());
                 _route.add(() -> Wait(500));
@@ -217,7 +217,7 @@ public class RouteManager implements IRobotModule {
                         _route.add(()->_automatic.PIDMove(new Vector2(-25, 0)));
                 }
 
-                _route.add(() -> _lift.SetLiftPose(LiftPose.AVERAGE));
+                _route.add(() -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
                 _route.add(() -> Wait(1500));
                 _route.add(() -> _intake.releaseGripper());
                 _route.add(() -> Wait(500));
@@ -268,7 +268,7 @@ public class RouteManager implements IRobotModule {
                         _route.add(()->_automatic.PIDMove(new Vector2(-25, 0)));
                 }
 
-                _route.add(() -> _lift.SetLiftPose(LiftPose.AVERAGE));
+                _route.add(() -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
                 _route.add(() -> Wait(1500));
                 _route.add(() -> _intake.releaseGripper());
                 _route.add(() -> Wait(500));
