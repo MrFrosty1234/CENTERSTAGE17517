@@ -60,6 +60,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+        cvtColor(frame, frame, COLOR_RGBA2RGB);//конвертация в хсв
         cvtColor(frame, frame, COLOR_RGB2HSV);//конвертация в хсв
         resize(frame, frame, new Size(x, y));// установка разрешения
 
