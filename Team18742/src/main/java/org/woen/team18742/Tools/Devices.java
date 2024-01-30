@@ -31,7 +31,7 @@ public class Devices {
 
     public static IMU IMU;
 
-    public static AnalogInput PixelSensor1, PixelSensor2;
+    public static AnalogInput PixelSensor, PixelSensor2;
     public static Servo Gripper, Clamp, Servopere, ServoPlane, ServoRailGun;
 
     public static List<LynxModule> Hubs;
@@ -41,38 +41,46 @@ public class Devices {
         if(_hardwareDevices != null)
             return;
 
-        LeftForwardDrive = map.get(DcMotorEx.class, "leftmotor");
-        RightForwardDrive = map.get(DcMotorEx.class, "rightmotor");
-        LeftBackDrive = map.get(DcMotorEx.class, "leftbackmotor");
-        RightBackDrive = map.get(DcMotorEx.class, "rightbackmotor");
+        LeftForwardDrive = map.get(DcMotorEx.class, "leftFrontMotor");
+        RightForwardDrive = map.get(DcMotorEx.class, "rightFrontMotor");
+        LeftBackDrive = map.get(DcMotorEx.class, "leftBackMotor");
+        RightBackDrive = map.get(DcMotorEx.class, "rightBackMotor");
 
-        LiftMotor = map.get(DcMotor.class, "liftmotor");
+        LiftMotor = map.get(DcMotorEx.class, "liftMotor");
 
-        BrushMotor = map.get(DcMotorEx.class, "brushMotor");
-
-        OdometerXLeft = map.get(DcMotorEx.class, "OdometrXLeft");
-        OdometerY = map.get(DcMotorEx.class, "OdometrY");
-        OdometerXRight = BrushMotor;
+        BrushMotor = map.get(DcMotorEx.class, "odometerXRightBrush");
+        OdometerXLeft = map.get(DcMotorEx.class, "odometerXLeft");
+        OdometerY = map.get(DcMotorEx.class, "odometrYLED");
+        OdometerXRight = map.get(DcMotorEx.class, "odometerXRightBrush");
 
         Camera = map.get(WebcamName.class, "Webcam 1");
 
-        EndSwitchUp = map.get(DigitalChannel.class, "ending1");
-        EndSwitchDown = map.get(DigitalChannel.class, "ending2");
+        EndSwitchUp = map.get(DigitalChannel.class, "endSwitchUp");
+        EndSwitchDown = map.get(DigitalChannel.class, "endSwitchDown");
 
         ServoPlane = map.get(Servo.class, "servoPlane");
         ServoRailGun = map.get(Servo.class, "servoRailGun");
 
         IMU = map.get(IMU.class, "imu");
 
-        PixelSensor1 = map.get(AnalogInput.class, "pixelSensor1");
-        PixelSensor2 = map.get(AnalogInput.class, "pixelSensor2");
-        Gripper = map.get(Servo.class, "gripok");
-        Clamp = map.get(Servo.class, "gripokiu");
-        Servopere = map.get(Servo.class, "perevert");
+        PixelSensor = map.get(AnalogInput.class, "pixelSensor");
+        Gripper = map.get(Servo.class, "gripper");
+        Clamp = map.get(Servo.class, "clamp");
+        Servopere = map.get(Servo.class, "turner");
 
+        //leftStackBrush = map.get(Servo.class,"leftStackBrush");
+
+        //rightStackBrush = map.get(Servo.class,"rightStackBrush");
+        //stackLift = map.get(Servo.class,"stackLift");
+
+        //podtyaga1 = map.get(Servo.class, "leftHook");
+        //podtyaga2 = map.get(Servo.class, "rightHook");
         Hubs = map.getAll(LynxModule.class);
 
         VoltageSensor = map.get(VoltageSensor.class, "Control Hub");
+
+        LightingMotor = map.get(DcMotorEx.class, "odometrYLED");;
+       // Podtyagamotor = map.get(DcMotorEx.class, "odometerXLeft");
 
         LightingMotor = OdometerXLeft;
 
