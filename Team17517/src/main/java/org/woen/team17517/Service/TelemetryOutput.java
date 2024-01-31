@@ -64,9 +64,9 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("pixelSensorRight",robot.grabber.pixelSensorRight);
         }
         if(odometry){
-            telemetry.addData("x",robot.odometry.x);
-            telemetry.addData("y",robot.odometry.y);
-            telemetry.addData("heading",robot.odometry.heading);
+            telemetry.addData("x",robot.odometryNew.getX());
+            telemetry.addData("y",robot.odometryNew.getY());
+            telemetry.addData("heading",robot.odometryNew.getH());
         }
         if(velocity){
             HashMap<String,Double> encoderMap = robot.driveTrainVelocityControl.getEncoders();

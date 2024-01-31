@@ -17,8 +17,9 @@ public class Grabber implements RobotModule {
     public DcMotorEx pixelMotor;
     public AnalogInput pixelSensorRight;
     public AnalogInput pixelSensorLeft;
-    public Servo pixelGrabServo;
+    public Servo pixelServoRight;
     public Servo progibServo;
+    public Servo pixelServoLeft;
     public static double voltage;
     public double pixelsCount = 0;
     double pixelsCountOld = 0;
@@ -54,7 +55,9 @@ public class Grabber implements RobotModule {
         pixelSensorRight = this.robot.linearOpMode.hardwareMap.analogInput.get("pixelStorageRight");
         progibServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoLift");
         pixelMotor = (DcMotorEx) this.robot.linearOpMode.hardwareMap.dcMotor.get("intakeMotor");
-        pixelGrabServo = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
+        pixelServoRight = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
+        pixelServoLeft = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoLeft");
+
     }
 
     public void powerPixelMotor(double power) {
@@ -141,13 +144,27 @@ public class Grabber implements RobotModule {
     }
 
     public void openGraber() {
-        pixelGrabServo.setPosition(grabberOpen);
+        pixelServoRight.setPosition(grabberOpen);
+        pixelServoLeft.setPosition(grabberOpen);
     }
 
     public void closeGraber() {
-        pixelGrabServo.setPosition(grabberClose);
+        pixelServoRight.setPosition(grabberClose);
+        pixelServoLeft.setPosition(grabberClose);
     }
 
+    public void openRightGraber(){
+        pixelServoRight.setPosition(grabberOpen);
+    }
+    public void openLeftGraber(){
+        pixelServoLeft.setPosition(grabberOpen);
+    }
+    public void closeRightGraber(){
+        pixelServoRight.setPosition(grabberClose);
+    }
+    public void closeLeftGraber(){
+        pixelServoLeft.setPosition(grabberClose);
+    }
 
     public void perekidLiftSafe() {
         robot.grabber.progibServo.setPosition(perekidStartDown);

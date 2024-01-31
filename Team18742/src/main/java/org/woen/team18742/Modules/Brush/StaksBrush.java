@@ -5,106 +5,83 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.woen.team18742.Modules.Brush.Brush;
+
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 public class StaksBrush implements IRobotModule {
-    private boolean pixelOnLift = false;
-    private DcMotorEx StacksBrushMotor;
+    private Servo servoToUpBrush;
+    private  Servo servoBrush1;
+    private  Servo servoBrush2;
+private Brush _Brush;
+    private Lift _lift;
+    private BrushUpState newState = BrushUpState.STATE_UP;
+    private Intake _intake;
     public double downServoPos = 0;
     public double upServoPos = 1;
-    private StakBrush stateStakBrush = StakBrush.STATE_OFF;
-private double UpTime = 1000;
-private double ReversTime = 1000;
-    private PosBrush posbrush = PosBrush.STATE_UP;
-    private ElapsedTime TimeToSetOnPos = new ElapsedTime();
-    private ElapsedTime TimeToRevers = new ElapsedTime();
-     enum PosBrush{
-        STATE_DOWN,STATE_UP;
-    }
-    enum StakBrush{
-        STATE_ON,STATE_OFF,STATE_REV;
-    }
-    public void UpBrush(){
-         SetPosition(PosBrush.STATE_UP);
-
-    }
-    public void DownBrush(){
-        SetPosition(PosBrush.STATE_DOWN);
-    }
-    private void SetPosition(PosBrush TargetPos){
-         if(TargetPos != posbrush){
-             posbrush = TargetPos;
-             TimeToSetOnPos.reset();
-         }
-    }
-    private void StakBrushSetState(StakBrush TargetState){
-         if(TargetState != stateStakBrush){
-             if(TargetState == StakBrush.STATE_OFF){
-                 TimeToSetOnPos.reset();
-             }
-             if(TargetState == StakBrush.STATE_ON){
-
-             }
-             if(TargetState == StakBrush.STATE_REV){
-                 TimeToRevers.reset();
-             }
-
-         }
-    }
-    private void servoSetPosUp(){
-         //стваим подъём сервы вверх
-    }
-    private void servoSetPosDown(){
-        //стваим подъём сервы вниз
+    public double ServoGoPose1 = 0;
+    public double ServoGoPose2 = 1;
+    public double ServoStopPose1 = 0.5;
+    public double ServoStopPose2 = 0.5;
+    enum BrushUpState {
+        STATE_UP, STATE_DOWN;
     }
     private void normalRun(){
-         //щётки на захват
+        servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_FWD);
+        servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_FWD);
     }
     private void reversRun(){
-         //ревёрс щёток
+        servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_REV);
+        servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_REV);
     }
-    private  void  stop(){
-         //остановка щёток
+    private void stop(){
+        servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_STOP);
+        servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_STOP);
+    }
+    private void servoSetUpPose(){
+        servoToUpBrush.setPosition(Configs.StackBrush.SERVO_LIFT_UP);
+    }
+    private void servoSetDownPose(){
+        servoToUpBrush.setPosition(Configs.StackBrush.SERVO_LIFT_DOWN);
+    }
+    
+    private boolean brushIsDown(){
+        if(BrushUpState.STATE_DOWN == newState){
+            return true;
+        }else {
+            return false;
+        }
     }
     @Override
-    public void Update(){
-         // значения амперов с сервы1 = StakServo1AMPS
-        // значения амперов с сервы2 = StakServo2AMPS
+    public void Init(BaseCollector collector) {
+        _lift = collector.GetModule(Lift.class);
+        _intake = collector.GetModule(Intake.class);
+        _Brush = collector.GetModule(Brush.class);
 
-switch (stateStakBrush){
-    /* if(большие шётки включены){
-    StakBrushSetState(StakBrush.STATE_ON);
     }
-
-*/
-        case STATE_ON:
-            normalRun();
-            if(pixelOnLift) {
-                StakBrushSetState(StakBrush.STATE_OFF);
-            }
-            break;
-    case STATE_OFF:
-        SetPosition(PosBrush.STATE_UP);
-        stop();
-        if(TimeToSetOnPos.milliseconds() > UpTime){
-            StakBrushSetState(StakBrush.STATE_REV);
-        }
+    @Override
+    public void Update() {
+        if(brushIsDown()){
+switch (_Brush.trueStateBrush){
+    case 1:
+        normalRun();
         break;
-    case STATE_REV:
+    case 2:
         reversRun();
-        if(TimeToRevers.milliseconds() > ReversTime) {
-            StakBrushSetState(StakBrush.STATE_OFF);
-        }
         break;
+    case 3:
+        stop();
+        break;
+}}else{
+        stop();
+        }
+
     }
-    switch (posbrush){
-        case STATE_UP:
-            break;
-        case STATE_DOWN:
-            break;
-    }
-}
 }

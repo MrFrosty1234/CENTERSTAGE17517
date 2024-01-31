@@ -1,7 +1,6 @@
 package org.woen.team18742.Modules;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
@@ -10,7 +9,6 @@ import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.TeleopModule;
-import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.Vector2;
 
 @TeleopModule
@@ -26,7 +24,6 @@ public class Manual implements IRobotModule {
     private Lift _lift;
     private Drivetrain _drivetrain;
     private Suspension _suspension;
-    private Gyroscope _gyro;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -39,9 +36,6 @@ public class Manual implements IRobotModule {
         _lift = collector.GetModule(Lift.class);
         _drivetrain = collector.GetModule(Drivetrain.class);
         _suspension = collector.GetModule(Suspension.class);
-        _gyro = collector.GetModule(Gyroscope.class);
-
-        LiftPose.AVERAGE.Pose = 400;
     }
 
     @Override
@@ -49,40 +43,40 @@ public class Manual implements IRobotModule {
         _plane.Update();
 
         _drivetrain.SimpleDriveDirection(
-                new Vector2(_gamepad.left_stick_y, _gamepad.left_stick_x).Turn(_gyro.GetRadians() - Math.atan2()),
+                new Vector2(-_gamepad.left_stick_y, -_gamepad.left_stick_x),
                 _gamepad.right_stick_x);
 
-        boolean A = _gamepad.square;
+        boolean launchPlane = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;
+        boolean liftAverage = _gamepad.dpad_right;
         boolean grip = _gamepad.triangle;
-        boolean brush = _gamepad.cross;
-        boolean zajat = _gamepad.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
-        boolean average = _gamepad.dpad_right;
+        boolean brushOn = _gamepad.cross;
+        boolean brushReverseAndOff = _gamepad.circle;
+        boolean planeTimerBypass = _gamepad.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
         double servotyaga = _gamepad.left_trigger;
 
 
-        if(grip && !_gripOld) {
+        if (grip && !_gripOld) {
             _intake.releaseGripper();
         }
 
-        if(brush && !_brushOld){
-            if(_brush.isBrusnOn())
+        if(brushOn && !_brushOld){
+            if(!_brush.isBrusnOn())
                 _brush.BrushEnable();
-            else {
-                _brush.BrushDisable();
-                _brush.RevTimeRes();
-            }
+        } else if (brushReverseAndOff) {
+            _brush.BrushDisable();
+            _brush.RevTimeRes();
         }
 
-        if (A)
-            _plane.Launch(zajat);
+        if (launchPlane)
+            _plane.Launch(planeTimerBypass);
         else
             _plane.DeLaunch();
 
         if (liftUp)
             _lift.SetLiftPose(LiftPose.UP);
-        else if(average)
-            _lift.SetLiftPose(LiftPose.AVERAGE);
+        else if(liftAverage)
+            _lift.SetLiftPose(LiftPose.MIDDLE_UPPER);
 
         if(servotyaga > 0.2)
             _suspension.Active();
@@ -90,7 +84,7 @@ public class Manual implements IRobotModule {
             _suspension.Disable();
 
         _gripOld = grip;
-        _brushOld = brush;
+        _brushOld = brushOn;
     }
 
     @Override

@@ -155,7 +155,7 @@ public class DriveTrain{
         ElapsedTime moveTimer = new ElapsedTime();
         moveTimer.reset();
 
-        double moveTime = 0;
+        double  moveTime = 0;
 
         while (((abs(xError)) > minXErr || (abs(yError)) > minYErr || (abs(headingError)) > minHeadingErr) && moveTime < movingTime && robot.linearOpMode.opModeIsActive()) { //TODO parameters
             double timeNow = moveTimer.seconds();

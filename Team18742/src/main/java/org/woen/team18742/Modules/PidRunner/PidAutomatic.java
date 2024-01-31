@@ -1,13 +1,13 @@
-package org.woen.team18742.Modules;
+package org.woen.team18742.Modules.PidRunner;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.signum;
 
-import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Modules.Drivetrain;
+import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
-import org.woen.team18742.Modules.Odometry.OdometrsOdometry;
 import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs.Configs;
@@ -16,7 +16,7 @@ import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 @AutonomModule
-public class Automatic implements IRobotModule {
+public class PidAutomatic implements IRobotModule {
     private OdometryHandler _odometry;
     private Gyroscope _gyro;
     private Drivetrain _driverTrain;
@@ -82,13 +82,13 @@ public class Automatic implements IRobotModule {
         _PIDFSide.UpdateCoefs(Configs.AutomaticSidePid.PidSideP, Configs.AutomaticSidePid.PidSideI, Configs.AutomaticSidePid.PidSideD);
         _PIDFTurn.UpdateCoefs(Configs.AutomaticRotatePid.PidRotateP, Configs.AutomaticRotatePid.PidRotateI, Configs.AutomaticRotatePid.PidRotateD);
 
-        if(Configs.GeneralSettings.IsAutonomEnable) {
+        if(Configs.GeneralSettings.IsAutonomEnable && _isEnable) {
             _driverTrain.SetSpeedWorldCoords(
                     new Vector2(_PIDFForward.Update(_targetPosition.X - _odometry.Position.X) / Battery.ChargeDelta, _PIDFSide.Update(_targetPosition.Y - _odometry.Position.Y) / Battery.ChargeDelta),
                     _PIDFTurn.Update(Gyroscope.ChopAngle(_gyro.GetRadians() - _turnTarget)) / Battery.ChargeDelta);
-        }
 
-        ToolTelemetry.AddLine( "Autonom:" + _PIDFForward.Err + " " + _PIDFSide.Err + " " + _PIDFTurn.Err);
+            ToolTelemetry.AddLine( "Autonom:" + _PIDFForward.Err + " " + _PIDFSide.Err + " " + _PIDFTurn.Err);
+        }
     }
 
     @Override
@@ -96,5 +96,15 @@ public class Automatic implements IRobotModule {
         _PIDFSide.Start();
         _PIDFForward.Start();
         _PIDFTurn.Start();
+    }
+
+    private boolean _isEnable = false;
+
+    public void Disable(){
+        _isEnable = false;
+    }
+
+    public void Enable(){
+        _isEnable = true;
     }
 }

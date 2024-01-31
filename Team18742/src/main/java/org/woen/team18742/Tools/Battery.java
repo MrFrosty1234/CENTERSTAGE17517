@@ -5,12 +5,11 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.woen.team18742.Collectors.BaseCollector;
+import org.woen.team18742.Tools.Configs.Configs;
 
-@Config
 public class Battery {
     public static double ChargeDelta = 1;
-
-    public static double CorrectCharge = 14;
+    public static double Voltage = 1;
 
     private VoltageSensor _voltageSensor;
 
@@ -19,6 +18,7 @@ public class Battery {
     }
 
     public void Update(){
-        ChargeDelta = _voltageSensor.getVoltage() / CorrectCharge;
+        Voltage = _voltageSensor.getVoltage();
+        ChargeDelta = Voltage / Configs.Battery.CorrectCharge;
     }
 }

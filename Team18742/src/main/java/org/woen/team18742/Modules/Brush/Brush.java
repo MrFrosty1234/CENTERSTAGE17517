@@ -3,7 +3,6 @@ package org.woen.team18742.Modules.Brush;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team18742.Collectors.BaseCollector;
@@ -21,16 +20,13 @@ public class Brush implements IRobotModule {
     private DcMotorEx brushMotor;
     private BrushState statebrush = BrushState.STATE_OFF;
     private boolean _flagDefense = true;
-
+    public byte trueStateBrush = 3;
     private boolean _isReversed = false, _isIntake = false;
 
     private ElapsedTime ProtTime = new ElapsedTime();
     private ElapsedTime RevTime = new ElapsedTime();
     private Lift _lift;
     private Intake _intake;
-    private double MAX_CURRENT = 6;
-    private double PROTECTION_TIME = 700;
-    private double REVERS_TIME = 500;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -44,32 +40,32 @@ public class Brush implements IRobotModule {
 
     private void stop() {//функция для конечного автомата
         brushMotor.setPower(0);
+        trueStateBrush = 3;
     }
 
     private void NormalRun() {//функция для конечного автомата
-        brushMotor.setPower(1);
+        brushMotor.setPower(Configs.Brush.brushPower);
+        trueStateBrush = 1;
     }
 
     private void reversRun() {//функция для конечного автомата
-        brushMotor.setPower(-1);
+        brushMotor.setPower(Configs.Brush.brushPowerReverse);
+        trueStateBrush = 2;
     }
 
     enum BrushState {
         STATE_ON, STATE_PROT, STATE_OFF, STATE_REV_OFF;
     }
-    public boolean isBrusnOn(){
-        if(BrushState.STATE_ON == statebrush){
-            return true;
-        }
-            else{
-                return false;
-        }
+
+    public boolean isBrusnOn() {
+        return BrushState.STATE_ON == statebrush || BrushState.STATE_PROT == statebrush;
     }
 
 
     @Override
     public void Update() {
-        ToolTelemetry.AddLine("brush = " + brushMotor.getCurrent(CurrentUnit.AMPS));
+        double motorCurrent = brushMotor.getCurrent(CurrentUnit.AMPS);
+        ToolTelemetry.AddLine("brush = " + motorCurrent);
 
         if (!_lift.isDown() || _intake.isPixelGripped())
             changeState(BrushState.STATE_OFF);
@@ -77,22 +73,22 @@ public class Brush implements IRobotModule {
         switch (statebrush) {
             case STATE_ON: //тут нормальные щётки
                 NormalRun();
-                if (brushMotor.getCurrent(CurrentUnit.AMPS) <= MAX_CURRENT) {
+                if (motorCurrent <= Configs.Brush.protectionCurrentAmps) {
                     ProtTime.reset();
                 }
-                if (ProtTime.milliseconds() > PROTECTION_TIME) {
+                if (ProtTime.milliseconds() > Configs.Brush.protectionTimeThresholdMs) {
                     changeState(BrushState.STATE_PROT);
                 }
                 break;
             case STATE_PROT://рверс
                 reversRun();
-                if (RevTime.milliseconds() > REVERS_TIME) {
+                if (RevTime.milliseconds() > Configs.Brush.reverseTimeThresholdMs) {
                     changeState(BrushState.STATE_ON);
                 }
                 break;
             case STATE_OFF://выключение щёток
 
-                if (RevTime.milliseconds() < REVERS_TIME) {
+                if (RevTime.milliseconds() < Configs.Brush.reverseTimeThresholdMs) {
                     reversRun();
                 } else {
                     stop();
@@ -114,22 +110,23 @@ public class Brush implements IRobotModule {
     public void BrushReverse() {
         changeState(BrushState.STATE_PROT);
     }
-public void RevTimeRes(){
-    RevTime.reset();
-}
+
+    public void RevTimeRes() {
+        RevTime.reset();
+    }
 
     private void changeState(BrushState TargetState) {
-        if(TargetState != statebrush){
-        if (TargetState == BrushState.STATE_OFF) {
-            RevTimeRes();
-        }
-        if (TargetState == BrushState.STATE_ON) {
-            ProtTime.reset();
-        }
-        if (TargetState == BrushState.STATE_PROT) {
-           RevTimeRes();
-        }
-        statebrush = TargetState;
+        if (TargetState != statebrush) {
+            if (TargetState == BrushState.STATE_OFF) {
+                RevTimeRes();
+            }
+            if (TargetState == BrushState.STATE_ON) {
+                ProtTime.reset();
+            }
+            if (TargetState == BrushState.STATE_PROT) {
+                RevTimeRes();
+            }
+            statebrush = TargetState;
         }
     }
 }

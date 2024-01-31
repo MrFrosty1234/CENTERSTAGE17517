@@ -12,7 +12,6 @@ public class AutonomForBase {
     VisionPortal visionPortal;
     PipeLine pipeLine;
 
-
    /* public AutonomForBase(UltRobot robot){
         this.robot = robot;
 
