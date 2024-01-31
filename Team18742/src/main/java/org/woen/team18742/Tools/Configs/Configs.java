@@ -12,13 +12,7 @@ public class Configs {
         public static double rasstrelennayatyga2 = 0.23;
     }
 
-    @Config
-    public static class StaksBrush{
-        public double ServoGoPose1 = 0;
-        public double ServoGoPose2 = 1;
-        public double ServoStopPose1 = 0.5;
-        public double ServoStopPose2 = 0.5;
-    }
+
 
     @Config
     public static class GeneralSettings {

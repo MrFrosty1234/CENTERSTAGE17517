@@ -12,6 +12,7 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
@@ -33,22 +34,22 @@ private Brush _Brush;
         STATE_UP, STATE_DOWN;
     }
     private void normalRun(){
-        servoBrush1.setPosition(ServoGoPose1);
-        servoBrush2.setPosition(ServoGoPose2);
+        servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_FWD);
+        servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_FWD);
     }
     private void reversRun(){
-        servoBrush1.setPosition(ServoGoPose2);
-        servoBrush2.setPosition(ServoGoPose1);
+        servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_REV);
+        servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_REV);
     }
     private void stop(){
-        servoBrush1.setPosition(ServoStopPose1);
-        servoBrush2.setPosition(ServoStopPose2);
+        servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_STOP);
+        servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_STOP);
     }
     private void servoSetUpPose(){
-        servoToUpBrush.setPosition(upServoPos);
+        servoToUpBrush.setPosition(Configs.StackBrush.SERVO_LIFT_UP);
     }
     private void servoSetDownPose(){
-        servoToUpBrush.setPosition(downServoPos);
+        servoToUpBrush.setPosition(Configs.StackBrush.SERVO_LIFT_DOWN);
     }
     
     private boolean brushIsDown(){
