@@ -8,7 +8,6 @@ import com.acmerobotics.roadrunner.AccelConstraint;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.HolonomicController;
-import com.acmerobotics.roadrunner.Math;
 import com.acmerobotics.roadrunner.MecanumKinematics;
 import com.acmerobotics.roadrunner.MinVelConstraint;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -41,7 +40,6 @@ import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Timers.ElapsedTimeExtra;
-import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
@@ -157,6 +155,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         private final Optional<TimeTrajectory> _timeTrajectory;
         private final Optional<TimeTurn> _timeTurn;
         private final double _duration;
+        private ElapsedTime trajectoryTimer = null;
 
        //private double xPoints[], yPoints[];
 
@@ -186,7 +185,12 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
         @Override
         public boolean run(@NonNull TelemetryPacket p) {
-            double time = _time.seconds();
+            if(trajectoryTimer == null){
+                trajectoryTimer = new ElapsedTime();
+                trajectoryTimer.reset();
+            }
+
+            double time = trajectoryTimer.seconds();//_time.seconds();
 
             if (time >= _duration) {
                 _driveTrain.Stop();
@@ -201,7 +205,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
             PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
                     .compute(txWorldTarget, position, velocity);
 
-            _driveTrain.SetCMSpeed(new Vector2(-command.linearVel.x.value(), -command.linearVel.y.value()), command.angVel.value());
+            _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
 //            ToolTelemetry.GetCanvas().setStroke("#4CAF50FF");
   //          ToolTelemetry.GetCanvas().setStrokeWidth(1);

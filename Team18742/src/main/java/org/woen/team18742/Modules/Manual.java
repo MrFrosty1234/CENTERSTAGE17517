@@ -53,7 +53,7 @@ public class Manual implements IRobotModule {
 
         _drivetrain.SetCMSpeed(
                 new Vector2(_gamepad.left_stick_y * 100, _gamepad.left_stick_x * 100),
-                _gamepad.right_stick_x * toRadians(150));
+                _gamepad.right_stick_x * toRadians(180));
 
         boolean A = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;

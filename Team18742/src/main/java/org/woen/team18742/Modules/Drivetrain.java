@@ -63,24 +63,24 @@ public class Drivetrain implements IRobotModule {
         _rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _rightForwardDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        _leftForwardDrive.setDirection(REVERSE);
-        _leftBackDrive.setDirection(REVERSE);
+        _rightForwardDrive.setDirection(REVERSE);
+        _rightBackDrive.setDirection(REVERSE);
 
         _gyro = collector.GetModule(Gyroscope.class);
     }
 
     private void DriveDirection(Vector2 speed, double rotate) {
-        _leftForwardDrive.setPower(-speed.X + speed.Y + rotate);
-        _rightBackDrive.setPower(-speed.X + speed.Y - rotate);
-        _leftBackDrive.setPower(-speed.X - speed.Y + rotate);
-        _rightForwardDrive.setPower(-speed.X - speed.Y - rotate);
+        _leftForwardDrive.setPower(speed.X - speed.Y - rotate);
+        _rightBackDrive.setPower(speed.X - speed.Y + rotate);
+        _leftBackDrive.setPower(speed.X + speed.Y - rotate);
+        _rightForwardDrive.setPower(speed.X + speed.Y + rotate);
     }
 
     private void DriveEncoderDirection(Vector2 speed, double rotate) {
-        _leftForwardDrive.setEncoderPower(speed.X - speed.Y + rotate);
-        _rightBackDrive.setEncoderPower(speed.X - speed.Y - rotate);
-        _leftBackDrive.setEncoderPower(speed.X + speed.Y + rotate);
-        _rightForwardDrive.setEncoderPower(speed.X + speed.Y - rotate);
+        _leftForwardDrive.setEncoderPower(speed.X - speed.Y - rotate);
+        _rightBackDrive.setEncoderPower(speed.X - speed.Y + rotate);
+        _leftBackDrive.setEncoderPower(speed.X + speed.Y - rotate);
+        _rightForwardDrive.setEncoderPower(speed.X + speed.Y + rotate);
     }
 
     public void SimpleDriveDirection(Vector2 speed, double rotate){
@@ -94,7 +94,7 @@ public class Drivetrain implements IRobotModule {
 
         DriveEncoderDirection(new Vector2(cmSpeed.X / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat,
                 cmSpeed.Y / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat),
-                (-rotate * (Configs.DriveTrainWheels.Radius * 2d) / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat) / Configs.Odometry.RotateLag);
+                (rotate * (Configs.DriveTrainWheels.Radius * 2d) / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat) / Configs.Odometry.RotateLag);
     }
 
     public void ResetEncoders() {

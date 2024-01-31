@@ -2,6 +2,7 @@ package org.woen.team18742.Modules;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.signum;
+import static java.lang.Math.toDegrees;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -63,10 +64,10 @@ public class Gyroscope implements IRobotModule {
         _filter.UpdateCoef(Configs.Gyroscope.MergerCoefSeconds);
 
         if (Configs.GeneralSettings.IsUseOdometers) {
-            double odometerTurn = -(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
-            _radianSpeed = -(_odometrs.GetSpeedOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetSpeedOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
+            double odometerTurn = (-_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft + _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
+            _radianSpeed = (-_odometrs.GetSpeedOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft + _odometrs.GetSpeedOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
 
-
+            ToolTelemetry.AddVal("odometerTurn",toDegrees(odometerTurn));
 
             _allRadians = ChopAngle(odometerTurn*0d + _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) / 2d*2d);
         }
@@ -77,8 +78,8 @@ public class Gyroscope implements IRobotModule {
 
         _allRadians = ChopAngle(_allRadians + Bios.GetStartPosition().Rotation);
 
-        _allDegree = Math.toDegrees(_allRadians);
-        _degreeSpeed = Math.toDegrees(_radianSpeed);
+        _allDegree = toDegrees(_allRadians);
+        _degreeSpeed = toDegrees(_radianSpeed);
 
         ToolTelemetry.AddLine("rotation = " + _allDegree);
         ToolTelemetry.AddLine("speed rotation = " + _degreeSpeed);
