@@ -100,5 +100,9 @@ public class Lift implements IRobotModule {
         _liftPIDF.Start();
     }
 
+    public boolean isProchelnugnoepologenie(){
+        return _liftMotor.getCurrentPosition() > Configs.Lift.isProchelnugnoepologenie;
+    }
+
     private LiftPose _liftPose = LiftPose.DOWN;
 }

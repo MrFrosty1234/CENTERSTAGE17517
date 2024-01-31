@@ -26,6 +26,7 @@ public class Manual implements IRobotModule {
     private Lift _lift;
     private Drivetrain _drivetrain;
     private Suspension _suspension;
+    private Gyroscope _gyro;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -38,6 +39,7 @@ public class Manual implements IRobotModule {
         _lift = collector.GetModule(Lift.class);
         _drivetrain = collector.GetModule(Drivetrain.class);
         _suspension = collector.GetModule(Suspension.class);
+        _gyro = collector.GetModule(Gyroscope.class);
 
         LiftPose.AVERAGE.Pose = 400;
     }
@@ -47,7 +49,7 @@ public class Manual implements IRobotModule {
         _plane.Update();
 
         _drivetrain.SimpleDriveDirection(
-                new Vector2(_gamepad.left_stick_y, _gamepad.left_stick_x),
+                new Vector2(_gamepad.left_stick_y, _gamepad.left_stick_x).Turn(_gyro.GetRadians() - Math.atan2()),
                 _gamepad.right_stick_x);
 
         boolean A = _gamepad.square;

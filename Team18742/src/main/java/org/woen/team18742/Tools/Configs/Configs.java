@@ -57,6 +57,11 @@ public class Configs {
     }
 
     @Config
+    public static class Lift{
+        public static double isProchelnugnoepologenie = 100;
+    }
+
+    @Config
     public static class Odometry{
         public static double YCoef = 0.9;
         public static double XCoef = 0.9;

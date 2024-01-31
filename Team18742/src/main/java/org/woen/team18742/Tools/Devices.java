@@ -73,7 +73,7 @@ public class Devices {
         Clamp = map.get(Servo.class, "gripokiu");
         Servopere = map.get(Servo.class, "perevert");
 
-        podtyaga1 = map.get(Servo.class, "tyaga1");
+        map.get(Servo.class, "tyaga1");
         podtyaga2 = map.get(Servo.class, "tyaga2");
         Hubs = map.getAll(LynxModule.class);
 

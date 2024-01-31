@@ -41,11 +41,8 @@ private Brush _brush;
     }
 
     public void updateTurner() {
-        if (_lift.isUp()) {
+        if (_lift.isProchelnugnoepologenie()) {
             servoTurn.setPosition(Configs.Intake.servoTurnTurned);
-        } else if (_lift.isAverage()) {
-            servoTurn.setPosition(Configs.Intake.servoTurnTurned);
-            _normalTurnTimer.reset();
         } else {
             servoTurn.setPosition(Configs.Intake.servoTurnNormal);
         }
