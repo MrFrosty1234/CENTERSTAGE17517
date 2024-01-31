@@ -1,6 +1,7 @@
 package org.woen.team18742.Modules;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
@@ -55,7 +56,7 @@ public class Manual implements IRobotModule {
         double servotyaga = _gamepad.left_trigger;
 
 
-        if(grip && !_gripOld) {
+        if (grip && !_gripOld) {
             _intake.releaseGripper();
         }
 

@@ -28,10 +28,10 @@ public class Configs {
     @Config
     public static class Camera{
         public static int RobotPos = 2;
-        public static double CameraAccuracy = 130;
-        public static double CameraX = 16.01, CameraY = 16.18;
+        public static double CameraAccuracy = 150;
+        public static double CameraX = 16.01, CameraY = -16.18;
 
-        public static double ZoneLeftEnd = 320, ZoneForwardEnd = 620;
+        public static double ZoneLeftEnd = 220, ZoneForwardEnd = 550;
 
         public static int PruningStart = 290;
 
@@ -66,21 +66,20 @@ public class Configs {
         public static int POSE_SERVO_CLEARANCE = 900;
         public static int POSE_DOWN = -40;
         public static int POSE_DOWN_ENDSWITCH_THRESHOLD = 10;
+        public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
     }
 
     @Config
     public static class Odometry{
-        public static double YCoef = 0.9;
-        public static double XCoef = 0.9;
-
-        public static double YSpeedCoef = 0.9;
-        public static double XSpeedCoef = 0.9;
+        public static double YCoef = 0.5;
+        public static double XCoef = 0.5;
 
         public static double RadiusOdometrXLeft = 15.117, RadiusOdometrXRight = 15.315, RadiusOdometrY = 16.8609;
 
         public static double DiametrOdometr = 4.8, EncoderconstatOdometr = 8192;
 
-        public static double YLag = 0.8;
+        public static double YLag = 0.7;
+        public static double RotateLag = 0.89;
     }
 
     @Config
@@ -109,13 +108,14 @@ public class Configs {
 
     @Config
     public static class DriveTrainWheels {
-        public static double diameter = 9.8, encoderconstat = 480 / 1.1, MaxSpeedX = 2052, MaxSpeedY = 2052, MaxSpeedTurn = 1026, speed = 0.5;
-        public static boolean isUsePids = false;
+        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 150, MaxSpeedTurn = Math.toRadians(130), speed = 0.5;
+        public static double MaxTurnAccel = 3; //random
+        public static double Radius = 15.7;
     }
 
     @Config
     public static class Gyroscope{
-        public static double MergerCoefSeconds = 0.9;
+        public static double MergerCoefSeconds = 0.7;
     }
 
     @Config
@@ -135,6 +135,39 @@ public class Configs {
     public static class Plane{
         public static double servoplaneOtkrit = 0.07;
         public static double servoplaneneOtkrit = 0.17;
+    }
+
+    @Config
+    public static class Route{
+        public static double MinProfileAccel = -100; // random
+        public static double MaxProfileAccel = 100; // random
+    }
+
+    @Config
+    public static class PositionConnection{
+        public static double Axial = 0.0000012;
+        public static double Lateral = 0.0000012;
+        public static double Heading = 0.4;
+    }
+
+    @Config
+    public static class SpeedConnection{
+        public static double Axial = 0.15;
+        public static double Lateral = 0.15;
+        public static double Heading = 0.15;
+    }
+
+    @Config
+    public static class Motors{
+        public static double DefultP = 0.000001;
+        public static double DefultI = 0.00013;
+        public static double DefultD = 0.005;
+        public static double DefultF = 0.0004;
+    }
+
+    @Config
+    public static class Battery{
+        public static double CorrectCharge = 14;
     }
 
     @Config

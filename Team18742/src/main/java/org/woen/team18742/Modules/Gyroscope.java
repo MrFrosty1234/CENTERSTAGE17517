@@ -1,8 +1,8 @@
 package org.woen.team18742.Modules;
 
 import static java.lang.Math.PI;
-import static java.lang.Math.abs;
 import static java.lang.Math.signum;
+import static java.lang.Math.toDegrees;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -13,17 +13,21 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Modules.Odometry.OdometryHandler;
+import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponentialFilter;
+import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
 public class Gyroscope implements IRobotModule {
     private IMU _imu;
     private OdometryHandler _odometrs;
-    private ExponentialFilter _filter = new ExponentialFilter(Configs.Gyroscope.MergerCoefSeconds);
+    private final ExponentialFilter _filter = new ExponentialFilter(Configs.Gyroscope.MergerCoefSeconds);
 
-    private ElapsedTime _deltaTime = new ElapsedTime();
+    private final ElapsedTime _deltaTime = new ElapsedTime();
+
+    private double _oldRadians, _allRadians, _allDegree, _radianSpeed, _degreeSpeed;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -40,45 +44,54 @@ public class Gyroscope implements IRobotModule {
     }
 
     public double GetRadians() {
-        return _radians;
+        return _allRadians;
     }
 
     public double GetDegrees() {
-        return _degree;
+        return _allDegree;
     }
 
-    private double _degree, _radians, _odometrDegree, _odometrRadians;
+    public double GetSpeedRadians() {
+        return _radianSpeed;
+    }
+
+    public double GetSpeedDegrees() {
+        return _degreeSpeed;
+    }
 
     @Override
     public void Update() {
         _filter.UpdateCoef(Configs.Gyroscope.MergerCoefSeconds);
 
-        _degree = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-        _radians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-
         if (Configs.GeneralSettings.IsUseOdometers) {
-            _odometrRadians = ChopAngle(-(_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft - _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2);
-            _odometrDegree = Math.toDegrees(_odometrRadians);
+            double odometerTurn = ChopAngle((-_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft + _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2);
+            _radianSpeed = (-_odometrs.GetSpeedOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft + _odometrs.GetSpeedOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
 
-            //_radians = _filter.Update(_odometrRadians - _radians, _radians);
-            //_degree = Math.toDegrees(_radians);
-            //ToolTelemetry.AddLine("Gyro1 = " + _odometrDegree + " Gyro = " + _degree);
+            _allRadians = ChopAngle((odometerTurn + _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)) / 2d);
+        }
+        else {
+            _allRadians = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            _radianSpeed = (_allRadians - _oldRadians) / _deltaTime.seconds();
         }
 
-        SpeedTurn = (_radians - _oldRadians) / _deltaTime.seconds();
+        _allRadians = ChopAngle(_allRadians + Bios.GetStartPosition().Rotation);
 
-        _oldRadians = _radians;
+        _allDegree = toDegrees(_allRadians);
+        _degreeSpeed = toDegrees(_radianSpeed);
+
+        ToolTelemetry.AddLine("rotation = " + _allDegree);
+        ToolTelemetry.AddLine("speed rotation = " + _degreeSpeed);
+
+        _oldRadians = _allRadians;
 
         _deltaTime.reset();
     }
 
-    private double _oldRadians;
-
-    public double SpeedTurn = 0;
-
     public void Reset() {
         _imu.resetYaw();
         _filter.Reset();
+
+        _oldRadians = 0;
     }
 
     public static double ChopAngle(double angle){

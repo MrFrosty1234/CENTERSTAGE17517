@@ -17,5 +17,7 @@ public class TeleOpCollector extends BaseCollector {
             _annotatedClass = GetAnnotatedClasses(TeleopModule.class);
 
         AddAdditionModules(_annotatedClass);
+
+        Init();
     }
 }
