@@ -12,6 +12,8 @@ public class Configs {
         public static double rasstrelennayatyga2 = 0.23;
     }
 
+
+
     @Config
     public static class GeneralSettings {
         public static boolean IsAutonomEnable = true;
