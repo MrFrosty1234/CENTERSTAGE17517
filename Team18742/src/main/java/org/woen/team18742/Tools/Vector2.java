@@ -57,6 +57,10 @@ public class Vector2 {
         return new Vector2(vec1.X * vec2.X, vec1.Y * vec2.Y);
     }
 
+    public static Vector2 Multiply(Vector2 vec1, double val){
+        return new Vector2(vec1.X * val, vec1.Y * val);
+    }
+
     public static Vector2 ToVector(double val){
         return new Vector2(val, val);
     }

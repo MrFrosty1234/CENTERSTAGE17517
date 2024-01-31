@@ -46,14 +46,14 @@ public class Manual implements IRobotModule {
     public void Update() {
         _plane.Update();
 
-        /*_drivetrain.SimpleDriveDirection(
+        _drivetrain.SimpleDriveDirection(
                 new Vector2(_gamepad.left_stick_y, _gamepad.left_stick_x),
-                _gamepad.right_stick_x);*/
+                _gamepad.right_stick_x);
 
 
-        _drivetrain.SetCMSpeed(
+        /*_drivetrain.SetCMSpeed(
                 new Vector2(_gamepad.left_stick_y * 100, _gamepad.left_stick_x * 100),
-                _gamepad.right_stick_x * toRadians(180));
+                _gamepad.right_stick_x * toRadians(180));*/
 
         boolean A = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;

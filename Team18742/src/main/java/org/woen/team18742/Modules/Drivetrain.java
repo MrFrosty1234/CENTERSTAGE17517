@@ -84,13 +84,11 @@ public class Drivetrain implements IRobotModule {
     }
 
     public void SimpleDriveDirection(Vector2 speed, double rotate){
-        DriveDirection(speed, rotate);
+        DriveDirection(Vector2.Multiply(speed, 100), rotate * 100);
     }
 
     public void SetCMSpeed(Vector2 cmSpeed, double rotate){
         cmSpeed.Y *= 1d / Configs.Odometry.YLag;
-
-    //    cmSpeed = Vector2.Multiply(cmSpeed, new Vector2(0.25));
 
         DriveEncoderDirection(new Vector2(cmSpeed.X / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat,
                 cmSpeed.Y / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat),

@@ -122,16 +122,16 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 0.1; // random
-        public static double Lateral = 0.1; // random
-        public static double Heading = 0.4; // random
+        public static double Axial = 0.0000012;
+        public static double Lateral = 0.0000012;
+        public static double Heading = 0.4;
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 0; // random
-        public static double Lateral = 0; // random
-        public static double Heading = 0; // random
+        public static double Axial = 0.15;
+        public static double Lateral = 0.15;
+        public static double Heading = 0.15;
     }
 
     @Config
