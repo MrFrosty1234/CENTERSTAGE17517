@@ -1,6 +1,8 @@
 package org.woen.team18742.Modules;
 
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -14,7 +16,7 @@ import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
-import org.woen.team18742.Tools.Timer;
+import org.woen.team18742.Tools.Timers.Timer;
 import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
@@ -28,12 +30,13 @@ private Brush _brush;
     private Lift _lift;
 
     @Override
-    public void Init(BaseCollector collector) {
+    public void Init(@NonNull BaseCollector collector) {
         pixelSensor1 = Devices.PixelSensor;
         gripper = Devices.Gripper;
         clamp = Devices.Clamp;
         servoTurn = Devices.Servopere;
         _lighting = Devices.LightingMotor;
+
 
         _lift = collector.GetModule(Lift.class);
         _brush = collector.GetModule(Brush.class);

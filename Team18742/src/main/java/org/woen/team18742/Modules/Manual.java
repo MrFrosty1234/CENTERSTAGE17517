@@ -54,7 +54,7 @@ public class Manual implements IRobotModule {
         boolean brushReverseAndOff = _gamepad.circle;
         boolean planeTimerBypass = _gamepad.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
         double servotyaga = _gamepad.left_trigger;
-
+        double motortyagakopka = _gamepad.right_trigger;
 
         if (grip && !_gripOld) {
             _intake.releaseGripper();
@@ -85,6 +85,11 @@ public class Manual implements IRobotModule {
 
         _gripOld = grip;
         _brushOld = brushOn;
+
+        if(motortyagakopka > 0.2)
+        {
+            
+        }
     }
 
     @Override
