@@ -54,10 +54,10 @@ public class DriveTrain implements RobotModule{
     public static double minErrY;
     public static double minErrH;
 
-    public static double u_X = 2000;
-    public static double u_H = 2000;
-    public static double u_Y = 2400;
-    public static double u_max = 0;
+    public static double u_X = 0;
+    public static double u_H = 0;
+    public static double u_Y = 0;
+    public static double u_max = 2000;
 
 
     private PIDMethod pidX = new PIDMethod(kPX,kIX,kDX,ImaxX);
@@ -148,6 +148,7 @@ public class DriveTrain implements RobotModule{
         X = pidX.PID(targetVector.getX(),positionVector.getX(),voltage);
         Y = pidY.PID(targetVector.getY(), positionVector.getY(),voltage);
         H = pidH.PID(targetH,posH,voltage);
+
         u_X = timer.seconds() * kt;
 
         if (u_X > u_max){
