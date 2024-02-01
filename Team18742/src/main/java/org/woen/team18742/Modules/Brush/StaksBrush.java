@@ -18,9 +18,9 @@ import org.woen.team18742.Tools.ToolTelemetry;
 
 public class StaksBrush implements IRobotModule {
     private Servo servoToUpBrush;
-    private  Servo servoBrush1;
-    private  Servo servoBrush2;
-private Brush _Brush;
+    private Servo servoBrush1;
+    private Servo servoBrush2;
+    private Brush _Brush;
     private Lift _lift;
     private BrushUpState newState = BrushUpState.STATE_UP;
     private Intake _intake;
@@ -30,35 +30,42 @@ private Brush _Brush;
     public double ServoGoPose2 = 1;
     public double ServoStopPose1 = 0.5;
     public double ServoStopPose2 = 0.5;
+
     enum BrushUpState {
         STATE_UP, STATE_DOWN;
     }
-    private void normalRun(){
+
+    private void normalRun() {
         servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_FWD);
         servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_FWD);
     }
-    private void reversRun(){
+
+    private void reversRun() {
         servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_REV);
         servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_REV);
     }
-    private void stop(){
+
+    private void stop() {
         servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_STOP);
         servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_STOP);
     }
-    private void servoSetUpPose(){
+
+    private void servoSetUpPose() {
         servoToUpBrush.setPosition(Configs.StackBrush.SERVO_LIFT_UP);
     }
-    private void servoSetDownPose(){
+
+    private void servoSetDownPose() {
         servoToUpBrush.setPosition(Configs.StackBrush.SERVO_LIFT_DOWN);
     }
-    
-    private boolean brushIsDown(){
-        if(BrushUpState.STATE_DOWN == newState){
+
+    private boolean brushIsDown() {
+        if (BrushUpState.STATE_DOWN == newState) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
+
     @Override
     public void Init(BaseCollector collector) {
         _lift = collector.GetModule(Lift.class);
@@ -66,21 +73,23 @@ private Brush _Brush;
         _Brush = collector.GetModule(Brush.class);
 
     }
+
     @Override
     public void Update() {
-        if(brushIsDown()){
-switch (_Brush.trueStateBrush){
-    case 1:
-        normalRun();
-        break;
-    case 2:
-        reversRun();
-        break;
-    case 3:
-        stop();
-        break;
-}}else{
-        stop();
+        if (brushIsDown()) {
+            switch (_Brush.trueStateBrush) {
+                case 1:
+                    normalRun();
+                    break;
+                case 2:
+                    reversRun();
+                    break;
+                case 3:
+                    stop();
+                    break;
+            }
+        } else {
+            stop();
         }
 
     }
