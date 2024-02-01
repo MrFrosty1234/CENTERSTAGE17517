@@ -24,7 +24,9 @@ public class Lift implements RobotModule {
     UltRobot robot;
     private int liftOffset = -LiftPosition.UP.value;
     public boolean liftAtTaget = false;
-
+    public void setLiftMode(LiftMode mode){
+        liftMode = mode;
+    }
     public Lift(UltRobot robot) {
         this.robot = robot;
         liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("liftMotor");
@@ -97,33 +99,51 @@ public class Lift implements RobotModule {
 
         if (getTopSwitch())
             setPositionOffset(LiftPosition.UP.value - getRawPosition());
-        switch (targetPosition) {
-            case UP:
-                liftAtTaget = getTopSwitch();
-                liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
-                setPower(liftPower);
+        switch (liftMode){
+            case AUTO:
+                switch (targetPosition) {
+                    case UP:
+                        liftAtTaget = getTopSwitch();
+                        liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
+                        setPower(liftPower);
+                        break;
+                    case DOWN:
+                        liftAtTaget = getPosition() <= LiftPosition.DOWN.value;
+                        liftPower = liftAtTaget ? 0 : -liftMovePower;
+                        setPower(liftPower);
+                        break;
+                    case FORAUTONOM:
+                        if (getPosition() == LiftPosition.FORAUTONOM.value)
+                            liftAtTaget = true;
+                        else
+                            liftAtTaget = false;
+                        liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
+                        setPower(liftPower);
+                        break;
+                    default:
+                        liftAtTaget = true;
+                        liftPower = 0;
+                        setPower(liftPower);
+                        break;
+
+                }
+            break;
+            case  MANUALLIMIT:
+                if(manualTarget && getTopSwitch()){
+                    liftPower = 1;
+                    setPower(liftPower);
+                } else {
+                    setPower(liftGravityPower);
+                }
+
                 break;
-            case DOWN:
-                liftAtTaget = getPosition() <= LiftPosition.DOWN.value;
-                liftPower = liftAtTaget ? 0 : -liftMovePower;
-                setPower(liftPower);
-                break;
-            case FORAUTONOM:
-                 if(getPosition() == LiftPosition.FORAUTONOM.value)
-                     liftAtTaget = true;
-                 else
-                     liftAtTaget = false;
-                 liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
-                 setPower(liftPower);
-                 break;
-            default:
-                liftAtTaget = true;
-                liftPower = 0;
-                setPower(liftPower);
         }
 
     }
-
+    public void setManualTarget (double setManualTarget ){
+        this.manualTarget = manualTarget;
+    }
+    private boolean manualTarget = false;
     @Override
     public boolean isAtPosition() {
         return liftAtTaget;

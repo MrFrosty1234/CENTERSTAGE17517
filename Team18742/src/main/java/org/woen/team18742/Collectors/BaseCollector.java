@@ -4,14 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.woen.team18742.Modules.Manager.BulkInit;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Devices;
-import org.woen.team18742.Tools.TimerHandler;
-import org.woen.team18742.Tools.ToolTelemetry;
+import org.woen.team18742.Tools.Motor.MotorsHandler;
+import org.woen.team18742.Tools.Timers.TimerHandler;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,12 +30,13 @@ public class BaseCollector {
     private static ArrayList<Class<?>> _annotatedClass;
 
     private TimerHandler _timers;
+    private MotorsHandler _motors;
 
     public BaseCollector(LinearOpMode robot) {
         Robot = robot;
-        ToolTelemetry.SetTelemetry(Robot.telemetry);
 
         _timers = new TimerHandler();
+        _motors = new MotorsHandler();
 
         _modules.clear();
 
@@ -46,8 +49,6 @@ public class BaseCollector {
             _annotatedClass = GetAnnotatedClasses(Module.class);
 
         AddAdditionModules(_annotatedClass);
-
-        ToolTelemetry.Update();
     }
 
     private static ArrayList<Class<?>> _classes;
@@ -76,6 +77,18 @@ public class BaseCollector {
                     throw new RuntimeException("not successful find " + i + " class");
                 }
             }
+
+            for(Class<?> i: _classes){
+                for(Method j: i.getMethods())
+                    if(j.isAnnotationPresent(BulkInit.class)) {
+                        try {
+                            j.invoke(null);
+                        }
+                        catch (Exception e){
+                            throw new RuntimeException("failed to invoke method: " + j.getName());
+                        }
+                    }
+            }
         }
 
         ArrayList<Class<?>> result = new ArrayList<>();
@@ -90,11 +103,14 @@ public class BaseCollector {
     public void Start() {
         Time.reset();
 
+        _motors.Start();
+
         for (IRobotModule i : _modules)
             i.Start();
     }
 
     public void Update() {
+        _motors.Update();
         _battery.Update();
 
         for (IRobotModule i : _modules)
@@ -103,14 +119,17 @@ public class BaseCollector {
         for (IRobotModule i : _modules)
             i.LastUpdate();
 
-        ToolTelemetry.Update();
-
         _timers.Update();
     }
 
     public void Stop() {
         for (IRobotModule i : _modules)
             i.Stop();
+    }
+
+    public void Init(){
+        for (IRobotModule i : _modules)
+            i.Init(this);
     }
 
     protected void AddAdditionModules(ArrayList<Class<?>> modules) {
@@ -126,11 +145,6 @@ public class BaseCollector {
             if (instance instanceof IRobotModule)
                 _modules.add((IRobotModule) instance);
         }
-
-        ToolTelemetry.AddLine("activated modules = " + _modules.size());
-
-        for (IRobotModule i : _modules)
-            i.Init(this);
     }
 
     public <T extends IRobotModule> T GetModule(Class<T> type) {

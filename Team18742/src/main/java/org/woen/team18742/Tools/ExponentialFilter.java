@@ -27,6 +27,6 @@ public class ExponentialFilter {
     }
 
     public double Update(double val1, double val2){
-        return UpdateRaw(val2 - val1, val1);
+        return UpdateRaw(val1, val1 - val2);
     }
 }

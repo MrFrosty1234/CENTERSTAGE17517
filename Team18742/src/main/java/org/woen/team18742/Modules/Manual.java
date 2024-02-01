@@ -1,6 +1,7 @@
 package org.woen.team18742.Modules;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
@@ -53,9 +54,9 @@ public class Manual implements IRobotModule {
         boolean brushReverseAndOff = _gamepad.circle;
         boolean planeTimerBypass = _gamepad.left_bumper;// зажать эту кнопку чтоб досрочно запустить самолетик
         double servotyaga = _gamepad.left_trigger;
+        double motortyagakopka = _gamepad.right_trigger;
 
-
-        if(grip && !_gripOld) {
+        if (grip && !_gripOld) {
             _intake.releaseGripper();
         }
 
@@ -84,6 +85,11 @@ public class Manual implements IRobotModule {
 
         _gripOld = grip;
         _brushOld = brushOn;
+
+        if(motortyagakopka > 0.2)
+        {
+            
+        }
     }
 
     @Override

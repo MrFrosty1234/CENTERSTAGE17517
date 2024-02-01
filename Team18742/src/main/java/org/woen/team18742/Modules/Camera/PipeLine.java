@@ -23,6 +23,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Modules.StartRobotPosition;
+import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Vector2;
 
@@ -36,7 +37,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
     public AtomicReference<Vector2> RectCenter = new AtomicReference<>(new Vector2());
 
-    double x = 640;
+    double x = 590;
     double y = 480;
     double r1 = 5;
     double g1 = 69;
@@ -59,8 +60,13 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
     }
 
     @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
-        cvtColor(frame, frame, COLOR_RGBA2RGB);//конвертация в хсв
+    public Object processFrame(Mat frm, long captureTimeNanos) {
+        Bitmap b = Bitmap.createBitmap(frm.width(), frm.height(), Bitmap.Config.RGB_565);//выводим картинку в дашборд
+        Utils.matToBitmap(frm, b);
+        LastFrame.set(b);
+
+        Mat frame = frm.clone();
+
         cvtColor(frame, frame, COLOR_RGB2HSV);//конвертация в хсв
         resize(frame, frame, new Size(x, y));// установка разрешения
 
@@ -68,12 +74,11 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
         blur(frame, frame, new Size(10, 10));//размытие для компенсации шумов с камеры
         // можно иф для установки цвета команды и только 1 инрейндж
-        if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
+        if (Bios.GetStartPosition() == StartRobotPosition.RED_BACK || Bios.GetStartPosition() == StartRobotPosition.RED_FORWARD)
             inRange(frame, new Scalar(Configs.Camera.hRedDown, Configs.Camera.cRedDown, Configs.Camera.vRedDowm), new Scalar(Configs.Camera.hRedUp, Configs.Camera.cRedUp, Configs.Camera.vRedUp), frame);
 
         //inRange(картинка вход, мин знач хсв, макс знач хсв, выход картинка(трешхолды))
-
-        if (AutonomCollector.StartPosition == StartRobotPosition.RED_BACK || AutonomCollector.StartPosition == StartRobotPosition.RED_FORWARD)
+        if (Bios.GetStartPosition() == StartRobotPosition.BLUE_BACK || Bios.GetStartPosition() == StartRobotPosition.BLUE_FORWAD)
             inRange(frame, new Scalar(Configs.Camera.hBlueDown, Configs.Camera.cBlueDown, Configs.Camera.vBlueDowm), new Scalar(Configs.Camera.hBlueUp, Configs.Camera.cBlueUp, Configs.Camera.vBlueUp), frame);
 
         //Core.bitwise_or(img_range_red, img_range_blue, frame);//объединяем два инрейнджа
@@ -81,21 +86,17 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Сжать
         dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Раздуть
 
-        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);//выводим картинку в дашборд
-        Utils.matToBitmap(frame, b);
-        LastFrame.set(b);
-
         Moments moments = Imgproc.moments(frame);
 
         Rect boundingRect = boundingRect(frame);//boudingRect представляем прямоугольник
 
         if (boundingRect.area() <= 0) {
-            if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
-                pos.set(1);
-            else
+            if (Bios.GetStartPosition() == StartRobotPosition.BLUE_BACK || Bios.GetStartPosition() == StartRobotPosition.BLUE_FORWAD)
                 pos.set(3);
+            else
+                pos.set(1);
 
-            return frame;
+            return frm;
         }
 
         centerOfRectX = moments.m10/moments.m00;//координаты центра вычисляем
@@ -104,18 +105,18 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         RectCenter.set(new Vector2(centerOfRectX, centerOfRectY));
 
         if (centerOfRectX < Configs.Camera.ZoneLeftEnd)
-            if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
-                pos.set(3);
-            else
+            if (Bios.GetStartPosition() == StartRobotPosition.BLUE_BACK || Bios.GetStartPosition() == StartRobotPosition.BLUE_FORWAD)
                 pos.set(1);
+            else
+                pos.set(3);
         else if (centerOfRectX < Configs.Camera.ZoneForwardEnd)
             pos.set(2);
-        else if (AutonomCollector.StartPosition == StartRobotPosition.BLUE_BACK || AutonomCollector.StartPosition == StartRobotPosition.BLUE_FORWAD)
-            pos.set(1);
-        else
+        else if (Bios.GetStartPosition() == StartRobotPosition.BLUE_BACK || Bios.GetStartPosition() == StartRobotPosition.BLUE_FORWAD)
             pos.set(3);
+        else
+            pos.set(1);
 
-        return frame;
+        return frm;
     }
 
     @Override

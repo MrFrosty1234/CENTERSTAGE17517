@@ -18,6 +18,8 @@ import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
+import org.woen.team18742.Tools.Bios;
+import org.woen.team18742.Tools.Color;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
@@ -28,10 +30,10 @@ import java.util.ArrayList;
 public class CVOdometry implements IRobotModule {
     private AprilTagProcessor  _aprilTagProcessor = null;
 
-    public Vector2 Position = new Vector2(), Speed = new Vector2(), OldPosition = new Vector2();
+    public Vector2 Position = new Vector2(), ShiftPosition = new Vector2();
     public boolean IsZero = true;
 
-    private Vector2 _cameraPosition = new Vector2(Configs.Camera.CameraX, Configs.Camera.CameraY);
+    private Vector2 _cameraPosition = new Vector2(Configs.Camera.CameraX, Configs.Camera.CameraY), _oldPosition = new Vector2();
     private Gyroscope _gyro;
 
     private final ElapsedTime _deltaTime = new ElapsedTime();
@@ -51,8 +53,8 @@ public class CVOdometry implements IRobotModule {
     public void Start() {
         _deltaTime.reset();
 
-        Position = AutonomCollector.StartPosition.Position.copy();
-        OldPosition = AutonomCollector.StartPosition.Position.copy();
+        Position = Bios.GetStartPosition().Position.clone();
+        _oldPosition = Bios.GetStartPosition().Position.clone();
     }
 
     @Override
@@ -67,7 +69,7 @@ public class CVOdometry implements IRobotModule {
         int suitableDetections = 0;
 
         for (AprilTagDetection detection : detections) {
-            if (detection.rawPose != null && detection.decisionMargin > Configs.Camera.CameraAccuracy) {
+            if (detection.rawPose != null && detection.decisionMargin < Configs.Camera.CameraAccuracy) {
                 // Считать позицию тэга относительно камеры и записать её в VectorF
                 AprilTagPoseRaw rawTagPose = detection.rawPose;
                 VectorF rawTagPoseVector = new VectorF(
@@ -103,19 +105,13 @@ public class CVOdometry implements IRobotModule {
         IsZero = false;
 
         Position.X = xSum / suitableDetections;
-        Position.Y = -ySum / suitableDetections;
+        Position.Y = ySum / suitableDetections;
 
         Position = Vector2.Minus(Position, _cameraPosition.Turn(_gyro.GetRadians()));
 
-        Vector2 DeltaPosition = Vector2.Minus(OldPosition, Position);
+        ShiftPosition = Vector2.Minus(_oldPosition, Position);
 
-        Speed.X = DeltaPosition.X / _deltaTime.seconds();
-        Speed.Y = DeltaPosition.Y / _deltaTime.seconds();
-
-        ToolTelemetry.AddLine("CVOdometry = " + Position);
-        ToolTelemetry.DrawCircle(Position, 10, "#FFFFFF");
-
-        OldPosition = Position;
+        _oldPosition = Position;
         _deltaTime.reset();
     }
 }
