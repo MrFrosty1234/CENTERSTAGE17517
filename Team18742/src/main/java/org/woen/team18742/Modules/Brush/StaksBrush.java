@@ -12,76 +12,88 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Manager.IRobotModule;
+import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ToolTelemetry;
 
+@Module
 public class StaksBrush implements IRobotModule {
-    private Servo servoToUpBrush;
-    private  Servo servoBrush1;
-    private  Servo servoBrush2;
-private Brush _Brush;
-    private Lift _lift;
+    private Servo stacklift;
+    private Servo leftStacksBrush;
+    private Servo rightStacksBrush;
+    private Brush _Brush;
+
     private BrushUpState newState = BrushUpState.STATE_UP;
-    private Intake _intake;
-    public double downServoPos = 0;
-    public double upServoPos = 1;
-    public double ServoGoPose1 = 0;
-    public double ServoGoPose2 = 1;
-    public double ServoStopPose1 = 0.5;
-    public double ServoStopPose2 = 0.5;
+
+
     enum BrushUpState {
         STATE_UP, STATE_DOWN;
     }
-    private void normalRun(){
-        servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_FWD);
-        servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_FWD);
+
+    private void normalRun() {
+        leftStacksBrush.setPosition(Configs.StackBrush.LEFT_SERVO_FWD);
+        rightStacksBrush.setPosition(Configs.StackBrush.RIGHT_SERVO_FWD);
     }
-    private void reversRun(){
-        servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_REV);
-        servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_REV);
+
+    private void reversRun() {
+        leftStacksBrush.setPosition(Configs.StackBrush.LEFT_SERVO_REV);
+        rightStacksBrush.setPosition(Configs.StackBrush.RIGHT_SERVO_REV);
     }
-    private void stop(){
-        servoBrush1.setPosition(Configs.StackBrush.LEFT_SERVO_STOP);
-        servoBrush2.setPosition(Configs.StackBrush.RIGHT_SERVO_STOP);
+
+    private void stop() {
+        leftStacksBrush.setPosition(Configs.StackBrush.LEFT_SERVO_STOP);
+        rightStacksBrush.setPosition(Configs.StackBrush.RIGHT_SERVO_STOP);
+        servoSetUpPose();
     }
-    private void servoSetUpPose(){
-        servoToUpBrush.setPosition(Configs.StackBrush.SERVO_LIFT_UP);
+
+    public void servoSetUpPose() {
+        stacklift.setPosition(Configs.StackBrush.SERVO_LIFT_UP);
+
+        newState = BrushUpState.STATE_UP;
     }
-    private void servoSetDownPose(){
-        servoToUpBrush.setPosition(Configs.StackBrush.SERVO_LIFT_DOWN);
+
+    public void servoSetDownPose() {
+        stacklift.setPosition(Configs.StackBrush.SERVO_LIFT_DOWN);
+        newState = BrushUpState.STATE_DOWN;
     }
-    
-    private boolean brushIsDown(){
-        if(BrushUpState.STATE_DOWN == newState){
+
+    public boolean brushIsDown() {
+        if (BrushUpState.STATE_DOWN == newState) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
+
+
     @Override
     public void Init(BaseCollector collector) {
-        _lift = collector.GetModule(Lift.class);
-        _intake = collector.GetModule(Intake.class);
-        _Brush = collector.GetModule(Brush.class);
 
+        _Brush = collector.GetModule(Brush.class);
+        rightStacksBrush = Devices.rightStackBrush;
+        leftStacksBrush = Devices.leftStackBrush;
+        stacklift = Devices.stackLift;
     }
+
     @Override
     public void Update() {
-        if(brushIsDown()){
-switch (_Brush.trueStateBrush){
-    case 1:
-        normalRun();
-        break;
-    case 2:
-        reversRun();
-        break;
-    case 3:
-        stop();
-        break;
-}}else{
-        stop();
+        if (brushIsDown()) {
+            switch (_Brush.trueStateBrush) {
+                case 1:
+                    normalRun();
+                    break;
+                case 2:
+                    reversRun();
+                    break;
+                case 3:
+                    stop();
+                    break;
+            }
+        } else {
+            stop();
         }
+        ToolTelemetry.AddLine("trueStateStacksbrush = " + _Brush.trueStateBrush);
 
     }
 }

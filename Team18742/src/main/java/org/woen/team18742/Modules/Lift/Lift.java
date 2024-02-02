@@ -66,6 +66,8 @@ public class Lift implements IRobotModule {
         }
 
         ToolTelemetry.AddLine("Lift end1 = " + _endingUpState + " end = " + _endingDownState + " incoder = " + _liftMotor.getCurrentPosition());
+        ToolTelemetry.AddVal("isDown",isDown());
+
 
         if (_endingDownState)
             ResetLift();
@@ -77,7 +79,7 @@ public class Lift implements IRobotModule {
     }
 
     public boolean isDown() {
-        return _liftPose == LiftPose.DOWN && (_endingDownState || _liftMotor.getCurrentPosition() < Configs.LiftPoses.POSE_DOWN_ENDSWITCH_THRESHOLD);
+        return _liftPose == LiftPose.DOWN && (_endingDownState);// || _liftMotor.getCurrentPosition() < Configs.LiftPoses.POSE_DOWN_ENDSWITCH_THRESHOLD);
     }
 
     public boolean isUp() {

@@ -19,9 +19,7 @@ import org.woen.team18742.Tools.ToolTelemetry;
 public class Brush implements IRobotModule {
     private DcMotorEx brushMotor;
     private BrushState statebrush = BrushState.STATE_OFF;
-    private boolean _flagDefense = true;
     public byte trueStateBrush = 3;
-    private boolean _isReversed = false, _isIntake = false;
 
     private ElapsedTime ProtTime = new ElapsedTime();
     private ElapsedTime RevTime = new ElapsedTime();
@@ -66,9 +64,10 @@ public class Brush implements IRobotModule {
     public void Update() {
         double motorCurrent = brushMotor.getCurrent(CurrentUnit.AMPS);
         ToolTelemetry.AddLine("brush = " + motorCurrent);
+        ToolTelemetry.AddLine("trueStatebrush = " + statebrush);
 
         if (!_lift.isDown() || _intake.isPixelGripped())
-            changeState(BrushState.STATE_OFF);
+           changeState(BrushState.STATE_OFF);
 
         switch (statebrush) {
             case STATE_ON: //тут нормальные щётки
@@ -100,15 +99,12 @@ public class Brush implements IRobotModule {
 
     public void BrushEnable() {
         changeState(BrushState.STATE_ON);
+        brushMotor.setPower(0.3);
     }
 
     public void BrushDisable() {
         changeState(BrushState.STATE_OFF);
 
-    }
-
-    public void BrushReverse() {
-        changeState(BrushState.STATE_PROT);
     }
 
     public void RevTimeRes() {
