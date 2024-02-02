@@ -16,7 +16,6 @@ public class Suspension implements IRobotModule {
     private Servo podtyaga1;
     private Servo podtyaga2;
     private DcMotorEx _podtyaga1;
-    private ElapsedTime RevTime1 = new ElapsedTime();
 
     @Override
     public void Init(BaseCollector collector) {
