@@ -1,6 +1,8 @@
 package org.woen.meepmeep17517;
 
 import static java.lang.Math.PI;
+import static java.lang.Math.toRadians;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TrajectoryBuilder;
@@ -12,8 +14,8 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class MeepMeep17517 {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
-        double maxVel = 200d;
-        double maxAccel = 200d;
+        double maxVel = 400d;
+        double maxAccel = 400d;
         double maxAngVel = Math.toRadians(270d);
         double maxAngAccel = Math.toRadians(270d);
         double trackWidth = 35d;
@@ -25,10 +27,11 @@ public class MeepMeep17517 {
 
         myBot.runAction(myBot.getDrive()
                 .actionBuilder(new Pose2d(-150*INCH_TO_CM, 150*INCH_TO_CM, 0))
-                .splineTo(new Vector2d(100 * INCH_TO_CM, 30 * INCH_TO_CM), 0)
-                .lineToX(30 * INCH_TO_CM)
-                .turn(PI / 2)
-                .lineToY(-30 * INCH_TO_CM)
+                                .splineToLinearHeading(new Pose2d(50*INCH_TO_CM,150*INCH_TO_CM,toRadians(45)),toRadians(90))
+                //.splineTo(new Vector2d(100 * INCH_TO_CM, 30 * INCH_TO_CM), 0)
+                //.lineToX(30 * INCH_TO_CM)
+                //.turn(PI / 2)
+                //.lineToY(-30 * INCH_TO_CM)
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)

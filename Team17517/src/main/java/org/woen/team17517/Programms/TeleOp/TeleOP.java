@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team17517.RobotModules.Grabber.Grabber;
 import org.woen.team17517.RobotModules.Lift.LiftPosition;
+import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
 import org.woen.team17517.Service.Vector2D;
@@ -21,7 +22,7 @@ public class TeleOP extends LinearOpMode {
     private  enum TeleopMode{
         ROBOT,CENTRE
     }
-    TeleopMode teleopMode = TeleopMode.CENTRE;
+    TeleopMode teleopMode = TeleopMode.ROBOT;
     @Override
     public void runOpMode() {
         robot = new UltRobot(this);
@@ -34,13 +35,14 @@ public class TeleOP extends LinearOpMode {
 
         waitForStart();
 
-
-
+        robot.lighting.lightMode = Lighting.LightningMode.SMOOTH;
         boolean liftAtTarget = true;
 
         while (opModeIsActive()) {
+            telemetry.addData("Mode", teleopMode);
+            telemetry.update();
             triangle = gamepad1.triangle;
-
+            robot.lighting.lightMode = Lighting.LightningMode.SMOOTH;
             if (triangleButton.update(triangle)){
                 if(teleopMode == TeleopMode.CENTRE){
                     teleopMode = TeleopMode.ROBOT;
@@ -59,25 +61,6 @@ public class TeleOP extends LinearOpMode {
                     angleSpeed = robot.driveTrainVelocityControl.angularVelocityPercent(angleSpeed);
 
                     robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
-                    break;
-                case CENTRE:
-                    double targetH;
-                    double targetX;
-                    double targetY;
-                    Vector2D targetVector = new Vector2D();
-                    Vector2D positionVector = robot.odometryNew.getPositionVector();
-                    double hPosition = robot.odometryNew.getH();
-
-                    targetY = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y);
-                    targetX = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_x);
-                    targetH = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x);
-
-                    targetVector.setCord(targetX,targetY);
-                    targetVector.vectorRat(hPosition);
-                    targetVector = Vector2D.vectorSum(targetVector,positionVector);
-                    targetH += hPosition;
-
-                    robot.driveTrainVelocityControl.moveGlobalCord(targetVector, targetH);
                     break;
             }
 
