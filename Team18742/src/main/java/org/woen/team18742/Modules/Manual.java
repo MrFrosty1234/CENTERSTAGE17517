@@ -60,7 +60,7 @@ public class Manual implements IRobotModule {
         boolean stacksBrush = _gamepad.right_bumper;
         double servotyaga = _gamepad.left_trigger;
         double motortyagakopka = _gamepad.right_trigger;
-
+        boolean griperzapaa = _gamepad.dpad_right;
         if (grip && !_gripOld) {
             _intake.releaseGripper();
         }
@@ -99,10 +99,6 @@ public class Manual implements IRobotModule {
         _gripOld = grip;
         _brushOld = brushOn;
 
-        if(motortyagakopka > 0.2)
-        {
-            
-        }
     }
 
     @Override
