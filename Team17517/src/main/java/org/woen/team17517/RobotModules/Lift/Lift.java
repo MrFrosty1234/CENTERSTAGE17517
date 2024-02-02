@@ -129,21 +129,26 @@ public class Lift implements RobotModule {
                 }
             break;
             case  MANUALLIMIT:
-                if(manualTarget && getTopSwitch()){
-                    liftPower = 1;
-                    setPower(liftPower);
-                } else {
+                if(manualTargetUp && getTopSwitch()){
+                    setPower(liftMovePower);
+                }else if (manualTargetDown){
+                    setPower(0);
+                }else{
                     setPower(liftGravityPower);
                 }
 
-                break;
+            break;
         }
 
     }
-    public void setManualTarget (double setManualTarget ){
-        this.manualTarget = manualTarget;
+    public void setManualTargetUp(boolean manualTargetUp){
+        this.manualTargetUp = manualTargetUp;
     }
-    private boolean manualTarget = false;
+    private boolean manualTargetUp = false;
+    public void setManualTargetDown(boolean manualTargetDown){
+        this.manualTargetDown = manualTargetDown;
+    }
+    private  boolean manualTargetDown = false;
     @Override
     public boolean isAtPosition() {
         return liftAtTaget;

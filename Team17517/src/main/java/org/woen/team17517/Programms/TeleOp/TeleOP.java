@@ -36,7 +36,7 @@ public class TeleOP extends LinearOpMode {
 
 
 
-        boolean liftAtTaget = true;
+        boolean liftAtTarget = true;
 
         while (opModeIsActive()) {
             triangle = gamepad1.triangle;
@@ -94,7 +94,7 @@ public class TeleOP extends LinearOpMode {
                 grabber.setPower(0);
 
 
-            if (gamepad1.a || (robot.lift.getTargetPosition() == LiftPosition.UP && !liftAtTaget))
+            if (gamepad1.a || (robot.lift.getTargetPosition() == LiftPosition.UP && !liftAtTarget))
                 robot.grabber.closeGraber();
             if (gamepad1.b) robot.grabber.openGraber();
 
