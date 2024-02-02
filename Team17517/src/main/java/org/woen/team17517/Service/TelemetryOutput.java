@@ -21,6 +21,7 @@ public class TelemetryOutput implements RobotModule {
     public static boolean odometryAndCamera = false;
     public static boolean ftcMap = false;
     public static boolean encoders = false;
+    public  static  boolean cleanOdometry = false;
     double dlin =40;
     double shir =40;
     public double [] rectXPoints = new double[2];
@@ -67,6 +68,11 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("x",robot.odometryNew.getX());
             telemetry.addData("y",robot.odometryNew.getY());
             telemetry.addData("heading",robot.odometryNew.getH());
+        }
+        if (cleanOdometry){
+            telemetry.addData("x",robot.odometryNew.getVelCleanX());
+            telemetry.addData("y",robot.odometryNew.getVelCleanY());
+            telemetry.addData("heading",robot.odometryNew.getVelCleanH());
         }
         if(velocity){
             HashMap<String,Double> encoderMap = robot.driveTrainVelocityControl.getEncoders();

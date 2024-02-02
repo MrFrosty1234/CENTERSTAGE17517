@@ -19,16 +19,16 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double voltage;
 
     public static double kdX = 0;
-    public static double kiX = 0.000_000_1;
-    public static double kpX = 0.0003;
+    public static double kiX = 0;//.000_000_1;
+    public static double kpX = 0;//.0003;
 
     public static double kdRat = 0;
     public static double kiRat = 0.000_000_1;
     public static double kpRat = 0.0003;
 
     public static double kdY  = 0;
-    public static double kiY =0.000_000_1;
-    public static double kpY = 0.0003;
+    public static double kiY =0.;//000_000_1;
+    public static double kpY = 0;//.0003;
 
     public static  double maxIY = 0.01;
     public static  double maxIRat = 0.01;
@@ -136,12 +136,18 @@ public class DriveTrainVelocityControl implements RobotModule {
 
      private void  encUpdate()
     {
-        this.yEnc = (left_back_drive.getVelocity()+ 0*left_front_drive.getVelocity()+
-                right_front_drive.getVelocity()*0+ right_back_drive.getVelocity())/2.0;
+        this.yEnc = (left_back_drive.getVelocity()+ left_front_drive.getVelocity()+
+                right_front_drive.getVelocity()+ right_back_drive.getVelocity())/4.0;
         this.xEnc = ((-left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
-                0*right_front_drive.getVelocity()+ 0*right_back_drive.getVelocity())/2.0)*kSlide;
-        this.hEnc = (left_back_drive.getVelocity()*0+ left_front_drive.getVelocity()-
-                right_front_drive.getVelocity()*0 - right_back_drive.getVelocity())/2.0;
+                right_front_drive.getVelocity()+ right_back_drive.getVelocity())/4.0)*kSlide;
+        this.hEnc = (left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
+                right_front_drive.getVelocity() - right_back_drive.getVelocity())/4.0;
+    }
+    private void  odUpdate()
+    {
+        this.yEnc = robot.odometryNew.getVelCleanY();
+        this.xEnc = robot.odometryNew.getVelCleanX();
+        this.hEnc = robot.odometryNew.getVelCleanH();
     }
     private static double diameter = 9.8;
     private static double gearboxRatio = 1d/20d;
@@ -166,7 +172,6 @@ public class DriveTrainVelocityControl implements RobotModule {
     }
     private double moveX(double target)
     {
-
         return speedX.PID(target,xEnc,this.voltage);
     }
     private double moveY(double target)
@@ -207,7 +212,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double powerX = 0;
     private double powerY = 0;
     public void update() {
-        encUpdate();
+        odUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
 
         this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);

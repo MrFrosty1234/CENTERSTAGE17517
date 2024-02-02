@@ -39,30 +39,16 @@ public class TeleOP extends LinearOpMode {
         boolean liftAtTarget = true;
 
         while (opModeIsActive()) {
-            telemetry.addData("Mode", teleopMode);
-            telemetry.update();
-            triangle = gamepad1.triangle;
-            robot.lighting.lightMode = Lighting.LightningMode.SMOOTH;
-            if (triangleButton.update(triangle)){
-                if(teleopMode == TeleopMode.CENTRE){
-                    teleopMode = TeleopMode.ROBOT;
-                }else{
-                    teleopMode = TeleopMode.CENTRE;
-                }
-            }
-            switch (teleopMode) {
-                case ROBOT:
-                    forwardSpeed = -gamepad1.left_stick_y;
-                    sideSpeed = gamepad1.left_stick_x;
-                    angleSpeed = gamepad1.right_stick_x;
 
-                    forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(forwardSpeed);
-                    sideSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(sideSpeed);
-                    angleSpeed = robot.driveTrainVelocityControl.angularVelocityPercent(angleSpeed);
+            forwardSpeed = -gamepad1.left_stick_y;
+            sideSpeed = gamepad1.left_stick_x;
+            angleSpeed = gamepad1.right_stick_x;
 
-                    robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
-                    break;
-            }
+            forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(forwardSpeed);
+            sideSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(sideSpeed);
+            angleSpeed = robot.driveTrainVelocityControl.angularVelocityPercent(angleSpeed);
+
+            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
 
 
             if (gamepad1.dpad_up) robot.lift.moveUP();
