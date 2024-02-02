@@ -26,7 +26,7 @@ import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
 
-@AutonomModule
+@Module
 public class CVOdometry implements IRobotModule {
     private AprilTagProcessor  _aprilTagProcessor = null;
 

@@ -1,8 +1,6 @@
 package org.woen.team18742.Modules;
 
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -24,19 +22,18 @@ public class Intake implements IRobotModule {
     private Servo servoTurn;
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
-    private AnalogInput pixelSensor1, pixelSensor2; // Датчик присутствия пикселей над прижимом
+    private AnalogInput pixelSensor1; // Датчик присутствия пикселей над прижимом
     private DcMotor _lighting;
-private Brush _brush;
+    private Brush _brush;
     private Lift _lift;
 
     @Override
-    public void Init(@NonNull BaseCollector collector) {
+    public void Init(BaseCollector collector) {
         pixelSensor1 = Devices.PixelSensor;
         gripper = Devices.Gripper;
         clamp = Devices.Clamp;
         servoTurn = Devices.Servopere;
         _lighting = Devices.LightingMotor;
-
 
         _lift = collector.GetModule(Lift.class);
         _brush = collector.GetModule(Brush.class);
@@ -98,7 +95,7 @@ private Brush _brush;
         setGripper(false);
         _clampTimer.reset();
 
-        _liftTimer.Start(500, ()->_lift.SetLiftPose(LiftPose.DOWN));
+        _liftTimer.Start(500, () -> _lift.SetLiftPose(LiftPose.DOWN));
     }
 
     private final Timer _liftTimer = new Timer();
@@ -115,7 +112,7 @@ private Brush _brush;
 
         updateTurner();
 
-        ToolTelemetry.AddLine("Pixels:" + pixelSensor1.getVoltage() + "," + pixelSensor2.getVoltage());
+        ToolTelemetry.AddLine("Pixels:" + pixelSensor1.getVoltage());
         ToolTelemetry.AddLine("Detected:" + isPixelDetected());
     }
 

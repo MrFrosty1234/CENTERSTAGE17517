@@ -62,7 +62,7 @@ public class Configs {
 
     @Config
     public static class LiftPoses{
-        public static int POSE_UP = 900;
+        public static int POSE_UP = 1100;
         public static int POSE_MIDDLE_UPPER = 900;
         public static int POSE_MIDDLE_LOWER = 900;
         public static int POSE_SERVO_CLEARANCE = 900;
@@ -186,6 +186,6 @@ public class Configs {
         public static double RIGHT_SERVO_FWD = 1.0;
         public static double RIGHT_SERVO_REV = 0.0;
         public static double SERVO_LIFT_DOWN = 0.617;
-        public static double SERVO_LIFT_UP = 0.875;
+        public static double SERVO_LIFT_UP = 0.850;
     }
 }
