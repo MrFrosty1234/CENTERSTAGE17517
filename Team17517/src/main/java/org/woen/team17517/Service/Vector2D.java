@@ -36,11 +36,15 @@ public class Vector2D
       return new Vector2D(vector1.x + vector2.x,vector1.y+ vector2.y);
     }
 
-    public void vectorRat(double angle){
+    public void vectorRatOld(double angle){
         double radius = vectorRadius(x,y);
         double angleNew = vectorRadians(x,y)-angle;
         x = cos(angleNew)*radius;
         y = sin(angleNew)*radius;
+    }
+    public void vectorRat(double angle){
+        x = x * cos(angle) - y * sin(angle);
+        y = x * sin(angle) + y * cos(angle);
     }
 
 }
