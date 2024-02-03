@@ -34,8 +34,10 @@ public class Grabber implements RobotModule {
     int perekid = 0;
     int grabber = 0;
 
-    public static double grabberOpen = 0.8;
-    public static double grabberClose = 0.5;
+    public static double grabberOpenLeft = 0.8;
+    public static double grabberCloseLeft = 0.5;
+    public static double grabberOpenRight = 0.1;
+    public static double grabberCloseRight = 0.7;
 
     public static double perekidStartDown = 0.875;
     public static double perekidStart = 0.85;
@@ -144,26 +146,26 @@ public class Grabber implements RobotModule {
     }
 
     public void openGraber() {
-        pixelServoRight.setPosition(grabberOpen);
-        pixelServoLeft.setPosition(grabberOpen);
+        pixelServoRight.setPosition(grabberOpenRight);
+        pixelServoLeft.setPosition(grabberOpenLeft);
     }
 
     public void closeGraber() {
-        pixelServoRight.setPosition(grabberClose);
-        pixelServoLeft.setPosition(grabberClose);
+        pixelServoRight.setPosition(grabberCloseRight);
+        pixelServoLeft.setPosition(grabberCloseLeft);
     }
 
     public void openRightGraber(){
-        pixelServoRight.setPosition(grabberOpen);
+        pixelServoRight.setPosition(grabberOpenRight);
     }
     public void openLeftGraber(){
-        pixelServoLeft.setPosition(grabberOpen);
+        pixelServoLeft.setPosition(grabberOpenLeft);
     }
     public void closeRightGraber(){
-        pixelServoRight.setPosition(grabberClose);
+        pixelServoRight.setPosition(grabberCloseRight);
     }
     public void closeLeftGraber(){
-        pixelServoLeft.setPosition(grabberClose);
+        pixelServoLeft.setPosition(grabberCloseLeft);
     }
 
     public void perekidLiftSafe() {
