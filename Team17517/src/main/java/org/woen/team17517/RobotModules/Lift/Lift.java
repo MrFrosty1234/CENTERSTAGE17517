@@ -108,6 +108,9 @@ public class Lift implements RobotModule {
         }
         if (getTopSwitch())
             setPositionOffset(LiftPosition.UP.value - getRawPosition());
+        robot.linearOpMode.telemetry.addData("pos",encoderPosition);
+        robot.linearOpMode.telemetry.addData("posClean",liftMotor.getCurrentPosition());
+        robot.linearOpMode.telemetry.update();
         switch (liftMode){
             case AUTO:
                 switch (targetPosition) {
@@ -117,8 +120,10 @@ public class Lift implements RobotModule {
                         setPower(liftPower);
                         break;
                     case DOWN:
-                        liftAtTaget = getPosition() <= LiftPosition.DOWN.value;
-                        liftPower = liftAtTaget ? -0.3 : -liftMovePower;
+                        liftAtTaget = getEncoderPosition() <= LiftPosition.DOWN.value;
+                        liftPower = liftAtTaget ? 0 : -0.3;
+                        robot.linearOpMode.telemetry.addData("is",liftAtTaget);
+                        robot.linearOpMode.telemetry.update();
                         setPower(liftPower);
                         break;
                     case FORAUTONOM:
