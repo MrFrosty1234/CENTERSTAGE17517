@@ -15,7 +15,7 @@ public class MeepMeep18742 {
         double maxAccel = 150d;
         double maxAngVel = Math.toRadians(180d);
         double maxAngAccel = Math.toRadians(180d);
-        double trackWidth = 35d;
+        double trackWidth = 15.7 / 2.54 * 2;
         final double INCH_TO_CM = 1d / 2.54d;
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -23,7 +23,7 @@ public class MeepMeep18742 {
                 .build();
 
         myBot.runAction(myBot.getDrive()
-                .actionBuilder(new Pose2d(25.4 / 2.54, 154 / 2.54, -PI / 2))
+                .actionBuilder(new Pose2d(37.4 / 2.54, 154 / 2.54, -PI / 2))
                 .lineToY(110 / 2.54)
                 /*.splineTo(new Vector2d(25.4 / 2.54, 60 / 2.54), -PI/2)//forward
                 // .splineTo(new Vector2d(18 / 2.54, 90 / 2.54), -PI) //left

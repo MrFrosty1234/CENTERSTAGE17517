@@ -104,6 +104,8 @@ public class Manual implements IRobotModule {
 
         if(motortyagakopka > 0.8 )
             _suspension.unmotor();
+        else
+            _suspension.motor();
     }
 
     @Override
