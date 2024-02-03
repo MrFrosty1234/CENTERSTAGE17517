@@ -144,22 +144,22 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double MinProfileAccel = -100; // random
-        public static double MaxProfileAccel = 100; // random
+        public static double MinProfileAccel = -80; // random
+        public static double MaxProfileAccel = 80; // random
     }
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 0.0000014;
-        public static double Lateral = 0.0000014;
+        public static double Axial = 0.11;
+        public static double Lateral = 0.11;
         public static double Heading = 3.2;
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 0.45;
-        public static double Lateral = 0.45;
-        public static double Heading = 0.45;
+        public static double Axial = 0.1;
+        public static double Lateral = 0.1;
+        public static double Heading = 0.1;
     }
 
     @Config
@@ -167,7 +167,7 @@ public class Configs {
         public static double DefultP = 0.000001;
         public static double DefultI = 0.00013;
         public static double DefultD = 0.005;
-        public static double DefultF = 0.0004;
+        public static double DefultF = 0.0005;
     }
 
     @Config
