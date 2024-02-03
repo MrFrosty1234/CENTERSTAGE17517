@@ -27,10 +27,10 @@ public class MeepMeep18742 {
                 .lineToY(110 / 2.54)
                 //.splineTo(new Vector2d(25.4 , 85 ), -PI / 2)//forward
                 // .splineTo(new Vector2d(18 , 90 ), -PI) //left
-                .splineTo(new Vector2d(35 / 2.54, 90 / 2.54), 0) //right
-                .strafeToLinearHeading(new Vector2d(18 / 2.54, 85 / 2.54), 0)//right
+                .splineTo(new Vector2d(18/2.54 , 85/2.54 ), PI) //right
+                .strafeToLinearHeading(new Vector2d(25.4 / 2.54, 85 / 2.54), PI)//right
                 //пиксель на линию
-                .strafeToLinearHeading(new Vector2d(60 / 2.54, 150 / 2.54), 0)//universal
+                .strafeToLinearHeading(new Vector2d(60 / 2.54, 150 / 2.54), PI)//universal
                 .strafeToLinearHeading(new Vector2d(120 / 2.54, 75 / 2.54), 0)//right
                 //.strafeToLinearHeading(new Vector2d(123 , 90 ), 0)//forward
                 //.strafeToLinearHeading(new Vector2d(123 , 105 ), 0)//left
