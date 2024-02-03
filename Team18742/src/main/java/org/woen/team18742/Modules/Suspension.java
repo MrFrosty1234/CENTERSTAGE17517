@@ -25,14 +25,14 @@ public class Suspension implements IRobotModule {
         _podtyaga1 = Devices.Podtyagamotor;
     }
 
-    public void Active(){
+    public void Active() {
         podtyaga1.setPosition(Configs.Suspension.nulevayapodtyaga1);
         podtyaga2.setPosition(Configs.Suspension.nulevayapodtyaga2);
 
         _isRastrel = true;
     }
 
-    public void Disable(){
+    public void Disable() {
         podtyaga1.setPosition(Configs.Suspension.rasstrelennayatyga1);
         podtyaga2.setPosition(Configs.Suspension.rasstrelennayatyga2);
     }
@@ -40,16 +40,8 @@ public class Suspension implements IRobotModule {
     private Timer _timer = new Timer();
 
     public void unmotor() {
-        if(_isRastrel)
+        if (_isRastrel)
             _podtyaga1.setPower(1);
-
-        //_timer.Start(12000, ()->{
-          //  _podtyaga1.setPower(0.0);
-       //  });
-    }
-    public void motor() {
-        _podtyaga1.setPower(0);
-
         //_timer.Start(12000, ()->{
         //  _podtyaga1.setPower(0.0);
         //  });

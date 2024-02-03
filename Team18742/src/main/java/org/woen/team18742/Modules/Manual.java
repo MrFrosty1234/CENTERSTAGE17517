@@ -102,6 +102,8 @@ public class Manual implements IRobotModule {
         _brushOld = brushOn;
 
 
+        if(motortyagakopka > 0.8 )
+            _suspension.unmotor();
     }
 
     @Override
