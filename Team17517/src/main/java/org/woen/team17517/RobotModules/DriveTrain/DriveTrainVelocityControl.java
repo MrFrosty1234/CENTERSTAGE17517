@@ -156,7 +156,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     private static double odometrLight = PI*diameterOdometr;
     private static double gearboxRatio = 1d/20d;
     private static double encConstNoGearbox = 24.0;
-    private static double trackLength = 27d/2d;
+    private static double trackLength =  30.08d/2d;
     private static double encConstant = PI*diameter/(encConstNoGearbox / gearboxRatio);
     private static double maxMotorRpm = 280.0;
     private static double maxLinearSpeed = (maxMotorRpm / 60.0) * diameter * PI;
