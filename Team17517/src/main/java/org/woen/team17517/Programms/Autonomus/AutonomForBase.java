@@ -1,4 +1,4 @@
-package org.woen.team17517.NotUsedCode;
+package org.woen.team17517.Programms.Autonomus;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -21,8 +21,13 @@ public class AutonomForBase extends LinearOpMode {
         robot = new UltRobot(this);
         waitForStart();
         while (opModeIsActive()){
-            robot.driveTrainVelocityControl.moveRobotCord(0,robot.driveTrainVelocityControl.linearVelocityPercent(1),0);
-            robot.allUpdate();
+            robot.updateWhilePositionFalse(new Runnable[]{
+                    ()->robot.driveTrainVelocityControl.moveRobotCord(x,y,targetH),
+                    ()->robot.timer.getTimeForTimer(1),
+                    ()->robot.driveTrainVelocityControl.moveRobotCord(-x,-y,-targetH),
+                    ()->robot.timer.getTimeForTimer(1)
+            });
+
         }
     }
 

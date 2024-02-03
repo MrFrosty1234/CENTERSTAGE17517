@@ -36,7 +36,7 @@ public class Lift implements RobotModule {
         buttonDown = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonDown");
         buttonUp.setMode(DigitalChannel.Mode.INPUT);
         buttonDown.setMode(DigitalChannel.Mode.INPUT);
-        //resetEncoder();
+        resetEncoder();
     }
 
     private void resetEncoder(){
@@ -106,11 +106,14 @@ public class Lift implements RobotModule {
         if (getTopSwitch()){
             encoderError = liftMotor.getCurrentPosition() - LiftPosition.UP.value;
         }
-        if (getTopSwitch())
+        if (getTopSwitch()){
             setPositionOffset(LiftPosition.UP.value - getRawPosition());
-        robot.linearOpMode.telemetry.addData("pos",encoderPosition);
+        }
+        /*robot.linearOpMode.telemetry.addData("pos",encoderPosition);
         robot.linearOpMode.telemetry.addData("posClean",liftMotor.getCurrentPosition());
+
         robot.linearOpMode.telemetry.update();
+         */
         switch (liftMode){
             case AUTO:
                 switch (targetPosition) {

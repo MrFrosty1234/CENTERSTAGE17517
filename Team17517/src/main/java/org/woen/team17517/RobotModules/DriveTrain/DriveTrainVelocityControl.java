@@ -150,10 +150,13 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.xEnc = robot.odometryNew.getVelCleanX();
         this.hEnc = robot.odometryNew.getVelCleanH();
     }
-    private static double diameter = 9.8;
+    private static double odometrConstant =  8192;
+    private static double diameter = 9.6;
+    private static double diameterOdometr = 4.8;
+    private static double odometrLight = PI*diameterOdometr;
     private static double gearboxRatio = 1d/20d;
     private static double encConstNoGearbox = 24.0;
-    private static double trackLength = 27d/2d;
+    private static double trackLength =  30.08d/2d;
     private static double encConstant = PI*diameter/(encConstNoGearbox / gearboxRatio);
     private static double maxMotorRpm = 280.0;
     private static double maxLinearSpeed = (maxMotorRpm / 60.0) * diameter * PI;
@@ -162,6 +165,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     {
         return target/encConstant;
     }
+    private static double encToOdometr =  (odometrConstant/PI*diameterOdometr)/(encConstant*PI*diameter);
     private double encToSm(double target){return  target*encConstant;}
     private double smToDegrees(double sm)
     {
@@ -182,10 +186,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     public double linearVelocityPercent(double target){
         return smToEnc(maxLinearSpeed)*target;
     }
-    public double angularVelocityPercent(double target)
-    {
-        return target*smToDegrees(maxAngularSpeed);
-    }
+    public double angularVelocityPercent(double target){return target*smToDegrees(maxAngularSpeed);}
     public double getMetersPerSecondSpeed(double target)
     {
         return target/encConstant* gearboxRatio *diameter*Math.PI;
@@ -212,9 +213,12 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double powerH = 0;
     private double powerX = 0;
     private double powerY = 0;
+    public Vector2D vectorOd = new Vector2D();
     public void update() {
         odUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
+
+        vectorOd.setCord(vector.getX(),vector.getY());
 
         this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);
         this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX);
@@ -222,8 +226,8 @@ public class DriveTrainVelocityControl implements RobotModule {
 
 
         powerH = moveRat(targetH);
-        powerX = moveX(vector.getX());
-        powerY = moveY(vector.getY());
+        powerX = moveX(vectorOd.getX());
+        powerY = moveY(vectorOd.getY());
 
         left_front_drive.setPower(powerX + powerY + powerH);
         right_front_drive.setPower(-powerX + powerY - powerH);
