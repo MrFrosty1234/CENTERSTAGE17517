@@ -39,19 +39,33 @@ public class Intake implements IRobotModule {
         _brush = collector.GetModule(Brush.class);
     }
 
+    private Timer _normalTimer = new Timer();
+    private boolean _oldTurnPos = false;
+
     public void updateTurner() {
-        if (_lift.isProchelnugnoepologenie()) {
+        if(_lift.isProchelnugnoepologenie()){
             servoTurn.setPosition(Configs.Intake.servoTurnTurned);
-        } else {
+
+            _isTurned = false;
+
+            _oldTurnPos = true;
+        }
+        else {
             servoTurn.setPosition(Configs.Intake.servoTurnNormal);
+
+            if(_oldTurnPos){
+                _normalTimer.Start(400, ()->_isTurned = true);
+            }
+
+            _oldTurnPos = false;
         }
     }
 
     public boolean IsTurnNormal() {
-        return _normalTurnTimer.milliseconds() > Configs.Intake.AverageTime;
+        return _isTurned;
     }
 
-    private ElapsedTime _normalTurnTimer = new ElapsedTime(Configs.Intake.AverageTime);
+    private boolean _isTurned = true;
 
     private boolean _pixelGripped = false;
 

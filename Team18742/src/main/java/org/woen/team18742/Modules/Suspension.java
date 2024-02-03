@@ -21,6 +21,7 @@ public class Suspension implements IRobotModule {
     public void Init(BaseCollector collector) {
         podtyaga1 = Devices.podtyaga1;
         podtyaga2 = Devices.podtyaga2;
+        _podtyaga1 = Devices.Podtyagamotor;
     }
 
     public void Active(){
@@ -36,10 +37,10 @@ public class Suspension implements IRobotModule {
     private Timer _timer = new Timer();
 
     public void unmotor() {
-        _podtyaga1.setPower(0);
+        _podtyaga1.setPower(1);
 
-        _timer.Start(4000, ()->{
-            _podtyaga1.setPower(0);
+        _timer.Start(12000, ()->{
+            _podtyaga1.setPower(0.0);
         });
     }
 }

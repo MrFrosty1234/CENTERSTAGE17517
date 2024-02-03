@@ -10,12 +10,9 @@ import org.woen.team18742.Tools.Bios;
 public class Trajectory {
     public static RoadRunnerRouteManager.MyTrajectoryBuilder GetTrajectory(RoadRunnerRouteManager.MyTrajectoryBuilder builder, CameraRobotPosition camera) {
         return builder
-                .strafeTo(
-                        new Vector2d(Bios.GetStartPosition().Position.X/* + 60.96*/, Bios.GetStartPosition().Position.Y - 182.8))
+                .splineTo(new Vector2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y - 60.96), 0)
                 .setReversed(true)
-                .strafeTo(
-                        new Vector2d(Bios.GetStartPosition().Position.X/* + 60.96*/, Bios.GetStartPosition().Position.Y));
-
-        //return builder.turnTo(0);
+                .splineTo(new Vector2d(Bios.GetStartPosition().Position.X, Bios.GetStartPosition().Position.Y), -PI / 2);
+                //.turnTo(0);
     }
 }

@@ -27,6 +27,7 @@ public class Manual implements IRobotModule {
     private Drivetrain _drivetrain;
     private Suspension _suspension;
     private StaksBrush _stacksbrush;
+    private Gyroscope _gyro;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -40,6 +41,7 @@ public class Manual implements IRobotModule {
         _drivetrain = collector.GetModule(Drivetrain.class);
         _suspension = collector.GetModule(Suspension.class);
         _stacksbrush = collector.GetModule(StaksBrush.class);
+        _gyro = collector.GetModule(Gyroscope.class);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class Manual implements IRobotModule {
         boolean stacksBrush = _gamepad.right_bumper;
         double servotyaga = _gamepad.left_trigger;
         double motortyagakopka = _gamepad.right_trigger;
-        boolean griperzapaa = _gamepad.dpad_right;
+
         if (grip && !_gripOld) {
             _intake.releaseGripper();
         }
@@ -91,7 +93,7 @@ public class Manual implements IRobotModule {
         else if (liftAverage)
             _lift.SetLiftPose(LiftPose.MIDDLE_UPPER);
 
-        if (servotyaga > 0.2)
+        if (servotyaga < 0.2)
             _suspension.Active();
         else
             _suspension.Disable();
@@ -99,6 +101,8 @@ public class Manual implements IRobotModule {
         _gripOld = grip;
         _brushOld = brushOn;
 
+        if(motortyagakopka > 0.2)
+            _suspension.unmotor();
     }
 
     @Override

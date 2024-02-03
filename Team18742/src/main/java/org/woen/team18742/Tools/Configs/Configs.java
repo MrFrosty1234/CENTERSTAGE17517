@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Configs {
     @Config
     public static class Suspension{
-        public static double nulevayapodtyaga1 = 0.43;
-        public static double nulevayapodtyaga2 = 0.43;
-        public static double rasstrelennayatyga1 = 0.23;
-        public static double rasstrelennayatyga2 = 0.23;
+        public static double nulevayapodtyaga1 = 1;
+        public static double nulevayapodtyaga2 = 1;
+        public static double rasstrelennayatyga1 = 0.53;
+        public static double rasstrelennayatyga2 = 0.49;
     }
 
 
@@ -57,15 +57,14 @@ public class Configs {
     @Config
     public static class LiftPid{
         public static double PCoef = 0.01, ICoef = 0, DCoef = 0, GCoef = 0.1;
-        public static double DOWN_MOVE_POWER = 0, DOWN_AT_TARGET_POWER = 0;
+        public static double DOWN_MOVE_POWER = -0.00003, DOWN_AT_TARGET_POWER = 0;
     }
 
     @Config
     public static class LiftPoses{
         public static int POSE_UP = 1100;
-        public static int POSE_MIDDLE_UPPER = 900;
-        public static int POSE_MIDDLE_LOWER = 900;
-        public static int POSE_SERVO_CLEARANCE = 900;
+        public static int POSE_MIDDLE_UPPER = 600;
+        public static int POSE_MIDDLE_LOWER = 600;
         public static int POSE_DOWN = -40;
         public static int POSE_DOWN_ENDSWITCH_THRESHOLD = 10;
         public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
@@ -73,7 +72,7 @@ public class Configs {
 
     @Config
     public static class Lift{
-        public static double isProchelnugnoepologenie = 100;
+        public static double isProchelnugnoepologenie = 380;
     }
 
     @Config
@@ -140,8 +139,8 @@ public class Configs {
 
     @Config
     public static class Plane{
-        public static double servoplaneOtkrit = 0.07;
-        public static double servoplaneneOtkrit = 0.17;
+        public static double servoplaneOtkrit = 0.17;
+        public static double servoplaneneOtkrit = 0.07;
     }
 
     @Config
@@ -152,16 +151,16 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 0.0000012;
-        public static double Lateral = 0.0000012;
-        public static double Heading = 0.4;
+        public static double Axial = 0.0000014;
+        public static double Lateral = 0.0000014;
+        public static double Heading = 3.2;
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 0.15;
-        public static double Lateral = 0.15;
-        public static double Heading = 0.15;
+        public static double Axial = 0.45;
+        public static double Lateral = 0.45;
+        public static double Heading = 0.45;
     }
 
     @Config
@@ -179,7 +178,7 @@ public class Configs {
 
     @Config
     public static class StackBrush{
-        public static double LEFT_SERVO_STOP = 0.464;
+        public static double LEFT_SERVO_STOP = 0.452;
         public static double LEFT_SERVO_FWD = 0.0;
         public static double LEFT_SERVO_REV = 1.0;
         public static double RIGHT_SERVO_STOP = 0.418;

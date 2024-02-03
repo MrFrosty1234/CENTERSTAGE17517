@@ -315,5 +315,13 @@ public class RoadRunnerRouteManager implements IRobotModule {
         public MyTrajectoryBuilder strafeTo(Vector2d pos){
             return new MyTrajectoryBuilder(_builder.strafeTo(pos));
         }
+
+        public MyTrajectoryBuilder lineToX(double pos){
+            return new MyTrajectoryBuilder(_builder.lineToX(pos));
+        }
+
+        public MyTrajectoryBuilder lineToY(double pos){
+            return new MyTrajectoryBuilder(_builder.lineToY(pos));
+        }
     }
 }
