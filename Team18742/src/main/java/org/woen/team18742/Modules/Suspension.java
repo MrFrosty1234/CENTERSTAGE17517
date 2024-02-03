@@ -55,6 +55,6 @@ public class Suspension implements IRobotModule {
 
     public void cbros()
     {
-        _podtyaga1.setPower(0);
+        _podtyaga1.setPower(-1);
     }
 }
