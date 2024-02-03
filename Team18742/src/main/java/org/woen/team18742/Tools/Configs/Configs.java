@@ -140,7 +140,7 @@ public class Configs {
     @Config
     public static class Plane{
         public static double servoplaneOtkrit = 0.17;
-        public static double servoplaneneOtkrit = 0.07;
+        public static double servoplaneneOtkrit = 0.03'';
     }
 
     @Config
