@@ -50,6 +50,7 @@ public class Trajectory {
                         //врубили щётки
                         //начали опускать
                         .strafeToLinearHeading(new Vector2d(-145 , 30 ), 0)
+                        .waitSeconds(5)
                         //хаваем стопки
                         .strafeToLinearHeading(new Vector2d(120 , 30 ), 0)
                         .strafeToLinearHeading(new Vector2d(122 , 100 ), 0);
