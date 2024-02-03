@@ -63,8 +63,8 @@ public class Configs {
     @Config
     public static class LiftPoses{
         public static int POSE_UP = 1100;
-        public static int POSE_MIDDLE_UPPER = 600;
-        public static int POSE_MIDDLE_LOWER = 600;
+        public static int POSE_MIDDLE_UPPER = 430;
+        public static int POSE_MIDDLE_LOWER = 430;
         public static int POSE_DOWN = -40;
         public static int POSE_DOWN_ENDSWITCH_THRESHOLD = 10;
         public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
@@ -72,7 +72,7 @@ public class Configs {
 
     @Config
     public static class Lift{
-        public static double isProchelnugnoepologenie = 380;
+        public static double isProchelnugnoepologenie = 365;
     }
 
     @Config
@@ -129,11 +129,10 @@ public class Configs {
         public static double pixelSensorvoltage = 0.137, PixelCenterOpen = 0;//0.4 pixelSensorVoltage = 0.15
         public static double servoTurnNormal = 0.68;
         public static final double servoTurnTurned = 0.06 ;
-        public static long AverageTime = 830;
         public static double servoGripperNormal = 0.95;
         public static double servoGripperGripped = 0.765;
         public static double servoClampClamped = 0.65;
-        public static double servoClampReleased = 0.41 ;//0.38? //TODO THIS BREAKS THE ROBOT WHEN GOING THROUGH TRUSS
+        public static double servoClampReleased = 0.47;//0.38? //TODO THIS BREAKS THE ROBOT WHEN GOING THROUGH TRUSS
         public static double pixelDetectTimeMs = 200;
     }
 
