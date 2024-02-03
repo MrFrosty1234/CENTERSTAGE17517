@@ -54,7 +54,7 @@ public class Intake implements IRobotModule {
             servoTurn.setPosition(Configs.Intake.servoTurnNormal);
 
             if(_oldTurnPos){
-                _normalTimer.Start(400, ()->_isTurned = true);
+                _normalTimer.Start(500, ()->_isTurned = true);
             }
 
             _oldTurnPos = false;

@@ -42,8 +42,19 @@ public class Suspension implements IRobotModule {
     public void unmotor() {
         if (_isRastrel)
             _podtyaga1.setPower(1);
+        else
+            _podtyaga1.setPower(0);
         //_timer.Start(12000, ()->{
         //  _podtyaga1.setPower(0.0);
         //  });
+
+    }
+    public void motor() {
+            _podtyaga1.setPower(0);
+    }
+
+    public void cbros()
+    {
+        _podtyaga1.setPower(-1);
     }
 }
