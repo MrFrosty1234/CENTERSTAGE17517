@@ -150,7 +150,10 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.xEnc = robot.odometryNew.getVelCleanX();
         this.hEnc = robot.odometryNew.getVelCleanH();
     }
-    private static double diameter = 9.8;
+    private static double odometrConstant =  8192;
+    private static double diameter = 9.6;
+    private static double diameterOdometr = 4.8;
+    private static double odometrLight = PI*diameterOdometr;
     private static double gearboxRatio = 1d/20d;
     private static double encConstNoGearbox = 24.0;
     private static double trackLength = 27d/2d;
@@ -162,6 +165,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     {
         return target/encConstant;
     }
+    private static double encToOdometr =  (PI*diameterOdometr/odometrConstant)/(PI*diameter/encConstant);
     private double encToSm(double target){return  target*encConstant;}
     private double smToDegrees(double sm)
     {
@@ -182,10 +186,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     public double linearVelocityPercent(double target){
         return smToEnc(maxLinearSpeed)*target;
     }
-    public double angularVelocityPercent(double target)
-    {
-        return target*smToDegrees(maxAngularSpeed);
-    }
+    public double angularVelocityPercent(double target){return target*smToDegrees(maxAngularSpeed);}
     public double getMetersPerSecondSpeed(double target)
     {
         return target/encConstant* gearboxRatio *diameter*Math.PI;
@@ -215,6 +216,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     public void update() {
         odUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
+        vector.setCord(vector.getX()*encToOdometr,vector.getY()*encToOdometr);
 
         this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);
         this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX);

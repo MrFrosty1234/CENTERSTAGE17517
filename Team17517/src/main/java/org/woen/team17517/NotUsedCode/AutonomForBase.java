@@ -21,8 +21,25 @@ public class AutonomForBase extends LinearOpMode {
         robot = new UltRobot(this);
         waitForStart();
         while (opModeIsActive()){
-            robot.driveTrainVelocityControl.moveRobotCord(0,robot.driveTrainVelocityControl.linearVelocityPercent(1),0);
-            robot.allUpdate();
+            robot.updateWhilePositionFalse(new Runnable[]{
+                    ()->telemetry.addData("timer",robot.timer.isAtPosition()),
+                    ()->telemetry.addData("all",robot.isAtPositionAll()),
+                    ()->telemetry.update(),
+                    ()->robot.driveTrainVelocityControl.moveRobotCord(x,y,targetH),
+                    ()->telemetry.addData("timer",robot.timer.isAtPosition()),
+                    ()->telemetry.addData("all",robot.isAtPositionAll()),
+                    ()->telemetry.update(),
+                    ()->robot.timer.getTimeForTimer(1),
+                    ()->telemetry.addData("timer",robot.timer.isAtPosition()),
+                    ()->telemetry.addData("all",robot.isAtPositionAll()),
+                    ()->telemetry.update(),
+                    ()->telemetry.addData("timer",robot.timer.isAtPosition()),
+                    ()->telemetry.addData("all",robot.isAtPositionAll()),
+                    ()->telemetry.update(),
+                    ()->robot.driveTrainVelocityControl.moveRobotCord(-x,-y,-targetH),
+                    ()->robot.timer.getTimeForTimer(1)
+            });
+
         }
     }
 
