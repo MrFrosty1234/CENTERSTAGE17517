@@ -1,4 +1,4 @@
-package org.woen.team17517.NotUsedCode;
+package org.woen.team17517.RobotModules.Lighting;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -7,21 +7,16 @@ import org.woen.team17517.Service.RobotModule;
 
 public class Lighting implements RobotModule {
 
-    public LightningMode lightMode = LightningMode.OFF;
-    DcMotor svet1;
-    DcMotor svet2;
+    public LightningMode lightMode = LightningMode.ON;
+    DcMotor light;
     UltRobot robot;
     public Lighting(UltRobot robot) {
         this.robot = robot;
-       // svet1 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet1");
-       // svet2 = this.robot.linearOpMode.hardwareMap.dcMotor.get("svet2");
-      //  svet1.setDirection(DcMotorSimple.Direction.FORWARD);
-       // svet2.setDirection(DcMotorSimple.Direction.FORWARD);
+        light = this.robot.linearOpMode.hardwareMap.dcMotor.get("odometrLeft");
     }
 
     public void setPower(double x) {
-       // svet1.setPower(x);
-        //svet2.setPower(x);
+      light.setPower(-x);
     }
 
     public void smooth() {

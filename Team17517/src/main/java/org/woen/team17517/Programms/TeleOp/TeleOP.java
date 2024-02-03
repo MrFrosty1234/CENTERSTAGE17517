@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team17517.RobotModules.Grabber.Grabber;
 import org.woen.team17517.RobotModules.Lift.LiftPosition;
+import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
 import org.woen.team17517.Service.Vector2D;
@@ -21,7 +22,7 @@ public class TeleOP extends LinearOpMode {
     private  enum TeleopMode{
         ROBOT,CENTRE
     }
-    TeleopMode teleopMode = TeleopMode.CENTRE;
+    TeleopMode teleopMode = TeleopMode.ROBOT;
     @Override
     public void runOpMode() {
         robot = new UltRobot(this);
@@ -34,52 +35,20 @@ public class TeleOP extends LinearOpMode {
 
         waitForStart();
 
-
-
+        robot.lighting.lightMode = Lighting.LightningMode.SMOOTH;
         boolean liftAtTarget = true;
 
         while (opModeIsActive()) {
-            triangle = gamepad1.triangle;
 
-            if (triangleButton.update(triangle)){
-                if(teleopMode == TeleopMode.CENTRE){
-                    teleopMode = TeleopMode.ROBOT;
-                }else{
-                    teleopMode = TeleopMode.CENTRE;
-                }
-            }
-            switch (teleopMode) {
-                case ROBOT:
-                    forwardSpeed = -gamepad1.left_stick_y;
-                    sideSpeed = gamepad1.left_stick_x;
-                    angleSpeed = gamepad1.right_stick_x;
+            forwardSpeed = -gamepad1.left_stick_y;
+            sideSpeed = gamepad1.left_stick_x;
+            angleSpeed = gamepad1.right_stick_x;
 
-                    forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(forwardSpeed);
-                    sideSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(sideSpeed);
-                    angleSpeed = robot.driveTrainVelocityControl.angularVelocityPercent(angleSpeed);
+            forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(forwardSpeed);
+            sideSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(sideSpeed);
+            angleSpeed = robot.driveTrainVelocityControl.angularVelocityPercent(angleSpeed);
 
-                    robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
-                    break;
-                case CENTRE:
-                    double targetH;
-                    double targetX;
-                    double targetY;
-                    Vector2D targetVector = new Vector2D();
-                    Vector2D positionVector = robot.odometryNew.getPositionVector();
-                    double hPosition = robot.odometryNew.getH();
-
-                    targetY = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y);
-                    targetX = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_x);
-                    targetH = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x);
-
-                    targetVector.setCord(targetX,targetY);
-                    targetVector.vectorRat(hPosition);
-                    targetVector = Vector2D.vectorSum(targetVector,positionVector);
-                    targetH += hPosition;
-
-                    robot.driveTrainVelocityControl.moveGlobalCord(targetVector, targetH);
-                    break;
-            }
+            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
 
 
             if (gamepad1.dpad_up) robot.lift.moveUP();

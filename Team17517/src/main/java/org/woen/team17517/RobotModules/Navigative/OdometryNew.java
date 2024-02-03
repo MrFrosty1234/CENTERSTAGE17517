@@ -15,7 +15,7 @@ public class OdometryNew implements RobotModule {
     public OdometryNew(UltRobot robot){
         this.robot = robot;
 
-        odometrRightY = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_front_drive");
+        odometrRightY = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
         odometrLeftY =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "odometrLeft");
 
         right_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
@@ -26,6 +26,8 @@ public class OdometryNew implements RobotModule {
         reset();
 
     }
+    private double xEncOld = 0;
+    private double yEncOld = 0;
     private void reset()
     {
         odometrRightY.setDirection(DcMotor.Direction.FORWARD);
@@ -51,6 +53,7 @@ public class OdometryNew implements RobotModule {
     }
     private  double yEnc;
     private double xEnc;
+    private double hOld;
     private void  encUpdate()
     {
         this.yEnc = (odometrLeftY.getCurrentPosition()+ 0* odometrRightY.getCurrentPosition()+
@@ -64,6 +67,20 @@ public class OdometryNew implements RobotModule {
         this.yEnc = (odometrRightY.getCurrentPosition() + odometrLeftY.getCurrentPosition())/2d;
         this.xEnc = odometrX.getCurrentPosition();
         h = robot.gyro.getAngle();
+    }
+    private double cleanVelX = 0;
+    private double cleanVelY = 0;
+    private double cleanVelH = 0;
+    public double getVelCleanX() {
+        return cleanVelX;
+    }
+
+    public double getVelCleanY() {
+        return cleanVelY;
+    }
+
+    public double getVelCleanH() {
+        return cleanVelH;
     }
 
     private double encoderErrorH = 0;
@@ -84,8 +101,14 @@ public class OdometryNew implements RobotModule {
     public Vector2D getPositionVector(){return vector;}
     private Vector2D vectorCleanPosition = new Vector2D();
     public void update(){
+        cleanVelX = odometrX.getVelocity();
+        cleanVelY = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
+        cleanVelH = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
         odometerUpdate();
-        vectorCleanPosition.setCord(xEnc,yEnc);
+        vectorCleanPosition.setCord(xEnc-xEncOld,yEnc-yEncOld);
+        xEncOld = xEnc;
+        yEncOld = yEnc;
+        h = h - hOld;
         vectorCleanPosition.vectorRat(h);
         vector = Vector2D.vectorSum(vector, vectorCleanPosition);
     }

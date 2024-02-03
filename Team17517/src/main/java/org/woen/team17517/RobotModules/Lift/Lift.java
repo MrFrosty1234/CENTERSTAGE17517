@@ -66,6 +66,7 @@ public class Lift implements RobotModule {
         return getRawPosition() + liftOffset;
     }
 
+    private double encoderError  = 0;
     public void setPositionOffset(int liftOffset){
         this.liftOffset = liftOffset;
     }
@@ -91,12 +92,20 @@ public class Lift implements RobotModule {
             }
         }
     }
+    private double encoderPosition = 0;
+
+    public double getEncoderPosition() {
+        return encoderPosition;
+    }
 
     public void update() {
         double liftPower = 0;
         double liftGravityPower = 0.1;
         double liftMovePower = 1;
-
+        encoderPosition = liftMotor.getCurrentPosition()-encoderError;
+        if (getTopSwitch()){
+            encoderError = liftMotor.getCurrentPosition() - LiftPosition.UP.value;
+        }
         if (getTopSwitch())
             setPositionOffset(LiftPosition.UP.value - getRawPosition());
         switch (liftMode){

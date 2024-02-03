@@ -4,12 +4,12 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team17517.NotUsedCode.DrivetrainNew;
-import org.woen.team17517.NotUsedCode.Lighting;
 import org.woen.team17517.NotUsedCode.Odometry;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
 import org.woen.team17517.RobotModules.Grabber.Grabber;
 import org.woen.team17517.RobotModules.Lift.Lift;
+import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.Navigative.Gyro;
 import org.woen.team17517.RobotModules.Navigative.OdometryNew;
 import org.woen.team17517.RobotModules.OpenCV.TestAprilTagPipeline;
