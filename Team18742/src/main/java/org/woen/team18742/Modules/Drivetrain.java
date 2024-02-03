@@ -84,7 +84,7 @@ public class Drivetrain implements IRobotModule {
     }
 
     public void SimpleDriveDirection(Vector2 speed, double rotate){
-        DriveDirection(Vector2.Multiply(speed, 5), rotate * 5);
+        DriveDirection(Vector2.Multiply(speed, 8), rotate * 8);
     }
 
     public void SetCMSpeed(Vector2 cmSpeed, double rotate){
