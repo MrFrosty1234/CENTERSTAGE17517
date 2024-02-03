@@ -109,9 +109,11 @@ public class Lift implements RobotModule {
         if (getTopSwitch()){
             setPositionOffset(LiftPosition.UP.value - getRawPosition());
         }
-        robot.linearOpMode.telemetry.addData("pos",encoderPosition);
+        /*robot.linearOpMode.telemetry.addData("pos",encoderPosition);
         robot.linearOpMode.telemetry.addData("posClean",liftMotor.getCurrentPosition());
+
         robot.linearOpMode.telemetry.update();
+         */
         switch (liftMode){
             case AUTO:
                 switch (targetPosition) {

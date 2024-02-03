@@ -1,4 +1,4 @@
-package org.woen.team17517.NotUsedCode;
+package org.woen.team17517.Programms.Autonomus;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -22,20 +22,8 @@ public class AutonomForBase extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()){
             robot.updateWhilePositionFalse(new Runnable[]{
-                    ()->telemetry.addData("timer",robot.timer.isAtPosition()),
-                    ()->telemetry.addData("all",robot.isAtPositionAll()),
-                    ()->telemetry.update(),
                     ()->robot.driveTrainVelocityControl.moveRobotCord(x,y,targetH),
-                    ()->telemetry.addData("timer",robot.timer.isAtPosition()),
-                    ()->telemetry.addData("all",robot.isAtPositionAll()),
-                    ()->telemetry.update(),
                     ()->robot.timer.getTimeForTimer(1),
-                    ()->telemetry.addData("timer",robot.timer.isAtPosition()),
-                    ()->telemetry.addData("all",robot.isAtPositionAll()),
-                    ()->telemetry.update(),
-                    ()->telemetry.addData("timer",robot.timer.isAtPosition()),
-                    ()->telemetry.addData("all",robot.isAtPositionAll()),
-                    ()->telemetry.update(),
                     ()->robot.driveTrainVelocityControl.moveRobotCord(-x,-y,-targetH),
                     ()->robot.timer.getTimeForTimer(1)
             });
