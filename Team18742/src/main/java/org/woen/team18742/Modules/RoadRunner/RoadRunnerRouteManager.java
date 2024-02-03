@@ -255,7 +255,15 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftUp(double ds) {
-            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _lift.SetLiftPose(LiftPose.UP)));
+            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER)));
+        }
+
+        public MyTrajectoryBuilder pixelDegrip(double ds){
+            return new MyTrajectoryBuilder(_builder.afterDisp(ds, () -> _intake.releaseGripper()));
+        }
+
+        public MyTrajectoryBuilder pixelDegrip(){
+            return pixelDegrip(0);
         }
 
         public MyTrajectoryBuilder liftDown() {
@@ -314,6 +322,18 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
         public MyTrajectoryBuilder strafeTo(Vector2d pos){
             return new MyTrajectoryBuilder(_builder.strafeTo(pos));
+        }
+
+        public MyTrajectoryBuilder lineToX(double pos){
+            return new MyTrajectoryBuilder(_builder.lineToX(pos));
+        }
+
+        public MyTrajectoryBuilder lineToY(double pos){
+            return new MyTrajectoryBuilder(_builder.lineToY(pos));
+        }
+
+        public MyTrajectoryBuilder strafeToLinearHeading(Vector2d vec, double heading){
+            return new MyTrajectoryBuilder(_builder.strafeToLinearHeading(vec, heading));
         }
     }
 }
