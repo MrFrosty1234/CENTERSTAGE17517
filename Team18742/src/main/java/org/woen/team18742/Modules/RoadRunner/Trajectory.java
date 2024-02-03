@@ -11,7 +11,7 @@ public class Trajectory {
     public static RoadRunnerRouteManager.MyTrajectoryBuilder GetTrajectory(RoadRunnerRouteManager.MyTrajectoryBuilder builder, CameraRobotPosition camera) {
         switch (camera) {
             case FORWARD:
-                return builder
+                builder= builder
                         .lineToY(110 / 2.54)
                         .splineTo(new Vector2d(25.4 / 2.54, 85 / 2.54), -PI / 2)//forward
                         // .splineTo(new Vector2d(18 / 2.54, 90 / 2.54), -PI) //left
@@ -33,7 +33,7 @@ public class Trajectory {
                         .strafeToLinearHeading(new Vector2d(122 / 2.54, 100 / 2.54), 0);
             break;
             case RIGHT:
-                return builder
+                builder= builder
                         .lineToY(110 / 2.54)
                         //.splineTo(new Vector2d(25.4 / 2.54, 85 / 2.54), -PI / 2)//forward
                         // .splineTo(new Vector2d(18 / 2.54, 90 / 2.54), -PI) //left
@@ -55,7 +55,7 @@ public class Trajectory {
                         .strafeToLinearHeading(new Vector2d(122 / 2.54, 100 / 2.54), 0);
             break;
             case LEFT:
-                return builder
+                builder = builder
                         .lineToY(110 / 2.54)
                         .splineTo(new Vector2d(25.4 / 2.54, 85 / 2.54), -PI / 2)//forward
                         .splineTo(new Vector2d(18 / 2.54, 90 / 2.54), -PI) //left
@@ -76,6 +76,7 @@ public class Trajectory {
                         .strafeToLinearHeading(new Vector2d(120 / 2.54, 30 / 2.54), 0)
                         .strafeToLinearHeading(new Vector2d(122 / 2.54, 100 / 2.54), 0);
             break;
-        }
+
+        }return builder;
     }
 }
