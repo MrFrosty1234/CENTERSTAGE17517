@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class DriveTrain implements RobotModule{
     UltRobot robot;
     private double voltage = 12;
-
+    private boolean autoNode = false;
     public DriveTrain(UltRobot robot){
         this.robot = robot;
         voltage = 12;
@@ -96,91 +96,101 @@ public class DriveTrain implements RobotModule{
         targetVector.setCord(x,y);
         targetH = h;
         reset();
+        autoNode = true;
     }
     public void moveGlobalY(double y){
         targetVector.setCord(positionVector.getX(),y);
         reset();
+        autoNode = true;
     }
     public void moveGlobalH(double h){
         targetH = h;
         reset();
+        autoNode = true;
     }
     public void moveRobot(double x, double y, double h){
         targetVector = Vector2D.vectorSum(positionVector,new Vector2D(x,y));
         targetH = posH + h;
         reset();
+        autoNode = true;
     }
 
     public void moveRobotX(double x){
         targetVector = Vector2D.vectorSum(positionVector, new Vector2D(x,0));
         reset();
+        autoNode = true;
     }
     public void moveRobotY(double y){
         targetVector = Vector2D.vectorSum(positionVector, new Vector2D(0,y));
         reset();
+        autoNode = true;
     }
     public void moveRobotH(double h){
         targetH = posH+h;
+        autoNode = true;
     }
     public void moveGlobalX(double x){
         targetVector.setCord(x,positionVector.getY());
         reset();
+        autoNode = true;
     }
 
     public void update(){
-        voltage = robot.voltageSensorPoint.getVol();
-        positionVector = robot.odometryNew.getPositionVector();
-        posH = robot.odometryNew.getH();
+        if (autoNode) {
+            voltage = robot.voltageSensorPoint.getVol();
+            positionVector = robot.odometryNew.getPositionVector();
+            posH = robot.odometryNew.getH();
 
-        errX = targetVector.getX() - positionVector.getX();
-        errY = targetVector.getY() - positionVector.getY();
-        errH = targetH - posH;
-        while (Math.abs(errH)>360){
-            targetH -= 360*Math.signum(targetH - posH);
+            errX = targetVector.getX() - positionVector.getX();
+            errY = targetVector.getY() - positionVector.getY();
+            errH = targetH - posH;
+            while (Math.abs(errH) > 360) {
+                targetH -= 360 * Math.signum(targetH - posH);
+            }
+
+
+            pidX.setCoefficent(kPX, kIX, kDX, 0, ImaxX);
+            pidY.setCoefficent(kPY, kIY, kDY, 0, ImaxY);
+            pidH.setCoefficent(kPH, kIH, kDH, 0, ImaxH);
+
+            X = pidX.PID(targetVector.getX(), positionVector.getX(), voltage);
+            Y = pidY.PID(targetVector.getY(), positionVector.getY(), voltage);
+            H = pidH.PID(targetH, posH, voltage);
+
+            u_X = timer.seconds() * kt;
+
+            if (u_X > u_max) {
+                u_X = u_max;
+            }
+
+            if (abs(X) > u_X) {
+                X = u_X * Math.signum(u_X);
+            }
+
+            u_H = timer.seconds() * kt;
+
+            if (u_H > u_max) {
+                u_H = u_max;
+            }
+
+            if (abs(X) > u_H) {
+                X = u_H * Math.signum(u_H);
+            }
+
+
+            u_Y = timer.seconds() * kt;
+
+            if (u_Y > u_max) {
+                u_Y = u_max;
+            }
+            if (abs(Y) > u_Y) {
+                Y = u_Y * Math.signum(u_Y);
+            }
+
+            robot.driveTrainVelocityControl.moveGlobalCord(X, Y, H);
+        }
         }
 
-
-
-        pidX.setCoefficent(kPX,kIX,kDX,0,ImaxX);
-        pidY.setCoefficent(kPY,kIY,kDY,0,ImaxY);
-        pidH.setCoefficent(kPH,kIH,kDH,0,ImaxH);
-
-        X = pidX.PID(targetVector.getX(),positionVector.getX(),voltage);
-        Y = pidY.PID(targetVector.getY(), positionVector.getY(),voltage);
-        H = pidH.PID(targetH,posH,voltage);
-
-        u_X = timer.seconds() * kt;
-
-        if (u_X > u_max){
-            u_X = u_max;
-        }
-
-        if (abs(X) > u_X){
-            X = u_X * Math.signum(u_X);
-        }
-
-        u_H = timer.seconds() * kt;
-
-        if (u_H > u_max){
-            u_H = u_max;
-        }
-
-        if (abs(X) > u_H){
-            X = u_H * Math.signum(u_H);
-        }
-
-
-        u_Y = timer.seconds() * kt;
-
-        if (u_Y > u_max){
-            u_Y = u_max;
-        }
-        if (abs(Y) > u_Y){
-            Y = u_Y * Math.signum(u_Y);
-        }
-
-        robot.driveTrainVelocityControl.moveGlobalCord(X,Y,H);
-    }
     public boolean isAtPosition(){
         return Math.abs(errH)<minErrH && Math.abs(errX)<minErrX && Math.abs(errY)<minErrY;
     }

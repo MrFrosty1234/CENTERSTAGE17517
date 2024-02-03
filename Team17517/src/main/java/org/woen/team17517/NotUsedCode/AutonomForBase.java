@@ -21,7 +21,8 @@ public class AutonomForBase extends LinearOpMode {
         robot = new UltRobot(this);
         waitForStart();
         while (opModeIsActive()){
-            robot.driveTrainVelocityControl.moveRobotCord(0,200000,0);
+            robot.driveTrainVelocityControl.moveRobotCord(0,robot.driveTrainVelocityControl.linearVelocityPercent(1),0);
+            robot.allUpdate();
         }
     }
 
