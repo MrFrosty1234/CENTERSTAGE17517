@@ -7,8 +7,8 @@ import org.woen.team18742.Tools.Vector2;
 public enum StartRobotPosition {
     RED_BACK(new Vector2(-80.8, -177.6), PI / 2),
     RED_FORWARD(new Vector2(52, -185.7), PI / 2),
-    BLUE_BACK(new Vector2(-71.1, 137.2), -PI / 2),
-    BLUE_FORWAD(new Vector2(37.4, 154d), -PI / 2);
+    BLUE_BACK(new Vector2(-98.7, 157.1), -PI / 2),
+    BLUE_FORWAD(new Vector2(32.0, 164.8), -PI / 2);
 
     private StartRobotPosition(Vector2 vector, double rotation){
         Position = vector;

@@ -36,8 +36,8 @@ public class Trajectory {
                 builder= builder
                         .lineToY(110 )
                         //.splineTo(new Vector2d(25.4 , 85 ), -PI / 2)//forward
-                        // .splineTo(new Vector2d(18 , 90 ), -PI) //left
-                        .splineTo(new Vector2d(35 , 90 ), 0) //right
+                        .splineTo(new Vector2d(18 , 90 ), PI) //right
+                        //.splineTo(new Vector2d(35 , 90 ), 0) //left
                         .strafeToLinearHeading(new Vector2d(18 , 85 ), 0)//right
                         //пиксель на линию
                         .strafeToLinearHeading(new Vector2d(60 , 150 ), 0)//universal

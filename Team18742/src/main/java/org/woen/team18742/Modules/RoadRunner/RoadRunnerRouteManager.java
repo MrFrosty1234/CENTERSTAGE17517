@@ -24,6 +24,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Camera.Camera;
@@ -41,6 +42,7 @@ import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Bios;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Timers.ElapsedTimeExtra;
+import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
     private Brush _brush;
     private PidRouteManager _automaticPid;
 
-    private final MecanumKinematics _mecanumKinematics = new MecanumKinematics(Configs.DriveTrainWheels.Radius * 2, 1 / Configs.Odometry.YLag);
+    private final MecanumKinematics _mecanumKinematics = new MecanumKinematics(Configs.DriveTrainWheels.Radius * 2 + 5, 1 / Configs.Odometry.YLag);
 
     private final TurnConstraints _turnConstraints = new TurnConstraints(Configs.DriveTrainWheels.MaxSpeedTurn, -Configs.DriveTrainWheels.MaxTurnAccel, Configs.DriveTrainWheels.MaxTurnAccel);
 
@@ -126,6 +128,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
         _trajectory = Trajectory.GetTrajectory(ActionBuilder(
                 new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), _camera.GetPosition()).build();//_allTrajectory[indexStartPos][indexCamera];
 
+        _trajectory.preview(new Canvas());
+
         _time.reset();
     }
 
@@ -158,7 +162,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         private final double _duration;
         private ElapsedTime trajectoryTimer = null;
 
-       //private double xPoints[], yPoints[];
+       private double xPoints[], yPoints[];
 
         public TrajectoryAction(TimeTurn t) {
             _timeTrajectory = Optional.empty();
@@ -171,7 +175,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
             _timeTurn = Optional.empty();
             _duration = _timeTrajectory.get().duration;
 
-            /*List<Double> disps = Math.range(0, timeTrajectory.path.length(), Math.max(2, Math.ceil(timeTrajectory.path.length() / 2)));
+            List<Double> disps = com.acmerobotics.roadrunner.Math.range(0, timeTrajectory.path.length(), (int)Math.max(2d, Math.ceil(timeTrajectory.path.length() / 2)));
 
             xPoints = new double[disps.size()];
             yPoints = new double[disps.size()];
@@ -179,9 +183,9 @@ public class RoadRunnerRouteManager implements IRobotModule {
             for(int i = 0; i < disps.size(); i++){
                 Pose2d pose = timeTrajectory.path.get(disps.get(i), 1).value();
 
-                xPoints[i] = pose.position.x;
-                yPoints[i] = pose.position.y;
-            }*/
+                xPoints[i] = DistanceUnit.INCH.fromCm(pose.position.x);
+                yPoints[i] = DistanceUnit.INCH.fromCm(pose.position.y);
+            }
         }
 
         @Override
@@ -191,7 +195,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
                 trajectoryTimer.reset();
             }
 
-            double time = trajectoryTimer.seconds();//_time.seconds();
+            double time = trajectoryTimer.seconds();
 
             if (time >= _duration) {
                 _driveTrain.Stop();
@@ -208,18 +212,18 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
             _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
-//            ToolTelemetry.GetCanvas().setStroke("#4CAF50FF");
-  //          ToolTelemetry.GetCanvas().setStrokeWidth(1);
-    //        ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+            ToolTelemetry.GetCanvas().setStroke("#4CAF50FF");
+            ToolTelemetry.GetCanvas().setStrokeWidth(1);
+            ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
 
             return true;
         }
 
         @Override
         public void preview(@NonNull Canvas fieldOverlay) {
-            //ToolTelemetry.GetCanvas().setStroke("#4CAF507A");
-            //ToolTelemetry.GetCanvas().setStrokeWidth(1);
-            //ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+            ToolTelemetry.GetCanvas().setStroke("#4CAF507A");
+            ToolTelemetry.GetCanvas().setStrokeWidth(1);
+            ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
         }
     }
 
