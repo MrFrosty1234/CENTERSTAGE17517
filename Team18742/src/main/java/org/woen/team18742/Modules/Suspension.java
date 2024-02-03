@@ -52,4 +52,9 @@ public class Suspension implements IRobotModule {
     public void motor() {
             _podtyaga1.setPower(0);
     }
+
+    public void cbros()
+    {
+        _podtyaga1.setPower(0);
+    }
 }

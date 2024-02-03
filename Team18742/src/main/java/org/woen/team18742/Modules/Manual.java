@@ -55,6 +55,7 @@ public class Manual implements IRobotModule {
         boolean launchPlane = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;
         boolean liftAverage = _gamepad.dpad_right;
+        boolean cbrospodtyagi = _gamepad.dpad_left;
         boolean grip = _gamepad.triangle;
         boolean brushOn = _gamepad.cross;
         boolean brushReverseAndOff = _gamepad.circle;
@@ -106,6 +107,12 @@ public class Manual implements IRobotModule {
             _suspension.unmotor();
         else
             _suspension.motor();
+
+        if(cbrospodtyagi)
+        {
+            _suspension.cbros();
+        }
+
     }
 
     @Override
