@@ -105,7 +105,7 @@ public class Intake implements IRobotModule {
     ElapsedTime _clampTimer = new ElapsedTime();
     double clampTimerconst = 800;
 
-    void releaseGripper() {
+    public void releaseGripper() {
         setGripper(false);
         _clampTimer.reset();
 

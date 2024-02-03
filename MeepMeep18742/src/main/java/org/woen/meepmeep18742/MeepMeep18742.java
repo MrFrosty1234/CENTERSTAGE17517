@@ -25,11 +25,13 @@ public class MeepMeep18742 {
         myBot.runAction(myBot.getDrive()
                 .actionBuilder(new Pose2d(25.4 / 2.54, 154 / 2.54, -PI / 2))
                 .lineToY(110 / 2.54)
-                .splineTo(new Vector2d(18 / 2.54, 90 / 2.54), -PI)
-                .lineToX(50 / 2.54)
+                .splineTo(new Vector2d(25.4 / 2.54, 60 / 2.54), -PI/2)//forward
+                // .splineTo(new Vector2d(18 / 2.54, 90 / 2.54), -PI) //left
+                //пиксель на линию
+                .strafeToLinearHeading(new Vector2d(90/2.54, 150/2.54), 0)
                 .strafeToLinearHeading(new Vector2d(120 / 2.54, 75 / 2.54), 0)
-                .lineToX(122 / 2.54)
-                //тут ставим пиксель на задник
+               // .lineToX(122 / 2.54)
+                                //тут ставим пиксель на задник
                         //.splineTo(new Vector2d(0/2.54, 15/2.54), 0)
                         .strafeToLinearHeading(new Vector2d(25/2.54, 30/2.54), 0)
                 .strafeToLinearHeading(new Vector2d(-130/2.54, 30/2.54), 0)
