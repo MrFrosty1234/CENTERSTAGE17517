@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class Autonom extends AutonomBaseClass{
     @Override
     public  Runnable[] getBlueRight(){
-        return new Runnable[]{()-> robot.driveTrainVelocityControl.moveRobotCord(0,1000,0),
+        return new Runnable[]{()-> robot.driveTrainVelocityControl.moveRobotCord(0,     1000,0),
                             ()-> robot.timer.getTimeForTimer(1),
                             ()-> robot.driveTrainVelocityControl.moveRobotCord(0,-1000,0),
                             ()-> robot.timer.getTimeForTimer(1)};

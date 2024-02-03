@@ -1,6 +1,7 @@
 package org.woen.team17517.RobotModules.Navigative;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
@@ -64,10 +65,21 @@ public class OdometryNew implements RobotModule {
     }
 
     private void odometerUpdate(){
-        this.yEnc = (odometrRightY.getCurrentPosition() + odometrLeftY.getCurrentPosition())/2d;
+        this.yEnc = (-odometrRightY.getCurrentPosition() + odometrLeftY.getCurrentPosition())/2d;
         this.xEnc = odometrX.getCurrentPosition();
         h = robot.gyro.getAngle();
     }
+
+    public double getCleanLeftY() {
+        return cleanLeftY;
+    }
+
+    public double getCleanRightY() {
+        return cleanRightY;
+    }
+
+    private double cleanRightY = 0;
+    private double cleanLeftY = 0;
     private double cleanVelX = 0;
     private double cleanVelY = 0;
     private double cleanVelH = 0;
@@ -102,8 +114,10 @@ public class OdometryNew implements RobotModule {
     private Vector2D vectorCleanPosition = new Vector2D();
     public void update(){
         cleanVelX = odometrX.getVelocity();
-        cleanVelY = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
-        cleanVelH = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
+        cleanVelY = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
+        cleanVelH = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
+        cleanRightY = -odometrRightY.getVelocity();
+        cleanLeftY = odometrLeftY.getVelocity();
         odometerUpdate();
         vectorCleanPosition.setCord(xEnc-xEncOld,yEnc-yEncOld);
         xEncOld = xEnc;

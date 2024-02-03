@@ -118,7 +118,7 @@ public class Lift implements RobotModule {
                         break;
                     case DOWN:
                         liftAtTaget = getPosition() <= LiftPosition.DOWN.value;
-                        liftPower = liftAtTaget ? 0 : -liftMovePower;
+                        liftPower = liftAtTaget ? -0.3 : -liftMovePower;
                         setPower(liftPower);
                         break;
                     case FORAUTONOM:

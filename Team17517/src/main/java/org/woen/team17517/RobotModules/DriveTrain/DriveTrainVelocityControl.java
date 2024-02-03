@@ -19,21 +19,22 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double voltage;
 
     public static double kdX = 0;
-    public static double kiX = 0;//.000_000_1;
-    public static double kpX = 0;//.0003;
+    public static double kiX = 0.000_000;//_1;
+    public static double kpX = 0.000;// 3;
 
     public static double kdRat = 0;
-    public static double kiRat = 0.000_000_1;
-    public static double kpRat = 0.0003;
+    public static double kiRat = 0.000_00;//0_1;
+    public static double kpRat = 0.000;//3;
 
     public static double kdY  = 0;
-    public static double kiY =0.;//000_000_1;
-    public static double kpY = 0;//.0003;
+    public static double kiY =0.000_0;//00_1;
+    public static double kpY = 0.000;//3;
 
     public static  double maxIY = 0.01;
     public static  double maxIRat = 0.01;
     public static  double maxIX = 0.01;
 
+    public final double odToEnc = 98;
     private PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX,maxIX);
     private PIDMethod speedH = new PIDMethod(kpRat,kiRat,kdRat,ksY,maxIY);
     private PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat,maxIRat);
@@ -82,7 +83,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static double ksRat = 0.000479;
     public static double ksY = 0.0004;
     public static double ksX = 0.00045;
-    public static double kSlide = 0.5;
+    public static double kSlide = 1;
 
     private double targetH = 0;
     private Vector2D vector = new Vector2D(0,0);
