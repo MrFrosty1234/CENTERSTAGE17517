@@ -25,7 +25,7 @@ public class MeepMeep18742 {
         myBot.runAction(myBot.getDrive()
                 .actionBuilder(new Pose2d(25.4 / 2.54, 154 / 2.54, -PI / 2))
                 .lineToY(110 / 2.54)
-                .splineTo(new Vector2d(25.4 / 2.54, 60 / 2.54), -PI/2)//forward
+                /*.splineTo(new Vector2d(25.4 / 2.54, 60 / 2.54), -PI/2)//forward
                 // .splineTo(new Vector2d(18 / 2.54, 90 / 2.54), -PI) //left
                 //пиксель на линию
                 .strafeToLinearHeading(new Vector2d(90/2.54, 150/2.54), 0)
@@ -39,7 +39,7 @@ public class MeepMeep18742 {
                 .strafeToLinearHeading(new Vector2d(-145/2.54, 30/2.54), 0)
                 //хаваем стопки
                         .strafeToLinearHeading(new Vector2d(120/2.54, 30/2.54), 0)
-                .strafeToLinearHeading(new Vector2d(122/2.54, 100/2.54), 0)
+                .strafeToLinearHeading(new Vector2d(122/2.54, 100/2.54), 0)*/
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)

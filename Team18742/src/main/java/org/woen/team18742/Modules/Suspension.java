@@ -16,6 +16,7 @@ public class Suspension implements IRobotModule {
     private Servo podtyaga1;
     private Servo podtyaga2;
     private DcMotorEx _podtyaga1;
+    private boolean _isRastrel = false;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -27,6 +28,8 @@ public class Suspension implements IRobotModule {
     public void Active(){
         podtyaga1.setPosition(Configs.Suspension.nulevayapodtyaga1);
         podtyaga2.setPosition(Configs.Suspension.nulevayapodtyaga2);
+
+        _isRastrel = true;
     }
 
     public void Disable(){
@@ -37,10 +40,18 @@ public class Suspension implements IRobotModule {
     private Timer _timer = new Timer();
 
     public void unmotor() {
-        _podtyaga1.setPower(1);
+        if(_isRastrel)
+            _podtyaga1.setPower(1);
 
-        _timer.Start(12000, ()->{
-            _podtyaga1.setPower(0.0);
-        });
+        //_timer.Start(12000, ()->{
+          //  _podtyaga1.setPower(0.0);
+       //  });
+    }
+    public void motor() {
+        _podtyaga1.setPower(0);
+
+        //_timer.Start(12000, ()->{
+        //  _podtyaga1.setPower(0.0);
+        //  });
     }
 }
