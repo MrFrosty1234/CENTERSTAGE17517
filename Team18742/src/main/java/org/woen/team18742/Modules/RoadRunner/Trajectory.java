@@ -9,161 +9,66 @@ import org.woen.team18742.Tools.Bios;
 
 public class Trajectory {
     public static RoadRunnerRouteManager.MyTrajectoryBuilder GetTrajectory(RoadRunnerRouteManager.MyTrajectoryBuilder builder, CameraRobotPosition camera) {
-       /* switch (camera) {//синий передний
-            case FORWARD:
-                builder= builder
-                        .lineToY(110 )
-                        .splineTo(new Vector2d(25.4 , 85 ), -PI / 2)//forward
-                        // .splineTo(new Vector2d(18 , 90 ), -PI) //left
-                        //.splineTo(new Vector2d(35 , 90   ), 0) //right
-                        //.strafeToLinearHeading(new Vector2d(18 , 85 ), 0)//right
-                        //пиксель на линию
-                        .strafeToLinearHeading(new Vector2d(60 , 150 ), 0)//universal
-                        //.strafeToLinearHeading(new Vector2d(120 , 75 ), 0)//right
-                        .strafeToLinearHeading(new Vector2d(123 , 90 ), 0)//forward
-                        //.strafeToLinearHeading(new Vector2d(123 , 105 ), 0)//left
+        builder.brushOn();
+
+        switch (Bios.GetStartPosition()) {
+            case BLUE_FORWAD: {
+                builder.strafeToLinearHeading(new Vector2d(130, 90), 0)//left
                         //тут ставим пиксель на задник
-                        .strafeToLinearHeading(new Vector2d(70 , 30 ), 0)
-                        .strafeToLinearHeading(new Vector2d(-80 , 30 ), 0)
-                        //врубили щётки
-                        //начали опускать
-                        .strafeToLinearHeading(new Vector2d(-145 , 30 ), 0)
-                        //хаваем стопки
-                        .strafeToLinearHeading(new Vector2d(120 , 30 ), 0)
-                        .strafeToLinearHeading(new Vector2d(122 , 100 ), 0);
-            break;
-            case RIGHT:
-                builder= builder
-                        .lineToY(110 )
-                        //.splineTo(new Vector2d(25.4 , 85 ), -PI / 2)//forward
-                        //.splineTo(new Vector2d(35 , 90 ), 0) //left
-                        .splineTo(new Vector2d(18/2.54 , 85/2.54 ), PI) //right
-                        .strafeToLinearHeading(new Vector2d(25.4, 85), PI)//right
-                        //пиксель на линию
-                        .strafeToLinearHeading(new Vector2d(60 , 150 ), 0)//universal
-                        .strafeToLinearHeading(new Vector2d(120 , 75 ), 0)//right
-                        //.strafeToLinearHeading(new Vector2d(123 , 90 ), 0)//forward
-                        //.strafeToLinearHeading(new Vector2d(123 , 105 ), 0)//left
-                        //тут ставим пиксель на задник
-                        .strafeToLinearHeading(new Vector2d(70 , 30 ), 0)
-                        .strafeToLinearHeading(new Vector2d(-80 , 30 ), 0)
-                        //врубили щётки
-                        //начали опускать
-                        .strafeToLinearHeading(new Vector2d(-145 , 30 ), 0)
-                        .waitSeconds(5)
-                        //хаваем стопки
-                        .strafeToLinearHeading(new Vector2d(120 , 30 ), 0)
-                        .strafeToLinearHeading(new Vector2d(122 , 100 ), 0);
-            break;
-            case LEFT:
-                builder = builder
-                        .lineToY(110)
-                        //.splineTo(new Vector2d(25.4, 85), -PI / 2)//forward
-                        .splineTo(new Vector2d(25, 90), -PI) //left
-                        .lineToX(30)//left
-                        //.splineTo(new Vector2d(35, 90), 0) //right
-                        //.strafeToLinearHeading(new Vector2d(18, 85), 0)//right
-                        //пиксель на линию
-                        .strafeToLinearHeading(new Vector2d(60, 150), 0)//universal
-                        //.strafeToLinearHeading(new Vector2d(120, 75), 0)//right
-                        //.strafeToLinearHeading(new Vector2d(123, 90), 0)//forward
-                        .strafeToLinearHeading(new Vector2d(123, 105), 0)//left
-                        //тут ставим пиксель на задник
+                        .liftUp()
+                        .waitSeconds(1)
+                        .pixelDeGripp()
+                        .waitSeconds(1)
                         .strafeToLinearHeading(new Vector2d(70, 30), 0)
                         .strafeToLinearHeading(new Vector2d(-80, 30), 0)
                         //врубили щётки
                         //начали опускать
-                        .strafeToLinearHeading(new Vector2d(-145, 30), 0)
+                        .brushDown()
+                        .brushOn()
+                        .strafeToLinearHeading(new Vector2d(-90, 35), 0)
+                        .strafeToLinearHeading(new Vector2d(-145, 45), 0)
                         //хаваем стопки
-                        .strafeToLinearHeading(new Vector2d(120, 30), 0)
-                        .strafeToLinearHeading(new Vector2d(122, 100), 0);
-            break;
+                        .waitSeconds(5)
+                        .strafeToLinearHeading(new Vector2d(60, 30), 0)
+                        .waitSeconds(0.2)
+                        .strafeToLinearHeading(new Vector2d(130, 100), 0)
+                        .liftUp()
+                        .waitSeconds(1)
+                        .pixelDeGripp()
+                        .waitSeconds(1);
 
-        }*/
-       /* switch (camera) {//краный передний
-            case RIGHT:
-                builder = builder
+                break;
+            }
 
-                        //начало правого
-                        .splineTo(new Vector2d(57 / 2.54, -100 / 2.54), PI / 2)//right
-                        .strafeToLinearHeading(new Vector2d(57 / 2.54, -130 / 2.54), PI / 2)//right
-                        .strafeToLinearHeading(new Vector2d(95 / 2.54, -130 / 2.54), PI / 2)//right
-                        .strafeToLinearHeading(new Vector2d(120 / 2.54, -110 / 2.54), 0)//right
-                        //лифт
-                        .strafeToLinearHeading(new Vector2d(97 / 2.54, -30 / 2.54), 0)
-                        .strafeToLinearHeading(new Vector2d(-50 / 2.54, -30 / 2.54), 0)
-                        //запускаем щётки и опускаем обычные
-                        .strafeToLinearHeading(new Vector2d(-140 / 2.54, -27 / 2.54), 0)
-                        //ждём пикселя
-                        .strafeToLinearHeading(new Vector2d(100 / 2.54, -30 / 2.54), 0)
-                        .strafeToLinearHeading(new Vector2d(120 / 2.54, -80 / 2.54), 0)
-                        //ставим пиксель, ждём лифт
-                        .strafeToLinearHeading(new Vector2d(100 / 2.54, -30 / 2.54), 0)
-                        .strafeToLinearHeading(new Vector2d(140 / 2.54, -30 / 2.54), 0)
-                //парковка
-                break;
-            case FORWARD:
-                builder = builder
-                        //начало переднего
-                        .splineTo(new Vector2d(40 / 2.54, -93 / 2.54), PI / 2)//forward
-                        .strafeToLinearHeading(new Vector2d(40 / 2.54, -100 / 2.54), PI / 2)//forward
-                        .strafeToLinearHeading(new Vector2d(100 / 2.54, -100 / 2.54), 0)//forward
-                        .strafeToLinearHeading(new Vector2d(120 / 2.54, -90 / 2.54), 0)//forward
+            case RED_FORWARD: {
+                builder.strafeToLinearHeading(new Vector2d(130, -90), 0)//left
+                        //тут ставим пиксель на задник
+                        .liftUp()
+                        .waitSeconds(1)
+                        .pixelDeGripp()
+                        .waitSeconds(1)
+                        .strafeToLinearHeading(new Vector2d(70, -30), 0)
+                        .strafeToLinearHeading(new Vector2d(-80, -30), 0)
+                        //врубили щётки
+                        //начали опускать
+                        .brushDown()
+                        .brushOn()
+                        .strafeToLinearHeading(new Vector2d(-90, -35), 0)
+                        .strafeToLinearHeading(new Vector2d(-145, -45), 0)
+                        //хаваем стопки
+                        .waitSeconds(5)
+                        .strafeToLinearHeading(new Vector2d(60, -30), 0)
+                        .waitSeconds(0.2)
+                        .strafeToLinearHeading(new Vector2d(130, -100), 0)
+                        .liftUp()
+                        .waitSeconds(1)
+                        .pixelDeGripp()
+                        .waitSeconds(1);
 
-                        //лифт
-                        .strafeToLinearHeading(new Vector2d(97 / 2.54, -30 / 2.54), 0)
-                        .strafeToLinearHeading(new Vector2d(-50 / 2.54, -30 / 2.54), 0)
-                        //запускаем щётки и опускаем обычные
-                        .strafeToLinearHeading(new Vector2d(-140 / 2.54, -27 / 2.54), 0)
-                        //ждём пикселя
-                        .strafeToLinearHeading(new Vector2d(100 / 2.54, -30 / 2.54), 0)
-                        .strafeToLinearHeading(new Vector2d(120 / 2.54, -80 / 2.54), 0)
-                        //ставим пиксель, ждём лифт
-                        .strafeToLinearHeading(new Vector2d(100 / 2.54, -30 / 2.54), 0)
-                        .strafeToLinearHeading(new Vector2d(140 / 2.54, -30 / 2.54), 0)
-                //парковка
                 break;
-            case LEFT:
-                builder = builder
-                        //начало левого
-                        .splineTo(new Vector2d(27 / 2.54, -80 / 2.54), PI)
-                        .strafeToLinearHeading(new Vector2d(50 / 2.54, -80 / 2.54), PI)
-                        .strafeToLinearHeading(new Vector2d(122 / 2.54, -73 / 2.54), 0)
-                        //лифт
-                        .strafeToLinearHeading(new Vector2d(97 / 2.54, -30 / 2.54), 0)
-                        .strafeToLinearHeading(new Vector2d(-50 / 2.54, -30 / 2.54), 0)
-                        //запускаем щётки и опускаем обычные
-                        .strafeToLinearHeading(new Vector2d(-140 / 2.54, -27 / 2.54), 0)
-                        //ждём пикселя
-                        .strafeToLinearHeading(new Vector2d(100 / 2.54, -30 / 2.54), 0)
-                        .strafeToLinearHeading(new Vector2d(120 / 2.54, -80 / 2.54), 0)
-                        //ставим пиксель, ждём лифт
-                        .strafeToLinearHeading(new Vector2d(100 / 2.54, -30 / 2.54), 0)
-                        .strafeToLinearHeading(new Vector2d(140 / 2.54, -30 / 2.54), 0)
-                //парковка
-                break;
-        }*/
-        builder = builder
-                .lineToY(110)
-                //.splineTo(new Vector2d(25.4, 85), -PI / 2)//forward
-                .splineTo(new Vector2d(25, 90), -PI) //left
-                .lineToX(30)//left
-                //.splineTo(new Vector2d(35, 90), 0) //right
-                //.strafeToLinearHeading(new Vector2d(18, 85), 0)//right
-                //пиксель на линию
-                .strafeToLinearHeading(new Vector2d(60, 150), 0)//universal
-                //.strafeToLinearHeading(new Vector2d(120, 75), 0)//right
-                //.strafeToLinearHeading(new Vector2d(123, 90), 0)//forward
-                .strafeToLinearHeading(new Vector2d(123, 105), 0)//left
-                //тут ставим пиксель на задник
-                .strafeToLinearHeading(new Vector2d(70, 30), 0)
-                .strafeToLinearHeading(new Vector2d(-80, 30), 0)
-                //врубили щётки
-                //начали опускать
-                .strafeToLinearHeading(new Vector2d(-145, 30), 0)
-                //хаваем стопки
-                .strafeToLinearHeading(new Vector2d(120, 30), 0)
-                .strafeToLinearHeading(new Vector2d(122, 100), 0);
+            }
+        }
+
         return builder;
     }
 }

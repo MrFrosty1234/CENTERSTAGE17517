@@ -34,7 +34,7 @@ public class Configs {
         public static double CameraX = 16.01, CameraY = -16.18;
 
         public static double ZoneLeftEndRed = 0, ZoneForwardEndRed = 300;
-        public static double ZoneLeftEndBlue = 30, ZoneForwardEndBlue = 310;
+        public static double ZoneLeftEndBlue = 40, ZoneForwardEndBlue = 310;
 
         public static int PruningStart = 290;
 
@@ -127,7 +127,7 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.137, PixelCenterOpen = 0;//0.4 pixelSensorVoltage = 0.15
+        public static double pixelSensorvoltage = 0.137, PixelCenterOpen = 0.72;//0.4 pixelSensorVoltage = 0.15
         public static double servoTurnNormal = 0.68;
         public static final double servoTurnTurned = 0.06 ;
         public static double servoGripperNormal = 0.95;
@@ -151,9 +151,9 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 0.48;
-        public static double Lateral = 1.9;
-        public static double Heading = 3.2;
+        public static double Axial = 0.58;
+        public static double Lateral = 0.58;
+        public static double Heading = 3.3;
     }
 
     @Config
@@ -166,7 +166,7 @@ public class Configs {
     @Config
     public static class Motors{
         public static double DefultP = 0.000001;
-        public static double DefultI = 0.00013;
+        public static double DefultI = 0;//0.00013;
         public static double DefultD = 0.005;
         public static double DefultF = 0.0005;
     }

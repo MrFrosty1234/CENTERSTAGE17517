@@ -132,5 +132,9 @@ public class Intake implements IRobotModule {
 
     public void PixelCenterGrip(boolean gripped) {
         gripper.setPosition(gripped ? Configs.Intake.PixelCenterOpen : Configs.Intake.servoGripperNormal);
+
+        _pixelGripped = gripped;
+
+        _lighting.setPower(gripped ? 1 : 0);
     }
 }

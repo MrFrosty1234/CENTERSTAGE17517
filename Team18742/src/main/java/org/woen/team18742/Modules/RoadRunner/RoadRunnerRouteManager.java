@@ -134,6 +134,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
         _trajectorys = Trajectory.GetTrajectory(ActionBuilder(
                 new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), _camera.GetPosition()).build();//_allTrajectory[indexStartPos][indexCamera];
 
+        //_intake.PixelCenterGrip(true);
+
         for(Action i : _trajectorys)
             i.preview(new Canvas());
     }
@@ -278,17 +280,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftUp(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterDisp(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER)));
+            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_UPPER)));
             return this;
-        }
-
-        public MyTrajectoryBuilder pixelDegrip(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterDisp(ds, () -> _intake.releaseGripper()));
-            return this;
-        }
-
-        public MyTrajectoryBuilder pixelDegrip() {
-            return pixelDegrip(0);
         }
 
         public MyTrajectoryBuilder liftDown() {
@@ -296,7 +289,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftDown(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterDisp(ds, () -> _lift.SetLiftPose(LiftPose.DOWN)));
+            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () -> _lift.SetLiftPose(LiftPose.DOWN)));
             return this;
         }
 
@@ -313,7 +306,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushOn(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterDisp(ds, () -> _brush.BrushEnable()));
+            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () -> _brush.BrushEnable()));
             return this;
         }
 
@@ -331,7 +324,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder pixelDeGripp(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterDisp(ds, () -> _intake.setGripper(false)));
+            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () -> _intake.releaseGripper()));
             return this;
         }
 
@@ -374,11 +367,11 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushDown() {
-            return pixelDeGripp(0);
+            return brushDown(0);
         }
 
         public MyTrajectoryBuilder brushDown(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterDisp(ds, () ->_staksBrush.servoSetDownPose() ));
+            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () ->_staksBrush.servoSetDownPose() ));
             return this;
         }
     }
