@@ -53,7 +53,7 @@ public class UltRobot {
         drivetrainNew = new DrivetrainNew(this);
         odometryNew = new OdometryNew(this);
         driveTrain = new DriveTrain(this);
-        this.robotModules = new RobotModule[]{telemetryOutput, grabber, timer, voltageSensorPoint,
+        this.robotModules = new RobotModule[]{telemetryOutput,  timer, voltageSensorPoint,
                 lift, driveTrainVelocityControl, driveTrain, gyro, lighting, odometry, odometryNew, drivetrainNew};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
@@ -72,6 +72,21 @@ public class UltRobot {
         }
     }
 
+    public void updateWhile(RobotModule run ,Runnable [] runnables){
+        for (Runnable runnable : runnables){
+            runnable.run();
+            allUpdate();
+
+            double oldTime = System.currentTimeMillis();
+
+            while(!run.isAtPosition() && linearOpMode.opModeIsActive()){
+                allUpdate();
+            }
+            linearOpMode.telemetry.addData("posRun", run.isAtPosition());
+            linearOpMode.telemetry.update();
+        }
+
+    }
     public void updateWhilePositionFalse(Runnable[] runnables){
         for (Runnable runnable : runnables){
             runnable.run();
@@ -80,9 +95,15 @@ public class UltRobot {
             double oldTime = System.currentTimeMillis();
 
             while(!isAtPositionAll() && linearOpMode.opModeIsActive()){
+                linearOpMode.telemetry.addData("posAll", isAtPositionAll());
+                linearOpMode.telemetry.update();
                 allUpdate();
+                linearOpMode.telemetry.addData("posAll", isAtPositionAll());
+                linearOpMode.telemetry.update();
             }
-
+            linearOpMode.telemetry.addData("posAll", isAtPositionAll());
+            linearOpMode.telemetry.update();
         }
+
     }
 }

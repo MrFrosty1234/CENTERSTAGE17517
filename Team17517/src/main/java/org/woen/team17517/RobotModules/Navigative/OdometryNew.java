@@ -65,8 +65,8 @@ public class OdometryNew implements RobotModule {
     }
 
     private void odometerUpdate(){
-        this.yEnc = (-odometrRightY.getCurrentPosition() + odometrLeftY.getCurrentPosition())/2d;
-        this.xEnc = odometrX.getCurrentPosition();
+        this.yEnc = ((double) -odometrRightY.getCurrentPosition() + (double) odometrLeftY.getCurrentPosition())/2d;
+        this.xEnc = -odometrX.getCurrentPosition();
         h = robot.gyro.getAngle();
     }
 
@@ -113,7 +113,7 @@ public class OdometryNew implements RobotModule {
     public Vector2D getPositionVector(){return vector;}
     private Vector2D vectorCleanPosition = new Vector2D();
     public void update(){
-        cleanVelX = odometrX.getVelocity();
+        cleanVelX = -odometrX.getVelocity();
         cleanVelY = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
         cleanVelH = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
         cleanRightY = -odometrRightY.getVelocity();

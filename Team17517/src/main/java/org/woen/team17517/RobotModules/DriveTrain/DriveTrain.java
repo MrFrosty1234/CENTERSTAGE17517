@@ -192,7 +192,10 @@ public class DriveTrain implements RobotModule{
         }
 
     public boolean isAtPosition(){
-        return Math.abs(errH)<minErrH && Math.abs(errX)<minErrX && Math.abs(errY)<minErrY;
+        if(autoNode) {
+            return Math.abs(errH) < minErrH && Math.abs(errX) < minErrX && Math.abs(errY) < minErrY;
+        }else{
+            return true;}
     }
 }
 

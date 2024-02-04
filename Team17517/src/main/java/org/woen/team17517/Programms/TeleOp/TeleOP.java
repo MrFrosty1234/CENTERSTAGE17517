@@ -1,8 +1,10 @@
 package org.woen.team17517.Programms.TeleOp;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team17517.RobotModules.Grabber.Grabber;
 import org.woen.team17517.RobotModules.Lift.LiftPosition;
@@ -12,13 +14,23 @@ import org.woen.team17517.Service.Button;
 import org.woen.team17517.Service.Vector2D;
 
 @TeleOp
+@Config
 public class TeleOP extends LinearOpMode {
     UltRobot robot;
     DcMotor grabber;
     Grabber.PerekidPosition perekidPosition;
+    public Servo pixelServoRight;
+    public Servo pixelServoLeft;
+
+    public static double grabberOpenLeft = 0.8;
+    public static double grabberCloseLeft = 0.5;
+    public static double grabberOpenRight = 0.1;
+    public static double grabberCloseRight = 0.7;
+
 
     boolean triangle = false;
-    Button triangleButton = new Button();
+    Button x = new Button();
+    Button a = new Button();
     private  enum TeleopMode{
         ROBOT,CENTRE
     }
@@ -28,10 +40,14 @@ public class TeleOP extends LinearOpMode {
         robot = new UltRobot(this);
 
         grabber = robot.linearOpMode.hardwareMap.dcMotor.get("intakeMotor");
+        pixelServoRight = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
+        pixelServoLeft = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoLeft");
+
 
         double forwardSpeed;
         double sideSpeed;
         double angleSpeed;
+
 
         waitForStart();
 
@@ -63,11 +79,23 @@ public class TeleOP extends LinearOpMode {
                 grabber.setPower(0);
 
 
-            if (gamepad1.a || (robot.lift.getTargetPosition() == LiftPosition.UP && !liftAtTarget))
-                robot.grabber.closeGraber();
-            if (gamepad1.b) robot.grabber.openGraber();
+            if (x.update(gamepad1.right_trigger>0.1)) {
+                pixelServoRight.setPosition(grabberOpenRight);
+                pixelServoLeft.setPosition(grabberOpenLeft);
+                telemetry.addData("Open",true);
+            }else{
+                telemetry.addData("Open",false);
+            }
+            if (a.update(gamepad1.right_bumper)){
+                pixelServoRight.setPosition(grabberCloseRight);
+                pixelServoLeft.setPosition(grabberCloseLeft);
+                telemetry.addData("Close",true);
+            }else{
+                telemetry.addData("Close",false);
+            }
 
-
+            telemetry.addData("triger", gamepad1.right_trigger);
+            telemetry.update();
             if (robot.lift.isAtPosition()) {
 
                 if (robot.lift.getTargetPosition() == LiftPosition.UP)
@@ -80,5 +108,14 @@ public class TeleOP extends LinearOpMode {
 
             robot.allUpdate();
         }
+    }
+    public void openGraber() {
+        pixelServoRight.setPosition(grabberOpenRight);
+        pixelServoLeft.setPosition(grabberOpenLeft);
+    }
+
+    public void closeGraber() {
+        pixelServoRight.setPosition(grabberCloseRight);
+        pixelServoLeft.setPosition(grabberCloseLeft);
     }
 }
