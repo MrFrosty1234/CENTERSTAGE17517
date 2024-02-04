@@ -33,7 +33,7 @@ public class Motor {
 
         _encoderType = type;
 
-        _velocityPid = new PIDF(Configs.Motors.DefultP, Configs.Motors.DefultI, Configs.Motors.DefultD, 0, Configs.Motors.DefultF, 1, 0.001);
+        _velocityPid = new PIDF(Configs.Motors.DefultP, Configs.Motors.DefultI, Configs.Motors.DefultD, 0, Configs.Motors.DefultF, 1, 0);
 
         MotorsHandler.AddMotor(this);
 

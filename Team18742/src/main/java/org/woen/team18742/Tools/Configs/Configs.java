@@ -34,7 +34,7 @@ public class Configs {
         public static double CameraX = 16.01, CameraY = -16.18;
 
         public static double ZoneLeftEndRed = 0, ZoneForwardEndRed = 300;
-        public static double ZoneLeftEndBlue = 30, ZoneForwardEndBlue = 310;
+        public static double ZoneLeftEndBlue = 40, ZoneForwardEndBlue = 310;
 
         public static int PruningStart = 290;
 
@@ -151,8 +151,8 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 0.48;
-        public static double Lateral = 1.9;
+        public static double Axial = 0.58;
+        public static double Lateral = 0.58;
         public static double Heading = 3.2;
     }
 
@@ -166,7 +166,7 @@ public class Configs {
     @Config
     public static class Motors{
         public static double DefultP = 0.000001;
-        public static double DefultI = 0.00013;
+        public static double DefultI = 0;//0.00013;
         public static double DefultD = 0.005;
         public static double DefultF = 0.0005;
     }

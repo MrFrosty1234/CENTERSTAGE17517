@@ -32,7 +32,7 @@ public class Suspension implements IRobotModule {
     }
 
     public void Active() {
-        if(_endGameTime.seconds() < 70)
+        if(_endGameTime.seconds() < 90)
             return;
 
         podtyaga1.setPosition(Configs.Suspension.nulevayapodtyaga1);

@@ -48,9 +48,17 @@ public class Manual implements IRobotModule {
     public void Update() {
         _plane.Update();
 
-        _drivetrain.SimpleDriveDirection(
-                new Vector2(-_gamepad.left_stick_y, -_gamepad.left_stick_x),
-                -_gamepad.right_stick_x);
+        if(_lift.isDown()) {
+            _drivetrain.SimpleDriveDirection(
+                    new Vector2(-_gamepad.left_stick_y, -_gamepad.left_stick_x),
+                    -_gamepad.right_stick_x);
+        }
+        else
+        {
+            _drivetrain.SimpleDriveDirection(
+                    new Vector2(-_gamepad.left_stick_y * 0.5, -_gamepad.left_stick_x * 0.5),
+                    -_gamepad.right_stick_x * 0.5);
+        }
 
         boolean launchPlane = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;
@@ -94,25 +102,22 @@ public class Manual implements IRobotModule {
         else if (liftAverage)
             _lift.SetLiftPose(LiftPose.MIDDLE_UPPER);
 
-        if (servotyaga < 0.2)
+        /*if (servotyaga < 0.2)
             _suspension.Active();
         else
-            _suspension.Disable();
+            _suspension.Disable();*/
 
         _gripOld = grip;
         _brushOld = brushOn;
 
 
-        if(motortyagakopka > 0.8 )
+        /*if(motortyagakopka > 0.8 )
             _suspension.unmotor();
         else
             _suspension.motor();
 
         if(cbrospodtyagi)
-        {
-            _suspension.cbros();
-        }
-
+            _suspension.cbros();*/
     }
 
     @Override
