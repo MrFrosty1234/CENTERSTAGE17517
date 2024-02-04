@@ -37,10 +37,12 @@ public class CVOdometry implements IRobotModule {
     private Gyroscope _gyro;
 
     private final ElapsedTime _deltaTime = new ElapsedTime();
+    private OdometryHandler _handler;
 
     @Override
     public void Init(BaseCollector collector){
         _gyro = collector.GetModule(Gyroscope.class);
+        _handler = collector.GetModule(OdometryHandler.class);
     }
 
     public VisionProcessor GetProcessor(){
@@ -87,6 +89,9 @@ public class CVOdometry implements IRobotModule {
                 // Повернуть относительное положение на угол между тегом и полем
                 VectorF rotatedPosVector = fieldTagQ.applyToVector(rawTagPoseVector);
                 // Вычесть полученное положение камеры из абсолютного положения тега
+                if(Math.sqrt(rotatedPosVector.get(0) * rotatedPosVector.get(0) + rotatedPosVector.get(1) * rotatedPosVector.get(1)) > 800)
+                    continue;
+
                 VectorF fieldCameraPos = fieldTagPos.subtracted(rotatedPosVector);
 
                 xSum += fieldCameraPos.get(0);
@@ -96,7 +101,7 @@ public class CVOdometry implements IRobotModule {
             }
         }
 
-        if(suitableDetections == 0){
+        if(suitableDetections == 0 || Math.sqrt(_handler.Speed.X * _handler.Speed.X + _handler.Speed.Y * _handler.Speed.Y) > 70){
             IsZero = true;
 
             return;

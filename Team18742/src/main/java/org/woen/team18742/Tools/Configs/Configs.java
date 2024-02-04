@@ -33,11 +33,12 @@ public class Configs {
         public static double CameraAccuracy = 150;
         public static double CameraX = 16.01, CameraY = -16.18;
 
-        public static double ZoneLeftEnd = 220, ZoneForwardEnd = 550;
+        public static double ZoneLeftEndRed = 0, ZoneForwardEndRed = 300;
+        public static double ZoneLeftEndBlue = 30, ZoneForwardEndBlue = 310;
 
         public static int PruningStart = 290;
 
-        public static int ksize = 10;
+        public static int ksize = 22;
 
         public static double hRedDown = 4;
         public static double cRedDown = 127.7;
@@ -57,14 +58,14 @@ public class Configs {
     @Config
     public static class LiftPid{
         public static double PCoef = 0.01, ICoef = 0, DCoef = 0, GCoef = 0.1;
-        public static double DOWN_MOVE_POWER = -0.00003, DOWN_AT_TARGET_POWER = 0;
+        public static double DOWN_MOVE_POWER = -0.00003, DOWN_AT_TARGET_POWER = 0, DOWN_MOVE_POWER_FAST = -0.02;
     }
 
     @Config
     public static class LiftPoses{
         public static int POSE_UP = 1100;
-        public static int POSE_MIDDLE_UPPER = 430;
-        public static int POSE_MIDDLE_LOWER = 430;
+        public static int POSE_MIDDLE_UPPER = 490;
+        public static int POSE_MIDDLE_LOWER = 490;
         public static int POSE_DOWN = -40;
         public static int POSE_DOWN_ENDSWITCH_THRESHOLD = 10;
         public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
@@ -72,7 +73,7 @@ public class Configs {
 
     @Config
     public static class Lift{
-        public static double isProchelnugnoepologenie = 365;
+        public static double isProchelnugnoepologenie = 420;
     }
 
     @Config
@@ -114,7 +115,7 @@ public class Configs {
 
     @Config
     public static class DriveTrainWheels {
-        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 150, MaxSpeedTurn = Math.toRadians(130), speed = 0.5;
+        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 166.7, MaxSpeedTurn = Math.toRadians(130), speed = 0.5   ;
         public static double MaxTurnAccel = 3; //random
         public static double Radius = 15.7;
     }
@@ -150,16 +151,16 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 0.11;
-        public static double Lateral = 0.11;
+        public static double Axial = 0.48;
+        public static double Lateral = 1.9;
         public static double Heading = 3.2;
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 0.1;
-        public static double Lateral = 0.1;
-        public static double Heading = 0.1;
+        public static double Axial = 0.11;
+        public static double Lateral = 0.11;
+        public static double Heading = 0.11;
     }
 
     @Config
@@ -177,10 +178,10 @@ public class Configs {
 
     @Config
     public static class StackBrush{
-        public static double LEFT_SERVO_STOP = 0.452;
+        public static double LEFT_SERVO_STOP = 0.435;
         public static double LEFT_SERVO_FWD = 0.0;
         public static double LEFT_SERVO_REV = 1.0;
-        public static double RIGHT_SERVO_STOP = 0.418;
+        public static double RIGHT_SERVO_STOP = 0.421;
         public static double RIGHT_SERVO_FWD = 1.0;
         public static double RIGHT_SERVO_REV = 0.0;
         public static double SERVO_LIFT_DOWN = 0.617;
