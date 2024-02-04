@@ -7,7 +7,7 @@ public class Autonom extends AutonomBaseClass {
     @Override
     public Runnable[] getRedLeft() {
         return new Runnable[]{
-                () -> robot.grabber.openGraber(),
+                () -> robot.grabber.open(),
                 () -> robot.timer.getTimeForTimer(1),
                 () -> robot.driveTrainVelocityControl.moveRobotCord(25000, 0, 20),
                 () -> robot.timer.getTimeForTimer(1.1),
@@ -29,9 +29,9 @@ public class Autonom extends AutonomBaseClass {
                 () -> robot.timer.getTimeForTimer(3),
                 () -> robot.lift.moveUP(),
                 () -> robot.timer.getTimeForTimer(3),
-                () -> robot.grabber.perekidFinish(),
+                () -> robot.grabber.finish(),
                 () -> robot.timer.getTimeForTimer(1),
-                () -> robot.grabber.closeGraber(),
+                () -> robot.grabber.close(),
                 () -> robot.timer.getTimeForTimer(1),
 
 
@@ -41,7 +41,7 @@ public class Autonom extends AutonomBaseClass {
     @Override
     public Runnable[] getBlueLeft() {
         return new Runnable[]{
-                () -> robot.grabber.openGraber(),
+                () -> robot.grabber.open(),
                 () -> robot.timer.getTimeForTimer(1),
                 () -> robot.driveTrainVelocityControl.moveRobotCord(-24000, 0, -20),
                 () -> robot.timer.getTimeForTimer(1.3),
@@ -63,16 +63,16 @@ public class Autonom extends AutonomBaseClass {
                 () -> robot.timer.getTimeForTimer(3),
                 () -> robot.lift.moveUP(),
                 () -> robot.timer.getTimeForTimer(3),
-                () -> robot.grabber.perekidFinish(),
+                () -> robot.grabber.finish(),
                 () -> robot.timer.getTimeForTimer(1),
-                () -> robot.grabber.closeGraber(),
+                () -> robot.grabber.close(),
                 () -> robot.timer.getTimeForTimer(1),
         };
     }
     @Override
     public Runnable[] getRedRight(){
         return new Runnable[]{
-                () -> robot.grabber.openGraber(),
+                () -> robot.grabber.open(),
                 () -> robot.timer.getTimeForTimer(1),
                 () -> robot.driveTrainVelocityControl.moveRobotCord(24000,0,0),
                 () -> robot.timer.getTimeForTimer(0.7),
@@ -82,16 +82,16 @@ public class Autonom extends AutonomBaseClass {
                 () -> robot.timer.getTimeForTimer(5),
                 () -> robot.lift.moveUP(),
                 () -> robot.timer.getTimeForTimer(1),
-                () -> robot.grabber.perekidFinish(),
+                () -> robot.grabber.finish(),
                 () -> robot.timer.getTimeForTimer(0.3),
-                () -> robot.grabber.closeGraber(),
+                () -> robot.grabber.close(),
                 () -> robot.timer.getTimeForTimer(0.3),
         };
     }
     @Override
     public Runnable[] getBlueRight(){
         return new Runnable[]{
-                () -> robot.grabber.openGraber(),
+                () -> robot.grabber.open(),
                 () -> robot.timer.getTimeForTimer(1),
                 () -> robot.driveTrainVelocityControl.moveRobotCord(-25000,0,0),
                 () -> robot.timer.getTimeForTimer(0.7),
@@ -103,26 +103,13 @@ public class Autonom extends AutonomBaseClass {
                 () -> robot.timer.getTimeForTimer(5),
                 () -> robot.lift.moveUP(),
                 () -> robot.timer.getTimeForTimer(2),
-                () -> robot.grabber.perekidFinish(),
+                () -> robot.grabber.finish(),
                 () -> robot.timer.getTimeForTimer(0.3),
-                () -> robot.grabber.closeGraber(),
+                () -> robot.grabber.close(),
                 () -> robot.timer.getTimeForTimer(0.3),
-                () -> robot.grabber.perekidStart(),
+                () -> robot.grabber.start(),
                 () -> robot.timer.getTimeForTimer(0.3),
 
-                //////////////////////////
-                /*
-                () -> robot.driveTrainVelocityControl.moveRobotCord(-18000,0,0),
-                () -> robot.timer.getTimeForTimer(0.5),
-                () -> robot.driveTrainVelocityControl.moveRobotCord(26000,0,0),
-                () -> robot.timer.getTimeForTimer(0.5),
-                () -> robot.grabber.pixelMotor.setPower(-1),
-                () -> robot.timer.getTimeForTimer(1),
-                () -> robot.grabber.openGraber(),
-                () -> robot.driveTrainVelocityControl.moveRobotCord(-24000,0,0),
-                () -> robot.timer.getTimeForTimer(2),
-
-                 */
 
         };
     }

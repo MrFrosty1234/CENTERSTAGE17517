@@ -6,13 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.woen.team17517.RobotModules.Grabber.Grabber;
-import org.woen.team17517.RobotModules.Grabber.GrabberMode;
-import org.woen.team17517.RobotModules.Lift.LiftPosition;
+import org.woen.team17517.NotUsedCode.Grabber;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
-import org.woen.team17517.Service.Vector2D;
 
 @TeleOp
 @Config

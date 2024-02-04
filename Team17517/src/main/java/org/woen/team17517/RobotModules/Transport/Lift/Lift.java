@@ -1,13 +1,13 @@
-package org.woen.team17517.RobotModules.Lift;
+package org.woen.team17517.RobotModules.Transport.Lift;
 
 import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.Devices;
 import org.woen.team17517.Service.RobotModule;
 
 
@@ -23,26 +23,16 @@ public class Lift implements RobotModule {
     public LiftMode liftMode = LiftMode.AUTO;
     UltRobot robot;
     public boolean liftAtTaget = false;
+    private LiftPosition position;
     public void setLiftMode(LiftMode mode){
         liftMode = mode;
     }
     public Lift(UltRobot robot) {
         this.robot = robot;
-        liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("liftMotor");
-        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        buttonUp = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonUp");
-        buttonDown = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonDown");
-        buttonUp.setMode(DigitalChannel.Mode.INPUT);
-        buttonDown.setMode(DigitalChannel.Mode.INPUT);
-        reset();
+        liftMotor = robot.devices.liftMotor;
+        buttonUp = robot.devices.buttonUp;
+        buttonDown = robot.devices.buttonDown;
     }
-
-    private void reset(){
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
     public boolean getUpSwitch(){
         return buttonUp.getState();
     }
@@ -58,7 +48,7 @@ public class Lift implements RobotModule {
         this.targetPosition = LiftPosition.UP;
     }
     public void moveDown(){
-        this.targetPosition =LiftPosition.DOWN;
+        this.targetPosition = LiftPosition.DOWN;
     }
     private int encoderPosition = 0;
 
@@ -125,7 +115,15 @@ public class Lift implements RobotModule {
                 liftAtTaget = true;
             break;
         }
+        positionUpdate();
 
+    }
+    private void positionUpdate(){
+        if(!liftAtTaget) position = LiftPosition.UNKNOWN;
+        else             position = targetPosition;
+    }
+    public  LiftPosition getPosition(){
+        return position;
     }
     public void setManualTargetUp(boolean manualTargetUp){
         this.manualTargetUp = manualTargetUp;

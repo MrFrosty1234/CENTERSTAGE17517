@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.Devices;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
 
@@ -16,11 +17,11 @@ public class OdometryNew implements RobotModule {
     public OdometryNew(UltRobot robot){
         this.robot = robot;
 
-        odometrRightY = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
-        odometrLeftY =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "odometrLeft");
+        odometrRightY = robot.devices.right_front_drive;
+        odometrLeftY =  robot.devices.odometrLeft;
 
-        right_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
-        odometrX =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_back_drive");
+        right_front_drive = robot.devices.right_front_drive;
+        odometrX = robot.devices.left_back_drive;
 
         voltage = 12;
 

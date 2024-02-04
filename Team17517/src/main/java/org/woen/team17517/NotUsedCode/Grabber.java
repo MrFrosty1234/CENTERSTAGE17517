@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules.Grabber;
+package org.woen.team17517.NotUsedCode;
 
 
 import com.acmerobotics.dashboard.config.Config;
@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.woen.team17517.RobotModules.Transport.Grabber.GrabberMode;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 
@@ -20,6 +21,7 @@ public class Grabber implements RobotModule {
     public Servo pixelServoRight;
     public Servo progibServo;
     public Servo pixelServoLeft;
+
     public static double voltage;
     public double pixelsCount = 0;
     double pixelsCountOld = 0;
@@ -169,16 +171,16 @@ public class Grabber implements RobotModule {
     }
 
     public void perekidLiftSafe() {
-        robot.grabber.progibServo.setPosition(perekidStartDown);
+        this.progibServo.setPosition(perekidStartDown);
     }
 
 
     public void perekidStart() {
-        robot.grabber.progibServo.setPosition(perekidStart);
+        progibServo.setPosition(perekidStart);
     }
 
     public void perekidFinish() {
-        robot.grabber.progibServo.setPosition(perekidFinish);
+        progibServo.setPosition(perekidFinish);
     }
 
     public enum PerekidPosition {

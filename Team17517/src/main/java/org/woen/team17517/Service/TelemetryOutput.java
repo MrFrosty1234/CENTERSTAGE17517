@@ -62,9 +62,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("pos H", positionMap.get("H"));
         }
         if(grabber) {
-            telemetry.addData("pixels count",robot.grabber.pixelsCount);
-            telemetry.addData("pixelSensorLeft",robot.grabber.pixelSensorLeft);
-            telemetry.addData("pixelSensorRight",robot.grabber.pixelSensorRight);
+
         }
         if(odometry){
             telemetry.addData("x",robot.odometryNew.getX());

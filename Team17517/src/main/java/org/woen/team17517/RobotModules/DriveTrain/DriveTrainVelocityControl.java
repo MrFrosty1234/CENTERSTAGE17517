@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.Devices;
 import org.woen.team17517.Service.PIDMethod;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
@@ -86,7 +87,6 @@ public class DriveTrainVelocityControl implements RobotModule {
         return powerMap;
     }
 
-
     private double targetH = 0;
     private Vector2D vector = new Vector2D(0,0);
     private  double yEnc;
@@ -103,12 +103,11 @@ public class DriveTrainVelocityControl implements RobotModule {
 
         this.robot = robot;
 
-        left_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_front_drive");
-        left_back_drive =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_back_drive");
+        left_front_drive = robot.devices.left_front_drive;
+        left_back_drive =  robot.devices.left_back_drive;
 
-        right_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
-        right_back_drive =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_back_drive");
-
+        right_front_drive = robot.devices.right_front_drive;
+        right_back_drive = robot.devices.right_back_drive;
         voltage = 12;
 
         reset();
@@ -220,7 +219,6 @@ public class DriveTrainVelocityControl implements RobotModule {
         odUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
 
-        vectorOd.setCord(vector.getX(),vector.getY());
 
         this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);
         this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX);
@@ -228,8 +226,8 @@ public class DriveTrainVelocityControl implements RobotModule {
 
 
         powerH = moveRat(targetH);
-        powerX = moveX(vectorOd.getX());
-        powerY = moveY(vectorOd.getY());
+        powerX = moveX(vector.getX());
+        powerY = moveY(vector.getY());
 
         left_front_drive.setPower(powerX + powerY + powerH);
         right_front_drive.setPower(-powerX + powerY - powerH);
