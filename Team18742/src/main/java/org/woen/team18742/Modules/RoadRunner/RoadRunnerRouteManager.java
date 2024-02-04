@@ -134,6 +134,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
         _trajectorys = Trajectory.GetTrajectory(ActionBuilder(
                 new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), _camera.GetPosition()).build();//_allTrajectory[indexStartPos][indexCamera];
 
+        _intake.PixelCenterGrip(true);
+
         for(Action i : _trajectorys)
             i.preview(new Canvas());
     }
