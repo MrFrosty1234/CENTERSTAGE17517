@@ -17,6 +17,12 @@ public class Suspension implements IRobotModule {
     private Servo podtyaga2;
     private DcMotorEx _podtyaga1;
     private boolean _isRastrel = false;
+    private final ElapsedTime _endGameTime = new ElapsedTime();
+
+    @Override
+    public void Start() {
+        _endGameTime.reset();
+    }
 
     @Override
     public void Init(BaseCollector collector) {
@@ -26,6 +32,9 @@ public class Suspension implements IRobotModule {
     }
 
     public void Active() {
+        if(_endGameTime.seconds() < 70)
+            return;
+
         podtyaga1.setPosition(Configs.Suspension.nulevayapodtyaga1);
         podtyaga2.setPosition(Configs.Suspension.nulevayapodtyaga2);
 
