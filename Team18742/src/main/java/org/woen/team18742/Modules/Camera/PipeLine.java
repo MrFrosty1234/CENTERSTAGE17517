@@ -5,6 +5,7 @@ import static org.opencv.imgproc.Imgproc.*;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.acmerobotics.dashboard.config.Config;
 
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -61,9 +63,10 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
     @Override
     public Object processFrame(Mat frm, long captureTimeNanos) {
-        Bitmap b = Bitmap.createBitmap(frm.width(), frm.height(), Bitmap.Config.RGB_565);//выводим картинку в дашборд
-        Utils.matToBitmap(frm, b);
-        LastFrame.set(b);
+        Mat drawFrm = frm.clone();
+
+        //Imgproc.rectangle(drawFrm, new Rect(new Point(0, 0), new Point(Configs.Camera.ZoneLeftEndBlue, frm.height())), new Scalar(0, 0, 0), 15);
+        //Imgproc.rectangle(drawFrm, new Rect(new Point(Configs.Camera.ZoneLeftEndBlue, 0), new Point(Configs.Camera.ZoneForwardEndBlue, frm.height())), new Scalar(0, 0, 255), 15);
 
         Mat frame = frm.clone();
 
@@ -86,15 +89,19 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         erode(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Сжать
         dilate(frame, frame, getStructuringElement(MORPH_ERODE, new Size(Configs.Camera.ksize, Configs.Camera.ksize))); // Раздуть
 
+        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);//выводим картинку в дашборд
+        Utils.matToBitmap(frame, b);
+        LastFrame.set(b);
+
         Moments moments = Imgproc.moments(frame);
 
         Rect boundingRect = boundingRect(frame);//boudingRect представляем прямоугольник
 
-        if (boundingRect.area() <= 0) {
-            if (Bios.GetStartPosition() == StartRobotPosition.BLUE_BACK || Bios.GetStartPosition() == StartRobotPosition.BLUE_FORWAD)
-                pos.set(3);
-            else
+        if (boundingRect.area() <= 0 || boundingRect == null) {
+            if (Bios.GetStartPosition() == StartRobotPosition.RED_BACK || Bios.GetStartPosition() == StartRobotPosition.RED_FORWARD)
                 pos.set(1);
+            else
+                pos.set(3);
 
             return frm;
         }
@@ -103,24 +110,31 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         centerOfRectY = boundingRect.y + boundingRect.height / 2.0;
 
         RectCenter.set(new Vector2(centerOfRectX, centerOfRectY));
-
-        if (centerOfRectX < Configs.Camera.ZoneLeftEnd)
-            if (Bios.GetStartPosition() == StartRobotPosition.BLUE_BACK || Bios.GetStartPosition() == StartRobotPosition.BLUE_FORWAD)
+        if (Bios.GetStartPosition() == StartRobotPosition.RED_BACK || Bios.GetStartPosition() == StartRobotPosition.RED_FORWARD) {
+            if (centerOfRectX < Configs.Camera.ZoneLeftEndRed)
+                pos.set(3);
+            else if (centerOfRectX < Configs.Camera.ZoneForwardEndRed)
+                pos.set(2);
+            else
                 pos.set(1);
+        }
+        else {
+            if (centerOfRectX < Configs.Camera.ZoneLeftEndBlue)
+                pos.set(1);
+            else if (centerOfRectX < Configs.Camera.ZoneForwardEndBlue)
+                pos.set(2);
             else
                 pos.set(3);
-        else if (centerOfRectX < Configs.Camera.ZoneForwardEnd)
-            pos.set(2);
-        else if (Bios.GetStartPosition() == StartRobotPosition.BLUE_BACK || Bios.GetStartPosition() == StartRobotPosition.BLUE_FORWAD)
-            pos.set(3);
-        else
-            pos.set(1);
+        }
 
         return frm;
     }
 
+    private Paint _paint = new Paint();
+
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+
     }
 
     @Override

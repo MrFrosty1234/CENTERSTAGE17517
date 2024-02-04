@@ -16,20 +16,32 @@ public class Suspension implements IRobotModule {
     private Servo podtyaga1;
     private Servo podtyaga2;
     private DcMotorEx _podtyaga1;
-    private ElapsedTime RevTime1 = new ElapsedTime();
+    private boolean _isRastrel = false;
+    private final ElapsedTime _endGameTime = new ElapsedTime();
+
+    @Override
+    public void Start() {
+        _endGameTime.reset();
+    }
 
     @Override
     public void Init(BaseCollector collector) {
         podtyaga1 = Devices.podtyaga1;
         podtyaga2 = Devices.podtyaga2;
+        _podtyaga1 = Devices.Podtyagamotor;
     }
 
-    public void Active(){
+    public void Active() {
+        if(_endGameTime.seconds() < 90)
+            return;
+
         podtyaga1.setPosition(Configs.Suspension.nulevayapodtyaga1);
         podtyaga2.setPosition(Configs.Suspension.nulevayapodtyaga2);
+
+        _isRastrel = true;
     }
 
-    public void Disable(){
+    public void Disable() {
         podtyaga1.setPosition(Configs.Suspension.rasstrelennayatyga1);
         podtyaga2.setPosition(Configs.Suspension.rasstrelennayatyga2);
     }
@@ -37,10 +49,21 @@ public class Suspension implements IRobotModule {
     private Timer _timer = new Timer();
 
     public void unmotor() {
-        _podtyaga1.setPower(0);
-
-        _timer.Start(4000, ()->{
+        if (_isRastrel)
+            _podtyaga1.setPower(-1);
+        else
             _podtyaga1.setPower(0);
-        });
+        //_timer.Start(12000, ()->{
+        //  _podtyaga1.setPower(0.0);
+        //  });
+
+    }
+    public void motor() {
+            _podtyaga1.setPower(0);
+    }
+
+    public void cbros()
+    {
+        _podtyaga1.setPower(1);
     }
 }

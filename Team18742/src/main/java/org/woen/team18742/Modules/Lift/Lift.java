@@ -54,30 +54,33 @@ public class Lift implements IRobotModule {
         _endingUpState = _endSwitchUp.getState();
         _endingDownState = _endswitchDown.getState();
 
-        if (_liftPose != LiftPose.DOWN)
+        if (_liftPose != LiftPose.DOWN) {
             _liftMotor.setPower(_liftPIDF.Update(_liftPose.encoderPose() - _liftMotor.getCurrentPosition()));
-        else if (!_intake.IsTurnNormal()) {
-            _liftMotor.setPower(Math.max(_liftPIDF.Update(Configs.LiftPoses.POSE_SERVO_CLEARANCE - _liftMotor.getCurrentPosition()), Configs.LiftPid.DOWN_MOVE_POWER));
-        } else {
-            if (!_endingDownState)
-                _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER);
-            else
-                _liftMotor.setPower(Configs.LiftPid.DOWN_AT_TARGET_POWER);
         }
-
-        ToolTelemetry.AddLine("Lift end1 = " + _endingUpState + " end = " + _endingDownState + " incoder = " + _liftMotor.getCurrentPosition());
+        else if (!_intake.IsTurnNormal() && Math.abs(Configs.Lift.isProchelnugnoepologenie - _liftMotor.getCurrentPosition()) < 60) {
+            _liftMotor.setPower(Math.max(_liftPIDF.Update(Configs.Lift.isProchelnugnoepologenie - _liftMotor.getCurrentPosition()), Configs.LiftPid.DOWN_MOVE_POWER));
+        } else {
+            if (!_endingDownState) {
+                if(isProchelnugnoepologenie())
+                    _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER);
+                else
+                    _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER_FAST);
+            }
+            else {
+                _liftMotor.setPower(Configs.LiftPid.DOWN_AT_TARGET_POWER);
+            }
+        }
 
         if (_endingDownState)
             ResetLift();
     }
 
     public boolean isATarget() {
-        //return Math.abs(_liftPIDF.Err) < 60;
         return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || ((_liftPose == LiftPose.MIDDLE_LOWER || _liftPose == LiftPose.MIDDLE_UPPER) && Math.abs(_liftPIDF.Err) < 80);
     }
 
     public boolean isDown() {
-        return _liftPose == LiftPose.DOWN && (_endingDownState || _liftMotor.getCurrentPosition() < Configs.LiftPoses.POSE_DOWN_ENDSWITCH_THRESHOLD);
+        return _liftPose == LiftPose.DOWN && (_endingDownState);// || _liftMotor.getCurrentPosition() < Configs.LiftPoses.POSE_DOWN_ENDSWITCH_THRESHOLD);
     }
 
     public boolean isUp() {

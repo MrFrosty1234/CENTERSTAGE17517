@@ -19,21 +19,27 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double voltage;
 
     public static double kdX = 0;
-    public static double kiX = 0.000_000_1;
-    public static double kpX = 0.0003;
+    public static double kiX = 0.000005;
+    public static double kpX = 0.0000025;
 
     public static double kdRat = 0;
-    public static double kiRat = 0.000_000_1;
-    public static double kpRat = 0.0003;
+    public static double kiRat = 0.000_00;//0_1;
+    public static double kpRat = 0.000;//3;
 
     public static double kdY  = 0;
-    public static double kiY =0.000_000_1;
-    public static double kpY = 0.0003;
+    public static double kiY = 0.000005;
+    public static double kpY = 0.0000025;
 
-    public static  double maxIY = 0.01;
+    public static  double maxIY = 0.03;
     public static  double maxIRat = 0.01;
-    public static  double maxIX = 0.01;
+    public static  double maxIX = 0.035;
 
+    public static double ksRat = 0.000479;
+    public static double ksY = 0.00002;
+    public static double ksX = 0.00003;
+    public static double kSlide = 1;
+
+    public final double odToEnc = 98;
     private PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX,maxIX);
     private PIDMethod speedH = new PIDMethod(kpRat,kiRat,kdRat,ksY,maxIY);
     private PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat,maxIRat);
@@ -79,10 +85,7 @@ public class DriveTrainVelocityControl implements RobotModule {
         powerMap.put("powerH",powerH);
         return powerMap;
     }
-    public static double ksRat = 0.000479;
-    public static double ksY = 0.0004;
-    public static double ksX = 0.00045;
-    public static double kSlide = 0.5;
+
 
     private double targetH = 0;
     private Vector2D vector = new Vector2D(0,0);
@@ -130,23 +133,32 @@ public class DriveTrainVelocityControl implements RobotModule {
         right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        vector.setCord(0,0);
+
         targetH = 0;
     }
 
      private void  encUpdate()
     {
-        this.yEnc = (left_back_drive.getVelocity()+ 0*left_front_drive.getVelocity()+
-                right_front_drive.getVelocity()*0+ right_back_drive.getVelocity())/2.0;
+        this.yEnc = (left_back_drive.getVelocity()+ left_front_drive.getVelocity()+
+                right_front_drive.getVelocity()+ right_back_drive.getVelocity())/4.0;
         this.xEnc = ((-left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
-                0*right_front_drive.getVelocity()+ 0*right_back_drive.getVelocity())/2.0)*kSlide;
-        this.hEnc = (left_back_drive.getVelocity()*0+ left_front_drive.getVelocity()-
-                right_front_drive.getVelocity()*0 - right_back_drive.getVelocity())/2.0;
+                right_front_drive.getVelocity()+ right_back_drive.getVelocity())/4.0)*kSlide;
+        this.hEnc = (left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
+                right_front_drive.getVelocity() - right_back_drive.getVelocity())/4.0;
     }
-    private static double diameter = 9.8;
+    private void  odUpdate()
+    {
+        this.yEnc = robot.odometryNew.getVelCleanY();
+        this.xEnc = robot.odometryNew.getVelCleanX();
+        this.hEnc = robot.odometryNew.getVelCleanH();
+    }
+    private static double odometrConstant =  8192;
+    private static double diameter = 9.6;
+    private static double diameterOdometr = 4.8;
+    private static double odometrLight = PI*diameterOdometr;
     private static double gearboxRatio = 1d/20d;
     private static double encConstNoGearbox = 24.0;
-    private static double trackLength = 27d/2d;
+    private static double trackLength =  30.08d/2d;
     private static double encConstant = PI*diameter/(encConstNoGearbox / gearboxRatio);
     private static double maxMotorRpm = 280.0;
     private static double maxLinearSpeed = (maxMotorRpm / 60.0) * diameter * PI;
@@ -155,6 +167,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     {
         return target/encConstant;
     }
+    private static double encToOdometr =  (odometrConstant/PI*diameterOdometr)/(encConstant*PI*diameter);
     private double encToSm(double target){return  target*encConstant;}
     private double smToDegrees(double sm)
     {
@@ -166,7 +179,6 @@ public class DriveTrainVelocityControl implements RobotModule {
     }
     private double moveX(double target)
     {
-
         return speedX.PID(target,xEnc,this.voltage);
     }
     private double moveY(double target)
@@ -176,10 +188,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     public double linearVelocityPercent(double target){
         return smToEnc(maxLinearSpeed)*target;
     }
-    public double angularVelocityPercent(double target)
-    {
-        return target*smToDegrees(maxAngularSpeed);
-    }
+    public double angularVelocityPercent(double target){return target*smToDegrees(maxAngularSpeed);}
     public double getMetersPerSecondSpeed(double target)
     {
         return target/encConstant* gearboxRatio *diameter*Math.PI;
@@ -206,9 +215,12 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double powerH = 0;
     private double powerX = 0;
     private double powerY = 0;
+    public Vector2D vectorOd = new Vector2D();
     public void update() {
-        encUpdate();
+        odUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
+
+        vectorOd.setCord(vector.getX(),vector.getY());
 
         this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);
         this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX);
@@ -216,8 +228,8 @@ public class DriveTrainVelocityControl implements RobotModule {
 
 
         powerH = moveRat(targetH);
-        powerX = moveX(vector.getX());
-        powerY = moveY(vector.getY());
+        powerX = moveX(vectorOd.getX());
+        powerY = moveY(vectorOd.getY());
 
         left_front_drive.setPower(powerX + powerY + powerH);
         right_front_drive.setPower(-powerX + powerY - powerH);

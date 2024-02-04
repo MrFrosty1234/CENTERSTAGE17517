@@ -21,6 +21,7 @@ public class TelemetryOutput implements RobotModule {
     public static boolean odometryAndCamera = false;
     public static boolean ftcMap = false;
     public static boolean encoders = false;
+    public  static  boolean cleanOdometry = false;
     double dlin =40;
     double shir =40;
     public double [] rectXPoints = new double[2];
@@ -41,6 +42,8 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("target",robot.lift.getTargetPosition().value);
             telemetry.addData("lift pos",robot.lift.getTargetPosition());
             telemetry.addData("lift mode", robot.lift.liftMode);
+            telemetry.addData("button", robot.lift.getUpSwitch());
+            telemetry.addData("get pos", robot.lift.isAtPosition());
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.drivetrainNew.getTargets();
@@ -68,12 +71,20 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("y",robot.odometryNew.getY());
             telemetry.addData("heading",robot.odometryNew.getH());
         }
+        if (cleanOdometry){
+            telemetry.addData("x",robot.odometryNew.getVelCleanX());
+            telemetry.addData("y",robot.odometryNew.getVelCleanY());
+            telemetry.addData("heading",robot.odometryNew.getVelCleanH());
+            telemetry.addData("leftY", robot.odometryNew.getCleanLeftY());
+            telemetry.addData("RightY", robot.odometryNew.getCleanRightY());
+        }
         if(velocity){
             HashMap<String,Double> encoderMap = robot.driveTrainVelocityControl.getEncoders();
             HashMap<String,Double> powerMap = robot.driveTrainVelocityControl.getPowers();
             HashMap<String,Double> targetMap = robot.driveTrainVelocityControl.getTargets();
-            telemetry.addData("TargetY",targetMap.get("targetY"));
-            telemetry.addData("TargetX",targetMap.get("targetX"));
+            Vector2D vectorTarget = robot.driveTrainVelocityControl.vectorOd;
+            telemetry.addData("TargetY",vectorTarget.getY());
+            telemetry.addData("TargetX",vectorTarget.getX());
             telemetry.addData("TargetH",targetMap.get("targetH"));
             telemetry.addData("SpeedY",encoderMap.get("yEnc"));
             telemetry.addData("SpeedX",encoderMap.get("xEnc"));

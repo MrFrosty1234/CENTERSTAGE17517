@@ -127,7 +127,11 @@ public class DrivetrainNew implements RobotModule {
 
     @Override
     public boolean isAtPosition() {
-         return ((abs(errX) < minX) && (abs(errY) < minY) && (abs(errH) < minH));
-        }
+         if (autoMode) {
+             return ((abs(errX) < minX) && (abs(errY) < minY) && (abs(errH) < minH));
+         }else{
+             return true;
+         }
+         }
 }
 

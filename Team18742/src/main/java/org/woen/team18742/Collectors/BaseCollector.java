@@ -152,6 +152,6 @@ public class BaseCollector {
             if (i.getClass() == type)
                 return (T) i;
 
-        throw new RuntimeException("not found " + type.getName() + "module");
+        throw new RuntimeException("not found " + type.getName() + " module");
     }
 }
