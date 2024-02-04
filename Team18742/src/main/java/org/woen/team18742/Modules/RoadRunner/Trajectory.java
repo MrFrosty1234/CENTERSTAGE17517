@@ -80,6 +80,9 @@ public class Trajectory {
             break;
 
         }*/
+
+        //builder = builder.lineToY(0).waitSeconds(1).strafeTo(new Vector2d(10, 0));
+
         builder = builder
                 .lineToY(110)
                 //.splineTo(new Vector2d(25.4, 85), -PI / 2)//forward
@@ -99,7 +102,7 @@ public class Trajectory {
                 //начали опускать
                 .strafeToLinearHeading(new Vector2d(-145, 30), 0)
                 //хаваем стопки
-                .strafeToLinearHeading(new Vector2d(120, 30), 0)
+                .strafeToLinearHeading(new Vector2d(90, 30), 0)
                 .strafeToLinearHeading(new Vector2d(122, 100), 0);
         return builder;
     }

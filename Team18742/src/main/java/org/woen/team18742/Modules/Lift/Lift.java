@@ -56,21 +56,18 @@ public class Lift implements IRobotModule {
 
         if (_liftPose != LiftPose.DOWN) {
             _liftMotor.setPower(_liftPIDF.Update(_liftPose.encoderPose() - _liftMotor.getCurrentPosition()));
-            ToolTelemetry.AddLine("pose = down");
         }
         else if (!_intake.IsTurnNormal() && Math.abs(Configs.Lift.isProchelnugnoepologenie - _liftMotor.getCurrentPosition()) < 60) {
             _liftMotor.setPower(Math.max(_liftPIDF.Update(Configs.Lift.isProchelnugnoepologenie - _liftMotor.getCurrentPosition()), Configs.LiftPid.DOWN_MOVE_POWER));
-            ToolTelemetry.AddLine("pose = turned");
         } else {
             if (!_endingDownState) {
-                _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER);
-
-                ToolTelemetry.AddLine("pose = move down");
+                if(isProchelnugnoepologenie())
+                    _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER);
+                else
+                    _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER_FAST);
             }
             else {
                 _liftMotor.setPower(Configs.LiftPid.DOWN_AT_TARGET_POWER);
-
-                ToolTelemetry.AddLine("pose = move at down");
             }
         }
 
