@@ -42,6 +42,8 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("target",robot.lift.getTargetPosition().value);
             telemetry.addData("lift pos",robot.lift.getTargetPosition());
             telemetry.addData("lift mode", robot.lift.liftMode);
+            telemetry.addData("button", robot.lift.getUpSwitch());
+            telemetry.addData("get pos", robot.lift.isAtPosition());
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.drivetrainNew.getTargets();

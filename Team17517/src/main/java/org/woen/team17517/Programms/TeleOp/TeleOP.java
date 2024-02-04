@@ -29,7 +29,7 @@ public class TeleOP extends LinearOpMode {
     public static double grabberOpenRight = 0.1;
     public static double grabberCloseRight = 0.7;
 
-     public static double perekidStartDown = 0.875;
+     public static double perekidStartDown = 0.85;
      public static double perekidStart = 0.85;
      public static double perekidFinish = 0.3;boolean triangle = false;
     Button x = new Button();
@@ -58,6 +58,8 @@ public class TeleOP extends LinearOpMode {
 
         robot.lighting.lightMode = Lighting.LightningMode.SMOOTH;
         boolean liftAtTarget = true;
+        boolean posGrabber = true;
+
 
         while (opModeIsActive()) {
 
@@ -66,47 +68,57 @@ public class TeleOP extends LinearOpMode {
             angleSpeed = gamepad1.right_stick_x;
 
 
-            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed*40000, forwardSpeed*40000, angleSpeed*40000);
+            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed*60000, forwardSpeed*60000, angleSpeed*60000);
 
 
-            if (gamepad1.dpad_up) robot.lift.moveUP();
-            else if (gamepad1.dpad_down) robot.lift.moveDown();
+            if (gamepad1.dpad_up){ robot.lift.moveUP();
+            pixelServoLift.setPosition(perekidStart);}
+            else if (gamepad1.dpad_down) robot.lift.moveDown();{
+            }
 
 
             if (gamepad1.left_bumper)
-                grabber.setPower(1);
+                grabber.setPower(-1);
             else if (gamepad1.left_trigger > 0.1)
-                grabber.setPower(-gamepad1.left_trigger);
+                grabber.setPower(gamepad1.left_trigger);
             else
                 grabber.setPower(0);
 
-            if (x.update(gamepad1.right_trigger>0.1)) {
+            if (a.update(gamepad1.right_bumper)){
                 pixelServoRight.setPosition(grabberOpenRight);
                 pixelServoLeft.setPosition(grabberOpenLeft);
                 telemetry.addData("Open",true);
+                posGrabber = true;
             }else{
                 telemetry.addData("Open",false);
             }
-            if (a.update(gamepad1.right_bumper)){
+            if (x.update(gamepad1.right_trigger>0.1)){
                 pixelServoRight.setPosition(grabberCloseRight);
                 pixelServoLeft.setPosition(grabberCloseLeft);
                 telemetry.addData("Close",true);
+                posGrabber = false;
             }else{
                 telemetry.addData("Close",false);
             }
 
             telemetry.addData("triger", gamepad1.right_trigger);
 
-            if (square.update(gamepad1.b)) pixelServoLift.setPosition(perekidFinish);
-            else if (y.update(gamepad1.y)) pixelServoLift.setPosition(perekidStart);
+            if (square.update(gamepad1.b)) {
+                pixelServoLift.setPosition(perekidFinish);
+                pixelServoRight.setPosition(grabberOpenRight);
+                pixelServoLeft.setPosition(grabberOpenLeft);
+            }
+            else if (y.update(gamepad1.y)) {
+                pixelServoLift.setPosition(perekidStart);
+                pixelServoRight.setPosition(grabberCloseRight);
+                pixelServoLeft.setPosition(grabberCloseLeft);
+            }
+
             telemetry.addData("square", gamepad1.b);
             telemetry.update();
-
-
-
-
             robot.allUpdate();
         }
     };
     
 }
+                                

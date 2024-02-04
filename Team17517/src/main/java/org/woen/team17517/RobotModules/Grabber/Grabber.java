@@ -34,8 +34,8 @@ public class Grabber implements RobotModule {
     int perekid = 0;
     int grabber = 0;
 
-    public static double grabberOpenLeft = 0.8;
-    public static double grabberCloseLeft = 0.5;
+    public static double grabberOpenLeft = 0.7;
+    public static double grabberCloseLeft = 0.1;
     public static double grabberOpenRight = 0.1;
     public static double grabberCloseRight = 0.7;
 
