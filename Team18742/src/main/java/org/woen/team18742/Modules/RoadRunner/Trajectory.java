@@ -14,7 +14,7 @@ public class Trajectory {
         builder = builder
                 .lineToY(110)
                 //.splineTo(new Vector2d(25.4, 85), -PI / 2)//forward
-                .splineTo(new Vector2d(20, 90), -PI) //left
+                .splineTo(new Vector2d(35, 90), -PI) //left
                 .lineToX(30)//left
                 //.splineTo(new Vector2d(35, 90), 0) //right
                 //.strafeToLinearHeading(new Vector2d(18, 85), 0)//right
