@@ -100,8 +100,8 @@ public class Lift implements RobotModule {
 
     public void update() {
         double liftPower = 0;
-        double liftGravityPower = 0.1;
-        double liftMovePower = 1;
+        double liftGravityPower = 0.05;
+        double liftMovePower = 0.5;
         encoderPosition = liftMotor.getCurrentPosition()-encoderError;
         if (getTopSwitch()){
             encoderError = liftMotor.getCurrentPosition() - LiftPosition.UP.value;

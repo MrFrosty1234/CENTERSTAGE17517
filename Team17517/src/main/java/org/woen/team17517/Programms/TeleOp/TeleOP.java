@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.woen.team17517.RobotModules.Grabber.Grabber;
+import org.woen.team17517.RobotModules.Grabber.GrabberMode;
 import org.woen.team17517.RobotModules.Lift.LiftPosition;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
@@ -21,16 +22,20 @@ public class TeleOP extends LinearOpMode {
     Grabber.PerekidPosition perekidPosition;
     public Servo pixelServoRight;
     public Servo pixelServoLeft;
+    public Servo pixelServoLift;
 
-    public static double grabberOpenLeft = 0.8;
-    public static double grabberCloseLeft = 0.5;
+    public static double grabberOpenLeft = 0.7;
+    public static double grabberCloseLeft = 0.1;
     public static double grabberOpenRight = 0.1;
     public static double grabberCloseRight = 0.7;
 
-
-    boolean triangle = false;
+     public static double perekidStartDown = 0.875;
+     public static double perekidStart = 0.85;
+     public static double perekidFinish = 0.3;boolean triangle = false;
     Button x = new Button();
     Button a = new Button();
+    Button square = new Button();
+    Button y = new Button();
     private  enum TeleopMode{
         ROBOT,CENTRE
     }
@@ -42,7 +47,7 @@ public class TeleOP extends LinearOpMode {
         grabber = robot.linearOpMode.hardwareMap.dcMotor.get("intakeMotor");
         pixelServoRight = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
         pixelServoLeft = this.robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoLeft");
-
+        pixelServoLift = this.robot.linearOpMode.hardwareMap.get(Servo.class,"pixelServoLift");
 
         double forwardSpeed;
         double sideSpeed;
@@ -60,11 +65,8 @@ public class TeleOP extends LinearOpMode {
             sideSpeed = gamepad1.left_stick_x;
             angleSpeed = gamepad1.right_stick_x;
 
-            forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(forwardSpeed);
-            sideSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(sideSpeed);
-            angleSpeed = robot.driveTrainVelocityControl.angularVelocityPercent(angleSpeed);
 
-            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
+            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed*40000, forwardSpeed*40000, angleSpeed*40000);
 
 
             if (gamepad1.dpad_up) robot.lift.moveUP();
@@ -77,7 +79,6 @@ public class TeleOP extends LinearOpMode {
                 grabber.setPower(-gamepad1.left_trigger);
             else
                 grabber.setPower(0);
-
 
             if (x.update(gamepad1.right_trigger>0.1)) {
                 pixelServoRight.setPosition(grabberOpenRight);
@@ -95,27 +96,17 @@ public class TeleOP extends LinearOpMode {
             }
 
             telemetry.addData("triger", gamepad1.right_trigger);
+
+            if (square.update(gamepad1.b)) pixelServoLift.setPosition(perekidFinish);
+            else if (y.update(gamepad1.y)) pixelServoLift.setPosition(perekidStart);
+            telemetry.addData("square", gamepad1.b);
             telemetry.update();
-            if (robot.lift.isAtPosition()) {
 
-                if (robot.lift.getTargetPosition() == LiftPosition.UP)
-                    perekidPosition = Grabber.PerekidPosition.FINISH;
-                else perekidPosition = Grabber.PerekidPosition.START;
 
-            } else perekidPosition = Grabber.PerekidPosition.LIFT_SAFE;
 
-            robot.grabber.setPerekidPosition(perekidPosition);
 
             robot.allUpdate();
         }
-    }
-    public void openGraber() {
-        pixelServoRight.setPosition(grabberOpenRight);
-        pixelServoLeft.setPosition(grabberOpenLeft);
-    }
-
-    public void closeGraber() {
-        pixelServoRight.setPosition(grabberCloseRight);
-        pixelServoLeft.setPosition(grabberCloseLeft);
-    }
+    };
+    
 }

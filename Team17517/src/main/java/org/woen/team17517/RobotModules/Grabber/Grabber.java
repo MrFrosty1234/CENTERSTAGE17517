@@ -29,7 +29,7 @@ public class Grabber implements RobotModule {
     public boolean pixelIn = false;
     public boolean positionGrabber = false;
 
-    GrabberMode grabberMode = GrabberMode.MANUALMODE;
+    public GrabberMode grabberMode = GrabberMode.MANUALMODE;
     PixelsPosition pixelsPosition = PixelsPosition.AUTONOM;
     int perekid = 0;
     int grabber = 0;
