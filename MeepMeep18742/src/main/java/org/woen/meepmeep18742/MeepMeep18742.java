@@ -24,42 +24,12 @@ public class MeepMeep18742 {
 
         myBot.runAction(myBot.getDrive()
                 .actionBuilder(new Pose2d(52 / 2.54, -185.7 / 2.54, PI / 2))
-                /*
-                //начало правого
-                .splineTo(new Vector2d(57 / 2.54, -100 / 2.54), PI / 2)//right
-                .strafeToLinearHeading(new Vector2d(57 / 2.54, -130 / 2.54), PI / 2)//right
-                .strafeToLinearHeading(new Vector2d(95 / 2.54, -130 / 2.54), PI / 2)//right
-                .strafeToLinearHeading(new Vector2d(120 / 2.54, -110 / 2.54), 0)//right
-                */
-                /*
-                //начало переднего
-                .splineTo(new Vector2d(40/2.54, -93/2.54), PI/2)//forward
-                .strafeToLinearHeading(new Vector2d(40/2.54, -100/2.54), PI/2)//forward
-                .strafeToLinearHeading(new Vector2d(100/2.54, -100/2.54), 0)//forward
-                .strafeToLinearHeading(new Vector2d(120/2.54, -90/2.54), 0)//forward
-                */
-                /*
-                //начало левого
-                .splineTo(new Vector2d(27/2.54, -80/2.54), PI)
-                .strafeToLinearHeading(new Vector2d(50/2.54, -80/2.54), PI)
-                .strafeToLinearHeading(new Vector2d(122/2.54, -73/2.54), 0)
 
-                 */
-                //лифт
-                .strafeToLinearHeading(new Vector2d(97 / 2.54, -30 / 2.54), 0)
-                .strafeToLinearHeading(new Vector2d(-50 / 2.54, -30 / 2.54), 0)
-                //запускаем щётки и опускаем обычные
-                .strafeToLinearHeading(new Vector2d(-140 / 2.54, -27 / 2.54), 0)
-                //ждём пикселя
-                .strafeToLinearHeading(new Vector2d(100 / 2.54, -30 / 2.54), 0)
-                .strafeToLinearHeading(new Vector2d(120 / 2.54, -80 / 2.54), 0)
-                //ставим пиксель, ждём лифт
-                .strafeToLinearHeading(new Vector2d(100 / 2.54, -30 / 2.54), 0)
-                .strafeToLinearHeading(new Vector2d(140 / 2.54, -30 / 2.54), 0)
-                //парковка
-
-
-                .build());
+                        .strafeToLinearHeading(new Vector2d(70,-110), PI/2)
+                        .splineTo(new Vector2d(50,-90), PI)
+                        .strafeToLinearHeading(new Vector2d(100, -90), 0)//left
+                        .strafeToLinearHeading(new Vector2d(130, -90), 0)//left
+                  .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)

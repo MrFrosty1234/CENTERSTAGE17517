@@ -57,7 +57,7 @@ public class Manual implements IRobotModule {
         {
             _drivetrain.SimpleDriveDirection(
                     new Vector2(-_gamepad.left_stick_y * 0.5, -_gamepad.left_stick_x * 0.5),
-                    -_gamepad.right_stick_x * 0.5);
+                    -_gamepad.right_stick_x * 0.3);
         }
 
         boolean launchPlane = _gamepad.square;
