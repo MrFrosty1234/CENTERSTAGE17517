@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.woen.team17517.NotUsedCode.Grabber;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
@@ -16,7 +15,7 @@ import org.woen.team17517.Service.Button;
 public class TeleOP extends LinearOpMode {
     UltRobot robot;
     DcMotor grabber;
-    Grabber.PerekidPosition perekidPosition;
+
     public Servo pixelServoRight;
     public Servo pixelServoLeft;
     public Servo pixelServoLift;
@@ -68,9 +67,9 @@ public class TeleOP extends LinearOpMode {
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed*60000, forwardSpeed*60000, angleSpeed*60000);
 
 
-            if (gamepad1.dpad_up){ robot.lift.moveUP();
+            if (gamepad1.dpad_up){ robot.transportPixels.lift.moveUP();
             pixelServoLift.setPosition(perekidStart);}
-            else if (gamepad1.dpad_down) robot.lift.moveDown();{
+            else if (gamepad1.dpad_down) robot.transportPixels.lift.moveDown();{
             }
 
 

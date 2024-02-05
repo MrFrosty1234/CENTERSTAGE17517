@@ -28,8 +28,8 @@ public class Devices {
         pixelServoRight = robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoRight");
         pixelServoLeft = robot.linearOpMode.hardwareMap.get(Servo.class, "pixelServoLeft");
 
-        planeServoAim = robot.linearOpMode.hardwareMap.get(Servo.class,"planeServo");
-        planeServoStart = robot.linearOpMode.hardwareMap.get(Servo.class,"planeServoStart");
+        aimPlaneServo = robot.linearOpMode.hardwareMap.get(Servo.class,"planeServo");
+        startPlaneSrevo = robot.linearOpMode.hardwareMap.get(Servo.class,"planeServoStart");
         buttonUp = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonUp");
         buttonDown = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonDown");
         reset();
@@ -47,8 +47,8 @@ public class Devices {
     public Servo pixelServoRight;
     public Servo progibServo;
     public Servo pixelServoLeft;
-    public Servo planeServoStart;
-    public Servo planeServoAim;
+    public Servo startPlaneSrevo;
+    public Servo aimPlaneServo;
     public DigitalChannel buttonUp;
     public DigitalChannel buttonDown;
 

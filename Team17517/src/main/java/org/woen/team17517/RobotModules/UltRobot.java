@@ -27,7 +27,7 @@ public class UltRobot {
     public DriveTrain driveTrain;
     public DrivetrainNew drivetrainNew;
     public TransportPixels transportPixels;
-    public Lift lift;
+    private Lift lift;
     public GrabberNew grabber;
     public Lighting lighting;
     public VoltageSensorPoint voltageSensorPoint;
@@ -48,7 +48,7 @@ public class UltRobot {
         devices = new Devices(this);
         telemetryOutput = new TelemetryOutput(this);
         timer = new Timer(this);
-        transportPixels = new TransportPixels(this);
+        transportPixels = new TransportPixels(lift, grabber);
         voltageSensorPoint = new VoltageSensorPoint(this);
         grabber = new GrabberNew(this);
         lift = new Lift(this);
@@ -79,18 +79,14 @@ public class UltRobot {
         }
     }
 
-    public void updateWhile(RobotModule run ,Runnable [] runnables){
+    public static void updateWhile(RobotModule run ,Runnable [] runnables){
         for (Runnable runnable : runnables){
             runnable.run();
-            allUpdate();
+            run.update();
 
-            double oldTime = System.currentTimeMillis();
-
-            while(!run.isAtPosition() && linearOpMode.opModeIsActive()){
-                allUpdate();
+            while(!run.isAtPosition()){
+                run.update();
             }
-            linearOpMode.telemetry.addData("posRun", run.isAtPosition());
-            linearOpMode.telemetry.update();
         }
 
     }

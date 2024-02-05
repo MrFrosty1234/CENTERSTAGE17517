@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team17517.RobotModules.UltRobot;
-import org.woen.team17517.Service.Devices;
 import org.woen.team17517.Service.RobotModule;
 
 
@@ -46,9 +45,11 @@ public class Lift implements RobotModule {
     private int encoderError  = 0;
     public void moveUP(){
         this.targetPosition = LiftPosition.UP;
+        setLiftMode(LiftMode.AUTO);
     }
     public void moveDown(){
         this.targetPosition = LiftPosition.DOWN;
+        setLiftMode(LiftMode.AUTO);
     }
     private int encoderPosition = 0;
 
@@ -70,6 +71,9 @@ public class Lift implements RobotModule {
         }
     }
     public void update() {
+        updateEncoderPosition();
+        updatePosition();
+
         double liftPower = 0;
         double liftGravityPower = 0.1;
         double liftMovePower = 0.8;
@@ -115,22 +119,30 @@ public class Lift implements RobotModule {
                 liftAtTaget = true;
             break;
         }
-        positionUpdate();
 
     }
-    private void positionUpdate(){
+    private void updatePosition(){
         if(!liftAtTaget) position = LiftPosition.UNKNOWN;
         else             position = targetPosition;
     }
     public  LiftPosition getPosition(){
         return position;
     }
-    public void setManualTargetUp(boolean manualTargetUp){
-        this.manualTargetUp = manualTargetUp;
+    public void setManualTargetUp(){
+        setLiftMode(LiftMode.MANUALLIMIT);
+        manualTargetUp = true;
+        manualTargetDown = false;
+    }
+    public void setStopManualTarget(){
+        setLiftMode(LiftMode.MANUALLIMIT);
+        manualTargetUp = false;
+        manualTargetDown = false;
     }
     private boolean manualTargetUp = false;
-    public void setManualTargetDown(boolean manualTargetDown){
-        this.manualTargetDown = manualTargetDown;
+    public void setManualTargetDown(){
+        setLiftMode(LiftMode.MANUALLIMIT);
+        manualTargetDown = true;
+        manualTargetUp = false;
     }
     private  boolean manualTargetDown = false;
     @Override

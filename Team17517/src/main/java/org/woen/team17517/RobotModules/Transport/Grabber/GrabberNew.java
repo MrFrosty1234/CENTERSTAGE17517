@@ -21,9 +21,6 @@ public class GrabberNew implements RobotModule {
     public void finish(){
         targetProgib = GrabberPosition.FINISH.value;
     }
-    public void start(){
-        targetProgib = GrabberPosition.START.value;
-    }
     public void down(){
         targetProgib = GrabberPosition.DOWN.value;
     }
@@ -48,7 +45,6 @@ public class GrabberNew implements RobotModule {
     private double brushMode = BrushMode.OFF.value;
     private double targetProgib = GrabberPosition.DOWN.value;
     private double targetOpenClose = GrabberOpenClosePosition.OPEN.value;
-    private GrabberMode mode = GrabberMode.FULLPROTECTION;
     public void update(){
         progibServo.setPosition(targetProgib);
         openServo.setPosition(targetOpenClose);
