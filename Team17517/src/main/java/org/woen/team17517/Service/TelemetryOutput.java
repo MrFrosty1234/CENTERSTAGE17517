@@ -38,10 +38,12 @@ public class TelemetryOutput implements RobotModule {
 
     public void update(){
         if(lift) {
-            telemetry.addData("liftEncs", robot.lift.liftMotor.getCurrentPosition());
-            telemetry.addData("target",robot.lift.getTargetPosition().value);
-            telemetry.addData("lift pos",robot.lift.getTargetPosition());
-            telemetry.addData("lift mode", robot.lift.liftMode);
+            telemetry.addData("liftEncs", robot.transportPixels.lift.liftMotor.getCurrentPosition());
+            telemetry.addData("target",robot.transportPixels.lift.getTargetPosition().value);
+            telemetry.addData("lift pos",robot.transportPixels.lift.getTargetPosition());
+            telemetry.addData("lift mode", robot.transportPixels.lift.liftMode);
+            telemetry.addData("button", robot.transportPixels.lift.getUpSwitch());
+            telemetry.addData("get pos", robot.transportPixels.lift.isAtPosition());
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.drivetrainNew.getTargets();
@@ -60,9 +62,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("pos H", positionMap.get("H"));
         }
         if(grabber) {
-            telemetry.addData("pixels count",robot.grabber.pixelsCount);
-            telemetry.addData("pixelSensorLeft",robot.grabber.pixelSensorLeft);
-            telemetry.addData("pixelSensorRight",robot.grabber.pixelSensorRight);
+
         }
         if(odometry){
             telemetry.addData("x",robot.odometryNew.getX());

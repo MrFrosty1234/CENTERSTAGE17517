@@ -3,6 +3,7 @@ package org.woen.team17517.RobotModules.Lighting;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.Devices;
 import org.woen.team17517.Service.RobotModule;
 
 public class Lighting implements RobotModule {
@@ -12,7 +13,7 @@ public class Lighting implements RobotModule {
     UltRobot robot;
     public Lighting(UltRobot robot) {
         this.robot = robot;
-        light = this.robot.linearOpMode.hardwareMap.dcMotor.get("odometrLeft");
+        light = robot.devices.odometrLeft;
     }
 
     public void setPower(double x) {
