@@ -95,18 +95,6 @@ public class UltRobot {
         }
 
     }
-    public  void updateAllWhileOneRobotModule(RobotModule run, Runnable [] runnables){
-        for (Runnable runnable : runnables){
-            runnable.run();
-            allUpdate();
-
-            while(!run.isAtPosition()){
-                allUpdate();
-            }
-        }
-
-    }
-
     public void updateWhilePositionFalse(Runnable[] runnables){
         for (Runnable runnable : runnables){
             runnable.run();

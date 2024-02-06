@@ -17,7 +17,7 @@ public class AutnomModules {
         });
     }
     public void bacBoardPixels(){
-        robot.updateAllWhileOneRobotModule(robot.transportPixels,new Runnable[]{
+        robot.updateWhilePositionFalse(new Runnable[]{
                 ()-> robot.transportPixels.moveUp(),
                 ()-> robot.transportPixels.finishGrabber(),
                 ()-> robot.transportPixels.safeGrabber(),
