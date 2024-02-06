@@ -95,7 +95,7 @@ public class UltRobot {
         }
 
     }
-    public  void updateAllWhileOneRobotModule(RobotModule run , Runnable [] runnables){
+    public  void updateAllWhileOneRobotModule(RobotModule run, Runnable [] runnables){
         for (Runnable runnable : runnables){
             runnable.run();
             allUpdate();
@@ -112,7 +112,7 @@ public class UltRobot {
             runnable.run();
             allUpdate();
 
-            double oldTime = System.currentTimeMillis();
+
 
             while(!isAtPositionAll() && linearOpMode.opModeIsActive()){
                 linearOpMode.telemetry.addData("posAll", isAtPositionAll());
