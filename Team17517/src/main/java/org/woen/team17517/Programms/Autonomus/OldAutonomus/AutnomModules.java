@@ -8,7 +8,7 @@ public class AutnomModules {
         this.robot = robot;
     }
     public void Move(double x, double y, double h, double time){
-        robot.updateAllWhileOneRobotModule(robot.timer,new Runnable[]{
+        robot.updateWhilePositionFalse(new Runnable[]{
                 ()->robot.driveTrainVelocityControl.moveRobotCord(x,y,h),
                 ()->robot.timer.getTimeForTimer(time),
                 ()->robot.driveTrainVelocityControl.moveRobotCord(0,0,0),
