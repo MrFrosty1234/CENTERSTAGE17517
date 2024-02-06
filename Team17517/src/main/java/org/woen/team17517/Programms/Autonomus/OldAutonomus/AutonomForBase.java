@@ -1,4 +1,4 @@
-package org.woen.team17517.Programms.Autonomus;
+package org.woen.team17517.Programms.Autonomus.OldAutonomus;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;

@@ -1,10 +1,8 @@
 package org.woen.team17517.RobotModules.Navigative;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.woen.team17517.RobotModules.UltRobot;
-import org.woen.team17517.Service.Devices;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
 

@@ -1,5 +1,6 @@
-package org.woen.team17517.Service;
+package org.woen.team17517.RobotModules;
 
+import com.qualcomm.robotcore.hardware.AnalogSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -32,6 +33,8 @@ public class Devices {
         startPlaneSrevo = robot.linearOpMode.hardwareMap.get(Servo.class,"planeServoStart");
         buttonUp = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonUp");
         buttonDown = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonDown");
+        upPixelsSensor = robot.linearOpMode.hardwareMap.get(AnalogSensor.class,"upPixelsSensor");
+        downPixelSensor = robot.linearOpMode.hardwareMap.get(AnalogSensor.class,"downPixelsSensor");
         reset();
 
         this.robot = robot;
@@ -51,8 +54,8 @@ public class Devices {
     public Servo aimPlaneServo;
     public DigitalChannel buttonUp;
     public DigitalChannel buttonDown;
-
-
+    public AnalogSensor upPixelsSensor;
+    public AnalogSensor downPixelSensor;
 
     private void reset() {
         left_front_drive.setDirection(DcMotor.Direction.FORWARD);
