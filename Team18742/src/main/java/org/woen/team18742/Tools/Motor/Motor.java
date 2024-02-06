@@ -33,7 +33,7 @@ public class Motor {
 
         _encoderType = type;
 
-        _velocityPid = new PIDF(Configs.Motors.DefultP, Configs.Motors.DefultI, Configs.Motors.DefultD, 0, Configs.Motors.DefultF, 1, 0);
+        _velocityPid = new PIDF(Configs.Motors.DefultP, Configs.Motors.DefultI, Configs.Motors.DefultD, 0, Configs.Motors.DefultF, 50, 0);
 
         MotorsHandler.AddMotor(this);
 
@@ -75,7 +75,7 @@ public class Motor {
     private double _targetEncoderSpeed = 0;//, _targetVoltageSpeed = 0;
 
     public void setPower(double speed){
-        _targetEncoderSpeed = speed * _encoderType.Ticks;
+        setEncoderPower(speed * _encoderType.Ticks);
        // _targetVoltageSpeed = Configs.Battery.CorrectCharge * speed;
     }
 

@@ -137,7 +137,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         if (!Configs.GeneralSettings.IsAutonomEnable) return;
 
         if (!_isTrajectoryEnd)
-            _isTrajectoryEnd = _trajectory.run(new TelemetryPacket());
+            _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
         else
             _driveTrain.Stop();
     }
@@ -181,13 +181,19 @@ public class RoadRunnerRouteManager implements IRobotModule {
                 trajectoryTimer.reset();
             }
 
-            if (_waiters.size() > 0) {
+            if (_waiters.size() > 0) { //sps midnight
                 for (BooleanSupplier i : _waiters)
                     if (i.getAsBoolean())
                         _waiters.remove(i);
 
+                _driveTrain.Stop();
+
+                trajectoryTimer.pause();
+
                 return true;
             }
+            else
+                trajectoryTimer.start();
 
             double time = trajectoryTimer.seconds();
 
@@ -237,17 +243,17 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder splineTo(Vector2d vec, double tangent) {
-            _builder.splineTo(vec, tangent);
+            _builder = _builder.splineTo(vec, tangent);
             return this;
         }
 
         public MyTrajectoryBuilder splineToConstantHeading(Vector2d vec, double tangent) {
-            _builder.splineToConstantHeading(vec, tangent);
+            _builder = _builder.splineToConstantHeading(vec, tangent);
             return this;
         }
 
         public MyTrajectoryBuilder setReversed(boolean reversed) {
-            _builder.setReversed(reversed);
+            _builder = _builder.setReversed(reversed);
             return this;
         }
 
@@ -256,7 +262,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftUp(double ds) {
-            _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_UPPER));
+            _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_UPPER));
             return this;
         }
 
@@ -265,12 +271,12 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftDown(double ds) {
-            _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.DOWN));
+            _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.DOWN));
             return this;
         }
 
         public MyTrajectoryBuilder waitLift() {
-            _builder.stopAndAdd(() -> {
+            _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _lift.isATarget());
             });
             return this;
@@ -281,12 +287,12 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushOn(double ds) {
-            _builder.afterTime(ds, () -> _brush.BrushEnable());
+            _builder = _builder.afterTime(ds, () -> _brush.BrushEnable());
             return this;
         }
 
         public MyTrajectoryBuilder waitPixel() {
-            _builder.stopAndAdd(() -> {
+            _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _intake.isPixelGripped());
             });
 
@@ -298,23 +304,23 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder pixelDeGripp(double ds) {
-            _builder.afterTime(ds, () -> _intake.releaseGripper());
+            _builder = _builder.afterTime(ds, () -> _intake.releaseGripper());
             return this;
         }
 
         public MyTrajectoryBuilder turnTo(double heading) {
-            _builder.turnTo(heading);
+            _builder = _builder.turnTo(heading);
             return this;
         }
 
         public MyTrajectoryBuilder waitSeconds(double time) {
-            _builder.endTrajectory();
-            _builder.waitSeconds(time);
+            _builder = _builder.endTrajectory();
+            _builder = _builder.waitSeconds(time);
             return this;
         }
 
         public MyTrajectoryBuilder PidMove(ArrayList<Runnable> route) {
-            _builder.stopAndAdd(() -> {
+            _builder = _builder.stopAndAdd(() -> {
                 _automaticPid.Start(route);
             });
 
@@ -322,22 +328,22 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder strafeTo(Vector2d pos) {
-            _builder.strafeTo(pos);
+            _builder = _builder.strafeTo(pos);
             return this;
         }
 
         public MyTrajectoryBuilder lineToX(double pos) {
-            _builder.lineToX(pos);
+            _builder = _builder.lineToX(pos);
             return this;
         }
 
         public MyTrajectoryBuilder lineToY(double pos) {
-            _builder.lineToY(pos);
+            _builder = _builder.lineToY(pos);
             return this;
         }
 
         public MyTrajectoryBuilder strafeToLinearHeading(Vector2d vec, double heading) {
-            _builder.strafeToLinearHeading(vec, heading);
+            _builder = _builder.strafeToLinearHeading(vec, heading);
             return this;
         }
 
@@ -346,7 +352,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushDown(double ds) {
-            _builder.afterTime(ds, () -> _staksBrush.servoSetDownPose());
+            _builder = _builder.afterTime(ds, () -> _staksBrush.servoSetDownPose());
             return this;
         }
     }
