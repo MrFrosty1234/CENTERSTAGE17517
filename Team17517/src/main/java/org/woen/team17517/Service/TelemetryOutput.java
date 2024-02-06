@@ -80,9 +80,8 @@ public class TelemetryOutput implements RobotModule {
             HashMap<String,Double> encoderMap = robot.driveTrainVelocityControl.getEncoders();
             HashMap<String,Double> powerMap = robot.driveTrainVelocityControl.getPowers();
             HashMap<String,Double> targetMap = robot.driveTrainVelocityControl.getTargets();
-            Vector2D vectorTarget = robot.driveTrainVelocityControl.vectorOd;
-            telemetry.addData("TargetY",vectorTarget.getY());
-            telemetry.addData("TargetX",vectorTarget.getX());
+            telemetry.addData("TargetY",targetMap.get("Y"));
+            telemetry.addData("TargetX",targetMap.get("X"));
             telemetry.addData("TargetH",targetMap.get("targetH"));
             telemetry.addData("SpeedY",encoderMap.get("yEnc"));
             telemetry.addData("SpeedX",encoderMap.get("xEnc"));

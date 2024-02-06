@@ -81,15 +81,13 @@ public class Lift implements RobotModule {
             case AUTO:
                 switch (targetPosition) {
                     case UP:
-                        liftAtTaget = targetPosition.value == getEncoderPosition();
+                        liftAtTaget = getUpSwitch();
                         liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
                         setPower(liftPower);
                         break;
                     case DOWN:
-                        liftAtTaget = getEncoderPosition() <= LiftPosition.DOWN.value;
+                        liftAtTaget = getDownSwitch();
                         liftPower = liftAtTaget ? 0 : -liftMovePower;
-                        robot.linearOpMode.telemetry.addData("is",liftAtTaget);
-                        robot.linearOpMode.telemetry.update();
                         setPower(liftPower);
                         break;
                     case FORAUTONOM:
@@ -106,14 +104,15 @@ public class Lift implements RobotModule {
                 }
             break;
             case  MANUALLIMIT:
-                if(manualTargetUp && getUpSwitch()){
+                if(manualTargetUp && !getUpSwitch()){
                     liftPower = liftMovePower;
                     setPower(liftPower);
-                }else if (manualTargetDown){
+                }else if (manualTargetDown && !getDownSwitch()){
                     liftPower = -liftMovePower;
                     setPower(liftPower);
-                }else {
-                    liftPower = liftGravityPower;
+                }else{
+                    if(!getDownSwitch()) liftPower = liftGravityPower;
+                    else liftPower = 0;
                     setPower(liftPower);
                 }
                 liftAtTaget = true;

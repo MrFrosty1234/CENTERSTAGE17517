@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.woen.team17517.RobotModules.UltRobot;
-import org.woen.team17517.Service.Devices;
 import org.woen.team17517.Service.PIDMethod;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
@@ -100,7 +99,6 @@ public class DriveTrainVelocityControl implements RobotModule {
 
     public DriveTrainVelocityControl(UltRobot robot)
     {
-
         this.robot = robot;
 
         left_front_drive = robot.devices.left_front_drive;
@@ -214,7 +212,6 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double powerH = 0;
     private double powerX = 0;
     private double powerY = 0;
-    public Vector2D vectorOd = new Vector2D();
     public void update() {
         odUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
