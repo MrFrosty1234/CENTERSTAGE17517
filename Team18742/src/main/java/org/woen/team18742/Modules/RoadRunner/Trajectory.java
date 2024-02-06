@@ -14,6 +14,34 @@ public class Trajectory {
         builder.brushOn();
 
         switch (startPos) {
+            case RED_BACK: {
+                builder.strafeToLinearHeading(new Vector2d(-95 / 2.54, -92 / 2.54), PI / 2)
+                        //отпустить пиксель и щётки врубили и опустили
+                        .brushOn()
+                        .brushDown(2)
+                        .strafeToLinearHeading(new Vector2d(-95 / 2.54, -100 / 2.54), PI / 2)
+                        .strafeToLinearHeading(new Vector2d(-140 / 2.54, -90 / 2.54), 0)
+                        .waitPixel()
+                        .strafeToLinearHeading(new Vector2d(20 / 2.54, -90 / 2.54), 0)
+                        .liftUp()
+                        .strafeToLinearHeading(new Vector2d(120 / 2.54, -90 / 2.54), 0)
+                        .waitPixel()
+                        .brushOn(2)
+                        .brushDown(2)
+                        .pixelDeGripp()
+                        .strafeToLinearHeading(new Vector2d(-140 / 2.54, -90 / 2.54), 0)
+                        .waitPixel()
+                        .strafeToLinearHeading(new Vector2d(20 / 2.54, -90 / 2.54), 0)
+                        .liftUp()
+                        .strafeToLinearHeading(new Vector2d(120 / 2.54, -90 / 2.54), 0)
+                        .waitPixel()
+                        .brushOn(2)
+                        .brushDown(2)
+                        .pixelDeGripp()
+                        .strafeToLinearHeading(new Vector2d(120 / 2.54, -30 / 2.54), 0)
+                        .strafeToLinearHeading(new Vector2d(150 / 2.54, -30 / 2.54), 0);
+            }
+                break;
             case BLUE_FORWAD: {
                 builder.strafeToLinearHeading(new Vector2d(130, 90), 0)//left
                         //тут ставим пиксель на задник
@@ -66,6 +94,7 @@ public class Trajectory {
                         .pixelDeGripp()
                         .waitSeconds(1);
                 break;
+
             }
         }
 
