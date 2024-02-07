@@ -263,6 +263,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftUp(double ds) {
+            _builder = _builder.endTrajectory();
             _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
             return this;
         }
@@ -272,6 +273,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftDown(double ds) {
+            _builder = _builder.endTrajectory();
             _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.DOWN));
             return this;
         }
@@ -289,6 +291,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushOn(double ds) {
+            _builder = _builder.endTrajectory();
             _builder = _builder.afterTime(ds, () -> _brush.BrushEnable());
             return this;
         }
@@ -307,6 +310,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder pixelDeGripp(double ds) {
+            _builder = _builder.endTrajectory();
             _builder = _builder.afterTime(ds, () -> _intake.releaseGripper());
             return this;
         }
@@ -356,6 +360,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushDown(double ds) {
+            _builder = _builder.endTrajectory();
             _builder = _builder.afterTime(ds, () -> _staksBrush.servoSetDownPose());
             return this;
         }
