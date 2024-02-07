@@ -23,27 +23,29 @@ public class MeepMeep18742 {
                 .build();
 
         myBot.runAction(myBot.getDrive()
-                .actionBuilder(new Pose2d(-95 / 2.54, -150.7 / 2.54, PI / 2))
-                        .strafeToLinearHeading(new Vector2d(-95/2.54, -92/2.54), PI/2)
+                .actionBuilder(new Pose2d(-95 / 2.54, 150.7 / 2.54, PI / 2))
+                .strafeToLinearHeading(new Vector2d(-95/ 2.54, 95/ 2.54), -PI / 2)
                 //отпустить пиксель и щётки врубили и опустили
-                .strafeToLinearHeading(new Vector2d(-95/2.54, -100/2.54), PI/2)
-                       // .turnTo(0)
-                .strafeToLinearHeading(new Vector2d(-140/2.54, -90/2.54), 0)
-                //хаваем стопки
-                .strafeToLinearHeading(new Vector2d(20/2.54, -90/2.54), 0)
-                //поднимаем лифт
-                        .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(120/2.54, -90/2.54), 0)
-                //ставим пиксели
-                //врубаем щётки
-                .strafeToLinearHeading(new Vector2d(-140/2.54, -90/2.54), 0)
-                //хаваем стопки
-                .strafeToLinearHeading(new Vector2d(20/2.54, -90/2.54), 0)
-                //поднимаем лифт
-                .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(120/2.54, -90/2.54), 0)
-                .strafeToLinearHeading(new Vector2d(120/2.54, -30/2.54), 0)
-                .strafeToLinearHeading(new Vector2d(150/2.54, -30/2.54), 0)
+                //.brushOn()
+                .strafeToLinearHeading(new Vector2d(-95/ 2.54, 100/ 2.54), 0)
+                .strafeToLinearHeading(new Vector2d(-110/ 2.54, 95/ 2.54), 0)
+               // .waitPixel()
+               // .liftUp(4)
+                .strafeToLinearHeading(new Vector2d(100/ 2.54, 84/ 2.54), 0)
+               // .waitLift()
+              //  .brushOn(2)
+              //  .brushDown(3)
+               // .pixelDeGripp()
+               // .waitSeconds(2)
+                .strafeToLinearHeading(new Vector2d(-94/ 2.54, 100/ 2.54), 0)
+              //  .waitPixel()
+               // .liftUp(4)
+                .strafeToLinearHeading(new Vector2d(100/ 2.54, 89/ 2.54), 0)
+               // .waitLift()
+               // .pixelDeGripp()
+               // .waitSeconds(2)
+                .strafeToLinearHeading(new Vector2d(120/ 2.54, 30/ 2.54), 0)
+                .strafeToLinearHeading(new Vector2d(150/ 2.54, 30/ 2.54), 0)
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
