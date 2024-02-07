@@ -19,24 +19,24 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double voltage;
 
     public static double kdX = 0;
-    public static double kiX = 0.000005;
-    public static double kpX = 0.0000025;
+    public static double kiX = 0.0000012;
+    public static double kpX = 0.0000015;
 
     public static double kdRat = 0;
-    public static double kiRat = 0.000_00;//0_1;
-    public static double kpRat = 0.000;//3;
+    public static double kiRat = 0.0015;
+    public static double kpRat = 0.000008;
 
     public static double kdY  = 0;
-    public static double kiY = 0.000005;
-    public static double kpY = 0.0000025;
+    public static double kiY = 0.0000012;
+    public static double kpY = 0.0000014;
 
     public static  double maxIY = 0.03;
-    public static  double maxIRat = 0.01;
-    public static  double maxIX = 0.035;
+    public static  double maxIRat = 0.03;
+    public static  double maxIX = 0.03;
 
-    public static double ksRat = 0.000479;
-    public static double ksY = 0.00002;
-    public static double ksX = 0.00003;
+    public static double ksRat = 0.000025;
+    public static double ksY = 0.0000116;
+    public static double ksX = 0.000016;
     public static double kSlide = 1;
 
     public final double odToEnc = 98;
@@ -86,7 +86,6 @@ public class DriveTrainVelocityControl implements RobotModule {
         return powerMap;
     }
 
-
     private double targetH = 0;
     private Vector2D vector = new Vector2D(0,0);
     private  double yEnc;
@@ -100,15 +99,13 @@ public class DriveTrainVelocityControl implements RobotModule {
 
     public DriveTrainVelocityControl(UltRobot robot)
     {
-
         this.robot = robot;
 
-        left_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_front_drive");
-        left_back_drive =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_back_drive");
+        left_front_drive = robot.devices.left_front_drive;
+        left_back_drive =  robot.devices.left_back_drive;
 
-        right_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
-        right_back_drive =  robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_back_drive");
-
+        right_front_drive = robot.devices.right_front_drive;
+        right_back_drive = robot.devices.right_back_drive;
         voltage = 12;
 
         reset();
@@ -215,12 +212,10 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double powerH = 0;
     private double powerX = 0;
     private double powerY = 0;
-    public Vector2D vectorOd = new Vector2D();
     public void update() {
         odUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
 
-        vectorOd.setCord(vector.getX(),vector.getY());
 
         this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);
         this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX);
@@ -228,8 +223,8 @@ public class DriveTrainVelocityControl implements RobotModule {
 
 
         powerH = moveRat(targetH);
-        powerX = moveX(vectorOd.getX());
-        powerY = moveY(vectorOd.getY());
+        powerX = moveX(vector.getX());
+        powerY = moveY(vector.getY());
 
         left_front_drive.setPower(powerX + powerY + powerH);
         right_front_drive.setPower(-powerX + powerY - powerH);

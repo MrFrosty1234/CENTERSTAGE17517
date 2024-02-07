@@ -1,10 +1,9 @@
-package org.woen.team17517.RobotModules.Lift;
+package org.woen.team17517.RobotModules.Transport.Lift;
 
 import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team17517.RobotModules.UltRobot;
@@ -23,26 +22,16 @@ public class Lift implements RobotModule {
     public LiftMode liftMode = LiftMode.AUTO;
     UltRobot robot;
     public boolean liftAtTaget = false;
+    private LiftPosition position;
     public void setLiftMode(LiftMode mode){
         liftMode = mode;
     }
     public Lift(UltRobot robot) {
         this.robot = robot;
-        liftMotor = this.robot.linearOpMode.hardwareMap.dcMotor.get("liftMotor");
-        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        buttonUp = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonUp");
-        buttonDown = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonDown");
-        buttonUp.setMode(DigitalChannel.Mode.INPUT);
-        buttonDown.setMode(DigitalChannel.Mode.INPUT);
-        reset();
+        liftMotor = robot.devices.liftMotor;
+        buttonUp = robot.devices.buttonUp;
+        buttonDown = robot.devices.buttonDown;
     }
-
-    private void reset(){
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
     public boolean getUpSwitch(){
         return buttonUp.getState();
     }
@@ -56,9 +45,11 @@ public class Lift implements RobotModule {
     private int encoderError  = 0;
     public void moveUP(){
         this.targetPosition = LiftPosition.UP;
+        setLiftMode(LiftMode.AUTO);
     }
     public void moveDown(){
-        this.targetPosition =LiftPosition.DOWN;
+        this.targetPosition = LiftPosition.DOWN;
+        setLiftMode(LiftMode.AUTO);
     }
     private int encoderPosition = 0;
 
@@ -80,6 +71,9 @@ public class Lift implements RobotModule {
         }
     }
     public void update() {
+        updateEncoderPosition();
+        updatePosition();
+
         double liftPower = 0;
         double liftGravityPower = 0.1;
         double liftMovePower = 0.8;
@@ -87,15 +81,13 @@ public class Lift implements RobotModule {
             case AUTO:
                 switch (targetPosition) {
                     case UP:
-                        liftAtTaget = targetPosition.value == getEncoderPosition();
+                        liftAtTaget = getUpSwitch();
                         liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
                         setPower(liftPower);
                         break;
                     case DOWN:
-                        liftAtTaget = getEncoderPosition() <= LiftPosition.DOWN.value;
+                        liftAtTaget = getDownSwitch();
                         liftPower = liftAtTaget ? 0 : -liftMovePower;
-                        robot.linearOpMode.telemetry.addData("is",liftAtTaget);
-                        robot.linearOpMode.telemetry.update();
                         setPower(liftPower);
                         break;
                     case FORAUTONOM:
@@ -112,14 +104,15 @@ public class Lift implements RobotModule {
                 }
             break;
             case  MANUALLIMIT:
-                if(manualTargetUp && getUpSwitch()){
+                if(manualTargetUp && !getUpSwitch()){
                     liftPower = liftMovePower;
                     setPower(liftPower);
-                }else if (manualTargetDown){
+                }else if (manualTargetDown && !getDownSwitch()){
                     liftPower = -liftMovePower;
                     setPower(liftPower);
-                }else {
-                    liftPower = liftGravityPower;
+                }else{
+                    if(!getDownSwitch()) liftPower = liftGravityPower;
+                    else liftPower = 0;
                     setPower(liftPower);
                 }
                 liftAtTaget = true;
@@ -127,12 +120,28 @@ public class Lift implements RobotModule {
         }
 
     }
-    public void setManualTargetUp(boolean manualTargetUp){
-        this.manualTargetUp = manualTargetUp;
+    private void updatePosition(){
+        if(!liftAtTaget) position = LiftPosition.UNKNOWN;
+        else             position = targetPosition;
+    }
+    public  LiftPosition getPosition(){
+        return position;
+    }
+    public void setManualTargetUp(){
+        setLiftMode(LiftMode.MANUALLIMIT);
+        manualTargetUp = true;
+        manualTargetDown = false;
+    }
+    public void setStopManualTarget(){
+        setLiftMode(LiftMode.MANUALLIMIT);
+        manualTargetUp = false;
+        manualTargetDown = false;
     }
     private boolean manualTargetUp = false;
-    public void setManualTargetDown(boolean manualTargetDown){
-        this.manualTargetDown = manualTargetDown;
+    public void setManualTargetDown(){
+        setLiftMode(LiftMode.MANUALLIMIT);
+        manualTargetDown = true;
+        manualTargetUp = false;
     }
     private  boolean manualTargetDown = false;
     @Override

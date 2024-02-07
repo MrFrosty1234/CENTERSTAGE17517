@@ -62,9 +62,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("pos H", positionMap.get("H"));
         }
         if(grabber) {
-            telemetry.addData("pixels count",robot.grabber.pixelsCount);
-            telemetry.addData("pixelSensorLeft",robot.grabber.pixelSensorLeft);
-            telemetry.addData("pixelSensorRight",robot.grabber.pixelSensorRight);
+
         }
         if(odometry){
             telemetry.addData("x",robot.odometryNew.getX());
@@ -82,9 +80,8 @@ public class TelemetryOutput implements RobotModule {
             HashMap<String,Double> encoderMap = robot.driveTrainVelocityControl.getEncoders();
             HashMap<String,Double> powerMap = robot.driveTrainVelocityControl.getPowers();
             HashMap<String,Double> targetMap = robot.driveTrainVelocityControl.getTargets();
-            Vector2D vectorTarget = robot.driveTrainVelocityControl.vectorOd;
-            telemetry.addData("TargetY",vectorTarget.getY());
-            telemetry.addData("TargetX",vectorTarget.getX());
+            telemetry.addData("TargetY",targetMap.get("targetY"));
+            telemetry.addData("TargetX",targetMap.get("targetX"));
             telemetry.addData("TargetH",targetMap.get("targetH"));
             telemetry.addData("SpeedY",encoderMap.get("yEnc"));
             telemetry.addData("SpeedX",encoderMap.get("xEnc"));

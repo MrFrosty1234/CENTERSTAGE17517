@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.AccelConstraint;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Actions;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.HolonomicController;
 import com.acmerobotics.roadrunner.MecanumKinematics;
@@ -15,10 +16,12 @@ import com.acmerobotics.roadrunner.Pose2dDual;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.PoseVelocity2dDual;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Time;
 import com.acmerobotics.roadrunner.TimeTrajectory;
 import com.acmerobotics.roadrunner.TimeTurn;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
@@ -42,6 +45,7 @@ import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Modules.PidRunner.PidRouteManager;
 import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Bios;
+import org.woen.team18742.Tools.Color;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Timers.ElapsedTimeExtra;
 import org.woen.team18742.Tools.ToolTelemetry;
@@ -72,17 +76,12 @@ public class RoadRunnerRouteManager implements IRobotModule {
     private final VelConstraint _velConstraint = new MinVelConstraint(Arrays.asList(_mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX), new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn)));
     private final AccelConstraint _accelConstraint = new ProfileAccelConstraint(Configs.Route.MinProfileAccel, Configs.Route.MaxProfileAccel);
 
-    private List<Action> _trajectorys;
+    private Action _trajectory;
     private boolean _isTrajectoryEnd = false;
 
-    private BooleanSupplier _waiter = ()->true;
-    private boolean _isWait = false;
+    private List<BooleanSupplier> _waiters = new ArrayList<>();
 
-    private static final Action[][] _allTrajectory = new Action[StartRobotPosition.values().length][CameraRobotPosition.values().length];
-
-    private static boolean _isInited = false;
-
-    private int _currentTrajectory = 0;
+    private final Action[][] _allTrajectory = new Action[StartRobotPosition.values().length][CameraRobotPosition.values().length];
 
     @Override
     public void Init(BaseCollector collector) {
@@ -96,24 +95,20 @@ public class RoadRunnerRouteManager implements IRobotModule {
         _automaticPid = collector.GetModule(PidRouteManager.class);
         _staksBrush = collector.GetModule(StaksBrush.class);
 
-        /*if (!_isInited) {
-            _isInited = true;
+        for (int i = 0; i < _allTrajectory.length; i++) {
+            for (int j = 0; j < _allTrajectory[0].length; j++) {
+                StartRobotPosition pos = StartRobotPosition.values()[i];
+                CameraRobotPosition camPos = CameraRobotPosition.values()[j];
 
-            for (int i = 0; i < _allTrajectory.length; i++) {
-                for (int j = 0; j < _allTrajectory[0].length; j++) {
-                    StartRobotPosition pos = StartRobotPosition.values()[i];
-                    CameraRobotPosition camPos = CameraRobotPosition.values()[j];
-
-                    _allTrajectory[i][j] = Trajectory.GetTrajectory(ActionBuilder(
-                            new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), camPos).build();
-                }
+                _allTrajectory[i][j] = Trajectory.GetTrajectory(ActionBuilder(
+                        new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), pos, camPos).build();
             }
-        }*/
+        }
     }
 
     @Override
     public void Start() {
-        /*int indexStartPos = 0, indexCamera = 0;
+        int indexStartPos = 0, indexCamera = 0;
 
         for (int i = 0; i < StartRobotPosition.values().length; i++)
             if (StartRobotPosition.values()[i] == Bios.GetStartPosition()) {
@@ -127,47 +122,34 @@ public class RoadRunnerRouteManager implements IRobotModule {
             if (CameraRobotPosition.values()[i] == cameraPos) {
                 indexCamera = i;
                 break;
-            }*/
+            }
 
         StartRobotPosition pos = Bios.GetStartPosition();
 
-        _trajectorys = Trajectory.GetTrajectory(ActionBuilder(
-                new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), _camera.GetPosition()).build();//_allTrajectory[indexStartPos][indexCamera];
+        _trajectory = _allTrajectory[indexStartPos][indexCamera];
 
         //_intake.PixelCenterGrip(true);
 
-        for(Action i : _trajectorys)
-            i.preview(new Canvas());
+        _trajectory.preview(new Canvas());
     }
 
     @Override
     public void Update() {
         if (!Configs.GeneralSettings.IsAutonomEnable) return;
 
-        if (!_isTrajectoryEnd) {
-            if(_isWait)
-                if(_waiter.getAsBoolean()) {
-                    _currentTrajectory++;
-                    _isWait = false;
-                }
-
-            if(!_trajectorys.get(_currentTrajectory).run(new TelemetryPacket())){
-                if(_currentTrajectory + 1 < _trajectorys.size())
-                    _isWait = true;
-                else
-                    _isTrajectoryEnd = true;
-            }
-        } else
+        if (!_isTrajectoryEnd)
+            _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
+        else
             _driveTrain.Stop();
     }
 
-    private class TrajectoryAction implements Action {
+    public class TrajectoryAction implements Action {
         private final Optional<TimeTrajectory> _timeTrajectory;
         private final Optional<TimeTurn> _timeTurn;
         private final double _duration;
         private ElapsedTimeExtra trajectoryTimer = null;
 
-        private double xPoints[], yPoints[];
+        private double[] xPoints, yPoints;
 
         public TrajectoryAction(TimeTurn t) {
             _timeTrajectory = Optional.empty();
@@ -217,26 +199,32 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
             _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
-            ToolTelemetry.GetCanvas().setStroke("#4CAF50FF");
+            ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
             ToolTelemetry.GetCanvas().setStrokeWidth(1);
             ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+
+            if (_waiters.size() > 0) { //sps midnight
+                for (BooleanSupplier i : _waiters)
+                    if (i.getAsBoolean())
+                        _waiters.remove(i);
+
+                _driveTrain.Stop();
+
+                trajectoryTimer.pause();
+
+                return true;
+            }
+            else
+                trajectoryTimer.start();
 
             return true;
         }
 
         @Override
         public void preview(@NonNull Canvas fieldOverlay) {
-            ToolTelemetry.GetCanvas().setStroke("#4CAF507A");
+            ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
             ToolTelemetry.GetCanvas().setStrokeWidth(1);
             ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
-        }
-
-        public void Pause() {
-            trajectoryTimer.pause();
-        }
-
-        public void Start() {
-            trajectoryTimer.start();
         }
     }
 
@@ -245,33 +233,28 @@ public class RoadRunnerRouteManager implements IRobotModule {
     }
 
     public final class MyTrajectoryBuilder {
-        private List<TrajectoryActionBuilder> _builders = new ArrayList<>();
+        private TrajectoryActionBuilder _builder;
 
         public MyTrajectoryBuilder(TrajectoryActionBuilder builder) {
-            _builders.add(builder);
+            _builder = builder;
         }
 
-        public List<Action> build() {
-            List<Action> result = new ArrayList<>();
-
-            for(TrajectoryActionBuilder i : _builders)
-                result.add(i.build());
-
-            return result;
+        public Action build() {
+            return _builder.build();
         }
 
         public MyTrajectoryBuilder splineTo(Vector2d vec, double tangent) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).splineTo(vec, tangent));
+            _builder = _builder.splineTo(vec, tangent);
             return this;
         }
 
         public MyTrajectoryBuilder splineToConstantHeading(Vector2d vec, double tangent) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).splineToConstantHeading(vec, tangent));
+            _builder = _builder.splineToConstantHeading(vec, tangent);
             return this;
         }
 
         public MyTrajectoryBuilder setReversed(boolean reversed) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).setReversed(reversed));
+            _builder = _builder.setReversed(reversed);
             return this;
         }
 
@@ -280,7 +263,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftUp(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_UPPER)));
+            _builder = _builder.endTrajectory();
+            _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
             return this;
         }
 
@@ -289,80 +273,85 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftDown(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () -> _lift.SetLiftPose(LiftPose.DOWN)));
+            _builder = _builder.endTrajectory();
+            _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.DOWN));
             return this;
         }
 
-        /*public MyTrajectoryBuilder waitLift() {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).stopAndAdd(() -> {
-                // _trajectory.Pause();
+        public MyTrajectoryBuilder waitLift() {
+            _builder = _builder.endTrajectory();
+            _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _lift.isATarget());
-            }));
+            });
             return this;
-        }*/
+        }
 
         public MyTrajectoryBuilder brushOn() {
             return brushOn(0);
         }
 
         public MyTrajectoryBuilder brushOn(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () -> _brush.BrushEnable()));
+            _builder = _builder.endTrajectory();
+            _builder = _builder.afterTime(ds, () -> _brush.BrushEnable());
             return this;
         }
 
-        /*public MyTrajectoryBuilder waitPixel() {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).stopAndAdd(() -> {
-                // _trajectory.Pause();
+        public MyTrajectoryBuilder waitPixel() {
+            _builder = _builder.endTrajectory();
+            _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _intake.isPixelGripped());
-            }));
+            });
 
             return this;
-        }*/
+        }
 
         public MyTrajectoryBuilder pixelDeGripp() {
             return pixelDeGripp(0);
         }
 
         public MyTrajectoryBuilder pixelDeGripp(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () -> _intake.releaseGripper()));
+            _builder = _builder.endTrajectory();
+            _builder = _builder.afterTime(ds, () -> _intake.releaseGripper());
             return this;
         }
 
         public MyTrajectoryBuilder turnTo(double heading) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).turnTo(heading));
+            _builder = _builder.turnTo(heading);
             return this;
         }
 
         public MyTrajectoryBuilder waitSeconds(double time) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).waitSeconds(time));
+            _builder = _builder.endTrajectory();
+            _builder = _builder.waitSeconds(time);
             return this;
         }
 
         public MyTrajectoryBuilder PidMove(ArrayList<Runnable> route) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).stopAndAdd(() -> {
+            _builder = _builder.endTrajectory();
+            _builder = _builder.stopAndAdd(() -> {
                 _automaticPid.Start(route);
-            }));
+            });
 
             return this;
         }
 
         public MyTrajectoryBuilder strafeTo(Vector2d pos) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).strafeTo(pos));
+            _builder = _builder.strafeTo(pos);
             return this;
         }
 
         public MyTrajectoryBuilder lineToX(double pos) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).lineToX(pos));
+            _builder = _builder.lineToX(pos);
             return this;
         }
 
         public MyTrajectoryBuilder lineToY(double pos) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).lineToY(pos));
+            _builder = _builder.lineToY(pos);
             return this;
         }
 
         public MyTrajectoryBuilder strafeToLinearHeading(Vector2d vec, double heading) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).strafeToLinearHeading(vec, heading));
+            _builder = _builder.strafeToLinearHeading(vec, heading);
             return this;
         }
 
@@ -371,7 +360,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushDown(double ds) {
-            _builders.set(_builders.size() - 1, _builders.get(_builders.size() - 1).afterTime(ds, () ->_staksBrush.servoSetDownPose() ));
+            _builder = _builder.endTrajectory();
+            _builder = _builder.afterTime(ds, () -> _staksBrush.servoSetDownPose());
             return this;
         }
     }

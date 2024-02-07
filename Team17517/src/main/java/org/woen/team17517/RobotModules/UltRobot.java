@@ -5,10 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team17517.NotUsedCode.DrivetrainNew;
 import org.woen.team17517.NotUsedCode.Odometry;
+import org.woen.team17517.Programms.Autonomus.OldAutonomus.AutnomModules;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
-import org.woen.team17517.RobotModules.Grabber.Grabber;
-import org.woen.team17517.RobotModules.Lift.Lift;
+import org.woen.team17517.RobotModules.Transport.Grabber.GrabberNew;
+import org.woen.team17517.RobotModules.Transport.Grabber.PixelsCount;
+import org.woen.team17517.RobotModules.Transport.Lift.Lift;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.Navigative.Gyro;
 import org.woen.team17517.RobotModules.Navigative.OdometryNew;
@@ -23,8 +25,9 @@ import org.woen.team17517.Service.VoltageSensorPoint;
 public class UltRobot {
     public DriveTrain driveTrain;
     public DrivetrainNew drivetrainNew;
-    public Grabber grabber;
     public Lift lift;
+    public GrabberNew grabber;
+    public PixelsCount pixelsCount;
     public Lighting lighting;
     public VoltageSensorPoint voltageSensorPoint;
     public LinearOpMode linearOpMode;
@@ -34,17 +37,22 @@ public class UltRobot {
     public DriveTrainVelocityControl driveTrainVelocityControl;
     public Odometry odometry;
     public OdometryNew odometryNew;
+    public Devices devices;
     public Timer timer;
+    public AutnomModules autnomModules;
     public RobotModule[] robotModules;
     private final List<LynxModule> revHubs;
 
     public UltRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
+        devices = new Devices(this);
         telemetryOutput = new TelemetryOutput(this);
         timer = new Timer(this);
-        grabber = new Grabber(this);
-        voltageSensorPoint = new VoltageSensorPoint(this);
         lift = new Lift(this);
+        grabber = new GrabberNew(this);
+        pixelsCount = new PixelsCount(this);
+        autnomModules  = new AutnomModules(this);
+        voltageSensorPoint = new VoltageSensorPoint(this);
         driveTrainVelocityControl = new DriveTrainVelocityControl(this);
         gyro = new Gyro(this);
         lighting = new Lighting(this);
@@ -54,7 +62,7 @@ public class UltRobot {
         odometryNew = new OdometryNew(this);
         driveTrain = new DriveTrain(this);
         this.robotModules = new RobotModule[]{telemetryOutput,timer, voltageSensorPoint,
-                lift, driveTrainVelocityControl, driveTrain, gyro, lighting, odometry, odometryNew, drivetrainNew};
+                 driveTrainVelocityControl,lift,grabber,pixelsCount, gyro, lighting, odometryNew, drivetrainNew};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }
@@ -72,27 +80,11 @@ public class UltRobot {
         }
     }
 
-    public void updateWhile(RobotModule run ,Runnable [] runnables){
-        for (Runnable runnable : runnables){
-            runnable.run();
-            allUpdate();
-
-            double oldTime = System.currentTimeMillis();
-
-            while(!run.isAtPosition() && linearOpMode.opModeIsActive()){
-                allUpdate();
-            }
-            linearOpMode.telemetry.addData("posRun", run.isAtPosition());
-            linearOpMode.telemetry.update();
-        }
-
-    }
     public void updateWhilePositionFalse(Runnable[] runnables){
         for (Runnable runnable : runnables){
             runnable.run();
             allUpdate();
 
-            double oldTime = System.currentTimeMillis();
 
             while(!isAtPositionAll() && linearOpMode.opModeIsActive()){
                 linearOpMode.telemetry.addData("posAll", isAtPositionAll());

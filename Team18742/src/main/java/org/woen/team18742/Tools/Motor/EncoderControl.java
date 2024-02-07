@@ -7,6 +7,7 @@ public class EncoderControl {
     private final DcMotorEx _encoder;
     private final VelocityControl _velControl;
     private final double _ticks, _diameter;
+    private double _startPos = 0, _pos;
 
     public EncoderControl(DcMotorEx encoder, ReductorType type, double diameter){
         this(encoder, type.Ticks, diameter);
@@ -22,7 +23,7 @@ public class EncoderControl {
     }
 
     public double GetPosition(){
-        return _encoder.getCurrentPosition() / _ticks * Math.PI * _diameter;
+        return _pos / _ticks * Math.PI * _diameter;
     }
 
     public double GetVelocity(){
@@ -35,10 +36,10 @@ public class EncoderControl {
 
     public void Update(){
         _velControl.Update();
+        _pos = _encoder.getCurrentPosition() - _startPos;
     }
 
     public void Reset(){
-        _encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        _startPos = _encoder.getCurrentPosition();
     }
 }

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -34,8 +35,8 @@ public class Devices {
     public static IMU IMU;
 
     public static AnalogInput PixelSensor;
-    public static Servo Gripper, Clamp, Servopere, ServoPlane, ServoRailGun ,podtyaga1 ,podtyaga2;
-    public static Servo leftStackBrush, rightStackBrush, stackLift;
+    public static Servo Gripper, Clamp, Servopere, ServoPlane, podtyaga1, podtyaga2, stackLift;
+    public static ServoImplEx leftStackBrush, rightStackBrush;
 
     public static List<LynxModule> Hubs;
     public static VoltageSensor VoltageSensor;
@@ -62,7 +63,6 @@ public class Devices {
         EndSwitchDown = map.get(DigitalChannel.class, "endSwitchDown");
 
         ServoPlane = map.get(Servo.class, "servoPlane");
-        ServoRailGun = map.get(Servo.class, "servoRailGun");
 
         IMU = map.get(IMU.class, "imu");
 
@@ -71,9 +71,9 @@ public class Devices {
         Clamp = map.get(Servo.class, "clamp");
         Servopere = map.get(Servo.class, "turner");
 
-        leftStackBrush = map.get(Servo.class,"leftStackBrush");
+        leftStackBrush = map.get(ServoImplEx.class,"leftStackBrush");
+        rightStackBrush = map.get(ServoImplEx.class,"rightStackBrush");
 
-        rightStackBrush = map.get(Servo.class,"rightStackBrush");
         stackLift = map.get(Servo.class,"stackLift");
 
         podtyaga1 = map.get(Servo.class, "leftHook");

@@ -1,4 +1,4 @@
-package org.woen.team17517.Programms.Autonomus;
+package org.woen.team17517.Programms.Autonomus.OldAutonomus;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,7 +8,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 import org.woen.team17517.Service.Button;
-import org.woen.team17517.RobotModules.OpenCV.Camera;
 import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 
@@ -34,14 +33,7 @@ public class AutonomBaseClass extends LinearOpMode{
     Button rightBumperButton   = new Button();
     boolean rightTriger = false;
     Button rigtTrigerButton = new Button();
-
-    Camera camera;
-
     PipeLine pipeLine;
-
-    int positionEllment = 0;
-
-    Button button = new Button();
     StartTeam startTeam = StartTeam.BlUE;
     StartPosition startPosition = StartPosition.RIGHT;
     @Override
@@ -96,7 +88,7 @@ public class AutonomBaseClass extends LinearOpMode{
         return blueLeft;
     }
 
-    public Runnable[] getBlueRight() {
+    public Runnable[] getBlueNearBack() {
         return blueRight;
     }
 
@@ -146,7 +138,7 @@ public class AutonomBaseClass extends LinearOpMode{
                         robot.updateWhilePositionFalse(getBlueLeft());
                         break;
                     case RIGHT:
-                        robot.updateWhilePositionFalse(getBlueRight());
+                        robot.updateWhilePositionFalse(getBlueNearBack());
                         break;
                 }
                 break;

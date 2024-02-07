@@ -18,8 +18,8 @@ public class ToolTelemetry {
 
     private static TelemetryPacket _packet = new TelemetryPacket();
 
-    public static void Update(){
-        if(!Configs.GeneralSettings.TelemetryOn)
+    public static void Update() {
+        if (!Configs.GeneralSettings.TelemetryOn)
             return;
 
         _telemetry.update();
@@ -30,7 +30,7 @@ public class ToolTelemetry {
         _packet = new TelemetryPacket();
     }
 
-    public static Canvas GetCanvas(){
+    public static Canvas GetCanvas() {
         return _packet.fieldOverlay();
     }
 
@@ -38,35 +38,42 @@ public class ToolTelemetry {
         DrawCircle(pos, radius, color.toString());
     }
 
-    public static void DrawCircle(Vector2 pos, double radius, String color){
-        if(Configs.GeneralSettings.TelemetryOn) {
+    public static void DrawCircle(Vector2 pos, double radius, String color) {
+        if (Configs.GeneralSettings.TelemetryOn) {
             _packet.fieldOverlay().setFill(color);
             _packet.fieldOverlay().setRotation(0);
-            _packet.fieldOverlay().fillCircle(DistanceUnit.INCH.fromCm(pos.X), DistanceUnit.INCH.fromCm(pos.Y), radius);
+            _packet.fieldOverlay().fillCircle(DistanceUnit.INCH.fromCm(pos.X), DistanceUnit.INCH.fromCm(pos.Y), DistanceUnit.INCH.fromCm(radius));
         }
     }
 
-    public static void DrawRect(Vector2 pos, Vector2 size, double rotate, Color color){
+    public static void DrawRect(Vector2 pos, Vector2 size, double rotate, Color color) {
         DrawRect(pos, size, rotate, color.toString());
     }
 
-    public static void DrawRect(Vector2 pos, Vector2 size, double rotate, String color){
-        if(Configs.GeneralSettings.TelemetryOn) {
+    public static void DrawRect(Vector2 pos, Vector2 size, double rotate, String color) {
+        if (Configs.GeneralSettings.TelemetryOn) {
             _packet.fieldOverlay().setFill(color);
             _packet.fieldOverlay().setRotation(rotate);
-            _packet.fieldOverlay().fillRect(DistanceUnit.INCH.fromCm(pos.X), DistanceUnit.INCH.fromCm(pos.Y), size.X, size.Y);
+            _packet.fieldOverlay().fillRect(DistanceUnit.INCH.fromCm(pos.X), DistanceUnit.INCH.fromCm(pos.Y), DistanceUnit.INCH.fromCm(size.X), DistanceUnit.INCH.fromCm(size.Y));
         }
     }
 
     public static void AddLine(String str) {
-        if(Configs.GeneralSettings.TelemetryOn) {
+        if (Configs.GeneralSettings.TelemetryOn) {
             _telemetry.addLine(str);
             _packet.addLine(str);
         }
     }
 
+    public static void AddLines(String... strs) {
+        if (Configs.GeneralSettings.TelemetryOn) {
+            for (String i : strs)
+                AddLine(i + " ");
+        }
+    }
+
     public static void AddVal(String name, Object val) {
-        if(Configs.GeneralSettings.TelemetryOn) {
+        if (Configs.GeneralSettings.TelemetryOn) {
             _telemetry.addData(name, val);
             _packet.put(name, val);
         }

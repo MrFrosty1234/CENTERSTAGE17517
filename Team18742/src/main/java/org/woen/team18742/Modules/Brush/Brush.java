@@ -63,8 +63,6 @@ public class Brush implements IRobotModule {
     @Override
     public void Update() {
         double motorCurrent = brushMotor.getCurrent(CurrentUnit.AMPS);
-        ToolTelemetry.AddLine("brush = " + motorCurrent);
-        ToolTelemetry.AddLine("trueStatebrush = " + statebrush);
 
         if (!_lift.isDown() || _intake.isPixelGripped())
            changeState(BrushState.STATE_OFF);
