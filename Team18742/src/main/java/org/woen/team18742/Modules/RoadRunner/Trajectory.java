@@ -16,28 +16,35 @@ public class Trajectory {
         switch (startPos) {
             case BLUE_BACK: {
                 builder.brushDown(1)
-                        .strafeToLinearHeading(new Vector2d(-95, 95), -PI / 2)
+                        .strafeToLinearHeading(new Vector2d(-70, 105), -PI / 2)
                         //отпустить пиксель и щётки врубили и опустили
                         .brushOn()
                         .strafeToLinearHeading(new Vector2d(-95, 100), 0)
                         .strafeToLinearHeading(new Vector2d(-110, 95), 0)
                         .waitPixel()
-                        .liftUp(4)
+                        .strafeToLinearHeading(new Vector2d(20, 84), 0)
+                        .liftUp()
+                        .waitSeconds(0.7)
                         .strafeToLinearHeading(new Vector2d(100, 84), 0)
+                        .waitSeconds(0.5)
+                        //.waitLift()
+                        .pixelDeGripp()
+                        .waitSeconds(2)
+                        .strafeToLinearHeading(new Vector2d(-35, 100), 0)
+                        .waitSeconds(0.2)
+                        .brushOn()
+                        .brushDown()
+                        .strafeToLinearHeading(new Vector2d(-100, 95), 0)
+                        /*.waitPixel()
+                        .liftUp(4)
+                        .strafeToLinearHeading(new Vector2d(100, 89), 0)
                         .waitLift()
                         .brushOn(2)
                         .brushDown(3)
                         .pixelDeGripp()
                         .waitSeconds(2)
-                        .strafeToLinearHeading(new Vector2d(-94, 100), 0)
-                        .waitPixel()
-                        .liftUp(4)
-                        .strafeToLinearHeading(new Vector2d(100, 89), 0)
-                        .waitLift()
-                        .pixelDeGripp()
-                        .waitSeconds(2)
                         .strafeToLinearHeading(new Vector2d(120, 30), 0)
-                        .strafeToLinearHeading(new Vector2d(150, 30), 0);
+                        .strafeToLinearHeading(new Vector2d(150, 30), 0)*/;
 
                 break;
             }
