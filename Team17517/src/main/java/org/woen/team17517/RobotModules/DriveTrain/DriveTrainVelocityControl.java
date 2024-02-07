@@ -19,24 +19,24 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double voltage;
 
     public static double kdX = 0;
-    public static double kiX = 0.000005;
-    public static double kpX = 0.0000025;
+    public static double kiX = 0.0000012;
+    public static double kpX = 0.0000015;
 
     public static double kdRat = 0;
-    public static double kiRat = 0.000_00;//0_1;
-    public static double kpRat = 0.000;//3;
+    public static double kiRat = 0.0015;
+    public static double kpRat = 0.000008;
 
     public static double kdY  = 0;
-    public static double kiY = 0.000005;
-    public static double kpY = 0.0000025;
+    public static double kiY = 0.0000012;
+    public static double kpY = 0.0000014;
 
     public static  double maxIY = 0.03;
-    public static  double maxIRat = 0.01;
-    public static  double maxIX = 0.035;
+    public static  double maxIRat = 0.03;
+    public static  double maxIX = 0.03;
 
-    public static double ksRat = 0.000479;
-    public static double ksY = 0.00002;
-    public static double ksX = 0.00003;
+    public static double ksRat = 0.000025;
+    public static double ksY = 0.0000116;
+    public static double ksX = 0.000016;
     public static double kSlide = 1;
 
     public final double odToEnc = 98;

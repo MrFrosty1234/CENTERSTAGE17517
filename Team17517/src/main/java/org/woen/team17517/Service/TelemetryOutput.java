@@ -38,12 +38,12 @@ public class TelemetryOutput implements RobotModule {
 
     public void update(){
         if(lift) {
-            telemetry.addData("liftEncs", robot.transportPixels.lift.liftMotor.getCurrentPosition());
-            telemetry.addData("target",robot.transportPixels.lift.getTargetPosition().value);
-            telemetry.addData("lift pos",robot.transportPixels.lift.getTargetPosition());
-            telemetry.addData("lift mode", robot.transportPixels.lift.liftMode);
-            telemetry.addData("button", robot.transportPixels.lift.getUpSwitch());
-            telemetry.addData("get pos", robot.transportPixels.lift.isAtPosition());
+            telemetry.addData("liftEncs", robot.lift.liftMotor.getCurrentPosition());
+            telemetry.addData("target",robot.lift.getTargetPosition().value);
+            telemetry.addData("lift pos",robot.lift.getTargetPosition());
+            telemetry.addData("lift mode", robot.lift.liftMode);
+            telemetry.addData("button", robot.lift.getUpSwitch());
+            telemetry.addData("get pos", robot.lift.isAtPosition());
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.drivetrainNew.getTargets();
@@ -80,8 +80,8 @@ public class TelemetryOutput implements RobotModule {
             HashMap<String,Double> encoderMap = robot.driveTrainVelocityControl.getEncoders();
             HashMap<String,Double> powerMap = robot.driveTrainVelocityControl.getPowers();
             HashMap<String,Double> targetMap = robot.driveTrainVelocityControl.getTargets();
-            telemetry.addData("TargetY",targetMap.get("Y"));
-            telemetry.addData("TargetX",targetMap.get("X"));
+            telemetry.addData("TargetY",targetMap.get("targetY"));
+            telemetry.addData("TargetX",targetMap.get("targetX"));
             telemetry.addData("TargetH",targetMap.get("targetH"));
             telemetry.addData("SpeedY",encoderMap.get("yEnc"));
             telemetry.addData("SpeedX",encoderMap.get("xEnc"));

@@ -6,63 +6,49 @@ import org.woen.team17517.RobotModules.Transport.Lift.Lift;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 
-public class TransportPixels implements RobotModule {
-    public Lift lift;
-    public GrabberNew grabber;
+public class TransportPixels {
     UltRobot robot;
     public PixelsCount pixelsCount;
     public TransportPixels(UltRobot robot){
-        this.lift = robot.lift;
-        this.grabber = robot.grabber;
         this.pixelsCount = robot.pixelsCount;
     }
     public void finishGrabber(){
         robot.updateWhilePositionFalse(new Runnable[]{
-                ()->lift.moveUP(),
-                ()->grabber.finish(),
-                ()->grabber.open()
+                ()->robot.lift.moveUP(),
+                ()->robot.grabber.finish(),
+                ()->robot.grabber.open()
         });
     }
     public void safeGrabber(){
         robot.updateWhilePositionFalse(new Runnable[]{
-                ()-> grabber.close(),
-                ()-> grabber.safe()
+                ()-> robot.grabber.close(),
+                ()-> robot.grabber.safe()
         });
     }
     public void moveUp(){
         robot.updateWhilePositionFalse(new Runnable[]{
-                ()->grabber.close(),
-                ()->grabber.safe(),
-                ()->lift.moveUP()
+                ()->robot.grabber.close(),
+                ()->robot.grabber.safe(),
+                ()->robot.lift.moveUP()
         });
     }
     public void moveDown(){
         robot.updateWhilePositionFalse(new Runnable[]{
-                ()->grabber.open(),
-                ()->grabber.safe(),
-                ()->lift.moveDown(),
-                ()->grabber.down()
+                ()->robot.grabber.open(),
+                ()->robot.grabber.safe(),
+                ()->robot.lift.moveDown(),
+                ()->robot.grabber.down()
         });
     }
     public void stayLift(){
         robot.updateWhilePositionFalse(new Runnable[]{
-                ()->lift.setStopManualTarget()
+                ()->robot.lift.setStopManualTarget()
         });
     }
     public void eatPixels(){
         moveDown();
-        if(pixelsCount.isTwoPixelsCount()){
-            grabber.brushOut();
-        }else grabber.brushIn();
-    }
-    @Override
-    public boolean isAtPosition(){
-        return lift.isAtPosition()&&grabber.isAtPosition();
-    }
-
-    public void update() {
-        lift.update();
-        grabber.update();
-        pixelsCount.update();
+        if(robot.pixelsCount.isTwoPixelsCount()){
+            robot.grabber.brushOut();
+        }else robot.grabber.brushIn();
     }
 }
