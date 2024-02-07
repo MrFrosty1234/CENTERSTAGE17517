@@ -18,17 +18,30 @@ public class AutnomModules {
     }
     public void bacBoardPixels(){
         robot.updateWhilePositionFalse(new Runnable[]{
-                ()-> robot.transportPixels.moveUp(),
-                ()-> robot.transportPixels.finishGrabber(),
-                ()-> robot.transportPixels.safeGrabber(),
-                ()-> robot.transportPixels.moveDown()
+                ()->robot.grabber.close(),
+                ()->robot.grabber.safe(),
+                ()->robot.lift.moveUP(),
+                ()->robot.lift.moveUP(),
+                ()->robot.grabber.finish(),
+                ()->robot.grabber.open(),
+                ()-> robot.grabber.close(),
+                ()-> robot.grabber.safe(),
+                ()->robot.grabber.open(),
+                ()->robot.grabber.safe(),
+                ()->robot.lift.moveDown(),
+                ()->robot.grabber.down()
         });
     }
     public void eatPixels(){
         robot.updateWhilePositionFalse(new Runnable[]{
-                ()->robot.transportPixels.eatPixels(),
+                ()->robot.grabber.brushIn(),
                 ()->robot.timer.getTimeForTimer(1),
-                ()->robot.transportPixels.grabber.brushOff()
+                ()->robot.grabber.close(),
+                ()->robot.timer.getTimeForTimer(0.1),
+                ()->robot.grabber.brushOut(),
+                ()->robot.timer.getTimeForTimer(1),
+                ()->robot.grabber.brushOff(),
+                ()->robot.timer.getTimeForTimer(0.1),
         });
     }
 }

@@ -10,6 +10,7 @@ public class AutonomBlueNearBack extends LinearOpMode {
     UltRobot robot;
     public void runOpMode() {
         robot = new UltRobot(this);
+        waitForStart();
         robot.autnomModules.Move(-24000, -24000, 0, 1);
         robot.autnomModules.bacBoardPixels();
         robot.autnomModules.Move(-20000, -24000, 0, 1);

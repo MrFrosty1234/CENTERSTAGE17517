@@ -74,10 +74,10 @@ public class TeleOPNew extends LinearOpMode {
             }
 
             if(liftDownMan){
-                robot.transportPixels.lift.setManualTargetDown();
+                robot.lift.setManualTargetDown();
             }else if (liftUpMan) {
-                robot.transportPixels.lift.setManualTargetUp();
-            }else if (robot.transportPixels.lift.liftMode==LiftMode.MANUALLIMIT){
+                robot.lift.setManualTargetUp();
+            }else if (robot.lift.liftMode==LiftMode.MANUALLIMIT){
                 robot.transportPixels.stayLift();
             }
 

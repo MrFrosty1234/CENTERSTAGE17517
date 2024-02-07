@@ -48,15 +48,15 @@ public class UltRobot {
 
     public UltRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
-        autnomModules  = new AutnomModules(this);
         devices = new Devices(this);
         telemetryOutput = new TelemetryOutput(this);
         timer = new Timer(this);
-        transportPixels = new TransportPixels(this);
-        voltageSensorPoint = new VoltageSensorPoint(this);
-        grabber = new GrabberNew(this);
         lift = new Lift(this);
+        grabber = new GrabberNew(this);
         pixelsCount = new PixelsCount(this);
+        transportPixels = new TransportPixels(this);
+        autnomModules  = new AutnomModules(this);
+        voltageSensorPoint = new VoltageSensorPoint(this);
         driveTrainVelocityControl = new DriveTrainVelocityControl(this);
         gyro = new Gyro(this);
         lighting = new Lighting(this);
@@ -66,7 +66,7 @@ public class UltRobot {
         odometryNew = new OdometryNew(this);
         driveTrain = new DriveTrain(this);
         this.robotModules = new RobotModule[]{telemetryOutput,timer, voltageSensorPoint,
-                 driveTrainVelocityControl, transportPixels, gyro, lighting, odometryNew, drivetrainNew};
+                 driveTrainVelocityControl,lift,grabber,pixelsCount, gyro, lighting, odometryNew, drivetrainNew};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }
@@ -84,22 +84,10 @@ public class UltRobot {
         }
     }
 
-    public static void updateOneWhileOneRobotModule(RobotModule run , Runnable [] runnables){
-        for (Runnable runnable : runnables){
-            runnable.run();
-            run.update();
-
-            while(!run.isAtPosition()){
-                run.update();
-            }
-        }
-
-    }
     public void updateWhilePositionFalse(Runnable[] runnables){
         for (Runnable runnable : runnables){
             runnable.run();
             allUpdate();
-
 
 
             while(!isAtPositionAll() && linearOpMode.opModeIsActive()){

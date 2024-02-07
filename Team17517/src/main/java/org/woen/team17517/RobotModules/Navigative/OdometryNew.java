@@ -19,7 +19,7 @@ public class OdometryNew implements RobotModule {
         odometrLeftY =  robot.devices.odometrLeft;
 
         right_front_drive = robot.devices.right_front_drive;
-        odometrX = robot.devices.left_back_drive;
+        odometrX = robot.devices.right_back_drive;
 
         voltage = 12;
 
