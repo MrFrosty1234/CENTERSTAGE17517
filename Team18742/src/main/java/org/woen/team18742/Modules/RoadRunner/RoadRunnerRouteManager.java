@@ -277,6 +277,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder waitLift() {
+            _builder = _builder.endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _lift.isATarget());
             });
@@ -293,6 +294,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder waitPixel() {
+            _builder = _builder.endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _intake.isPixelGripped());
             });
@@ -321,6 +323,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder PidMove(ArrayList<Runnable> route) {
+            _builder = _builder.endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
                 _automaticPid.Start(route);
             });
