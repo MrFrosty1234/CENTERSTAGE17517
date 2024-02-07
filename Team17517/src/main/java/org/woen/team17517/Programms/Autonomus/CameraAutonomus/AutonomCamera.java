@@ -3,8 +3,6 @@ package org.woen.team17517.Programms.Autonomus.CameraAutonomus;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.woen.team17517.Programms.Autonomus.OldAutonomus.AutonomBaseClass;
-import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
 
@@ -24,7 +22,7 @@ public class AutonomCamera extends LinearOpMode {
     boolean rightTriger = false;
     Button rigtTrigerButton = new Button();
     StartTeam startTeam = StartTeam.BlUE;
-    StartPosition startPosition = StartPosition.RIGHT;
+    StartPosition startPosition = StartPosition.NEAR_BACKBOARD;
     @Override
     public void waitForStart() {
         long  timeToSleep= 0;
@@ -43,10 +41,10 @@ public class AutonomCamera extends LinearOpMode {
                 startTeam = StartTeam.RED;
             }
             if (dpadLeftButton.update(dpadLeft)){
-                startPosition = StartPosition.LEFT;
+                startPosition = StartPosition.FAR_BACKBOARD;
             }
             if (dpadRightButton.update(dpadRight)){
-                startPosition = StartPosition.RIGHT;
+                startPosition = StartPosition.NEAR_BACKBOARD;
             }
             if (rightBumperButton.update(rightBumper)){
                 timeToSleep += 1000;
@@ -69,8 +67,8 @@ public class AutonomCamera extends LinearOpMode {
         RED
     }
     enum StartPosition{
-        RIGHT,
-        LEFT
+        NEAR_BACKBOARD,
+        FAR_BACKBOARD
     }
 
     public void runOpMode() {
@@ -83,16 +81,54 @@ public class AutonomCamera extends LinearOpMode {
                 robot.autnomModules.Move(0,-25000,0,1);
                 break;
             case LEFT:
-                robot.autnomModules.Move(0,24000,4000,0);
-                robot.autnomModules.Move(0,-24000,-4000,0);
+                robot.autnomModules.Move(0,24000,4000,1);
+                robot.autnomModules.Move(0,-24000,-4000,1);
                 break;
             case RIGHT:
-                robot.autnomModules.Move(0,24000,-4000,0);
-                robot.autnomModules.Move(0,-24000,4000,0);
+                robot.autnomModules.Move(0,24000,-4000,1);
+                robot.autnomModules.Move(0,-24000,4000,1);
                 break;
         }
         switch (startTeam){
             case RED:
+                switch (startPosition){
+                    case FAR_BACKBOARD:
+                    break;
+                    case NEAR_BACKBOARD:
+                    break;
+                }
+            break;
+            case BlUE:
+                switch (startPosition){
+                    case FAR_BACKBOARD:
+                        robot.autnomModules.Move(24000,0,0,1);
+                        robot.autnomModules.Move(0,24000,0,1);
+                        robot.autnomModules.eatPixels();
+                        robot.autnomModules.Move(0,24000,0,1);
+                        robot.autnomModules.Move(0,0,6000,1);
+                        robot.autnomModules.Move(0,12000,0,1);
+                        robot.autnomModules.Move(0,12000,0,1);
+                        robot.autnomModules.Move(0,-25000,0,5);
+                        robot.autnomModules.Move(24000,0,0,1);
+                        robot.autnomModules.Move(0,-12000,0,3);
+                        robot.autnomModules.bacBoardPixels();
+                    break;
+                    case NEAR_BACKBOARD:
+                        robot.autnomModules.Move(24000,0,0,1);
+                        robot.autnomModules.Move(0,24000,0,1);
+                        robot.autnomModules.Move(0,0,6000,1);
+                        robot.autnomModules.Move(0,-24000,0,2);
+                        robot.autnomModules.bacBoardPixels();
+                        robot.autnomModules.Move(-24000,24000,0,1);
+                        robot.autnomModules.Move(0,30000,0,5);
+                        robot.autnomModules.eatPixels();
+                        robot.autnomModules.Move(0,-30000,0,5);
+                        robot.autnomModules.Move(24000,-24000,0,1);
+                        robot.autnomModules.Move(0,-24000,0,0.5);
+                        robot.autnomModules.bacBoardPixels();
+                        break;
+                }
+            break;
         }
 
     }
