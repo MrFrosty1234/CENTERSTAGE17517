@@ -93,7 +93,5 @@ public class StaksBrush implements IRobotModule {
         } else {
             stop();
         }
-        ToolTelemetry.AddLine("trueStateStacksbrush = " + _Brush.trueStateBrush);
-
     }
 }

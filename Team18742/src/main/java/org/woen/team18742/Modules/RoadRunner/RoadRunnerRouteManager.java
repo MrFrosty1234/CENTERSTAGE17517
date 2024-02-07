@@ -45,6 +45,7 @@ import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Modules.PidRunner.PidRouteManager;
 import org.woen.team18742.Modules.StartRobotPosition;
 import org.woen.team18742.Tools.Bios;
+import org.woen.team18742.Tools.Color;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Timers.ElapsedTimeExtra;
 import org.woen.team18742.Tools.ToolTelemetry;
@@ -148,7 +149,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         private final double _duration;
         private ElapsedTimeExtra trajectoryTimer = null;
 
-        private double xPoints[], yPoints[];
+        private double[] xPoints, yPoints;
 
         public TrajectoryAction(TimeTurn t) {
             _timeTrajectory = Optional.empty();
@@ -181,20 +182,6 @@ public class RoadRunnerRouteManager implements IRobotModule {
                 trajectoryTimer.reset();
             }
 
-            if (_waiters.size() > 0) { //sps midnight
-                for (BooleanSupplier i : _waiters)
-                    if (i.getAsBoolean())
-                        _waiters.remove(i);
-
-                _driveTrain.Stop();
-
-                trajectoryTimer.pause();
-
-                return true;
-            }
-            else
-                trajectoryTimer.start();
-
             double time = trajectoryTimer.seconds();
 
             if (time >= _duration) {
@@ -212,16 +199,30 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
             _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
-            ToolTelemetry.GetCanvas().setStroke("#4CAF50FF");
+            ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
             ToolTelemetry.GetCanvas().setStrokeWidth(1);
             ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+
+            if (_waiters.size() > 0) { //sps midnight
+                for (BooleanSupplier i : _waiters)
+                    if (i.getAsBoolean())
+                        _waiters.remove(i);
+
+                _driveTrain.Stop();
+
+                trajectoryTimer.pause();
+
+                return true;
+            }
+            else
+                trajectoryTimer.start();
 
             return true;
         }
 
         @Override
         public void preview(@NonNull Canvas fieldOverlay) {
-            ToolTelemetry.GetCanvas().setStroke("#4CAF507A");
+            ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
             ToolTelemetry.GetCanvas().setStrokeWidth(1);
             ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
         }
