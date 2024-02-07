@@ -93,8 +93,29 @@ public class AutonomCamera extends LinearOpMode {
             case RED:
                 switch (startPosition){
                     case FAR_BACKBOARD:
+                        robot.autnomModules.Move(-24000,0,0,1);
+                        robot.autnomModules.Move(0,24000,0,1);
+                        robot.autnomModules.eatPixels();
+                        robot.autnomModules.Move(0,24000,0,1);//примерно 1 плитка
+                        robot.autnomModules.Move(0,0,-6000,1); // 90 градусов
+                        robot.autnomModules.Move(0,12000,0,1);// выравнивание
+                        robot.autnomModules.Move(0,-24000,0,5);
+                        robot.autnomModules.Move(-24000,24000,0,1);
+                        robot.autnomModules.Move(0,-12000,0,3);
+                        robot.autnomModules.bacBoardPixels();
                     break;
                     case NEAR_BACKBOARD:
+                        robot.autnomModules.Move(24000,0,0,1);
+                        robot.autnomModules.Move(0,24000,0,1);
+                        robot.autnomModules.Move(0,0,-6000,1);
+                        robot.autnomModules.Move(0,-24000,0,2);
+                        robot.autnomModules.bacBoardPixels();
+                        robot.autnomModules.Move(24000,24000,0,1);
+                        robot.autnomModules.Move(0,24000,0,5);
+                        robot.autnomModules.eatPixels();
+                        robot.autnomModules.Move(0,-24000,0,5);
+                        robot.autnomModules.Move(-24000,-24000,0,1.5);
+                        robot.autnomModules.bacBoardPixels();
                     break;
                 }
             break;
@@ -104,27 +125,25 @@ public class AutonomCamera extends LinearOpMode {
                         robot.autnomModules.Move(24000,0,0,1);
                         robot.autnomModules.Move(0,24000,0,1);
                         robot.autnomModules.eatPixels();
-                        robot.autnomModules.Move(0,24000,0,1);
-                        robot.autnomModules.Move(0,0,6000,1);
-                        robot.autnomModules.Move(0,12000,0,1);
-                        robot.autnomModules.Move(0,12000,0,1);
-                        robot.autnomModules.Move(0,-25000,0,5);
-                        robot.autnomModules.Move(24000,0,0,1);
+                        robot.autnomModules.Move(0,24000,0,1);//примерно 1 плитка
+                        robot.autnomModules.Move(0,0,6000,1); // 90 градусов
+                        robot.autnomModules.Move(0,12000,0,1);// выравнивание
+                        robot.autnomModules.Move(0,-24000,0,5);
+                        robot.autnomModules.Move(24000,24000,0,1);
                         robot.autnomModules.Move(0,-12000,0,3);
                         robot.autnomModules.bacBoardPixels();
                     break;
                     case NEAR_BACKBOARD:
-                        robot.autnomModules.Move(24000,0,0,1);
+                        robot.autnomModules.Move(-24000,0,0,1);
                         robot.autnomModules.Move(0,24000,0,1);
                         robot.autnomModules.Move(0,0,6000,1);
                         robot.autnomModules.Move(0,-24000,0,2);
                         robot.autnomModules.bacBoardPixels();
                         robot.autnomModules.Move(-24000,24000,0,1);
-                        robot.autnomModules.Move(0,30000,0,5);
+                        robot.autnomModules.Move(0,24000,0,5);
                         robot.autnomModules.eatPixels();
-                        robot.autnomModules.Move(0,-30000,0,5);
-                        robot.autnomModules.Move(24000,-24000,0,1);
-                        robot.autnomModules.Move(0,-24000,0,0.5);
+                        robot.autnomModules.Move(0,-24000,0,5);
+                        robot.autnomModules.Move(24000,-24000,0,1.5);
                         robot.autnomModules.bacBoardPixels();
                         break;
                 }
