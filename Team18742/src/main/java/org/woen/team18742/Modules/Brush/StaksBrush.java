@@ -33,11 +33,17 @@ public class StaksBrush implements IRobotModule {
     }
 
     private void normalRun() {
+        leftStacksBrush.setPwmEnable();
+        rightStacksBrush.setPwmEnable();
+
         leftStacksBrush.setPosition(Configs.StackBrush.LEFT_SERVO_FWD);
         rightStacksBrush.setPosition(Configs.StackBrush.RIGHT_SERVO_FWD);
     }
 
     private void reversRun() {
+        leftStacksBrush.setPwmEnable();
+        rightStacksBrush.setPwmEnable();
+
         leftStacksBrush.setPosition(Configs.StackBrush.LEFT_SERVO_REV);
         rightStacksBrush.setPosition(Configs.StackBrush.RIGHT_SERVO_REV);
     }
