@@ -9,34 +9,35 @@ import org.woen.team17517.Service.RobotModule;
 public class TransportPixels implements RobotModule {
     public Lift lift;
     public GrabberNew grabber;
+    UltRobot robot;
     public PixelsCount pixelsCount;
-    public TransportPixels(Lift lift, GrabberNew grabber, PixelsCount pixelsCount){
-        this.lift = lift;
-        this.grabber = grabber;
-        this.pixelsCount = pixelsCount;
+    public TransportPixels(UltRobot robot){
+        this.lift = robot.lift;
+        this.grabber = robot.grabber;
+        this.pixelsCount = robot.pixelsCount;
     }
     public void finishGrabber(){
-        UltRobot.updateOneWhileOneRobotModule(this,new Runnable[]{
+        robot.updateWhilePositionFalse(new Runnable[]{
                 ()->lift.moveUP(),
                 ()->grabber.finish(),
                 ()->grabber.open()
         });
     }
     public void safeGrabber(){
-        UltRobot.updateOneWhileOneRobotModule(grabber,new Runnable[]{
+        robot.updateWhilePositionFalse(new Runnable[]{
                 ()-> grabber.close(),
                 ()-> grabber.safe()
         });
     }
     public void moveUp(){
-        UltRobot.updateOneWhileOneRobotModule(this, new Runnable[]{
+        robot.updateWhilePositionFalse(new Runnable[]{
                 ()->grabber.close(),
                 ()->grabber.safe(),
                 ()->lift.moveUP()
         });
     }
     public void moveDown(){
-        UltRobot.updateOneWhileOneRobotModule(this,new Runnable[]{
+        robot.updateWhilePositionFalse(new Runnable[]{
                 ()->grabber.open(),
                 ()->grabber.safe(),
                 ()->lift.moveDown(),
@@ -44,7 +45,7 @@ public class TransportPixels implements RobotModule {
         });
     }
     public void stayLift(){
-        UltRobot.updateOneWhileOneRobotModule(this,new Runnable[]{
+        robot.updateWhilePositionFalse(new Runnable[]{
                 ()->lift.setStopManualTarget()
         });
     }

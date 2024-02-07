@@ -28,9 +28,9 @@ public class UltRobot {
     public DriveTrain driveTrain;
     public DrivetrainNew drivetrainNew;
     public TransportPixels transportPixels;
-    private Lift lift;
+    public Lift lift;
     public GrabberNew grabber;
-    private PixelsCount pixelsCount;
+    public PixelsCount pixelsCount;
     public Lighting lighting;
     public VoltageSensorPoint voltageSensorPoint;
     public LinearOpMode linearOpMode;
@@ -52,7 +52,7 @@ public class UltRobot {
         devices = new Devices(this);
         telemetryOutput = new TelemetryOutput(this);
         timer = new Timer(this);
-        transportPixels = new TransportPixels(lift, grabber,pixelsCount);
+        transportPixels = new TransportPixels(this);
         voltageSensorPoint = new VoltageSensorPoint(this);
         grabber = new GrabberNew(this);
         lift = new Lift(this);
