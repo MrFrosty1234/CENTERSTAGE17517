@@ -263,7 +263,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftUp(double ds) {
-            _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_UPPER));
+            _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
             return this;
         }
 
