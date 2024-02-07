@@ -16,8 +16,6 @@ import org.woen.team17517.RobotModules.Navigative.Gyro;
 import org.woen.team17517.RobotModules.Navigative.OdometryNew;
 import org.woen.team17517.RobotModules.OpenCV.TestAprilTagPipeline;
 import java.util.List;
-
-import org.woen.team17517.RobotModules.Transport.TransportPixels;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.TelemetryOutput;
 import org.woen.team17517.Service.Timer;
@@ -27,7 +25,6 @@ import org.woen.team17517.Service.VoltageSensorPoint;
 public class UltRobot {
     public DriveTrain driveTrain;
     public DrivetrainNew drivetrainNew;
-    public TransportPixels transportPixels;
     public Lift lift;
     public GrabberNew grabber;
     public PixelsCount pixelsCount;
@@ -54,7 +51,6 @@ public class UltRobot {
         lift = new Lift(this);
         grabber = new GrabberNew(this);
         pixelsCount = new PixelsCount(this);
-        transportPixels = new TransportPixels(this);
         autnomModules  = new AutnomModules(this);
         voltageSensorPoint = new VoltageSensorPoint(this);
         driveTrainVelocityControl = new DriveTrainVelocityControl(this);

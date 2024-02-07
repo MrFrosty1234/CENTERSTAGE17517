@@ -54,15 +54,30 @@ public class TeleOPNew extends LinearOpMode {
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed*30000, forwardSpeed*30000, angleSpeed*30000);
 
             if (liftUpBut.update(liftUpAuto)) {
-                robot.transportPixels.moveUp();
+                robot.updateWhilePositionFalse(new Runnable[]{
+                        ()->robot.grabber.close(),
+                        ()->robot.grabber.safe(),
+                        ()->robot.lift.moveUP()});
             }else if (liftDownBut.update(liftDownAuto)) {
-                robot.transportPixels.moveDown();
+                robot.updateWhilePositionFalse(new Runnable[]{
+                        ()->robot.grabber.open(),
+                        ()->robot.grabber.safe(),
+                        ()->robot.lift.moveDown(),
+                        ()->robot.grabber.down()
+                });
             }
 
             if (openAndFinishGrabberBut.update(openAndFinishGrabber)){
-                robot.transportPixels.finishGrabber();
-            }else if (closeAndSAfeGrabberBut.update(closeAndSafeGrabber)) {
-                robot.transportPixels.safeGrabber();
+                robot.updateWhilePositionFalse(new Runnable[]{
+                        ()->robot.lift.moveUP(),
+                        ()->robot.grabber.finish(),
+                        ()->robot.grabber.open()
+                });}
+            else if (closeAndSAfeGrabberBut.update(closeAndSafeGrabber)) {
+                robot.updateWhilePositionFalse(new Runnable[]{
+                        ()-> robot.grabber.close(),
+                        ()-> robot.grabber.safe()
+                });
             }
 
             if (brushIn){
@@ -78,7 +93,7 @@ public class TeleOPNew extends LinearOpMode {
             }else if (liftUpMan) {
                 robot.lift.setManualTargetUp();
             }else if (robot.lift.liftMode==LiftMode.MANUALLIMIT){
-                robot.transportPixels.stayLift();
+                robot.lift.setStopManualTarget();
             }
 
             if(aimPlaneBut.update(aimPlane)){
