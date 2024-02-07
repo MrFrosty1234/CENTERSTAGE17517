@@ -46,8 +46,6 @@ public class Manual implements IRobotModule {
 
     @Override
     public void Update() {
-        _plane.Update();
-
         if(_lift.isDown()) {
             _drivetrain.SimpleDriveDirection(
                     new Vector2(-_gamepad.left_stick_y, -_gamepad.left_stick_x),
@@ -75,7 +73,7 @@ public class Manual implements IRobotModule {
         if (grip && !_gripOld) {
             _intake.releaseGripper();
         }
-        ToolTelemetry.AddLine("brushon = " + brushOn);
+
         if (brushOn) {
             if (!_brush.isBrusnOn()) {
                 _brush.BrushEnable();

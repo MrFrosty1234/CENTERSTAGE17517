@@ -151,8 +151,8 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 2.44;
-        public static double Lateral = 2.44;
+        public static double Axial = 2.54;
+        public static double Lateral = 2.54;
         public static double Heading = 5.3;
     }
 

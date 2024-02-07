@@ -41,7 +41,7 @@ public class OdometrsOdometry implements IRobotModule {
 
         Speed.X = (odometrSpeedXLeft + odometrSpeedXRight) / 2;
 
-        Speed.Y = odometrSpeedY - Configs.Odometry.RadiusOdometrY * Gyroscope.ChopAngle(_gyro.GetRadians() - _oldRotate);
+        Speed.Y = odometrSpeedY - Configs.Odometry.RadiusOdometrY * _gyro.GetSpeedRadians();
 
         _oldOdometrXLeft = odometrXLeft;
         _oldOdometrXRight = odometrXRight;
