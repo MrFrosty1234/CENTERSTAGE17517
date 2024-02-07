@@ -34,10 +34,6 @@ public class AutonomBaseClass extends LinearOpMode{
     boolean rightTriger = false;
     Button rigtTrigerButton = new Button();
     PipeLine pipeLine;
-
-    int positionEllment = 0;
-
-    Button button = new Button();
     StartTeam startTeam = StartTeam.BlUE;
     StartPosition startPosition = StartPosition.RIGHT;
     @Override
