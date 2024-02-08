@@ -12,7 +12,6 @@ import org.woen.team18742.Tools.Configs.Configs;
 public class EnableCompetitions extends LinearOpMode {
     @Override
     public void runOpMode() {
-
         OpModeManagerImpl.getOpModeManagerOfActivity(AppUtil.getInstance().getActivity()).startActiveOpMode();
         waitForStart();
         if (opModeIsActive()) {

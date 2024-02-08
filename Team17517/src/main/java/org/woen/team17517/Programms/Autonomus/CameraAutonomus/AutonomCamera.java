@@ -3,6 +3,9 @@ package org.woen.team17517.Programms.Autonomus.CameraAutonomus;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
 
@@ -23,6 +26,7 @@ public class AutonomCamera extends LinearOpMode {
     Button rigtTrigerButton = new Button();
     StartTeam startTeam = StartTeam.BlUE;
     StartPosition startPosition = StartPosition.NEAR_BACKBOARD;
+    PipeLine pipeLine;
     @Override
     public void waitForStart() {
         long  timeToSleep= 0;
@@ -73,8 +77,20 @@ public class AutonomCamera extends LinearOpMode {
 
     public void runOpMode() {
         robot = new UltRobot(this);
+        pipeLine = new PipeLine();
+        robot = new UltRobot(this);
+        VisionPortal visionPortal;
+
+        visionPortal = new VisionPortal.Builder().setCamera(hardwareMap.get(WebcamName.class, "Webcam 1")).addProcessors(pipeLine).build();
+
         waitForStart();
-        ElementPosition elementPos = ElementPosition.FRONT;///HERE
+        ElementPosition elementPos = ElementPosition.NOTFIND;
+        if (pipeLine.pos == 1)
+            elementPos = ElementPosition.LEFT;
+        if (pipeLine.pos == 2)
+            elementPos = ElementPosition.FRONT;
+        if (pipeLine.pos == 3)
+            elementPos = ElementPosition.RIGHT;
         switch (elementPos){
             case FRONT:
                 robot.autnomModules.Move(0,24000,0,1);

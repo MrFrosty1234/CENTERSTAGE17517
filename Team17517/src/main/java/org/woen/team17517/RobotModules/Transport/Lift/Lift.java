@@ -51,6 +51,14 @@ public class Lift implements RobotModule {
         this.targetPosition = LiftPosition.DOWN;
         setLiftMode(LiftMode.AUTO);
     }
+    public void moveToYellowPixel(){
+        this.targetPosition = LiftPosition.YELLOWPIXEL;
+        setLiftMode(LiftMode.AUTO);
+    }
+    public void moveToWhitePixel(){
+        this.targetPosition = LiftPosition.WHITEPIXEL;
+        setLiftMode(LiftMode.AUTO);
+    }
     private int encoderPosition = 0;
 
     public int getEncoderPosition() {
@@ -95,6 +103,14 @@ public class Lift implements RobotModule {
                         liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
                         setPower(liftPower);
                         break;
+                    case YELLOWPIXEL:
+                        liftAtTaget = getEncoderPosition() == LiftPosition.YELLOWPIXEL.value;
+                        liftPower = liftAtTaget ? liftGravityPower : liftPower;
+                        setPower(liftPower);
+                    case WHITEPIXEL:
+                        liftAtTaget = getEncoderPosition() == LiftPosition.WHITEPIXEL.value;
+                        liftPower = liftAtTaget ? liftGravityPower : liftPower;
+                        setPower(liftPower);
                     default:
                         liftAtTaget = true;
                         liftPower = 0;

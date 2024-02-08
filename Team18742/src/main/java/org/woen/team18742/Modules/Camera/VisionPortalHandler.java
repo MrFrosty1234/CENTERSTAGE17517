@@ -12,6 +12,7 @@ import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Modules.Odometry.CVOdometry;
+import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 
 @Module
@@ -25,7 +26,8 @@ public class VisionPortalHandler implements IRobotModule {
 
             _visualPortal = new VisionPortal.Builder().addProcessors((VisionProcessor) video, collector.GetModule(CVOdometry.class).GetProcessor()).setCamera(Devices.Camera).build();
 
-            FtcDashboard.getInstance().startCameraStream(video, 15);
+            if(Configs.GeneralSettings.TelemetryOn)
+                FtcDashboard.getInstance().startCameraStream(video, 15);
         }
         else
             _visualPortal = new VisionPortal.Builder().addProcessors(collector.GetModule(CVOdometry.class).GetProcessor()).setCamera(Devices.Camera).build();
