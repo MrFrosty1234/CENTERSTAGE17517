@@ -2,13 +2,13 @@ package org.woen.team17517.NotUsedCode;
 
 import static java.lang.Math.abs;
 
-public class PidRegulator { //TODO Feedforward
+public class PidRegulator {
     double kP = 0;
     double kI = 0;
     double kD = 0;
     double ui = 0;
     double errold;
-    double told; //TODO ElapsedTimeA
+    double told;
     double u_max;
 
     public PidRegulator(double p, double i, double d, double u_max) {
@@ -29,7 +29,7 @@ public class PidRegulator { //TODO Feedforward
         double time = System.currentTimeMillis() / 1000.0;
         double up = err * kP;
         ui += (err * kI) * (time - told);
-        if (abs(ui) > u_max) { //TODO parameter
+        if (abs(ui) > u_max) {
             ui = u_max;
         }
         double ud = (err - errold) * kD / (time - told);

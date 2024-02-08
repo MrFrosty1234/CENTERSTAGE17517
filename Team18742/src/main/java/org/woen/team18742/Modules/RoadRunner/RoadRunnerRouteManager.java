@@ -199,9 +199,11 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
             _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
 
-            ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
-            ToolTelemetry.GetCanvas().setStrokeWidth(1);
-            ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+            if(Configs.GeneralSettings.TelemetryOn) {
+                ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
+                ToolTelemetry.GetCanvas().setStrokeWidth(1);
+                ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+            }
 
             if (_waiters.size() > 0) { //sps midnight
                 for (BooleanSupplier i : _waiters)
@@ -222,9 +224,11 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
         @Override
         public void preview(@NonNull Canvas fieldOverlay) {
-            ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
-            ToolTelemetry.GetCanvas().setStrokeWidth(1);
-            ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+            if(Configs.GeneralSettings.TelemetryOn) {
+                ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
+                ToolTelemetry.GetCanvas().setStrokeWidth(1);
+                ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
+            }
         }
     }
 

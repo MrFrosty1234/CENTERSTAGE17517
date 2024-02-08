@@ -24,24 +24,24 @@ public class AutnomModules {
                 ()->robot.lift.moveUP(),
                 ()->robot.grabber.finish(),
                 ()->robot.grabber.open(),
-                ()-> robot.grabber.close(),
-                ()-> robot.grabber.safe(),
+                ()->robot.grabber.close(),
+                ()->robot.grabber.safe(),
                 ()->robot.grabber.open(),
                 ()->robot.grabber.safe(),
                 ()->robot.lift.moveDown(),
                 ()->robot.grabber.down()
         });
     }
-    public void eatPixels(){
+    public void eatPixels() {
         robot.updateWhilePositionFalse(new Runnable[]{
-                ()->robot.grabber.brushIn(),
-                ()->robot.timer.getTimeForTimer(1),
-                ()->robot.grabber.close(),
-                ()->robot.timer.getTimeForTimer(0.1),
-                ()->robot.grabber.brushOut(),
-                ()->robot.timer.getTimeForTimer(1),
-                ()->robot.grabber.brushOff(),
-                ()->robot.timer.getTimeForTimer(0.1),
+                () -> robot.grabber.brushIn(),
+                () -> robot.timer.getTimeForTimer(1),
+                () -> robot.grabber.close(),
+                () -> robot.timer.getTimeForTimer(0.1),
+                () -> robot.grabber.brushOut(),
+                () -> robot.timer.getTimeForTimer(1),
+                () -> robot.grabber.brushOff(),
+                () -> robot.timer.getTimeForTimer(0.1),
         });
     }
 }

@@ -151,15 +151,15 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 2.54;
-        public static double Lateral = 2.54;
+        public static double Axial = 2.49;
+        public static double Lateral = 2.49;
         public static double Heading = 5.3;
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 0.11;
-        public static double Lateral = 0.11;
+        public static double Axial = 0.21;
+        public static double Lateral = 0.21;
         public static double Heading = 0.05;
     }
 

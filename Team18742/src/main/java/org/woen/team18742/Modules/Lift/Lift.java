@@ -61,7 +61,7 @@ public class Lift implements IRobotModule {
         else {
             if (!_endingDownState) {
                 if(isProchelnugnoepologenie())
-                    _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER);
+                    _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER * (_liftMotor.getCurrentPosition() / Configs.Lift.isProchelnugnoepologenie));
                 else
                     _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER_FAST);
             }
