@@ -43,18 +43,24 @@ public class Intake implements IRobotModule {
     private boolean _oldTurnPos = false;
 
     public void updateTurner() {
-        if(_lift.isProchelnugnoepologenie()){
+        if (_lift.isProchelnugnoepologenie()) {
             servoTurn.setPosition(Configs.Intake.servoTurnTurned);
 
             _isTurned = false;
 
             _oldTurnPos = true;
-        }
-        else {
+        } else {
             servoTurn.setPosition(Configs.Intake.servoTurnNormal);
 
-            if(_oldTurnPos){
-                _normalTimer.Start(500, ()->_isTurned = true);
+            if (_oldTurnPos) {
+                double pos = clamp.getPosition();
+
+                clamp.setPosition(Configs.Intake.servoClampReleasedLift);
+
+                _normalTimer.Start(500, () -> {
+                    _isTurned = true;
+                    clamp.setPosition(pos);
+                });
             }
 
             _oldTurnPos = false;

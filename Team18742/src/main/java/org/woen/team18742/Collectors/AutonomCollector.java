@@ -2,6 +2,7 @@ package org.woen.team18742.Collectors;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.jetbrains.annotations.NotNull;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.StartRobotPosition;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public class AutonomCollector extends BaseCollector {
     private static ArrayList<Class<?>> _annotatedClass;
 
-    public AutonomCollector(LinearOpMode robot) {
+    public AutonomCollector(@NotNull LinearOpMode robot) {
         super(robot);
 
         if(_annotatedClass == null)

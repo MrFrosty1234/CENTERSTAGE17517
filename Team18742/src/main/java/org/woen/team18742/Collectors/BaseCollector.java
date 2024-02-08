@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.jetbrains.annotations.NotNull;
 import org.woen.team18742.Modules.Manager.BulkInit;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
@@ -29,10 +30,10 @@ public class BaseCollector {
 
     private static ArrayList<Class<?>> _annotatedClass;
 
-    private TimerHandler _timers;
-    private MotorsHandler _motors;
+    private final TimerHandler _timers;
+    private final MotorsHandler _motors;
 
-    public BaseCollector(LinearOpMode robot) {
+    public BaseCollector(@NotNull LinearOpMode robot) {
         Robot = robot;
 
         _timers = new TimerHandler();

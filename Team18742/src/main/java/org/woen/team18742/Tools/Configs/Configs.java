@@ -129,11 +129,12 @@ public class Configs {
     public static class Intake{
         public static double pixelSensorvoltage = 0.128, PixelCenterOpen = 0.72;//0.4 pixelSensorVoltage = 0.15
         public static double servoTurnNormal = 0.68;
-        public static final double servoTurnTurned = 0.06 ;
+        public static final double servoTurnTurned = 0.06;
         public static double servoGripperNormal = 0.95;
         public static double servoGripperGripped = 0.765;
         public static double servoClampClamped = 0.65;
-        public static double servoClampReleased = 0.47;//0.38? //TODO THIS BREAKS THE ROBOT WHEN GOING THROUGH TRUSS
+        public static double servoClampReleased = 0.47;
+        public static double servoClampReleasedLift = 0.37;
         public static double pixelDetectTimeMs = 235;
     }
 
