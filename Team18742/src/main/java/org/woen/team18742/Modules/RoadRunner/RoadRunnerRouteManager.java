@@ -25,6 +25,7 @@ import com.acmerobotics.roadrunner.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.checkerframework.checker.units.qual.A;
@@ -83,8 +84,12 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
     private final Action[][] _allTrajectory = new Action[StartRobotPosition.values().length][CameraRobotPosition.values().length];
 
+    private LinearOpMode _robot;
+
     @Override
     public void Init(BaseCollector collector) {
+        _robot = collector.Robot;
+
         _lift = collector.GetModule(Lift.class);
         _intake = collector.GetModule(Intake.class);
         _camera = collector.GetModule(Camera.class);
@@ -100,8 +105,18 @@ public class RoadRunnerRouteManager implements IRobotModule {
                 StartRobotPosition pos = StartRobotPosition.values()[i];
                 CameraRobotPosition camPos = CameraRobotPosition.values()[j];
 
-                _allTrajectory[i][j] = Trajectory.GetTrajectory(ActionBuilder(
-                        new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), pos, camPos).build();
+                for(int attempt = 0; attempt < 5; attempt++) {
+                    try {
+                        _allTrajectory[i][j] = Trajectory.GetTrajectory(ActionBuilder(
+                                new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), pos, camPos).build();
+                    }
+                    catch (Exception e) {
+                        _robot.sleep(10);
+                        continue;
+                    }
+
+                    break;
+                }
             }
         }
     }
@@ -233,7 +248,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
     }
 
     private MyTrajectoryBuilder ActionBuilder(Pose2d beginPose) {
-        return new MyTrajectoryBuilder(new TrajectoryActionBuilder(TrajectoryAction::new, TrajectoryAction::new, beginPose, 1e-6, 0.0, _turnConstraints, _velConstraint, _accelConstraint, 0.25, 0.1));
+        return new MyTrajectoryBuilder(new TrajectoryActionBuilder(TrajectoryAction::new, TrajectoryAction::new, beginPose, 1e-6, 0.0, _turnConstraints, _velConstraint, _accelConstraint, 0.2, 0.1));
     }
 
     public final class MyTrajectoryBuilder {
