@@ -15,8 +15,26 @@ public class Trajectory {
 
         switch (startPos) {
             case BLUE_BACK: {
+                //left
                 builder.brushDown(1)
-                        .strafeToLinearHeading(new Vector2d(-70, 105), -PI / 2)
+                        .strafeToLinearHeading(new Vector2d(-70,120),-PI/2)
+                        .strafeToLinearHeading(new Vector2d(-61,85),-PI/2/2/2)
+                        .brushOn()
+                        //.strafeToLinearHeading(new Vector2d(-95, 100), 0)
+                        .strafeToLinearHeading(new Vector2d(-98, 90), 0)
+                        .waitPixel()
+                        .strafeToLinearHeading(new Vector2d(-90, 90), 0)
+                        .strafeToLinearHeading(new Vector2d(-90, 25), 0)
+                        .strafeToLinearHeading(new Vector2d(90, 25), 0)
+                        .liftUp()
+                        .strafeToLinearHeading(new Vector2d(123, 85), 0)
+                        .waitSeconds(0.4)
+                        .waitLift()
+                        .pixelDeGripp()
+                        .waitSeconds(1);
+                /*//forward
+                builder.brushDown(1)
+                        .strafeToLinearHeading(new Vector2d(-70, 108), -PI / 2)
                         //отпустить пиксель и щётки врубили и опустили
                         .brushOn()
                         .strafeToLinearHeading(new Vector2d(-95, 100), 0)
@@ -25,7 +43,7 @@ public class Trajectory {
                         .strafeToLinearHeading(new Vector2d(20, 84), 0)
                         .waitSeconds(0.7)
                         .liftUp(0.5)
-                        .strafeToLinearHeading(new Vector2d(100, 84), 0)
+                        .strafeToLinearHeading(new Vector2d(103, 84), 0)
                         //.waitSeconds(0.5)
                         .waitLift()
                         .pixelDeGripp()
@@ -39,7 +57,7 @@ public class Trajectory {
                         .strafeToLinearHeading(new Vector2d(20, 84), 0)
                         .waitSeconds(0.7)
                         .liftUp(0.5)
-                        .strafeToLinearHeading(new Vector2d(100, 84), 0)
+                        .strafeToLinearHeading(new Vector2d(103, 84), 0)
                         //.waitSeconds(0.5)
                         .waitLift()
                         .pixelDeGripp()
@@ -56,7 +74,7 @@ public class Trajectory {
                         .pixelDeGripp()
                         .waitSeconds(2)
                         .strafeToLinearHeading(new Vector2d(120, 30), 0)
-                        .strafeToLinearHeading(new Vector2d(150, 30), 0)*/;
+                        .strafeToLinearHeading(new Vector2d(150, 30), 0)*/
 
                 break;
             }

@@ -100,22 +100,22 @@ public class Manual implements IRobotModule {
         else if (liftAverage)
             _lift.SetLiftPose(LiftPose.MIDDLE_UPPER);
 
-        /*if (servotyaga < 0.2)
+        if (servotyaga < 0.2)
             _suspension.Active();
         else
-            _suspension.Disable();*/
+            _suspension.Disable();
 
         _gripOld = grip;
         _brushOld = brushOn;
 
 
-        /*if(motortyagakopka > 0.8 )
+        if(motortyagakopka > 0.8)
             _suspension.unmotor();
         else
             _suspension.motor();
 
         if(cbrospodtyagi)
-            _suspension.cbros();*/
+            _suspension.cbros();
     }
 
     @Override

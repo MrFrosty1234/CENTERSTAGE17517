@@ -99,9 +99,9 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
         if (boundingRect.area() <= 0 || boundingRect == null) {
             if (Bios.GetStartPosition() == StartRobotPosition.RED_BACK || Bios.GetStartPosition() == StartRobotPosition.RED_FORWARD)
-                pos.set(1);
-            else
                 pos.set(3);
+            else
+                pos.set(1);
 
             return frm;
         }
