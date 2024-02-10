@@ -54,21 +54,19 @@ public class Lift implements IRobotModule {
         _endingUpState = _endSwitchUp.getState();
         _endingDownState = _endswitchDown.getState();
 
-        if (_liftPose != LiftPose.DOWN) {
+        if (_liftPose != LiftPose.DOWN)
             _liftMotor.setPower(_liftPIDF.Update(_liftPose.encoderPose() - _liftMotor.getCurrentPosition()));
-        }
-        else if (!_intake.IsTurnNormal() && Math.abs(Configs.Lift.isProchelnugnoepologenie - _liftMotor.getCurrentPosition()) < 60) {
+        else if (!_intake.IsTurnNormal() && Math.abs(Configs.Lift.isProchelnugnoepologenie - _liftMotor.getCurrentPosition()) < 60)
             _liftMotor.setPower(Math.max(_liftPIDF.Update(Configs.Lift.isProchelnugnoepologenie - _liftMotor.getCurrentPosition()), Configs.LiftPid.DOWN_MOVE_POWER));
-        } else {
+        else {
             if (!_endingDownState) {
                 if(isProchelnugnoepologenie())
-                    _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER);
+                    _liftMotor.setPower(Math.max(Configs.LiftPid.DOWN_MOVE_POWER * (_liftMotor.getCurrentPosition() / 600d), Configs.LiftPid.DOWN_MOVE_POWER));
                 else
                     _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER_FAST);
             }
-            else {
+            else
                 _liftMotor.setPower(Configs.LiftPid.DOWN_AT_TARGET_POWER);
-            }
         }
 
         if (_endingDownState)

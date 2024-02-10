@@ -17,14 +17,8 @@ apply from: '../build.dependencies.gradle'
 
 android {
     namespace = 'org.woen.team18742'
-    androidResources {
-        noCompress 'tflite'
-    }
 
     packagingOptions {
-        jniLibs {
-            pickFirsts += ['**/*.so']
-        }
         jniLibs.useLegacyPackaging true
     }
 }

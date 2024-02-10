@@ -1,6 +1,7 @@
 package org.woen.team18742.Modules.Odometry;
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
@@ -23,12 +24,12 @@ public class OdometryHandler implements IRobotModule {
     private DriveEncoderOdometry _encoderOdometry;
 
     private final ExponentialFilter _filterX = new ExponentialFilter(Configs.Odometry.XCoef), _filterY = new ExponentialFilter(Configs.Odometry.YCoef);
+    private Vector2 _oldSpeed = new Vector2();
 
-    public Vector2 Speed = new Vector2();
+    public Vector2 Position = new Vector2(), Speed = new Vector2(), Accel = new Vector2();
 
-    public Vector2 Position = new Vector2();
-
-    private final Vector2 _maxSpeed = new Vector2();
+    private final Vector2 _maxSpeed = new Vector2(), _maxAccel = new Vector2();
+    private ElapsedTime _deltaTime = new ElapsedTime();
 
     @Override
     public void Init(BaseCollector collector) {
@@ -85,16 +86,14 @@ public class OdometryHandler implements IRobotModule {
 
         _filterX.Reset();
         _filterY.Reset();
+
+        _deltaTime.reset();
     }
 
     @Override
     public void LastUpdate() {
         _filterX.UpdateCoef(Configs.Odometry.XCoef);
         _filterY.UpdateCoef(Configs.Odometry.YCoef);
-
-        ToolTelemetry.AddVal("YOdometr = ", GetSpeedOdometerY());
-        ToolTelemetry.AddVal("XROdometr = ", GetSpeedOdometerXRight());
-        ToolTelemetry.AddVal("XLOdometr = ", GetSpeedOdometerXLeft());
 
         _odometerY.Update();
         _odometerXRight.Update();
@@ -108,18 +107,32 @@ public class OdometryHandler implements IRobotModule {
         } else
             Position = pos;
 
-        ToolTelemetry.DrawCircle(Position, 5, Color.BLUE);
-        ToolTelemetry.AddLine("position " + Position);
+        ToolTelemetry.DrawCircle(pos, Configs.DriveTrainWheels.Radius, Color.BLUE);
 
         Speed = Configs.GeneralSettings.IsUseOdometers ? _odometry.Speed : _encoderOdometry.Speed;
 
-        if (Speed.X > _maxSpeed.X)
-            _maxSpeed.X = Speed.X;
+        Accel.X = (Speed.X - _oldSpeed.X) / _deltaTime.seconds();
+        Accel.Y = (Speed.Y - _oldSpeed.Y) / _deltaTime.seconds();
 
-        if (Speed.Y > _maxSpeed.Y)
-            _maxSpeed.Y = Speed.Y;
+        if (Math.abs(Speed.X) > _maxSpeed.X)
+            _maxSpeed.X = Math.abs(Speed.X);
 
+        if (Math.abs(Speed.Y) > _maxSpeed.Y)
+            _maxSpeed.Y = Math.abs(Speed.Y);
+
+        if (Math.abs(Accel.X) > _maxAccel.X)
+            _maxAccel.X = Math.abs(Accel.X);
+
+        if (Math.abs(Accel.Y) > _maxAccel.Y)
+            _maxAccel.Y = Math.abs(Accel.Y);
+
+        ToolTelemetry.AddLine("pos " + Position);
         ToolTelemetry.AddLine("drive speed " + Speed);
+        ToolTelemetry.AddLine("drive accel " + Accel);
         ToolTelemetry.AddLine("max drive speed " + _maxSpeed);
+        ToolTelemetry.AddLine("max drive accel " + _maxAccel);
+
+        _oldSpeed = Speed.clone();
+        _deltaTime.reset();
     }
 }

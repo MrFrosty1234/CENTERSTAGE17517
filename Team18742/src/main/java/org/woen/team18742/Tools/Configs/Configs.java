@@ -67,8 +67,6 @@ public class Configs {
         public static int POSE_MIDDLE_UPPER = 490;
         public static int POSE_MIDDLE_LOWER = 490;
         public static int POSE_DOWN = -40;
-        public static int POSE_DOWN_ENDSWITCH_THRESHOLD = 10;
-        public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
     }
 
     @Config
@@ -115,8 +113,8 @@ public class Configs {
 
     @Config
     public static class DriveTrainWheels {
-        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 166.7, MaxSpeedTurn = Math.toRadians(130), speed = 0.5   ;
-        public static double MaxTurnAccel = 3; //random
+        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 155, MaxSpeedTurn = Math.toRadians(110), speed = 0.5;
+        public static double MaxTurnAccel = Math.toRadians(110); //random
         public static double Radius = 15.7;
     }
 
@@ -127,14 +125,15 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.137, PixelCenterOpen = 0.72;//0.4 pixelSensorVoltage = 0.15
+        public static double pixelSensorvoltage = 0.128, PixelCenterOpen = 0.72;//0.4 pixelSensorVoltage = 0.15
         public static double servoTurnNormal = 0.68;
-        public static final double servoTurnTurned = 0.06 ;
+        public static final double servoTurnTurned = 0.06;
         public static double servoGripperNormal = 0.95;
         public static double servoGripperGripped = 0.765;
-        public static double servoClampClamped = 0.65;
-        public static double servoClampReleased = 0.47;//0.38? //TODO THIS BREAKS THE ROBOT WHEN GOING THROUGH TRUSS
-        public static double pixelDetectTimeMs = 200;
+        public static double servoClampClamped = 0.7;
+        public static double servoClampReleased = 0.54;
+        public static double servoClampReleasedLift = 0.42;
+        public static double pixelDetectTimeMs = 335;
     }
 
     @Config
@@ -145,22 +144,22 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double MinProfileAccel = -80; // random
-        public static double MaxProfileAccel = 80; // random
+        public static double MinProfileAccel = -150; // random
+        public static double MaxProfileAccel = 150; // random
     }
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 0.58;
-        public static double Lateral = 0.58;
-        public static double Heading = 3.2;
+        public static double Axial = 2.2;
+        public static double Lateral = 2.2;
+        public static double Heading = 5.53;
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 0.11;
-        public static double Lateral = 0.11;
-        public static double Heading = 0.11;
+        public static double Axial = 0.21;
+        public static double Lateral = 0.21;
+        public static double Heading = 0.05;
     }
 
     @Config
@@ -186,5 +185,11 @@ public class Configs {
         public static double RIGHT_SERVO_REV = 0.0;
         public static double SERVO_LIFT_DOWN = 0.617;
         public static double SERVO_LIFT_UP = 0.850;
+    }
+
+    @Config
+    public static class Lighting{
+        public static double Intensity = 0.5;
+        public static double Brightness = 1;
     }
 }
