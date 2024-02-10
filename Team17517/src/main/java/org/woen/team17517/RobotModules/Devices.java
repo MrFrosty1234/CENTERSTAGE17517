@@ -1,13 +1,12 @@
 package org.woen.team17517.RobotModules;
 
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.woen.team17517.RobotModules.UltRobot;
 
 @com.acmerobotics.dashboard.config.Config
 public class Devices {
@@ -31,10 +30,11 @@ public class Devices {
 
         aimPlaneServo = robot.linearOpMode.hardwareMap.get(Servo.class,"planeServo");
         startPlaneSrevo = robot.linearOpMode.hardwareMap.get(Servo.class,"planeServoStart");
+        lightning = robot.linearOpMode.hardwareMap.get(DcMotorEx.class,"lightning");
         buttonUp = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonUp");
         buttonDown = robot.linearOpMode.hardwareMap.digitalChannel.get("buttonDown");
-        upPixelsSensor = robot.linearOpMode.hardwareMap.get(AnalogSensor.class,"upPixelsSensor");
-        downPixelSensor = robot.linearOpMode.hardwareMap.get(AnalogSensor.class,"downPixelsSensor");
+        upPixelsSensor = robot.linearOpMode.hardwareMap.get(AnalogInput.class,"upPixelsSensor");
+        downPixelSensor = robot.linearOpMode.hardwareMap.get(AnalogInput.class,"downPixelsSensor");
         reset();
 
         this.robot = robot;
@@ -46,7 +46,7 @@ public class Devices {
     public DcMotorEx liftMotor;
     public DcMotorEx intakeMotor;
     public DcMotorEx odometrLeft;
-
+    public DcMotorEx lightning;
     public Servo pixelServoRight;
     public Servo progibServo;
     public Servo pixelServoLeft;
@@ -54,8 +54,8 @@ public class Devices {
     public Servo aimPlaneServo;
     public DigitalChannel buttonUp;
     public DigitalChannel buttonDown;
-    public AnalogSensor upPixelsSensor;
-    public AnalogSensor downPixelSensor;
+    public AnalogInput upPixelsSensor;
+    public AnalogInput downPixelSensor;
 
     private void reset() {
         left_front_drive.setDirection(DcMotor.Direction.FORWARD);

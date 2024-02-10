@@ -20,13 +20,11 @@ public class AutnomModules {
         robot.updateWhilePositionFalse(new Runnable[]{
                 ()->robot.grabber.close(),
                 ()->robot.grabber.safe(),
-                ()->robot.lift.moveUP(),
+                ()->robot.timer.getTimeForTimer(0.2),
                 ()->robot.lift.moveUP(),
                 ()->robot.grabber.finish(),
                 ()->robot.grabber.open(),
-                ()->robot.grabber.close(),
-                ()->robot.grabber.safe(),
-                ()->robot.grabber.open(),
+                ()->robot.timer.getTimeForTimer(1),
                 ()->robot.grabber.safe(),
                 ()->robot.lift.moveDown(),
                 ()->robot.grabber.down()
@@ -35,7 +33,7 @@ public class AutnomModules {
     public void eatPixels() {
         robot.updateWhilePositionFalse(new Runnable[]{
                 () -> robot.grabber.brushIn(),
-                () -> robot.timer.getTimeForTimer(1),
+                () -> robot.timer.getTimeForTimer(2),
                 () -> robot.grabber.close(),
                 () -> robot.timer.getTimeForTimer(0.1),
                 () -> robot.grabber.brushOut(),

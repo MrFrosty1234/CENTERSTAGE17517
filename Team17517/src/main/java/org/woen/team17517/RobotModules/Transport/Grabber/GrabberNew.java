@@ -17,7 +17,12 @@ public class GrabberNew implements RobotModule {
         openServo = robot.devices.pixelServoLeft;
         brushMotor = robot.devices.intakeMotor;
     }
-
+    public double getTargetProgib(){
+        return targetProgib;
+    }
+    public double getTargetOpenClose(){
+        return targetOpenClose;
+    }
     public void finish(){
         targetProgib = GrabberPosition.FINISH.value;
     }

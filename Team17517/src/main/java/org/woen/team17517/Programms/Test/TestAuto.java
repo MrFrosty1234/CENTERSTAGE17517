@@ -11,6 +11,9 @@ public class TestAuto extends LinearOpMode {
     public void runOpMode() {
         robot = new UltRobot(this);
         waitForStart();
-        robot.autnomModules.Move(0, 24000, 0, 1);
+        while (opModeIsActive()) {
+            robot.lift.moveUP();
+            robot.allUpdate();
+        }
     }
 }
