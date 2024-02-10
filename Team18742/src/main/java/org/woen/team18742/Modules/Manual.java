@@ -100,10 +100,10 @@ public class Manual implements IRobotModule {
             _hook.Active(timerBypass);
 
         if(hookUp > 0.8)
-            _hook.hookUp(timerBypass);
+            _hook.hookUp();
 
         if(hookDown)
-            _hook.hookDown(timerBypass);
+            _hook.hookDown();
 
         _gripOld = grip;
         _brushOld = brushOn;

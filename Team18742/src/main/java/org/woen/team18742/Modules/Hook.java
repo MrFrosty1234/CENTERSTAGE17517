@@ -60,17 +60,17 @@ public class Hook implements IRobotModule {
     }
 
 
-    public void hookUp(boolean timerBypass) {
-        if (_isOpen || timerBypass)
+    public void hookUp() {
+        if (_isOpen)
             _hookMotor.setPower(1);
         else
             _hookMotor.setPower(0);
 
     }
 
-    public void hookDown(boolean timerBypass)
+    public void hookDown()
     {
-        if (_isOpen || timerBypass)
+        if (_isOpen)
             _hookMotor.setPower(-1);
         else
             _hookMotor.setPower(0);
