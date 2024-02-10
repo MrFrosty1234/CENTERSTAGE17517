@@ -23,7 +23,7 @@ public class Suspension implements IRobotModule {
     public void Start() {
         _endGameTime.reset();
     }
-
+    private final ElapsedTime ter = new ElapsedTime();
     @Override
     public void Init(BaseCollector collector) {
         podtyaga1 = Devices.podtyaga1;
@@ -46,7 +46,6 @@ public class Suspension implements IRobotModule {
         podtyaga2.setPosition(Configs.Suspension.rasstrelennayatyga2);
     }
 
-    private Timer _timer = new Timer();
 
     public void unmotor() {
         if (_isRastrel)

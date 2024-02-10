@@ -67,8 +67,6 @@ public class Configs {
         public static int POSE_MIDDLE_UPPER = 490;
         public static int POSE_MIDDLE_LOWER = 490;
         public static int POSE_DOWN = -40;
-        public static int POSE_DOWN_ENDSWITCH_THRESHOLD = 10;
-        public static double PCoef = 0.1, ICoef = 0, DCoef = 0.1;
     }
 
     @Config
@@ -132,10 +130,10 @@ public class Configs {
         public static final double servoTurnTurned = 0.06;
         public static double servoGripperNormal = 0.95;
         public static double servoGripperGripped = 0.765;
-        public static double servoClampClamped = 0.65;
-        public static double servoClampReleased = 0.47;
-        public static double servoClampReleasedLift = 0.37;
-        public static double pixelDetectTimeMs = 235;
+        public static double servoClampClamped = 0.7;
+        public static double servoClampReleased = 0.54;
+        public static double servoClampReleasedLift = 0.42;
+        public static double pixelDetectTimeMs = 335;
     }
 
     @Config
@@ -152,9 +150,9 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 2.49;
-        public static double Lateral = 2.49;
-        public static double Heading = 5.3;
+        public static double Axial = 2.2;
+        public static double Lateral = 2.2;
+        public static double Heading = 5.53;
     }
 
     @Config
@@ -187,5 +185,11 @@ public class Configs {
         public static double RIGHT_SERVO_REV = 0.0;
         public static double SERVO_LIFT_DOWN = 0.617;
         public static double SERVO_LIFT_UP = 0.850;
+    }
+
+    @Config
+    public static class Lighting{
+        public static double Intensity = 0.5;
+        public static double Brightness = 1;
     }
 }

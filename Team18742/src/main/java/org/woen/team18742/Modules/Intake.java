@@ -23,7 +23,6 @@ public class Intake implements IRobotModule {
     private Servo gripper; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1; // Датчик присутствия пикселей над прижимом
-    private DcMotor _lighting;
     private Brush _brush;
     private Lift _lift;
 
@@ -33,13 +32,12 @@ public class Intake implements IRobotModule {
         gripper = Devices.Gripper;
         clamp = Devices.Clamp;
         servoTurn = Devices.Servopere;
-        _lighting = Devices.LightingMotor;
 
         _lift = collector.GetModule(Lift.class);
         _brush = collector.GetModule(Brush.class);
     }
 
-    private Timer _normalTimer = new Timer();
+    private final Timer _normalTimer = new Timer();
     private boolean _oldTurnPos = false;
 
     public void updateTurner() {
@@ -53,13 +51,8 @@ public class Intake implements IRobotModule {
             servoTurn.setPosition(Configs.Intake.servoTurnNormal);
 
             if (_oldTurnPos) {
-                double pos = clamp.getPosition();
-
-                clamp.setPosition(Configs.Intake.servoClampReleasedLift);
-
                 _normalTimer.Start(500, () -> {
                     _isTurned = true;
-                    clamp.setPosition(pos);
                 });
             }
 
@@ -82,8 +75,6 @@ public class Intake implements IRobotModule {
             gripper.setPosition(Configs.Intake.servoGripperNormal);
         }
         _pixelGripped = grip;
-
-        _lighting.setPower(grip ? 1 : 0);
     }
 
     public boolean isPixelGripped() {
@@ -94,8 +85,11 @@ public class Intake implements IRobotModule {
     public void setClamp(boolean clampIk) {
         if (clampIk) {
             clamp.setPosition(Configs.Intake.servoClampClamped);
-        } else {
+        } else if(_isTurned) {
             clamp.setPosition(Configs.Intake.servoClampReleased);
+        }
+        else{
+            clamp.setPosition(Configs.Intake.servoClampReleasedLift);
         }
     }
 
@@ -140,7 +134,5 @@ public class Intake implements IRobotModule {
         gripper.setPosition(gripped ? Configs.Intake.PixelCenterOpen : Configs.Intake.servoGripperNormal);
 
         _pixelGripped = gripped;
-
-        _lighting.setPower(gripped ? 1 : 0);
     }
 }
