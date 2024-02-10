@@ -101,9 +101,10 @@ public class Manual implements IRobotModule {
 
         if(hookUp > 0.8)
             _hook.hookUp();
-
-        if(hookDown)
+        else if(hookDown)
             _hook.hookDown();
+        else
+            _hook.Stop();
 
         _gripOld = grip;
         _brushOld = brushOn;

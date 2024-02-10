@@ -75,4 +75,8 @@ public class Hook implements IRobotModule {
         else
             _hookMotor.setPower(0);
     }
+
+    public void Stop(){
+        _hookMotor.setPower(0);
+    }
 }
