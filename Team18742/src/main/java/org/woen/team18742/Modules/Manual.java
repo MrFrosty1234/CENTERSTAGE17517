@@ -61,6 +61,7 @@ public class Manual implements IRobotModule {
         boolean launchPlane = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;
         boolean liftAverage = _gamepad.dpad_right;
+        boolean liftAverageDown = _gamepad.dpad_down;
         boolean cbrospodtyagi = _gamepad.dpad_left;
         boolean grip = _gamepad.triangle;
         boolean brushOn = _gamepad.cross;
@@ -99,8 +100,10 @@ public class Manual implements IRobotModule {
             _lift.SetLiftPose(LiftPose.UP);
         else if (liftAverage)
             _lift.SetLiftPose(LiftPose.MIDDLE_UPPER);
+        else if (liftAverageDown)
+            _lift.SetLiftPose(LiftPose.MIDDLE_LOWER);
 
-        if (servotyaga < 0.2)
+        if (servotyaga > 0.2)
             _suspension.Active();
         else
             _suspension.Disable();

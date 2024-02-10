@@ -17,6 +17,7 @@ public class Lighting implements IRobotModule {
     private DcMotor _lighting;
 
     private final ElapsedTime _time = new ElapsedTime();
+    public boolean Disable = false;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -32,6 +33,12 @@ public class Lighting implements IRobotModule {
 
     @Override
     public void Update() {
+        if(Disable){
+            _lighting.setPower(0);
+
+            return;
+        }
+
         if(_intake.isPixelGripped())
             _lighting.setPower(-Configs.Lighting.Brightness);
         else

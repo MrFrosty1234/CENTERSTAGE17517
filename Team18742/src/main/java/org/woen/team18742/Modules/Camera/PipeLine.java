@@ -99,7 +99,7 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
         if (boundingRect.area() <= 0 || boundingRect == null) {
             if (Bios.GetStartPosition() == StartRobotPosition.RED_BACK || Bios.GetStartPosition() == StartRobotPosition.RED_FORWARD)
-                pos.set(3);
+                pos.set(1);
             else
                 pos.set(1);
 
@@ -112,11 +112,11 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         RectCenter.set(new Vector2(centerOfRectX, centerOfRectY));
         if (Bios.GetStartPosition() == StartRobotPosition.RED_BACK || Bios.GetStartPosition() == StartRobotPosition.RED_FORWARD) {
             if (centerOfRectX < Configs.Camera.ZoneLeftEndRed)
-                pos.set(3);
+                pos.set(1);
             else if (centerOfRectX < Configs.Camera.ZoneForwardEndRed)
                 pos.set(2);
             else
-                pos.set(1);
+                pos.set(3);
         }
         else {
             if (centerOfRectX < Configs.Camera.ZoneLeftEndBlue)

@@ -40,6 +40,7 @@ public class Devices {
 
     public static List<LynxModule> Hubs;
     public static VoltageSensor VoltageSensor;
+    public static List<ServoImplEx> Servs;
 
     public static void Init(HardwareMap map){
         if(_hardwareDevices != null)
@@ -49,6 +50,8 @@ public class Devices {
         RightForwardDrive = map.get(DcMotorEx.class, "rightFrontMotor");
         LeftBackDrive = map.get(DcMotorEx.class, "leftBackMotor");
         RightBackDrive = map.get(DcMotorEx.class, "rightBackMotor");
+
+        Servs = map.getAll(ServoImplEx.class);
 
         LiftMotor = map.get(DcMotorEx.class, "liftMotor");
 

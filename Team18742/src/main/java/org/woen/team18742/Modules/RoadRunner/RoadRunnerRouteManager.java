@@ -111,6 +111,9 @@ public class RoadRunnerRouteManager implements IRobotModule {
                                 new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), pos, camPos).build();
                     }
                     catch (Exception e) {
+                        if(attempt == 4)
+                            throw e;
+
                         _robot.sleep(10);
                         continue;
                     }
@@ -139,13 +142,11 @@ public class RoadRunnerRouteManager implements IRobotModule {
                 break;
             }
 
-        StartRobotPosition pos = Bios.GetStartPosition();
-
         _trajectory = _allTrajectory[indexStartPos][indexCamera];
 
         //_intake.PixelCenterGrip(true);
 
-        _trajectory.preview(new Canvas());
+        _trajectory.preview(ToolTelemetry.GetCanvas());
     }
 
     @Override

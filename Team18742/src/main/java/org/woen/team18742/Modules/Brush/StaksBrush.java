@@ -49,11 +49,12 @@ public class StaksBrush implements IRobotModule {
     }
 
     private void stop() {
-        //leftStacksBrush.setPosition(Configs.StackBrush.LEFT_SERVO_STOP);
-        //rightStacksBrush.setPosition(Configs.StackBrush.RIGHT_SERVO_STOP);
+        leftStacksBrush.setPosition(Configs.StackBrush.LEFT_SERVO_STOP);
+        rightStacksBrush.setPosition(Configs.StackBrush.RIGHT_SERVO_STOP);
+        servoSetUpPose();
+
         leftStacksBrush.setPwmDisable();
         rightStacksBrush.setPwmDisable();
-        servoSetUpPose();
     }
 
     public void servoSetUpPose() {

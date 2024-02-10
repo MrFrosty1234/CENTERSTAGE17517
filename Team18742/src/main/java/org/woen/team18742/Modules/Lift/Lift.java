@@ -61,7 +61,7 @@ public class Lift implements IRobotModule {
         else {
             if (!_endingDownState) {
                 if(isProchelnugnoepologenie())
-                    _liftMotor.setPower(Math.max(Configs.LiftPid.DOWN_MOVE_POWER * (_liftMotor.getCurrentPosition() / 600d), Configs.LiftPid.DOWN_MOVE_POWER));
+                    _liftMotor.setPower(Math.min(Configs.LiftPid.DOWN_MOVE_POWER * (_liftMotor.getCurrentPosition() / 580d), Configs.LiftPid.DOWN_MOVE_POWER));
                 else
                     _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER_FAST);
             }
@@ -74,7 +74,7 @@ public class Lift implements IRobotModule {
     }
 
     public boolean isATarget() {
-        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || ((_liftPose == LiftPose.MIDDLE_LOWER || _liftPose == LiftPose.MIDDLE_UPPER) && Math.abs(_liftPIDF.Err) < 80);
+        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || ((_liftPose == LiftPose.MIDDLE_LOWER || _liftPose == LiftPose.MIDDLE_UPPER) && Math.abs(_liftPIDF.Err) < 90);
     }
 
     public boolean isDown() {
