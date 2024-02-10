@@ -7,22 +7,33 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.PIDMethod;
 import org.woen.team17517.Service.RobotModule;
 
 
 @Config
 public class Lift implements RobotModule {
-    public DcMotor liftMotor;
-    public DigitalChannel buttonUp;
-    public DigitalChannel buttonDown;
-    private LiftPosition targetPosition = LiftPosition.UNKNOWN;
+    private DcMotor liftMotor;
+    private DigitalChannel buttonUp;
+    private DigitalChannel buttonDown;
+    private double voltage;
+    private LiftPosition targetPosition = LiftPosition.DOWN;
     public LiftPosition getTargetPosition(){
         return targetPosition;
     }
-    public LiftMode liftMode = LiftMode.AUTO;
+    private LiftMode liftMode = LiftMode.AUTO;
+    public LiftMode getLiftMode(){
+        return liftMode;
+    }
     UltRobot robot;
-    public boolean liftAtTaget = false;
+    private boolean liftAtTaget = false;
     private LiftPosition position;
+    public static double kp;
+    public static double ki;
+    public static double ks = 0;
+    public static double kd = 0;
+    public static double maxI;
+    PIDMethod pid = new PIDMethod(kp,ki,kd,ks,maxI);
     public void setLiftMode(LiftMode mode){
         liftMode = mode;
     }
@@ -31,6 +42,7 @@ public class Lift implements RobotModule {
         liftMotor = robot.devices.liftMotor;
         buttonUp = robot.devices.buttonUp;
         buttonDown = robot.devices.buttonDown;
+        voltage = 12;
     }
     public boolean getUpSwitch(){
         return buttonUp.getState();
@@ -71,7 +83,7 @@ public class Lift implements RobotModule {
 
     public void updateEncoderPosition(){
         cleanPosition = liftMotor.getCurrentPosition();
-        encoderPosition = cleanPosition -encoderError;
+        encoderPosition = cleanPosition - encoderError;
         if (getUpSwitch()){
             encoderError = liftMotor.getCurrentPosition() - LiftPosition.UP.value;
         }if (getDownSwitch()){
@@ -82,19 +94,22 @@ public class Lift implements RobotModule {
         updateEncoderPosition();
         updatePosition();
 
+        pid.setCoefficent(kp,ki,kd,ks,maxI);
+        voltage = robot.voltageSensorPoint.getVol();
+
         double liftPower = 0;
-        double liftGravityPower = 0.1;
-        double liftMovePower = 0.8;
+        double liftGravityPower = 0.05;
+        double liftMovePower = 0.5;
         switch (liftMode){
             case AUTO:
                 switch (targetPosition) {
                     case UP:
-                        liftAtTaget = getUpSwitch();
+                        liftAtTaget =  getEncoderPosition() > LiftPosition.UP.value;
                         liftPower = liftAtTaget ? liftGravityPower : liftMovePower;
                         setPower(liftPower);
                         break;
                     case DOWN:
-                        liftAtTaget = getDownSwitch();
+                        liftAtTaget = getDownSwitch() || getEncoderPosition() < LiftPosition.DOWN.value;
                         liftPower = liftAtTaget ? 0 : -liftMovePower;
                         setPower(liftPower);
                         break;
@@ -104,13 +119,15 @@ public class Lift implements RobotModule {
                         setPower(liftPower);
                         break;
                     case YELLOWPIXEL:
-                        liftAtTaget = getEncoderPosition() == LiftPosition.YELLOWPIXEL.value;
-                        liftPower = liftAtTaget ? liftGravityPower : liftPower;
+                        liftAtTaget = Math.abs(LiftPosition.YELLOWPIXEL.value - getEncoderPosition()) < 25;
+                        liftPower = pid.PID(LiftPosition.YELLOWPIXEL.value,getEncoderPosition(),voltage);
                         setPower(liftPower);
+                        break;
                     case WHITEPIXEL:
-                        liftAtTaget = getEncoderPosition() == LiftPosition.WHITEPIXEL.value;
-                        liftPower = liftAtTaget ? liftGravityPower : liftPower;
+                        liftAtTaget = Math.abs(LiftPosition.WHITEPIXEL.value - getEncoderPosition()) < 25;
+                        liftPower = pid.PID(LiftPosition.WHITEPIXEL.value,getEncoderPosition(),voltage);
                         setPower(liftPower);
+                        break;
                     default:
                         liftAtTaget = true;
                         liftPower = 0;
@@ -121,10 +138,10 @@ public class Lift implements RobotModule {
             break;
             case  MANUALLIMIT:
                 if(manualTargetUp && !getUpSwitch()){
-                    liftPower = liftMovePower;
+                    liftPower = liftMovePower*0.8;
                     setPower(liftPower);
                 }else if (manualTargetDown && !getDownSwitch()){
-                    liftPower = -liftMovePower;
+                    liftPower = -liftMovePower*0.8;
                     setPower(liftPower);
                 }else{
                     if(!getDownSwitch()) liftPower = liftGravityPower;

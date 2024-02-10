@@ -15,7 +15,7 @@ public class TelemetryOutput implements RobotModule {
     UltRobot robot;
     public static boolean lift = false;
     public static boolean driveTrain = false;
-    public static boolean grabber = false;
+    public static boolean teleOp = false;
     public static boolean odometry = false;
     public static boolean velocity = false;
     public static boolean odometryAndCamera = false;
@@ -24,11 +24,12 @@ public class TelemetryOutput implements RobotModule {
     public  static  boolean cleanOdometry = false;
     double dlin =40;
     double shir =40;
+    public static boolean opticalSensor = false;
     public double [] rectXPoints = new double[2];
     public double [] rectYPoints = new double[2];
 
     TelemetryPacket packet = new TelemetryPacket();
-    
+    public static boolean grabber = false;
     private final Telemetry telemetry;
     public TelemetryOutput(UltRobot robot){
         this.robot = robot;
@@ -38,12 +39,22 @@ public class TelemetryOutput implements RobotModule {
 
     public void update(){
         if(lift) {
-            telemetry.addData("liftEncs", robot.lift.liftMotor.getCurrentPosition());
-            telemetry.addData("target",robot.lift.getTargetPosition().value);
-            telemetry.addData("lift pos",robot.lift.getTargetPosition());
-            telemetry.addData("lift mode", robot.lift.liftMode);
-            telemetry.addData("button", robot.lift.getUpSwitch());
-            telemetry.addData("get pos", robot.lift.isAtPosition());
+            telemetry.addData("cleanPos", robot.lift.getCleanPosition());
+            telemetry.addData("lift mode", robot.lift.getLiftMode());
+            telemetry.addData("posEncoder", robot.lift.getEncoderPosition());
+            telemetry.addData("liftTarget", robot.lift.getTargetPosition());
+            telemetry.addData("isAtPosition", robot.lift.isAtPosition());
+            telemetry.addData("buttonDown", robot.lift.getDownSwitch());
+            telemetry.addData("buttonUp", robot.lift.getUpSwitch());
+        }
+        if (opticalSensor){
+            telemetry.addData("PixelsIn",robot.pixelsCount.isTwoPixelsCount());
+            telemetry.addData("Up",robot.pixelsCount.getUpVolt());
+            telemetry.addData("Down",robot.pixelsCount.getDownVolt());
+        }
+        if (grabber){
+            telemetry.addData("GrabberProgibTarget",robot.grabber.getTargetProgib());
+            telemetry.addData("GrabberTargetOpenClose",robot.grabber.getTargetOpenClose());
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.drivetrainNew.getTargets();
@@ -61,8 +72,32 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("target H", targetMap.get("H"));
             telemetry.addData("pos H", positionMap.get("H"));
         }
-        if(grabber) {
+        if(teleOp) {
+            boolean liftUpAuto            = robot.linearOpMode.gamepad1.triangle;
+            boolean liftDownAuto          = robot.linearOpMode.gamepad1.cross;
 
+            boolean brushIn               = robot.linearOpMode.gamepad1.left_trigger > 0.1;
+            boolean brushOut              = robot.linearOpMode.gamepad1.left_bumper;
+
+            boolean openAndFinishGrabber  = robot.linearOpMode.gamepad1.circle;
+            boolean closeAndSafeGrabber   = robot.linearOpMode.gamepad1.square;
+
+            boolean liftUpMan             = robot.linearOpMode.gamepad1.dpad_up;
+            boolean liftDownMan           = robot.linearOpMode.gamepad1.dpad_down;
+
+            boolean startPlane = robot.linearOpMode.gamepad1.ps;
+            boolean aimPlane = robot.linearOpMode.gamepad1.right_stick_button;
+
+            telemetry.addData("aimPlane",aimPlane);
+            telemetry.addData("startPlane",startPlane);
+            telemetry.addData("brushIn",brushIn);
+            telemetry.addData("brushOut",brushOut);
+            telemetry.addData("openAndFinishGrabber",openAndFinishGrabber);
+            telemetry.addData("closeAndFinishGrabber",closeAndSafeGrabber);
+            telemetry.addData("liftUoMan",liftUpMan);
+            telemetry.addData("liftDownMan",liftDownMan);
+            telemetry.addData("liftUpAuto",liftUpAuto);
+            telemetry.addData("liftDownAuto",liftDownAuto);
         }
         if(odometry){
             telemetry.addData("x",robot.odometryNew.getX());

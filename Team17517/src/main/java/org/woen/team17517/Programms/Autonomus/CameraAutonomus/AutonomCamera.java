@@ -92,6 +92,7 @@ public class AutonomCamera extends LinearOpMode {
         if (pipeLine.pos == 3)
             elementPos = ElementPosition.RIGHT;
         switch (elementPos){
+            case NOTFIND:
             case FRONT:
                 robot.autnomModules.Move(0,24000,0,1);
                 robot.autnomModules.Move(0,-25000,0,1);
@@ -103,6 +104,8 @@ public class AutonomCamera extends LinearOpMode {
             case RIGHT:
                 robot.autnomModules.Move(0,24000,-4000,1);
                 robot.autnomModules.Move(0,-24000,4000,1);
+                break;
+            default:
                 break;
         }
         switch (startTeam){
