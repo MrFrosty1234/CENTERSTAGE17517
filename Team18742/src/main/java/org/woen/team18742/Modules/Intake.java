@@ -2,7 +2,6 @@ package org.woen.team18742.Modules;
 
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -41,7 +40,7 @@ public class Intake implements IRobotModule {
     private boolean _oldTurnPos = false;
 
     public void updateTurner() {
-        if (_lift.isProchelnugnoepologenie()) {
+        if (_lift.isTurnPosPassed()) {
             servoTurn.setPosition(Configs.Intake.servoTurnTurned);
 
             _isTurned = false;

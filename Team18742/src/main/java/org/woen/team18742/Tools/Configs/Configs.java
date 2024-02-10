@@ -1,15 +1,14 @@
 package org.woen.team18742.Tools.Configs;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class Configs {
     @Config
-    public static class Suspension{
-        public static double nulevayapodtyaga1 = 0.53;
-        public static double nulevayapodtyaga2 = 0.49;
-        public static double rasstrelennayatyga1 = 1;
-        public static double rasstrelennayatyga2 = 1;
+    public static class Hook {
+        public static double ServoHookOpenLeft = 0.53;
+        public static double ServoHookOpenRight = 0.49;
+        public static double ServoHookClosedLeft = 1;
+        public static double ServoHookClosedRight = 1;
     }
 
 
@@ -71,7 +70,7 @@ public class Configs {
 
     @Config
     public static class Lift{
-        public static double isProchelnugnoepologenie = 320;
+        public static double TurnPos = 320;
     }
 
     @Config
@@ -114,7 +113,7 @@ public class Configs {
     @Config
     public static class DriveTrainWheels {
         public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 155, MaxSpeedTurn = Math.toRadians(110), speed = 0.5;
-        public static double MaxTurnAccel = Math.toRadians(110); //random
+        public static double MaxTurnAccel = Math.toRadians(110);
         public static double Radius = 15.7;
     }
 
@@ -125,7 +124,7 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.128, PixelCenterOpen = 0.72;//0.4 pixelSensorVoltage = 0.15
+        public static double pixelSensorvoltage = 0.128;
         public static double servoTurnNormal = 0.1;
         public static final double servoTurnTurned = 0.7;
         public static double servoGripperNormal = 0.59;
@@ -144,8 +143,8 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double MinProfileAccel = -150; // random
-        public static double MaxProfileAccel = 150; // random
+        public static double MinProfileAccel = -150;
+        public static double MaxProfileAccel = 150;
     }
 
     @Config
@@ -165,7 +164,7 @@ public class Configs {
     @Config
     public static class Motors{
         public static double DefultP = 0.000001;
-        public static double DefultI = 0;//0.00013;
+        public static double DefultI = 0;
         public static double DefultD = 0.005;
         public static double DefultF = 0.0005;
     }

@@ -17,7 +17,7 @@ public class Lighting implements IRobotModule {
     private DcMotor _lighting;
 
     private final ElapsedTime _time = new ElapsedTime();
-    public boolean Disable = false;
+    private boolean _disable = false;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -31,9 +31,17 @@ public class Lighting implements IRobotModule {
         _time.reset();
     }
 
+    public void Disable(){
+        _disable = true;
+    }
+
+    public void Enable(){
+        _disable = false;
+    }
+
     @Override
     public void Update() {
-        if(Disable){
+        if(_disable){
             _lighting.setPower(0);
 
             return;
