@@ -40,6 +40,7 @@ public class CVOdometry implements IRobotModule {
     private final ElapsedTime _deltaTime = new ElapsedTime();
     private OdometryHandler _handler;
     private boolean _isNear = false;
+    public Vector2 TagPos;
 
     public boolean IsNear(){
         return _isNear;
@@ -110,6 +111,8 @@ public class CVOdometry implements IRobotModule {
                 }
                 else
                     _isNear = false;
+
+                TagPos = new Vector2(rotatedPosVector.get(0), rotatedPosVector.get(1));
 
                 VectorF fieldCameraPos = fieldTagPos.subtracted(rotatedPosVector);
 

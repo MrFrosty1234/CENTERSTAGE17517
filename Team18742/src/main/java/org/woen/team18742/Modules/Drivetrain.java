@@ -75,6 +75,12 @@ public class Drivetrain implements IRobotModule {
     }
 
     private void DriveDirection(Vector2 speed, double rotate) {
+        if(_cvOdometry.IsNear()){
+            if(Math.abs(Math.signum(_odometry.Speed.X) - Math.signum(_cvOdometry.TagPos.X)) < 0.1 ||
+                    Math.abs(Math.signum(_odometry.Speed.Y) - Math.signum(_cvOdometry.TagPos.Y)) < 0.1)
+                Stop();
+        }
+
         _leftForwardDrive.setPower(speed.X - speed.Y - rotate);
         _rightBackDrive.setPower(speed.X - speed.Y + rotate);
         _leftBackDrive.setPower(speed.X + speed.Y - rotate);
