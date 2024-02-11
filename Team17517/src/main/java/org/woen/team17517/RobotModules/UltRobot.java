@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team17517.NotUsedCode.DrivetrainNew;
 import org.woen.team17517.NotUsedCode.Odometry;
-import org.woen.team17517.Programms.Autonomus.OldAutonomus.AutnomModules;
+import org.woen.team17517.Programms.Autonomus.AutonomusWithAutonomModules.AutnomModules;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
 import org.woen.team17517.RobotModules.Transport.Grabber.GrabberNew;

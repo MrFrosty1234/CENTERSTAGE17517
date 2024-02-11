@@ -21,7 +21,7 @@ public class TeleOPNew extends LinearOpMode {
     Button openGrabberMunBut = new Button();
     Button closeGrabberMunBut = new Button();
     public static double aimPos = 0.35;
-    public static double startPos = 0.7;
+    public static double startPos = 0.9;
     public static boolean telemetryTeleOp =false;
     UltRobot robot;
     public void runOpMode(){
@@ -30,6 +30,7 @@ public class TeleOPNew extends LinearOpMode {
         boolean planeAimed = false;
 
         waitForStart();
+        long startPlaneTime = System.currentTimeMillis()/1000;
 
         while(opModeIsActive()){
             robot.telemetryOutput.teleOp = telemetryTeleOp;
@@ -50,7 +51,7 @@ public class TeleOPNew extends LinearOpMode {
             boolean closeGrabberMun       = gamepad1.dpad_right;
 
             boolean startPlane            = gamepad1.ps;
-            boolean aimPlane              = gamepad1.touchpad;
+            boolean aimPlane              = gamepad1.share;
 
 
             double forwardSpeed;
@@ -62,14 +63,15 @@ public class TeleOPNew extends LinearOpMode {
             angleSpeed   = gamepad1.right_stick_x;
 
 
-            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed*60000, forwardSpeed*60000, angleSpeed*60000);
+            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed*60000, forwardSpeed*60000, angleSpeed*20000);
 
             if (liftUpBut.update(liftUpAuto)){
                 telemetry.addData("liftMoving","UP");
                 robot.updateWhilePositionFalse(new Runnable[]{
                         ()->robot.grabber.close(),
                         ()->robot.grabber.safe(),
-                        ()->robot.lift.moveUP()
+                        ()->robot.lift.moveUP(),
+                        ()->robot.grabber.finish()
                 });
                 telemetry.addData("liftMoving","STAY");
             }else if (liftDownBut.update(liftDownAuto)) {
@@ -95,7 +97,14 @@ public class TeleOPNew extends LinearOpMode {
                 });
             }
             if (openGrabberMunBut.update(openGrabberMun))   robot.grabber.open();
-            if (closeGrabberMunBut.update(closeGrabberMun)) robot.grabber.close();
+            if (closeGrabberMunBut.update(closeGrabberMun)){
+                robot.updateWhilePositionFalse(new Runnable[]{
+                        ()->robot.grabber.close(),
+                        ()->robot.grabber.brushOut(),
+                        ()->robot.timer.getTimeForTimer(1)
+                });
+
+            }
 
             if (brushIn){
                 robot.grabber.brushIn();
@@ -113,7 +122,7 @@ public class TeleOPNew extends LinearOpMode {
                 robot.lift.setStopManualTarget();
             }
 
-            if(aimPlaneBut.update(aimPlane)){
+            if(aimPlaneBut.update(aimPlane) && (System.currentTimeMillis()/1000 - startPlaneTime) > 90){
                 planeAimed = true;
                 telemetry.addData("Plane","aimed");
                 robot.devices.aimPlaneServo.setPosition(aimPos);

@@ -110,7 +110,7 @@ public class Lift implements RobotModule {
                         break;
                     case DOWN:
                         liftAtTaget = getDownSwitch() || getEncoderPosition() < LiftPosition.DOWN.value;
-                        liftPower = liftAtTaget ? 0 : -liftMovePower;
+                        liftPower = liftAtTaget ? 0 : -liftMovePower*0.1;
                         setPower(liftPower);
                         break;
                     case FORAUTONOM:

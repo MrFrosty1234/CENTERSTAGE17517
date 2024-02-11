@@ -10,10 +10,11 @@ public class SimpleAutoRedNear extends LinearOpMode {
     public void runOpMode() {
         robot = new UltRobot(this);
         waitForStart();
-        robot.autnomModules.Move(30000, 0, 0, 2.2);
-        robot.autnomModules.Move(0,-30000,0,4);
-        robot.autnomModules.Move(0,15000,0,1);
+        robot.autnomModules.move(60000, -60000, 0, 0.9);
+        robot.autnomModules.move(0, -30000, 0, 2);
         robot.autnomModules.bacBoardPixels();
+        robot.autnomModules.move(0,15000,0,1);
+        robot.autnomModules.move(-30000,0,0,2);
     }
 
 }
