@@ -1,15 +1,14 @@
 package org.woen.team18742.Tools.Configs;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class Configs {
     @Config
-    public static class Suspension{
-        public static double nulevayapodtyaga1 = 1;
-        public static double nulevayapodtyaga2 = 1;
-        public static double rasstrelennayatyga1 = 0.53;
-        public static double rasstrelennayatyga2 = 0.49;
+    public static class Hook {
+        public static double ServoHookOpenLeft = 0.53;
+        public static double ServoHookOpenRight = 0.49;
+        public static double ServoHookClosedLeft = 1;
+        public static double ServoHookClosedRight = 1;
     }
 
 
@@ -33,7 +32,7 @@ public class Configs {
         public static double CameraAccuracy = 150;
         public static double CameraX = 16.01, CameraY = -16.18;
 
-        public static double ZoneLeftEndRed = 0, ZoneForwardEndRed = 300;
+        public static double ZoneLeftEndRed = 20, ZoneForwardEndRed = 300;
         public static double ZoneLeftEndBlue = 40, ZoneForwardEndBlue = 310;
 
         public static int PruningStart = 290;
@@ -65,13 +64,13 @@ public class Configs {
     public static class LiftPoses{
         public static int POSE_UP = 1100;
         public static int POSE_MIDDLE_UPPER = 490;
-        public static int POSE_MIDDLE_LOWER = 490;
+        public static int POSE_MIDDLE_LOWER = 380;
         public static int POSE_DOWN = -40;
     }
 
     @Config
     public static class Lift{
-        public static double isProchelnugnoepologenie = 420;
+        public static double TurnPos = 320;
     }
 
     @Config
@@ -114,7 +113,7 @@ public class Configs {
     @Config
     public static class DriveTrainWheels {
         public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 155, MaxSpeedTurn = Math.toRadians(110), speed = 0.5;
-        public static double MaxTurnAccel = Math.toRadians(110); //random
+        public static double MaxTurnAccel = Math.toRadians(110);
         public static double Radius = 15.7;
     }
 
@@ -125,15 +124,15 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.128, PixelCenterOpen = 0.72;//0.4 pixelSensorVoltage = 0.15
-        public static double servoTurnNormal = 0.68;
-        public static final double servoTurnTurned = 0.06;
-        public static double servoGripperNormal = 0.95;
-        public static double servoGripperGripped = 0.765;
+        public static double pixelSensorvoltage = 0.128;
+        public static double servoTurnNormal = 0.1;
+        public static final double servoTurnTurned = 0.7;
+        public static double servoGripperNormal = 0.59;
+        public static double servoGripperGripped = 0.33;
         public static double servoClampClamped = 0.7;
         public static double servoClampReleased = 0.54;
         public static double servoClampReleasedLift = 0.42;
-        public static double pixelDetectTimeMs = 335;
+        public static double pixelDetectTimeMs = 355;
     }
 
     @Config
@@ -144,28 +143,28 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double MinProfileAccel = -150; // random
-        public static double MaxProfileAccel = 150; // random
+        public static double MinProfileAccel = -130;
+        public static double MaxProfileAccel = 130;
     }
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 2.2;
-        public static double Lateral = 2.2;
+        public static double Axial = 5.2;
+        public static double Lateral = 5.2;
         public static double Heading = 5.53;
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 0.21;
-        public static double Lateral = 0.21;
+        public static double Axial = 0.31;
+        public static double Lateral = 0.31;
         public static double Heading = 0.05;
     }
 
     @Config
     public static class Motors{
         public static double DefultP = 0.000001;
-        public static double DefultI = 0;//0.00013;
+        public static double DefultI = 0;
         public static double DefultD = 0.005;
         public static double DefultF = 0.0005;
     }
@@ -189,7 +188,7 @@ public class Configs {
 
     @Config
     public static class Lighting{
-        public static double Intensity = 0.5;
+        public static double Intensity = 0.2;
         public static double Brightness = 1;
     }
 }

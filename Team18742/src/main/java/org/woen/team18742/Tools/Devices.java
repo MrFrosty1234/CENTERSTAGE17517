@@ -22,7 +22,7 @@ public class Devices {
 
     public static DcMotorEx OdometerXLeft, OdometerY, OdometerXRight;
 
-    public static DcMotorEx Podtyagamotor;
+    public static DcMotorEx HookMotor;
 
     public static DcMotorEx LiftMotor, LightingMotor;
 
@@ -35,11 +35,12 @@ public class Devices {
     public static IMU IMU;
 
     public static AnalogInput PixelSensor;
-    public static Servo Gripper, Clamp, Servopere, ServoPlane, podtyaga1, podtyaga2, stackLift;
+    public static Servo Gripper, Clamp, Servopere, ServoPlane, HookServoLeft, HookServoRight, stackLift;
     public static ServoImplEx leftStackBrush, rightStackBrush;
 
     public static List<LynxModule> Hubs;
     public static VoltageSensor VoltageSensor;
+    public static List<ServoImplEx> Servs;
 
     public static void Init(HardwareMap map){
         if(_hardwareDevices != null)
@@ -49,6 +50,8 @@ public class Devices {
         RightForwardDrive = map.get(DcMotorEx.class, "rightFrontMotor");
         LeftBackDrive = map.get(DcMotorEx.class, "leftBackMotor");
         RightBackDrive = map.get(DcMotorEx.class, "rightBackMotor");
+
+        Servs = map.getAll(ServoImplEx.class);
 
         LiftMotor = map.get(DcMotorEx.class, "liftMotor");
 
@@ -76,14 +79,14 @@ public class Devices {
 
         stackLift = map.get(Servo.class,"stackLift");
 
-        podtyaga1 = map.get(Servo.class, "leftHook");
-        podtyaga2 = map.get(Servo.class, "rightHook");
+        HookServoLeft = map.get(Servo.class, "leftHook");
+        HookServoRight = map.get(Servo.class, "rightHook");
         Hubs = map.getAll(LynxModule.class);
 
         VoltageSensor = map.get(VoltageSensor.class, "Control Hub");
 
         LightingMotor = map.get(DcMotorEx.class, "odometrYLED");;
-        Podtyagamotor = map.get(DcMotorEx.class, "odometerXLeft");
+        HookMotor = map.get(DcMotorEx.class, "odometerXLeft");
 
         _hardwareDevices = map;
     }

@@ -14,6 +14,7 @@ public class Plane {
         _time = time;
         _servoPlane = Devices.ServoPlane;
     }
+
     public void Launch(boolean debug){
         if(debug || _time.milliseconds() > 60000)
             _servoPlane.setPosition(Configs.Plane.servoplaneOtkrit);

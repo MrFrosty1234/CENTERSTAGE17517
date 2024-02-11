@@ -7,6 +7,7 @@ import org.woen.team18742.Collectors.TeleOpCollector;
 public class TeleOp extends LinearOpModeBase {
     @Override
     protected BaseCollector GetCollector() {
+        IsStarted = true;
         return new TeleOpCollector(this);
     }
 }

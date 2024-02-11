@@ -2,7 +2,6 @@ package org.woen.team18742.Modules;
 
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -41,7 +40,7 @@ public class Intake implements IRobotModule {
     private boolean _oldTurnPos = false;
 
     public void updateTurner() {
-        if (_lift.isProchelnugnoepologenie()) {
+        if (_lift.isTurnPosPassed()) {
             servoTurn.setPosition(Configs.Intake.servoTurnTurned);
 
             _isTurned = false;
@@ -60,6 +59,11 @@ public class Intake implements IRobotModule {
         }
     }
 
+    @Override
+    public void Start() {
+        setGripper(false);
+    }
+
     public boolean IsTurnNormal() {
         return _isTurned;
     }
@@ -74,6 +78,7 @@ public class Intake implements IRobotModule {
         } else {
             gripper.setPosition(Configs.Intake.servoGripperNormal);
         }
+
         _pixelGripped = grip;
     }
 
@@ -81,11 +86,10 @@ public class Intake implements IRobotModule {
         return _pixelGripped;
     }
 
-
     public void setClamp(boolean clampIk) {
         if (clampIk) {
             clamp.setPosition(Configs.Intake.servoClampClamped);
-        } else if(_isTurned) {
+        } else if(_lift.isDown()) {
             clamp.setPosition(Configs.Intake.servoClampReleased);
         }
         else{
@@ -109,14 +113,14 @@ public class Intake implements IRobotModule {
         setGripper(false);
         _clampTimer.reset();
 
-        _liftTimer.Start(500, () -> _lift.SetLiftPose(LiftPose.DOWN));
+        _liftTimer.Start(400, () -> _lift.SetLiftPose(LiftPose.DOWN));
     }
 
     private final Timer _liftTimer = new Timer();
 
     @Override
     public void Update() {
-        if (isPixelDetected()) {
+        if (isPixelDetected() && _lift.isDown()) {
             setGripper(true);
             setClamp(_clampTimer.milliseconds() < clampTimerconst && _lift.isDown());
         } else {
@@ -130,9 +134,5 @@ public class Intake implements IRobotModule {
         ToolTelemetry.AddLine("Detected:" + isPixelDetected());
     }
 
-    public void PixelCenterGrip(boolean gripped) {
-        gripper.setPosition(gripped ? Configs.Intake.PixelCenterOpen : Configs.Intake.servoGripperNormal);
 
-        _pixelGripped = gripped;
-    }
 }

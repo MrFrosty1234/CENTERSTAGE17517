@@ -7,11 +7,9 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
-import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.PIDF;
-import org.woen.team18742.Tools.ToolTelemetry;
 
 @Module
 public class Lift implements IRobotModule {
@@ -21,7 +19,7 @@ public class Lift implements IRobotModule {
 
     private boolean _endingUpState = false, _endingDownState = false;
 
-    private final PIDF _liftPIDF = new PIDF(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef, 0, 0, 1, 1);
+    private final PIDF _liftPIDF = new PIDF(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef, 0.00001, 0, 1, 1);
     private Intake _intake;
 
     @Override
@@ -56,12 +54,12 @@ public class Lift implements IRobotModule {
 
         if (_liftPose != LiftPose.DOWN)
             _liftMotor.setPower(_liftPIDF.Update(_liftPose.encoderPose() - _liftMotor.getCurrentPosition()));
-        else if (!_intake.IsTurnNormal() && Math.abs(Configs.Lift.isProchelnugnoepologenie - _liftMotor.getCurrentPosition()) < 60)
-            _liftMotor.setPower(Math.max(_liftPIDF.Update(Configs.Lift.isProchelnugnoepologenie - _liftMotor.getCurrentPosition()), Configs.LiftPid.DOWN_MOVE_POWER));
+        else if (!_intake.IsTurnNormal() && Math.abs(Configs.Lift.TurnPos - _liftMotor.getCurrentPosition()) < 60)
+            _liftMotor.setPower(Math.max(_liftPIDF.Update(Configs.Lift.TurnPos - _liftMotor.getCurrentPosition()), Configs.LiftPid.DOWN_MOVE_POWER));
         else {
             if (!_endingDownState) {
-                if(isProchelnugnoepologenie())
-                    _liftMotor.setPower(Math.max(Configs.LiftPid.DOWN_MOVE_POWER * (_liftMotor.getCurrentPosition() / 600d), Configs.LiftPid.DOWN_MOVE_POWER));
+                if(isTurnPosPassed())
+                    _liftMotor.setPower(Math.min(Configs.LiftPid.DOWN_MOVE_POWER * (_liftMotor.getCurrentPosition() / 580d), Configs.LiftPid.DOWN_MOVE_POWER));
                 else
                     _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER_FAST);
             }
@@ -74,11 +72,11 @@ public class Lift implements IRobotModule {
     }
 
     public boolean isATarget() {
-        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || ((_liftPose == LiftPose.MIDDLE_LOWER || _liftPose == LiftPose.MIDDLE_UPPER) && Math.abs(_liftPIDF.Err) < 80);
+        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || ((_liftPose == LiftPose.MIDDLE_LOWER || _liftPose == LiftPose.MIDDLE_UPPER) && Math.abs(_liftPIDF.Err) < 90);
     }
 
     public boolean isDown() {
-        return _liftPose == LiftPose.DOWN && (_endingDownState);// || _liftMotor.getCurrentPosition() < Configs.LiftPoses.POSE_DOWN_ENDSWITCH_THRESHOLD);
+        return _liftPose == LiftPose.DOWN && (_endingDownState);
     }
 
     public boolean isUp() {
@@ -101,8 +99,8 @@ public class Lift implements IRobotModule {
         _liftPIDF.Start();
     }
 
-    public boolean isProchelnugnoepologenie(){
-        return _liftMotor.getCurrentPosition() > Configs.Lift.isProchelnugnoepologenie;
+    public boolean isTurnPosPassed(){
+        return _liftMotor.getCurrentPosition() > Configs.Lift.TurnPos;
     }
 
     private LiftPose _liftPose = LiftPose.DOWN;
