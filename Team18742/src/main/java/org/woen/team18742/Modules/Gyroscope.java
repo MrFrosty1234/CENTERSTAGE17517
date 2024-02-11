@@ -44,7 +44,7 @@ public class Gyroscope implements IRobotModule {
         if(!_isInited) {
             Reset();
 
-            _isInited = true;
+            //_isInited = true;
         }
         _deltaTime.reset();
     }

@@ -69,7 +69,7 @@ public class OdometrsOdometry implements IRobotModule {
         if(!_isInited) {
             Position = Bios.GetStartPosition().Position.clone();
 
-            _isInited = true;
+            _isInited = false;
         }
     }
 }

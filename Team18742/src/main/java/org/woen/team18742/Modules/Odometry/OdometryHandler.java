@@ -53,7 +53,7 @@ public class OdometryHandler implements IRobotModule {
         _odometerXLeft.Start();
 
         if(!_isInited) {
-            _isInited = true;
+            _isInited = false;
 
             Position = Bios.GetStartPosition().Position.clone();
 

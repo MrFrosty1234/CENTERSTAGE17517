@@ -50,7 +50,7 @@ public class Configs {
         public static double vRedUp = 255;
 
         public static double hBlueDown = 95;
-        public static double cBlueDown = 170;
+        public static double cBlueDown = 100;
         public static double vBlueDowm = 0;
         public static double hBlueUp = 255;
         public static double cBlueUp = 255;
@@ -110,7 +110,7 @@ public class Configs {
         public static double protectionTimeThresholdMs = 700;
         public static double reverseTimeThresholdMs = 900;
         public static double brushPower = 1.0;
-        public static double brushPowerReverse = -1.0;
+        public static double brushPowerReverse = -0.7;
     }
 
     @Config

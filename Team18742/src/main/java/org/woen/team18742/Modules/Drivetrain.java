@@ -75,14 +75,8 @@ public class Drivetrain implements IRobotModule {
     }
 
     private void DriveDirection(Vector2 speed, double rotate) {
-        if(HitCheck())
-            Stop();
-
-        if(_cvOdometry.IsNear()){
-            if(Math.abs(Math.signum(_odometry.Speed.X) - Math.signum(_cvOdometry.TagPos.X)) < 0.1 ||
-                    Math.abs(Math.signum(_odometry.Speed.Y) - Math.signum(_cvOdometry.TagPos.Y)) < 0.1)
-                Stop();
-        }
+        /*if(HitCheck())
+            Stop();*/
 
         _leftForwardDrive.setPower(speed.X - speed.Y - rotate);
         _rightBackDrive.setPower(speed.X - speed.Y + rotate);
@@ -101,8 +95,8 @@ public class Drivetrain implements IRobotModule {
     }
 
     private void DriveEncoderDirection(Vector2 speed, double rotate) {
-        if(HitCheck())
-            Stop();
+        /*if(HitCheck())
+            Stop();*/
 
         _leftForwardDrive.setEncoderPower(speed.X - speed.Y - rotate);
         _rightBackDrive.setEncoderPower(speed.X - speed.Y + rotate);
