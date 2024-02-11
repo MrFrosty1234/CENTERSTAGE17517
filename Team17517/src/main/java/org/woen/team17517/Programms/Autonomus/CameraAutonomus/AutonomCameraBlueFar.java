@@ -9,7 +9,7 @@ import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 
 @Autonomous
-public class AutonomCameraRedNear extends LinearOpMode {
+public class AutonomCameraBlueFar extends LinearOpMode {
     UltRobot robot;
     PipeLine pipeLine;
 
@@ -31,34 +31,23 @@ public class AutonomCameraRedNear extends LinearOpMode {
         robot.linearOpMode.telemetry.addData("Pos", pipeLine);
         if (pipeLine.pos == 3) {
             robot.updateWhilePositionFalse(new Runnable[]{
-                    () -> robot.autnomModules.move(-15500, -22000, 0, 1.6),
-                    () -> robot.autnomModules.move(0, 22000, 0, 0.5),
-                    () -> robot.autnomModules.move(0, 0, 12000, 1.2),
-                    () -> robot.autnomModules.move(-6000, -30000, 0, 2.3),
-                    () -> robot.autnomModules.bacBoardPixels(),
-                    () -> robot.autnomModules.move(0, 30000, 0, 0.5)
+                            () -> robot.autnomModules.move(-15500, -22000, 0, 1.6),
+                            () -> robot.autnomModules.move(0, 22000, 0, 0.5)
                     }
 
             );
         } else if (pipeLine.pos == 2) {
             robot.updateWhilePositionFalse(new Runnable[]{
-                            () -> robot.autnomModules.move(0, -30000, 0, 1.5),
-                            () -> robot.autnomModules.move(-10000, 30000, 0, 0.5),
-                            () -> robot.autnomModules.move(0, 0, 12000, 1.25),
-                            () -> robot.autnomModules.move(4000, -30000, 0, 2.8),
-                            () -> robot.autnomModules.bacBoardPixels(),
-                            () -> robot.autnomModules.move(0, 30000, 0, 0.5),
-
+                            () -> robot.autnomModules.move(0, -30000, 0, 1.45),
+                            () -> robot.autnomModules.move(-10000, 30000, 0, 1.25),
+                    () -> robot.autnomModules.move(0,0,24000,0.6),
+                    () -> robot.autnomModules.move(50000,0,0,1.8)
                     }
             );
         } else if (pipeLine.pos == 1) {
             robot.updateWhilePositionFalse(new Runnable[]{
                             () -> robot.autnomModules.move(0, -28000, 0, 1.05),
-                            () -> robot.autnomModules.move(0, -12000, -12000, 0.9),
-                            () -> robot.autnomModules.move(0, 30000, 0, 0.5),
-                            () -> robot.autnomModules.move(0, 0, 12000, 2.3),
-                            () -> robot.autnomModules.move(10000, -30000, 0, 2.4),
-                            () -> robot.autnomModules.bacBoardPixels(),
+                            () -> robot.autnomModules.move(0, -13000, -12000, 0.9),
                             () -> robot.autnomModules.move(0, 30000, 0, 0.5)
                     }
             );

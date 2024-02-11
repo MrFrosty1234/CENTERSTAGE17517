@@ -122,7 +122,7 @@ public class TeleOPNew extends LinearOpMode {
                 robot.lift.setStopManualTarget();
             }
 
-            if(aimPlaneBut.update(aimPlane) && (System.currentTimeMillis()/1000 - startPlaneTime) > 90){
+            if(aimPlaneBut.update(aimPlane)){
                 planeAimed = true;
                 telemetry.addData("Plane","aimed");
                 robot.devices.aimPlaneServo.setPosition(aimPos);
