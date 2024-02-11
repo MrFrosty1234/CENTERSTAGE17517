@@ -143,8 +143,8 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double MinProfileAccel = -150;
-        public static double MaxProfileAccel = 150;
+        public static double MinProfileAccel = -130;
+        public static double MaxProfileAccel = 130;
     }
 
     @Config

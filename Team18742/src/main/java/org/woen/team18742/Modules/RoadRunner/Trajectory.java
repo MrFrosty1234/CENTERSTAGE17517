@@ -11,8 +11,6 @@ import org.woen.team18742.Tools.Bios;
 public class Trajectory {
     public static RoadRunnerRouteManager.MyTrajectoryBuilder GetTrajectory(RoadRunnerRouteManager.MyTrajectoryBuilder builder,
                                                                            StartRobotPosition startPos, CameraRobotPosition camera) {
-        builder.brushOn();
-
         switch (startPos) {
             case BLUE_BACK: {
 //forward
@@ -27,7 +25,7 @@ public class Trajectory {
                         .strafeToLinearHeading(new Vector2d(60, 97), 0)
                         .waitSeconds(0.7)
                         .liftUp(0.5)
-                        .strafeToLinearHeading(new Vector2d(115 , 80), 0)
+                        .strafeToLinearHeading(new Vector2d(115, 80), 0)
                         .waitSeconds(0.5)
                         //.waitSeconds(0.5)
                         .waitLift()
@@ -35,8 +33,9 @@ public class Trajectory {
                         .pixelDeGripp()
                         .waitSeconds(2)
                         .strafeToLinearHeading(new Vector2d(120, 28), 0)
-                        .strafeToLinearHeading(new Vector2d(150, 28), 0);;
-break;
+                        .strafeToLinearHeading(new Vector2d(150, 28), 0);
+
+                break;
             }
 
             case RED_BACK: {

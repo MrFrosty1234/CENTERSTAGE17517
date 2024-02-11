@@ -59,6 +59,11 @@ public class Intake implements IRobotModule {
         }
     }
 
+    @Override
+    public void Start() {
+        setGripper(false);
+    }
+
     public boolean IsTurnNormal() {
         return _isTurned;
     }
@@ -129,9 +134,5 @@ public class Intake implements IRobotModule {
         ToolTelemetry.AddLine("Detected:" + isPixelDetected());
     }
 
-    /*public void PixelCenterGrip(boolean gripped) {
-        gripper.setPosition(gripped ? Configs.Intake.PixelCenterOpen : Configs.Intake.servoGripperNormal);
 
-        _pixelGripped = gripped;
-    }*/
 }

@@ -28,6 +28,9 @@ public class Hook implements IRobotModule {
     public void Start() {
         _endGameTime.reset();
         _isOpen = false;
+
+        _hookServoLeft.setPosition(Configs.Hook.ServoHookClosedLeft);
+        _hookServoRight.setPosition(Configs.Hook.ServoHookClosedRight);
     }
 
     @Override
@@ -45,6 +48,9 @@ public class Hook implements IRobotModule {
         if((_endGameTime.seconds() < 90 && !timerBypass) || _isOpen)
             return;
 
+        for(ServoImplEx i : Devices.Servs)
+            i.setPwmDisable();
+
         _hookServoLeft.setPosition(Configs.Hook.ServoHookOpenLeft);
         _hookServoRight.setPosition(Configs.Hook.ServoHookOpenRight);
 
@@ -53,29 +59,26 @@ public class Hook implements IRobotModule {
         _brush.BrushEnable();
         _stackBrush.servoSetDownPose();
 
-        for(ServoImplEx i : Devices.Servs)
-            i.setPwmDisable();
-
         _isOpen = true;
     }
 
 
     public void hookUp() {
         if (_isOpen)
-            _hookMotor.setPower(1);
+            _hookMotor.setPower(-1);
         else
-            _hookMotor.setPower(0);
-
+            Stop();
     }
 
     public void hookDown()
     {
         if (_isOpen)
-            _hookMotor.setPower(-1);
+            _hookMotor.setPower(1);
         else
-            _hookMotor.setPower(0);
+            Stop();
     }
 
+    @Override
     public void Stop(){
         _hookMotor.setPower(0);
     }
