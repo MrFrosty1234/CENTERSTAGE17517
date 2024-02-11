@@ -19,7 +19,7 @@ import org.woen.team18742.Tools.ToolTelemetry;
 @Module
 public class Intake implements IRobotModule {
     private Servo servoTurn;
-    private Servo gripper; // Штучка которая хватает пиксели в подъемнике
+    private Servo gripper, _lineServo; // Штучка которая хватает пиксели в подъемнике
     private Servo clamp; // Сервак который прижимает пиксели после щеток
     private AnalogInput pixelSensor1; // Датчик присутствия пикселей над прижимом
     private Brush _brush;
@@ -31,6 +31,7 @@ public class Intake implements IRobotModule {
         gripper = Devices.Gripper;
         clamp = Devices.Clamp;
         servoTurn = Devices.Servopere;
+        _lineServo = Devices.LineServo;
 
         _lift = collector.GetModule(Lift.class);
         _brush = collector.GetModule(Brush.class);
@@ -62,6 +63,7 @@ public class Intake implements IRobotModule {
     @Override
     public void Start() {
         setGripper(false);
+        LineServoClose();
     }
 
     public boolean IsTurnNormal() {
@@ -134,5 +136,11 @@ public class Intake implements IRobotModule {
         ToolTelemetry.AddLine("Detected:" + isPixelDetected());
     }
 
+    public void LineServoOpen(){
+        _lineServo.setPosition(Configs.Intake.LineServoOpen);
+    }
 
+    public void LineServoClose(){
+        _lineServo.setPosition(Configs.Intake.LineServoClose);
+    }
 }

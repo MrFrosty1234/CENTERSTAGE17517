@@ -24,6 +24,8 @@ public class OdometrsOdometry implements IRobotModule {
 
     private final ElapsedTime _deltaTime = new ElapsedTime();
 
+    private static boolean _isInited = false;
+
     @Override
     public void Init(BaseCollector collector) {
         _gyro = collector.GetModule(Gyroscope.class);
@@ -64,6 +66,10 @@ public class OdometrsOdometry implements IRobotModule {
     public void Start() {
         _deltaTime.reset();
 
-        Position = Bios.GetStartPosition().Position.clone();
+        if(!_isInited) {
+            Position = Bios.GetStartPosition().Position.clone();
+
+            _isInited = false;
+        }
     }
 }

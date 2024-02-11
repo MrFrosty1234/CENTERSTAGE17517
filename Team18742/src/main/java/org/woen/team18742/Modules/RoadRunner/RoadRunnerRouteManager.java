@@ -81,15 +81,13 @@ public class RoadRunnerRouteManager implements IRobotModule {
     private boolean _isTrajectoryEnd = false;
 
     private List<BooleanSupplier> _waiters = new ArrayList<>();
+    private double _startWaitTime;
+    private final ElapsedTime _time = new ElapsedTime();
 
     private final Action[][] _allTrajectory = new Action[StartRobotPosition.values().length][CameraRobotPosition.values().length];
 
-    private LinearOpMode _robot;
-
     @Override
     public void Init(BaseCollector collector) {
-        _robot = collector.Robot;
-
         _lift = collector.GetModule(Lift.class);
         _intake = collector.GetModule(Intake.class);
         _camera = collector.GetModule(Camera.class);
@@ -114,7 +112,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
                         if(attempt == 4)
                             throw e;
 
-                        _robot.sleep(10);
+                        collector.Robot.sleep(10);
                         continue;
                     }
 
@@ -144,9 +142,9 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
         _trajectory = _allTrajectory[indexStartPos][indexCamera];
 
-        //_intake.PixelCenterGrip(true);
-
         _trajectory.preview(ToolTelemetry.GetCanvas());
+
+        _time.reset();
     }
 
     @Override
@@ -226,6 +224,9 @@ public class RoadRunnerRouteManager implements IRobotModule {
                     if (i.getAsBoolean())
                         _waiters.remove(i);
 
+                if(_time.seconds() - _startWaitTime > 10)
+                    _waiters.clear();
+
                 _driveTrain.Stop();
 
                 trajectoryTimer.pause();
@@ -302,6 +303,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
             _builder = _builder.endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _lift.isATarget());
+                _startWaitTime = _time.seconds();
             });
             return this;
         }
@@ -320,6 +322,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
             _builder = _builder.endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _intake.isPixelGripped());
+                _startWaitTime = _time.seconds();
             });
 
             return this;
@@ -382,6 +385,16 @@ public class RoadRunnerRouteManager implements IRobotModule {
         public MyTrajectoryBuilder brushDown(double ds) {
             _builder = _builder.endTrajectory();
             _builder = _builder.afterTime(ds, () -> _staksBrush.servoSetDownPose());
+            return this;
+        }
+
+        public MyTrajectoryBuilder linePixelOpen() {
+            return linePixelOpen(0);
+        }
+
+        public MyTrajectoryBuilder linePixelOpen(double ds) {
+            _builder = _builder.endTrajectory();
+            _builder = _builder.afterTime(ds, () -> _intake.LineServoOpen());
             return this;
         }
     }

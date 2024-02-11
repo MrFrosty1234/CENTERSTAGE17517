@@ -33,11 +33,18 @@ public class CVOdometry implements IRobotModule {
     public Vector2 Position = new Vector2(), ShiftPosition = new Vector2();
     public boolean IsZero = true;
 
-    private Vector2 _cameraPosition = new Vector2(Configs.Camera.CameraX, Configs.Camera.CameraY), _oldPosition = new Vector2();
+    private final Vector2 _cameraPosition = new Vector2(Configs.Camera.CameraX, Configs.Camera.CameraY);
+    private Vector2 _oldPosition = new Vector2();
     private Gyroscope _gyro;
 
     private final ElapsedTime _deltaTime = new ElapsedTime();
     private OdometryHandler _handler;
+    private boolean _isNear = false;
+    public Vector2 TagPos;
+
+    public boolean IsNear(){
+        return _isNear;
+    }
 
     @Override
     public void Init(BaseCollector collector){
@@ -89,8 +96,23 @@ public class CVOdometry implements IRobotModule {
                 // Повернуть относительное положение на угол между тегом и полем
                 VectorF rotatedPosVector = fieldTagQ.applyToVector(rawTagPoseVector);
                 // Вычесть полученное положение камеры из абсолютного положения тега
-                if(Math.sqrt(rotatedPosVector.get(0) * rotatedPosVector.get(0) + rotatedPosVector.get(1) * rotatedPosVector.get(1)) > 800)
+                double dist = Math.sqrt(rotatedPosVector.get(0) * rotatedPosVector.get(0) + rotatedPosVector.get(1) * rotatedPosVector.get(1));
+
+                if(dist > 800)
                     continue;
+
+                if(dist < 10) {
+                    for (int i : Configs.Camera.BackDropTags)
+                        if (i == metadata.id) {
+                            _isNear = true;
+
+                            break;
+                        }
+                }
+                else
+                    _isNear = false;
+
+                TagPos = new Vector2(rotatedPosVector.get(0), rotatedPosVector.get(1));
 
                 VectorF fieldCameraPos = fieldTagPos.subtracted(rotatedPosVector);
 

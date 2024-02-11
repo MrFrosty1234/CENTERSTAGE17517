@@ -13,39 +13,99 @@ public class Trajectory {
                                                                            StartRobotPosition startPos, CameraRobotPosition camera) {
         switch (startPos) {
             case BLUE_BACK: {
-//forward
-                builder.brushDown(4)
-                        .waitSeconds(3)
-                        .strafeToLinearHeading(new Vector2d(-74, 109), -PI / 2)
-                        //отпустить пиксель и щётки врубили и опустили
-                        .brushOn()
-                        .strafeToLinearHeading(new Vector2d(-98, 96), 0)
-                        .strafeToLinearHeading(new Vector2d(-118, 89), 0)
-                        .waitPixel()
-                        .strafeToLinearHeading(new Vector2d(60, 97), 0)
-                        .waitSeconds(0.7)
-                        .liftUp(0.5)
-                        .strafeToLinearHeading(new Vector2d(115, 80), 0)
-                        .waitSeconds(0.5)
-                        //.waitSeconds(0.5)
-                        .waitLift()
-                        .waitSeconds(0.5)
-                        .pixelDeGripp()
-                        .waitSeconds(2)
-                        .strafeToLinearHeading(new Vector2d(120, 28), 0)
-                        .strafeToLinearHeading(new Vector2d(150, 28), 0);
+                switch (camera) {
+                    case RIGHT:
+                        builder.strafeToLinearHeading(new Vector2d(-83,115), -2)
+                                .strafeToLinearHeading(new Vector2d(-78, 135), -PI / 2)
+                                .strafeToLinearHeading(new Vector2d(-116, 105), -PI / 2)
+                        //сюда и до парковки
+                        .strafeToLinearHeading(new Vector2d(-116, 50), -PI / 2)
+                               // .turnTo(0)
+                                .strafeToLinearHeading(new Vector2d(126, 27), -PI / 2)
 
+
+
+
+
+
+                        ;
+                        ;break;
+                    case LEFT:
+                        builder//.brushOn().brushDown(1)
+                                .strafeToLinearHeading(new Vector2d(-58, 110), -PI/2)
+                                .strafeToLinearHeading(new Vector2d(-64, 88), 0)
+                                .strafeToLinearHeading(new Vector2d(-65, 135), -PI / 2)
+                                .strafeToLinearHeading(new Vector2d(-111, 105), -PI / 2)
+
+
+
+
+
+                        //тут начало обрубка кода для теста
+                                // .strafeToLinearHeading(new Vector2d(-95, 100), 0)
+                                /*.strafeToLinearHeading(new Vector2d(-96, 92), 0)
+                                .waitPixel()
+                                .strafeToLinearHeading(new Vector2d(-90, 90), 0)
+                                .strafeToLinearHeading(new Vector2d(-90, 25), 0)
+                                .strafeToLinearHeading(new Vector2d(90, 30), 0)
+                                .liftUp()
+                                .strafeToLinearHeading(new Vector2d(145 , 80), 0)
+                                .waitSeconds(0.1)
+                                .waitLift()
+                                .pixelDeGripp()
+                                .waitSeconds(1)
+                                .brushOn()
+                                .strafeToLinearHeading(new Vector2d(120, 32), 0)
+                                .strafeToLinearHeading(new Vector2d(140, 25), 0)*/;
+                        break;
+                    case FORWARD:
+//forward
+                    builder
+                            .strafeToLinearHeading(new Vector2d(-77, 103), -PI / 2)
+                            .strafeToLinearHeading(new Vector2d(-76, 135), -PI / 2)
+                            .strafeToLinearHeading(new Vector2d(-105, 90), -PI / 2)
+
+//новый код
+
+                    //начало обрубка для теста
+                            /*.brushOn()
+                            .strafeToLinearHeading(new Vector2d(-98, 96), 0)
+                            .strafeToLinearHeading(new Vector2d(-118, 89), 0)
+                            .waitPixel()
+                            .strafeToLinearHeading(new Vector2d(60, 97), 0)
+                            .waitSeconds(0.7)
+                            .liftUp(0.5)
+                            .strafeToLinearHeading(new Vector2d(110, 80), 0)
+                            .waitSeconds(0.3)
+                            .strafeToLinearHeading(new Vector2d(124, 80), 0)
+                            .waitSeconds(0.5)
+                            //.waitSeconds(0.5)
+                            .waitLift()
+                            .waitSeconds(1)
+                            .pixelDeGripp()
+                            .waitSeconds(2)
+                            .strafeToLinearHeading(new Vector2d(120, 28), 0)
+                            .strafeToLinearHeading(new Vector2d(150, 28), 0)*/;
+                break;
+                }
                 break;
             }
 
             case RED_BACK: {
                 switch (camera) {
                     case RIGHT:
-                        builder.brushDown(4)
-                                .waitSeconds(5)
-                                .strafeToLinearHeading(new Vector2d(-58, -123), PI / 2)
-                                .strafeToLinearHeading(new Vector2d(-61, -85), PI / 2 / 2 / 2)
-                                .brushOn()
+                        builder//.brushOn()
+                        //.brushDown(4)
+                                //.waitSeconds(5)
+                                .strafeToLinearHeading(new Vector2d(-58, -132), PI / 2)
+                                .strafeToLinearHeading(new Vector2d(-61, -100),PI / 2 / 2 / 2)
+                                //тут ноый код
+                                .strafeToLinearHeading(new Vector2d(-70, -135), PI/2)
+                                .waitSeconds(0.7)
+                                .strafeToLinearHeading(new Vector2d(-95, -120), PI/2)
+
+                        //прода старого
+                                /*.brushOn()
                                 //.strafeToLinearHeading(new Vector2d(-95, 100), 0)
                                 .strafeToLinearHeading(new Vector2d(-96, -92), 0)
                                 .waitPixel()
@@ -60,37 +120,31 @@ public class Trajectory {
                                 .waitSeconds(1)
                                 .brushOn()
                                 .strafeToLinearHeading(new Vector2d(120, -32), 0)
-                                .strafeToLinearHeading(new Vector2d(150, -32), 0);
+                                .strafeToLinearHeading(new Vector2d(150, -32), 0)*/;
                         break;
                     case LEFT:
-                        builder.brushDown(4)
-                                .waitSeconds(5)
-                                .strafeToLinearHeading(new Vector2d(-58, -123), PI / 2)
-                                .strafeToLinearHeading(new Vector2d(-61, -85), PI / 2 / 2 / 2)
-                                .brushOn()
-                                //.strafeToLinearHeading(new Vector2d(-95, 100), 0)
-                                .strafeToLinearHeading(new Vector2d(-96, -92), 0)
-                                .waitPixel()
-                                .strafeToLinearHeading(new Vector2d(-90, -90), 0)
-                                .strafeToLinearHeading(new Vector2d(-90, -25), 0)
-                                .strafeToLinearHeading(new Vector2d(90, -30), 0)
-                                .liftUp()
-                                .strafeToLinearHeading(new Vector2d(143, -100), 0)
-                                .waitSeconds(0.1)
-                                .waitLift()
-                                .pixelDeGripp()
-                                .waitSeconds(1)
-                                .brushOn()
-                                .strafeToLinearHeading(new Vector2d(120, -32), 0)
-                                .strafeToLinearHeading(new Vector2d(150, -32), 0);
+                        builder
+                                //.strafeToLinearHeading(new Vector2d(-78, -140), PI/2)//прямо
+                                .strafeToLinearHeading(new Vector2d(-89, -130), 1.9)
+                                //тут ноый код
+                                .strafeToLinearHeading(new Vector2d(-74, -135), PI/2)
+                                .waitSeconds(0.7)
+                                .strafeToLinearHeading(new Vector2d(-95, -120), PI/2)
+                        //прода старого
+                                ;
                         break;
                     case FORWARD:
                         //forward
-                        builder.brushDown(4)
-                                .waitSeconds(3)
-                                .strafeToLinearHeading(new Vector2d(-74, -109), PI / 2)
+                        builder//.brushDown(4)
+                                //.waitSeconds(3)
+                                .strafeToLinearHeading(new Vector2d(-74, -105), PI / 2)
+                        //тут ноый код
+                                .strafeToLinearHeading(new Vector2d(-74, -135), PI/2)
+                                .waitSeconds(0.7)
+                                .strafeToLinearHeading(new Vector2d(-95, -120), PI/2)
+                        //прода старого
                                 //отпустить пиксель и щётки врубили и опустили
-                                .brushOn()
+                                /*.brushOn()
                                 .strafeToLinearHeading(new Vector2d(-98, -96), 0)
                                 .strafeToLinearHeading(new Vector2d(-118, -89), 0)
                                 .waitPixel()
@@ -117,9 +171,9 @@ public class Trajectory {
                                 //.waitSeconds(0.5)
                                 .waitLift()
                                 .pixelDeGripp()
-                                .waitSeconds(2)*/
+                                .waitSeconds(2)
                                 .strafeToLinearHeading(new Vector2d(120, -32), 0)
-                                .strafeToLinearHeading(new Vector2d(150, -32), 0);
+                                .strafeToLinearHeading(new Vector2d(150, -32), 0)*/;
 
                         /*.waitPixel()
                         .liftUp(4)
@@ -165,30 +219,9 @@ public class Trajectory {
             }
 
             case RED_FORWARD: {
-                builder.strafeToLinearHeading(new Vector2d(130, -90), 0)//left
-                        //тут ставим пиксель на задник
-                        .liftUp()
-                        .waitSeconds(1.4)
-                        .pixelDeGripp()
-                        .waitSeconds(1)
-                        .strafeToLinearHeading(new Vector2d(70, -30), 0)
-                        .strafeToLinearHeading(new Vector2d(-80, -30), 0)
-                        //врубили щётки
-                        //начали опускать
-                        .brushDown()
-                        .brushOn()
-                        .strafeToLinearHeading(new Vector2d(-145, -60), 0)
-                        //.strafeToLinearHeading(new Vector2d(-145, -40), 0)
-                        //хаваем стопки
-                        .waitSeconds(5)
-                        .strafeToLinearHeading(new Vector2d(60, -30), 0)
-                        .waitSeconds(0.2)
-                        .strafeToLinearHeading(new Vector2d(130, -100), 0)
-                        .liftUp()
-                        .waitSeconds(1.4)
-                        .pixelDeGripp()
-                        .waitSeconds(1);
-                break;
+                builder.strafeToLinearHeading(new Vector2d(90, -90), PI/2)//left
+
+                ;break;
 
             }
         }
