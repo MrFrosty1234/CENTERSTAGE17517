@@ -29,6 +29,9 @@ public class Configs {
     @Config
     public static class Camera{
         public static int RobotPos = 2;
+        public static int BackDropTags[] = new int[]{
+          1,2,3,4,5,6
+        };
         public static double CameraAccuracy = 150;
         public static double CameraX = 16.01, CameraY = -16.18;
 

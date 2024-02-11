@@ -29,6 +29,8 @@ public class Gyroscope implements IRobotModule {
 
     private double _oldRadians, _allRadians, _allDegree, _radianSpeed, _degreeSpeed, _radianAccel, _degreeAccel, _oldRadianSpeed, _maxRadianSpeed, _maxRadianAccel, _startRotateRadian;
 
+    private static boolean _isInited = false;
+
     @Override
     public void Init(BaseCollector collector) {
         _imu = Devices.IMU;
@@ -39,7 +41,11 @@ public class Gyroscope implements IRobotModule {
 
     @Override
     public void Start() {
-        Reset();
+        if(!_isInited) {
+            Reset();
+
+            _isInited = true;
+        }
         _deltaTime.reset();
     }
 

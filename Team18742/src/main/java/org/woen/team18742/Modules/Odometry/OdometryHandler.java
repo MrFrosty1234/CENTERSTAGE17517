@@ -29,7 +29,9 @@ public class OdometryHandler implements IRobotModule {
     public Vector2 Position = new Vector2(), Speed = new Vector2(), Accel = new Vector2();
 
     private final Vector2 _maxSpeed = new Vector2(), _maxAccel = new Vector2();
-    private ElapsedTime _deltaTime = new ElapsedTime();
+    private final ElapsedTime _deltaTime = new ElapsedTime();
+
+    private static boolean _isInited = false;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -46,13 +48,17 @@ public class OdometryHandler implements IRobotModule {
 
     @Override
     public void Start() {
-        Reset();
-
         _odometerY.Start();
         _odometerXRight.Start();
         _odometerXLeft.Start();
 
-        Position = Bios.GetStartPosition().Position.clone();
+        if(!_isInited) {
+            _isInited = true;
+
+            Position = Bios.GetStartPosition().Position.clone();
+
+            Reset();
+        }
     }
 
     public double GetSpeedOdometerXLeft() {

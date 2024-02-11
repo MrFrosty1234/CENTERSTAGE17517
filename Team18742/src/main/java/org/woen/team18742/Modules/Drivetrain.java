@@ -10,6 +10,7 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.BulkInit;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
+import org.woen.team18742.Modules.Odometry.CVOdometry;
 import org.woen.team18742.Modules.Odometry.OdometrsOdometry;
 import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Configs.Configs;
@@ -27,6 +28,8 @@ public class Drivetrain implements IRobotModule {
     private EncoderControl _leftForwardEncoder, _rightForwardEncoder, _leftBackEncoder, _rightBackEncoder;
 
     private Gyroscope _gyro;
+    private CVOdometry _cvOdometry;
+    private OdometryHandler _odometry;
 
     @Override
     public void Start() {
@@ -67,6 +70,8 @@ public class Drivetrain implements IRobotModule {
         _rightBackDrive.setDirection(REVERSE);
 
         _gyro = collector.GetModule(Gyroscope.class);
+        _cvOdometry = collector.GetModule(CVOdometry.class);
+        _odometry = collector.GetModule(OdometryHandler.class);
     }
 
     private void DriveDirection(Vector2 speed, double rotate) {
