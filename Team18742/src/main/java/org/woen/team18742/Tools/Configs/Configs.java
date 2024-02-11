@@ -136,6 +136,8 @@ public class Configs {
         public static double servoClampReleased = 0.54;
         public static double servoClampReleasedLift = 0.42;
         public static double pixelDetectTimeMs = 375;
+        public static double LineServoOpen = 1;
+        public static double LineServoClose = 0;
     }
 
     @Config

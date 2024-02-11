@@ -35,7 +35,7 @@ public class Devices {
     public static IMU IMU;
 
     public static AnalogInput PixelSensor;
-    public static Servo Gripper, Clamp, Servopere, ServoPlane, HookServoLeft, HookServoRight, stackLift;
+    public static Servo Gripper, Clamp, Servopere, ServoPlane, HookServoLeft, HookServoRight, stackLift, LineServo;
     public static ServoImplEx leftStackBrush, rightStackBrush;
 
     public static List<LynxModule> Hubs;
@@ -87,6 +87,8 @@ public class Devices {
 
         LightingMotor = map.get(DcMotorEx.class, "odometrYLED");;
         HookMotor = map.get(DcMotorEx.class, "odometerXLeft");
+
+        LineServo = map.get(Servo.class, "lineServo");
 
         _hardwareDevices = map;
     }

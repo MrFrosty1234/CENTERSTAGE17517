@@ -387,5 +387,15 @@ public class RoadRunnerRouteManager implements IRobotModule {
             _builder = _builder.afterTime(ds, () -> _staksBrush.servoSetDownPose());
             return this;
         }
+
+        public MyTrajectoryBuilder linePixelOpen() {
+            return linePixelOpen(0);
+        }
+
+        public MyTrajectoryBuilder linePixelOpen(double ds) {
+            _builder = _builder.endTrajectory();
+            _builder = _builder.afterTime(ds, () -> _intake.LineServoOpen());
+            return this;
+        }
     }
 }
