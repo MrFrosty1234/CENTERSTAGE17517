@@ -33,18 +33,18 @@ public class PipeLine implements VisionProcessor {
     Mat img_range_red1 = new Mat();
     Mat img_range_red2 = new Mat();
     Mat img_range_blue = new Mat();
-    public static double hRedDown1 = 170;
+    public static double hRedDown1 = 130;
     public static double hRedDown2 = 0;
-    public static double cRedDown = 160;
-    public static double vRedDowm = 100;
-    public static double hRedUp1 = 180;
+    public static double cRedDown = 180;
+    public static double vRedDowm = 60;
+    public static double hRedUp1 = 160;
     public static double hRedUp2 = 10;
     public static double cRedUp = 255;
     public static double vRedUp = 255;
 
-    public static double hBlueDown = 90;
-    public static double cBlueDown = 180;
-    public static double vBlueDowm = 120;
+    public static double hBlueDown = 20;
+    public static double cBlueDown = 130;
+    public static double vBlueDowm = 150;
     public static double hBlueUp = 140;
     public static double cBlueUp = 255;
     public static double vBlueUp = 255;
