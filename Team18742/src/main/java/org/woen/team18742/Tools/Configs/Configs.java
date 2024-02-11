@@ -124,7 +124,7 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.128;
+        public static double pixelSensorvoltage = 0.123;
         public static double servoTurnNormal = 0.1;
         public static final double servoTurnTurned = 0.7;
         public static double servoGripperNormal = 0.59;
@@ -132,7 +132,7 @@ public class Configs {
         public static double servoClampClamped = 0.7;
         public static double servoClampReleased = 0.54;
         public static double servoClampReleasedLift = 0.42;
-        public static double pixelDetectTimeMs = 355;
+        public static double pixelDetectTimeMs = 375;
     }
 
     @Config
@@ -143,8 +143,8 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double MinProfileAccel = -130;
-        public static double MaxProfileAccel = 130;
+        public static double MinProfileAccel = -100;
+        public static double MaxProfileAccel = 100;
     }
 
     @Config
