@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules.Transport.Grabber;
+package org.woen.team17517.RobotModules.Grabber;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;

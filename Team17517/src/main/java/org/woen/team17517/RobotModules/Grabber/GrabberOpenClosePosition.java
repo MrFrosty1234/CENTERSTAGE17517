@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules.Transport.Grabber;
+package org.woen.team17517.RobotModules.Grabber;
 
 public enum GrabberOpenClosePosition {
     OPEN(0.565),CLOSE(0.465);

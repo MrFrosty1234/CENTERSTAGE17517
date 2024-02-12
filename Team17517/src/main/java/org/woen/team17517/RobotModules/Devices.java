@@ -6,15 +6,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @com.acmerobotics.dashboard.config.Config
 public class Devices {
     UltRobot robot;
     public Devices(UltRobot robot){
+        this.robot = robot;
+
         left_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_front_drive");
         left_back_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "left_back_drive");
-
         right_front_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_front_drive");
         right_back_drive = robot.linearOpMode.hardwareMap.get(DcMotorEx.class, "right_back_drive");
 
@@ -36,9 +38,8 @@ public class Devices {
         upPixelsSensor = robot.linearOpMode.hardwareMap.get(AnalogInput.class,"upPixelsSensor");
         downPixelSensor = robot.linearOpMode.hardwareMap.get(AnalogInput.class,"downPixelsSensor");
         reset();
-
-        this.robot = robot;
     }
+
     public DcMotorEx left_front_drive;
     public DcMotorEx left_back_drive;
     public DcMotorEx right_front_drive;

@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules.Transport.Lift;
+package org.woen.team17517.RobotModules.Lift;
 
 import static java.lang.Math.abs;
 
