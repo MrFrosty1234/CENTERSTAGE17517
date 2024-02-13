@@ -45,7 +45,7 @@ public class Lift implements RobotModule {
         voltage = 12;
     }
     public boolean getUpSwitch(){
-        return buttonUp.getState();
+        return false;
     }
     public boolean getDownSwitch(){return buttonDown.getState();}
 
