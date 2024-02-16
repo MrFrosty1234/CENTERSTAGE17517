@@ -38,7 +38,6 @@ public class UltRobot {
     public DriveTrainVelocityControl driveTrainVelocityControl;
     public Odometry odometry;
     public OdometryNew odometryNew;
-    //public Devices devices;
     public Timer timer;
     public RobotModule[] robotModules;
     public Hardware hardware;
