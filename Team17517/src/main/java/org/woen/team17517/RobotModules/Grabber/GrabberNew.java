@@ -13,46 +13,49 @@ public class GrabberNew implements RobotModule {
     private DcMotorEx brushMotor;
     public GrabberNew(UltRobot robot){
         this.robot = robot;
-        progibServo = robot.devices.progibServo;
-        openServo = robot.devices.pixelServoLeft;
-        brushMotor = robot.devices.intakeMotor;
+        progibServo = robot.hardware.grabberServos.grabberServo;
+        openServo = robot.hardware.grabberServos.upServo;
+        brushMotor = robot.hardware.intakeAndLiftMotors.brushMotor;
     }
-    public double getTargetProgib(){
+    public GrabberPosition getTargetProgib(){
         return targetProgib;
     }
-    public double getTargetOpenClose(){
+    public BrushMode getBrushMode() {
+        return brushMode;
+    }
+    public GrabberOpenClosePosition getTargetOpenClose(){
         return targetOpenClose;
     }
     public void finish(){
-        targetProgib = GrabberPosition.FINISH.value;
+        targetProgib = GrabberPosition.FINISH;
     }
     public void down(){
-        targetProgib = GrabberPosition.DOWN.value;
+        targetProgib = GrabberPosition.DOWN;
     }
     public void safe(){
-        targetProgib = GrabberPosition.SAFE.value;
+        targetProgib = GrabberPosition.SAFE;
     }
     public void open(){
-        targetOpenClose = GrabberOpenClosePosition.OPEN.value;
+        targetOpenClose = GrabberOpenClosePosition.OPEN;
     }
     public void close(){
-        targetOpenClose = GrabberOpenClosePosition.CLOSE.value;
+        targetOpenClose = GrabberOpenClosePosition.CLOSE;
     }
     public void brushIn(){
-        brushMode = BrushMode.IN.value;
+        brushMode = BrushMode.IN;
     }
     public void brushOut(){
-        brushMode = BrushMode.OUT.value;
+        brushMode = BrushMode.OUT;
     }
     public void brushOff(){
-        brushMode = BrushMode.OFF.value;
+        brushMode = BrushMode.OFF;
     }
-    private double brushMode = BrushMode.OFF.value;
-    private double targetProgib = GrabberPosition.DOWN.value;
-    private double targetOpenClose = GrabberOpenClosePosition.OPEN.value;
+    private BrushMode brushMode = BrushMode.OFF;
+    private GrabberPosition targetProgib = GrabberPosition.DOWN;
+    private GrabberOpenClosePosition targetOpenClose = GrabberOpenClosePosition.OPEN;
     public void update(){
-        progibServo.setPosition(targetProgib);
-        openServo.setPosition(targetOpenClose);
-        brushMotor.setPower(brushMode);
+        progibServo.setPosition(targetProgib.value);
+        openServo.setPosition(targetOpenClose.value);
+        brushMotor.setPower(brushMode.value);
     }
 }

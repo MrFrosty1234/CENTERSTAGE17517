@@ -1,4 +1,4 @@
-package org.woen.team17517.Programms.Test;
+package org.woen.team17517.Programms.Autonomus.AutonomusWithOutCamera;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,14 +7,17 @@ import org.woen.team17517.Programms.Autonomus.AutnomModules;
 import org.woen.team17517.RobotModules.UltRobot;
 
 @Autonomous
-public class TestAuto extends LinearOpMode {
+public class SimpleAutoBlueNear extends LinearOpMode {
     UltRobot robot;
     AutnomModules autnomModules;
     public void runOpMode() {
         robot = new UltRobot(this);
         autnomModules = new AutnomModules(robot);
         waitForStart();
-        sleep(25000);
-        autnomModules.move(0,30000,0,3);
+        autnomModules.move(-60000, -60000, 0, 0.9);
+        autnomModules.move(0, -30000, 0, 2);
+        autnomModules.bacBoardPixels();
+        autnomModules.move(0,15000,0,1);
+        autnomModules.move(30000,0,0,2);
     }
 }

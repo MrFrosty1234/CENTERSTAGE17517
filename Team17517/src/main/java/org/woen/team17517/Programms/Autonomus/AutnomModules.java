@@ -1,4 +1,4 @@
-package org.woen.team17517.Programms.Autonomus.AutonomusWithAutonomModules;
+package org.woen.team17517.Programms.Autonomus;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -49,35 +49,5 @@ public class AutnomModules {
                 () -> robot.grabber.brushOff(),
                 () -> robot.timer.getTimeForTimer(0.1),
         });
-    }
-    public void cameraMove() {
-        VisionPortal visionPortal;
-
-        visionPortal = new VisionPortal.Builder().setCamera(robot.linearOpMode.hardwareMap.get(WebcamName.class, "Webcam 1")).addProcessors(pipeLine).build();
-        visionPortal.close();
-        robot.linearOpMode.telemetry.addData("Pos",pipeLine);
-        if (pipeLine.pos == 1){
-            robot.updateWhilePositionFalse( new Runnable[]{
-                    () -> robot.autnomModules.move(20000,-30000,0,0.6),
-                    () -> robot.autnomModules.move(-20000,30000,0,0.6)
-                    }
-
-            );
-        }else if (pipeLine.pos == 2){
-            robot.updateWhilePositionFalse( new Runnable[]{
-                    () -> robot.autnomModules.move(0,-30000,0,0.8),
-                    () -> robot.autnomModules.move(0,30000,0,0.8)
-            }
-            );
-        }else if (pipeLine.pos == 3){
-            robot.updateWhilePositionFalse( new Runnable[]{
-                    () -> robot.autnomModules.move(-20000,-30000,-6000,0.6),
-                    () -> robot.autnomModules.move(20000,30000,6000,0.6)
-            }
-            );
-        }
-
-
-
     }
 }

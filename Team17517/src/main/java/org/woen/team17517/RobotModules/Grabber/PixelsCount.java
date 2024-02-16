@@ -12,8 +12,8 @@ public class PixelsCount implements RobotModule {
     AnalogInput downSensor;
     public PixelsCount(UltRobot robot){
         this.robot = robot;
-        upSensor =  robot.devices.upPixelsSensor;
-        downSensor = robot.devices.downPixelSensor;
+        upSensor =  robot.hardware.sensors.upPixelsSensor;
+        downSensor = robot.hardware.sensors.downPixelSensor;
     }
     private double downVolt = 0;
     private double upVolt = 0;
