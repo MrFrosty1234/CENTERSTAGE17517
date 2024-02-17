@@ -24,7 +24,6 @@ public class OdometrsOdometry implements IRobotModule {
 
     private final ElapsedTime _deltaTime = new ElapsedTime();
 
-    private static boolean _isInited = false;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -33,7 +32,7 @@ public class OdometrsOdometry implements IRobotModule {
     }
 
     @Override
-    public void Update() {
+    public void LastUpdate() {
         double odometrXLeft = _odometrs.GetOdometerXLeft(), odometrY = _odometrs.GetOdometerY(), odometrXRight = _odometrs.GetOdometerXRight();
         double odometrSpeedXLeft = _odometrs.GetSpeedOdometerXLeft(), odometrSpeedY = _odometrs.GetSpeedOdometerY(), odometrSpeedXRight = _odometrs.GetSpeedOdometerXRight();
 
@@ -66,10 +65,6 @@ public class OdometrsOdometry implements IRobotModule {
     public void Start() {
         _deltaTime.reset();
 
-        if(!_isInited) {
-            Position = Bios.GetStartPosition().Position.clone();
-
-            _isInited = false;
-        }
+        Position = Bios.GetStartPosition().Position.clone();
     }
 }

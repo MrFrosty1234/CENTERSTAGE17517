@@ -72,16 +72,14 @@ public class Motor {
         Motor.setPower(pidSpeed / Battery.ChargeDelta);
     }
 
-    private double _targetEncoderSpeed = 0;//, _targetVoltageSpeed = 0;
+    private double _targetEncoderSpeed = 0;
 
     public void setPower(double speed){
         setEncoderPower(speed * _encoderType.Ticks);
-       // _targetVoltageSpeed = Configs.Battery.CorrectCharge * speed;
     }
 
     public void setEncoderPower(double speed){
         _targetEncoderSpeed = speed;
-        //_targetVoltageSpeed = Configs.Battery.CorrectCharge * (speed / _encoderType.Ticks);
     }
     
     public VelocityControl GetVelocityController(){

@@ -115,7 +115,7 @@ public class Configs {
 
     @Config
     public static class DriveTrainWheels {
-        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 155, MaxSpeedTurn = Math.toRadians(110), speed = 0.5;
+        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 110, MaxSpeedTurn = Math.toRadians(110), speed = 0.5;
         public static double MaxTurnAccel = Math.toRadians(110);
         public static double Radius = 15.7;
     }
@@ -136,8 +136,8 @@ public class Configs {
         public static double servoClampReleased = 0.54;
         public static double servoClampReleasedLift = 0.42;
         public static double pixelDetectTimeMs = 375;
-        public static double LineServoOpen = 1;
-        public static double LineServoClose = 0;
+        public static double LineServoOpen = 0;
+        public static double LineServoClose = 0.55;
     }
 
     @Config
@@ -148,22 +148,22 @@ public class Configs {
 
     @Config
     public static class Route{
-        public static double MinProfileAccel = -100;
-        public static double MaxProfileAccel = 100;
+        public static double MinProfileAccel = -70;
+        public static double MaxProfileAccel = 70;
     }
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 5.2;
-        public static double Lateral = 5.2;
-        public static double Heading = 5.53;
+        public static double Axial = 1.2;
+        public static double Lateral = 1.2;
+        public static double Heading = 1.2;
     }
 
     @Config
     public static class SpeedConnection{
-        public static double Axial = 0.31;
-        public static double Lateral = 0.31;
-        public static double Heading = 0.05;
+        public static double Axial = 1;
+        public static double Lateral = 1;
+        public static double Heading = 1;
     }
 
     @Config

@@ -21,7 +21,6 @@ public class VelocityControl {
         _encoder = encoder;
     }
 
-
     private double mathSpeed = 0d;
 
     public void Update() {
