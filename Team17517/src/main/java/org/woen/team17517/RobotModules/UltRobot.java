@@ -45,7 +45,6 @@ public class UltRobot {
 
     public UltRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
-        //devices = new Devices(this);
         hardware = new Hardware(linearOpMode1.hardwareMap);
         telemetryOutput = new TelemetryOutput(this);
         timer = new Timer(this);

@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class DriveTrain implements RobotModule{
     UltRobot robot;
     private double voltage = 12;
-    private boolean autoNode = false;
+    private boolean autoMode = false;
     public DriveTrain(UltRobot robot){
         this.robot = robot;
         voltage = 12;
@@ -96,47 +96,47 @@ public class DriveTrain implements RobotModule{
         targetVector.setCord(x,y);
         targetH = h;
         reset();
-        autoNode = true;
+        autoMode = true;
     }
     public void moveGlobalY(double y){
         targetVector.setCord(positionVector.getX(),y);
         reset();
-        autoNode = true;
+        autoMode = true;
     }
     public void moveGlobalH(double h){
         targetH = h;
         reset();
-        autoNode = true;
+        autoMode = true;
     }
     public void moveRobot(double x, double y, double h){
         targetVector = Vector2D.vectorSum(positionVector,new Vector2D(x,y));
         targetH = posH + h;
         reset();
-        autoNode = true;
+        autoMode = true;
     }
 
     public void moveRobotX(double x){
         targetVector = Vector2D.vectorSum(positionVector, new Vector2D(x,0));
         reset();
-        autoNode = true;
+        autoMode = true;
     }
     public void moveRobotY(double y){
         targetVector = Vector2D.vectorSum(positionVector, new Vector2D(0,y));
         reset();
-        autoNode = true;
+        autoMode = true;
     }
     public void moveRobotH(double h){
         targetH = posH+h;
-        autoNode = true;
+        autoMode = true;
     }
     public void moveGlobalX(double x){
         targetVector.setCord(x,positionVector.getY());
         reset();
-        autoNode = true;
+        autoMode = true;
     }
 
     public void update(){
-        if (autoNode) {
+        if (autoMode) {
             voltage = robot.voltageSensorPoint.getVol();
             positionVector = robot.odometryNew.getPositionVector();
             posH = robot.odometryNew.getH();
@@ -157,7 +157,7 @@ public class DriveTrain implements RobotModule{
             Y = pidY.PID(targetVector.getY(), positionVector.getY(), voltage);
             H = pidH.PID(targetH, posH, voltage);
 
-            u_X = timer.seconds() * kt;
+            u_X = timer.seconds()*kt;
 
             if (u_X > u_max) {
                 u_X = u_max;
@@ -192,7 +192,7 @@ public class DriveTrain implements RobotModule{
         }
 
     public boolean isAtPosition(){
-        if(autoNode) {
+        if(autoMode) {
             return Math.abs(errH) < minErrH && Math.abs(errX) < minErrX && Math.abs(errY) < minErrY;
         }else{
             return true;}
