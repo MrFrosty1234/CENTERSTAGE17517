@@ -3,8 +3,6 @@ package org.woen.team17517.RobotModules;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.woen.team17517.NotUsedCode.DrivetrainNew;
-import org.woen.team17517.NotUsedCode.Odometry;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
 import org.woen.team17517.RobotModules.Grabber.GrabberNew;
@@ -25,7 +23,6 @@ import Devices.Hardware;
 
 public class UltRobot {
     public DriveTrain driveTrain;
-    public DrivetrainNew drivetrainNew;
     public Lift lift;
     public GrabberNew grabber;
     public PixelsCount pixelsCount;
@@ -36,8 +33,7 @@ public class UltRobot {
     public TestAprilTagPipeline testAprilTagPipeline;
     public TelemetryOutput telemetryOutput;
     public DriveTrainVelocityControl driveTrainVelocityControl;
-    public Odometry odometry;
-    public OdometryNew odometryNew;
+    public OdometryNew odometry;
     public Timer timer;
     public RobotModule[] robotModules;
     public Hardware hardware;
@@ -56,12 +52,10 @@ public class UltRobot {
         gyro = new Gyro(this);
         lighting = new Lighting(this);
         testAprilTagPipeline = new TestAprilTagPipeline(this);
-        odometry = new Odometry(this);
-        drivetrainNew = new DrivetrainNew(this);
-        odometryNew = new OdometryNew(this);
+        odometry = new OdometryNew(this);
         driveTrain = new DriveTrain(this);
         this.robotModules = new RobotModule[]{telemetryOutput,timer, voltageSensorPoint,
-                 driveTrainVelocityControl,lift,grabber,pixelsCount, gyro, lighting, odometryNew, drivetrainNew};
+                 driveTrainVelocityControl,lift,grabber,pixelsCount, gyro, lighting, odometry};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }

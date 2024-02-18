@@ -27,7 +27,7 @@ public class Lift implements RobotModule {
     }
     UltRobot robot;
     private boolean liftAtTaget = false;
-    private LiftPosition position;
+    private LiftPosition position = LiftPosition.DOWN;
     public static double kp;
     public static double ki;
     public static double ks = 0;
@@ -99,7 +99,7 @@ public class Lift implements RobotModule {
 
         double liftPower = 0;
         double liftGravityPower = 0.05;
-        double liftMovePower = 0.5;
+        double liftMovePower = 0.8;
         switch (liftMode){
             case AUTO:
                 switch (targetPosition) {

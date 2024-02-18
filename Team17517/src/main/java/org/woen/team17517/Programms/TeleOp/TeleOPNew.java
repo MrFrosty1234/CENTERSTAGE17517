@@ -63,7 +63,7 @@ public class TeleOPNew extends LinearOpMode {
             boolean startPlane            = gamepad1.right_trigger>0.1;
             boolean aimPlane              = gamepad1.right_bumper;
 
-            double forwardSpeed = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y);
+            double forwardSpeed = -robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y);
             double sideSpeed    = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_x);
             double angleSpeed   = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x);
 

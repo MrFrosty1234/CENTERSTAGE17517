@@ -145,9 +145,9 @@ public class DriveTrainVelocityControl implements RobotModule {
     }
     private void  odUpdate()
     {
-        this.yEnc = robot.odometryNew.getVelCleanY();
-        this.xEnc = robot.odometryNew.getVelCleanX();
-        this.hEnc = robot.odometryNew.getVelCleanH();
+        this.yEnc = robot.odometry.getVelCleanY();
+        this.xEnc = robot.odometry.getVelCleanX();
+        this.hEnc = robot.odometry.getVelCleanH();
     }
     private static double odometrConstant =  8192;
     private static double diameter = 9.6;
@@ -204,13 +204,13 @@ public class DriveTrainVelocityControl implements RobotModule {
         targetH = h;
     }
     public void moveGlobalCord(Vector2D vector, double targetH){
-        vector.vectorRat(-robot.odometryNew.getH());
+        vector.vectorRat(-robot.odometry.getH());
         this.vector.setCord(vector.getX(),vector.getY());
         this.targetH = targetH;
     }
     public void moveGlobalCord(double x, double y, double targetH){
         vector.setCord(x,y);
-        vector.vectorRat(-robot.odometryNew.getH());
+        vector.vectorRat(-robot.odometry.getH());
         this.targetH = targetH;
     }
 
