@@ -28,28 +28,25 @@ public class OdometryNew implements RobotModule {
         vector.setCord(0,0);
         h = 0;
     }
-
-    private double cleanRightY = 0;
-    private double cleanLeftY = 0;
-    private double cleanVelX = 0;
-    private double cleanVelY = 0;
-    private double cleanVelH = 0;
+    private double velX = 0;
+    private double velY = 0;
+    private double velH = 0;
     public double getCleanLeftY() {
-        return cleanLeftY;
+        return odometrLeftY.getVelocity();
     }
 
     public double getCleanRightY() {
-        return cleanRightY;
+        return -odometrRightY.getVelocity();
     }
 
     public double getVelCleanX() {
-        return cleanVelX;
+        return velX;
     }
     public double getVelCleanY() {
-        return cleanVelY;
+        return velY;
     }
 
-    public double getVelCleanH() {return cleanVelH;}
+    public double getVelCleanH() {return velH;}
 
     public double getX(){return vector.getX();}
 
@@ -58,12 +55,9 @@ public class OdometryNew implements RobotModule {
     public Vector2D getPositionVector(){return vector;}
     private Vector2D vectorDeltaPosition = new Vector2D();
     private void velocityUpdate(){
-        cleanVelX = -odometrX.getVelocity();
-        cleanVelY = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
-        cleanVelH = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
-
-        cleanRightY = -odometrRightY.getVelocity();
-        cleanLeftY = odometrLeftY.getVelocity();
+        velX = -odometrX.getVelocity();
+        velY = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
+        velH = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
     }
     private void odometerUpdate(){
         this.yEnc = ((double) -odometrRightY.getCurrentPosition() + (double) odometrLeftY.getCurrentPosition())/2d;
@@ -74,10 +68,10 @@ public class OdometryNew implements RobotModule {
         velocityUpdate();
         odometerUpdate();
         vectorDeltaPosition.setCord(xEnc-xEncOld,yEnc-yEncOld);
-        vectorDeltaPosition.vectorRat(h-hOld);
+        vectorDeltaPosition.vectorRat(h);
+        vector.vectorSum(vectorDeltaPosition);
         xEncOld = xEnc;
         yEncOld = yEnc;
         hOld=h;
-        vector.vectorSum(vectorDeltaPosition);
     }
 }
