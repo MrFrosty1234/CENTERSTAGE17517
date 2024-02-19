@@ -69,7 +69,7 @@ public class BaseCollector {
             _classes = new ArrayList<>();
 
             for (String i : classNames) {
-                if (!i.contains("team18742"))
+                if (!i.contains("team18742.Modules"))
                     continue;
 
                 try {

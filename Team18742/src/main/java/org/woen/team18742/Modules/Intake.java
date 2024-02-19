@@ -112,6 +112,9 @@ public class Intake implements IRobotModule {
     double clampTimerconst = 800;
 
     public void releaseGripper() {
+        if(_lift.isDown() || !_lift.isATarget())
+            return;
+
         setGripper(false);
         _clampTimer.reset();
 

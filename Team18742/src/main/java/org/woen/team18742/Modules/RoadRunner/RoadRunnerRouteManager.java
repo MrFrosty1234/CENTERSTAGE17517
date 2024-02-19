@@ -86,6 +86,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
     private final Action[][] _allTrajectory = new Action[StartRobotPosition.values().length][CameraRobotPosition.values().length];
 
+    private Pose2dDual<Time> _worldTargetPose;
+
     @Override
     public void Init(BaseCollector collector) {
         _lift = collector.GetModule(Lift.class);
@@ -103,16 +105,14 @@ public class RoadRunnerRouteManager implements IRobotModule {
                 StartRobotPosition pos = StartRobotPosition.values()[i];
                 CameraRobotPosition camPos = CameraRobotPosition.values()[j];
 
-                for(int attempt = 0; attempt < 5; attempt++) {
+                for (int attempt = 0; attempt < 5; attempt++) {
                     try {
                         _allTrajectory[i][j] = Trajectory.GetTrajectory(ActionBuilder(
                                 new Pose2d(pos.Position.X, pos.Position.Y, pos.Rotation)), pos, camPos).build();
-                    }
-                    catch (Exception e) {
-                        if(attempt == 4)
+                    } catch (Exception e) {
+                        if (attempt == 4)
                             throw e;
 
-                        collector.Robot.sleep(10);
                         continue;
                     }
 
@@ -153,8 +153,15 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
         if (!_isTrajectoryEnd)
             _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
-        else
-            _driveTrain.Stop();
+
+        if (_waiters.size() == 0) {
+            PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
+                    .compute(_worldTargetPose,
+                            new Pose2d(_odometry.Position.X, _odometry.Position.Y, _gyro.GetRadians()),
+                            new PoseVelocity2d(new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.GetSpeedRadians()));
+
+            _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
+        }
     }
 
     public class TrajectoryAction implements Action {
@@ -198,22 +205,9 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
             double time = trajectoryTimer.seconds();
 
-            if (time >= _duration) {
-                _driveTrain.Stop();
-                return false;
-            }
+            _worldTargetPose = _timeTrajectory.map(trajectory -> trajectory.get(time)).orElseGet(() -> _timeTurn.get().get(time));
 
-            Pose2dDual<Time> txWorldTarget = _timeTrajectory.map(trajectory -> trajectory.get(time)).orElseGet(() -> _timeTurn.get().get(time));
-
-            Pose2d position = new Pose2d(_odometry.Position.X, _odometry.Position.Y, _gyro.GetRadians());
-            PoseVelocity2d velocity = new PoseVelocity2d(new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.GetSpeedRadians());
-
-            PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
-                    .compute(txWorldTarget, position, velocity);
-
-            _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
-
-            if(Configs.GeneralSettings.TelemetryOn) {
+            if (Configs.GeneralSettings.TelemetryOn) {
                 ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
                 ToolTelemetry.GetCanvas().setStrokeWidth(1);
                 ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
@@ -224,7 +218,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
                     if (i.getAsBoolean())
                         _waiters.remove(i);
 
-                if(_time.seconds() - _startWaitTime > 10)
+                if (_time.seconds() - _startWaitTime > 10)
                     _waiters.clear();
 
                 _driveTrain.Stop();
@@ -232,16 +226,19 @@ public class RoadRunnerRouteManager implements IRobotModule {
                 trajectoryTimer.pause();
 
                 return true;
-            }
-            else
+            } else
                 trajectoryTimer.start();
+
+            if (time >= _duration) {
+                return false;
+            }
 
             return true;
         }
 
         @Override
         public void preview(@NonNull Canvas fieldOverlay) {
-            if(Configs.GeneralSettings.TelemetryOn) {
+            if (Configs.GeneralSettings.TelemetryOn) {
                 ToolTelemetry.GetCanvas().setStroke(Color.GREEN.toString());
                 ToolTelemetry.GetCanvas().setStrokeWidth(1);
                 ToolTelemetry.GetCanvas().strokePolyline(xPoints, yPoints);
@@ -279,28 +276,18 @@ public class RoadRunnerRouteManager implements IRobotModule {
             return this;
         }
 
-        public MyTrajectoryBuilder liftUp() {
-            return liftUp(0);
+        public MyTrajectoryBuilder liftMiddle() {
+            _builder = _builder.stopAndAdd(() -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
+            return this;
         }
 
-        public MyTrajectoryBuilder liftUp(double ds) {
+        public MyTrajectoryBuilder liftMiddle(double ds) {
             _builder = _builder.endTrajectory();
             _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
             return this;
         }
 
-        public MyTrajectoryBuilder liftDown() {
-            return liftDown(0);
-        }
-
-        public MyTrajectoryBuilder liftDown(double ds) {
-            _builder = _builder.endTrajectory();
-            _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.DOWN));
-            return this;
-        }
-
         public MyTrajectoryBuilder waitLift() {
-            _builder = _builder.endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _lift.isATarget());
                 _startWaitTime = _time.seconds();
@@ -309,7 +296,9 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushOn() {
-            return brushOn(0);
+            _builder = _builder.stopAndAdd(() -> _brush.BrushEnable());
+
+            return this;
         }
 
         public MyTrajectoryBuilder brushOn(double ds) {
@@ -329,7 +318,9 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder pixelDeGripp() {
-            return pixelDeGripp(0);
+            _builder = _builder.stopAndAdd(() -> _intake.releaseGripper());
+
+            return this;
         }
 
         public MyTrajectoryBuilder pixelDeGripp(double ds) {
@@ -350,7 +341,6 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder PidMove(ArrayList<Runnable> route) {
-            _builder = _builder.endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
                 _automaticPid.Start(route);
             });
@@ -379,7 +369,9 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushDown() {
-            return brushDown(0);
+            _builder = _builder.stopAndAdd(() -> _staksBrush.servoSetDownPose());
+
+            return this;
         }
 
         public MyTrajectoryBuilder brushDown(double ds) {
@@ -389,12 +381,14 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder linePixelOpen() {
-            return linePixelOpen(0);
+            _builder = _builder.stopAndAdd(() -> _intake.LineServoOpen());
+            return this;
         }
 
         public MyTrajectoryBuilder linePixelOpen(double ds) {
             _builder = _builder.endTrajectory();
             _builder = _builder.afterTime(ds, () -> _intake.LineServoOpen());
+
             return this;
         }
     }

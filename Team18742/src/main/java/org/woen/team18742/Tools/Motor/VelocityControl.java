@@ -33,7 +33,8 @@ public class VelocityControl {
             _deltaTime.reset();
             _oldPosition = encoderPosition;
         }
-        _speed = hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / (double) 0x10000) * (double) 0x10000;
+
+        _speed = hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / (double) Short.MAX_VALUE) * (double) Short.MAX_VALUE;
     }
 
     public void Start() {

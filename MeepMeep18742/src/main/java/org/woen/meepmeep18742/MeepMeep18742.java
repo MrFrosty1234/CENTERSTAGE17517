@@ -23,18 +23,18 @@ public class MeepMeep18742 {
                 .build();
 
         myBot.runAction(myBot.getDrive()
-                .actionBuilder(new Pose2d(-93.7/2.54, 156.4/2.54, -PI/2))
-                .strafeToLinearHeading(new Vector2d(-70/2.54, 120/2.54), -PI / 2)
-                .strafeToLinearHeading(new Vector2d(-61/2.54, 85/2.54), -PI / 2 / 2 / 2)
+                .actionBuilder(new Pose2d(ToInch(-93.7), ToInch(156.4), -PI/2))
+                .strafeToLinearHeading(new Vector2d(ToInch(-70), ToInch(120)), -PI / 2)
+                .strafeToLinearHeading(new Vector2d(ToInch(-61), ToInch(85)), -PI / 2 / 2 / 2)
                 //.brushOn()
                 //.strafeToLinearHeading(new Vector2d(-95, 100), 0)
-                .strafeToLinearHeading(new Vector2d(-98/2.54, 90/2.54), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(-98), ToInch(90)), 0)
                 //.waitPixel()
-                .strafeToLinearHeading(new Vector2d(-90/2.54, 90/2.54), 0)
-                .strafeToLinearHeading(new Vector2d(-90/2.54, 25/2.54), 0)
-                .strafeToLinearHeading(new Vector2d(90/2.54, 25/2.54), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(-90), ToInch(90)), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(-90), ToInch(25)), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(90), ToInch(25)), 0)
                 //.liftUp()
-                .strafeToLinearHeading(new Vector2d(123/2.54, 85/2.54), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(123), ToInch(85)), 0)
                 .waitSeconds(0.4)
                 //.waitLift()
                 //.pixelDeGripp()
@@ -46,5 +46,9 @@ public class MeepMeep18742 {
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
                 .start();
+    }
+
+    private static double ToInch(double value){
+        return value/2.54;
     }
 }

@@ -12,11 +12,11 @@ public class Trajectory {
     public static RoadRunnerRouteManager.MyTrajectoryBuilder GetTrajectory(RoadRunnerRouteManager.MyTrajectoryBuilder builder,
                                                                            StartRobotPosition startPos, CameraRobotPosition camera) {
         builder
-                .strafeToLinearHeading(new Vector2d(-97.9, 84), -PI / 2)
+                .strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(84)), -PI / 2)
                 .linePixelOpen()
                 .waitSeconds(5)
-                .strafeToLinearHeading(new Vector2d(-97.9, 130), -PI / 2)
-                .strafeToLinearHeading(new Vector2d(-110.9, 130), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(130)), -PI / 2)
+                .strafeToLinearHeading(new Vector2d(ToInch(-110.9), ToInch(130)), 0)
 
         // .strafeToLinearHeading(new Vector2d(-97.9, 100), -PI / 2)
 
@@ -65,7 +65,7 @@ public class Trajectory {
 //                                .strafeToLinearHeading(new Vector2d(-90, 90), 0)
 //                                .strafeToLinearHeading(new Vector2d(-90, 25), 0)
 //                                .strafeToLinearHeading(new Vector2d(90, 30), 0)
-//                                .liftUp()
+//                                .liftMiddle()
 //                                .strafeToLinearHeading(new Vector2d(145 , 80), 0)
 //                                .waitSeconds(0.1)
 //                                .waitLift()
@@ -94,7 +94,7 @@ public class Trajectory {
 //                            .waitPixel()
 //                            .strafeToLinearHeading(new Vector2d(60, 97), 0)
 //                            .waitSeconds(0.7)
-//                            .liftUp(0.5)
+//                            .liftMiddle(0.5)
 //                            .strafeToLinearHeading(new Vector2d(110, 80), 0)
 //                            .waitSeconds(0.3)
 //                            .strafeToLinearHeading(new Vector2d(124, 80), 0)
@@ -132,7 +132,7 @@ public class Trajectory {
 //                                .strafeToLinearHeading(new Vector2d(-90, -90), 0)
 //                                .strafeToLinearHeading(new Vector2d(-90, -25), 0)
 //                                .strafeToLinearHeading(new Vector2d(90, -30), 0)
-//                                .liftUp()
+//                                .liftMiddle()
 //                                .strafeToLinearHeading(new Vector2d(143, -100), 0)
 //                                .waitSeconds(0.1)
 //                                .waitLift()
@@ -170,7 +170,7 @@ public class Trajectory {
 //                                .waitPixel()
 //                                .strafeToLinearHeading(new Vector2d(60, -64), 0)
 //                                .waitSeconds(0.7)
-//                                .liftUp(0.5)
+//                                .liftMiddle(0.5)
 //                                .strafeToLinearHeading(new Vector2d(120, -80), 0)
 //                                .waitSeconds(0.5)
 //                                //.waitSeconds(0.5)
@@ -186,7 +186,7 @@ public class Trajectory {
 //                                .waitPixel()
 //                                .strafeToLinearHeading(new Vector2d(20, -78), 0)
 //                                .waitSeconds(0.7)
-//                                .liftUp(0.5)
+//                                .liftMiddle(0.5)
 //                                .strafeToLinearHeading(new Vector2d(103, -78), 0)
 //                                //.waitSeconds(0.5)
 //                                .waitLift()
@@ -196,7 +196,7 @@ public class Trajectory {
 //                                .strafeToLinearHeading(new Vector2d(150, -32), 0)*/;
 //
 //                        /*.waitPixel()
-//                        .liftUp(4)
+//                        .liftMiddle(4)
 //                        .strafeToLinearHeading(new Vector2d(100, 89), 0)
 //                        .waitLift()
 //                        .brushOn(2)
@@ -214,7 +214,7 @@ public class Trajectory {
 //            case BLUE_FORWAD: {
 //                builder.strafeToLinearHeading(new Vector2d(130, 90), 0)//left
 //                        //тут ставим пиксель на задник
-//                        .liftUp()
+//                        .liftMiddle()
 //                        .waitSeconds(1.4)
 //                        .pixelDeGripp()
 //                        .waitSeconds(1)
@@ -231,7 +231,7 @@ public class Trajectory {
 //                        .strafeToLinearHeading(new Vector2d(60, 30), 0)
 //                        .waitSeconds(0.2)
 //                        .strafeToLinearHeading(new Vector2d(130, 100), 0)
-//                        .liftUp()
+//                        .liftMiddle()
 //                        .waitSeconds(1.4)
 //                        .pixelDeGripp()
 //                        .waitSeconds(1);
@@ -248,6 +248,10 @@ public class Trajectory {
 
         return builder;
     }
+
+    private static double ToInch(double value){
+        return value;
+    }
 }
 //blue back copy
  /*switch (camera) {
@@ -262,7 +266,7 @@ public class Trajectory {
                                 .strafeToLinearHeading(new Vector2d(-90, 90), 0)
                                 .strafeToLinearHeading(new Vector2d(-90, 32), 0)
                                 .strafeToLinearHeading(new Vector2d(90, 30), 0)
-                                .liftUp()
+                                .liftMiddle()
                                 .strafeToLinearHeading(new Vector2d(137, 106), 0)
                                 .waitSeconds(0.1)
                                 .waitLift()
@@ -284,7 +288,7 @@ public class Trajectory {
                             .strafeToLinearHeading(new Vector2d(-90, -90), 0)
                             .strafeToLinearHeading(new Vector2d(-90, -32), 0)
                             .strafeToLinearHeading(new Vector2d(90, -32), 0)
-                            .liftUp()
+                            .liftMiddle()
                             .strafeToLinearHeading(new Vector2d(153, -82), 0)
                             .waitSeconds(0.1)
                             .waitLift()
@@ -303,7 +307,7 @@ public class Trajectory {
                                 .strafeToLinearHeading(new Vector2d(-90, 90), 0)
                                 .strafeToLinearHeading(new Vector2d(-90, 32), 0)
                                 .strafeToLinearHeading(new Vector2d(90, 30), 0)
-                                .liftUp()
+                                .liftMiddle()
                                 .strafeToLinearHeading(new Vector2d(137, 106), 0)
                                 .waitSeconds(0.1)
                                 .waitLift()
@@ -325,7 +329,7 @@ public class Trajectory {
                             .strafeToLinearHeading(new Vector2d(-90, -90), 0)
                             .strafeToLinearHeading(new Vector2d(-90, -32), 0)
                             .strafeToLinearHeading(new Vector2d(90, -32), 0)
-                            .liftUp()
+                            .liftMiddle()
                             .strafeToLinearHeading(new Vector2d(153, -82), 0)
                             .waitSeconds(0.1)
                             .waitLift()
@@ -344,7 +348,7 @@ public class Trajectory {
                                 .waitPixel()
                                 .strafeToLinearHeading(new Vector2d(60, 64), 0)
                                 .waitSeconds(0.7)
-                                .liftUp(0.5)
+                                .liftMiddle(0.5)
                                 .strafeToLinearHeading(new Vector2d(114, 80), 0)
                                 .waitSeconds(0.5)
                                 //.waitSeconds(0.5)
@@ -360,7 +364,7 @@ public class Trajectory {
                                 .waitPixel()
                                 .strafeToLinearHeading(new Vector2d(20, -78), 0)
                                 .waitSeconds(0.7)
-                                .liftUp(0.5)
+                                .liftMiddle(0.5)
                                 .strafeToLinearHeading(new Vector2d(103, -78), 0)
                                 //.waitSeconds(0.5)
                                 .waitLift()
@@ -370,7 +374,7 @@ public class Trajectory {
                                 .strafeToLinearHeading(new Vector2d(150, 32), 0);
 
                         /*.waitPixel()
-                        .liftUp(4)
+                        .liftMiddle(4)
                         .strafeToLinearHeading(new Vector2d(100, 89), 0)
                         .waitLift()
                         .brushOn(2)
