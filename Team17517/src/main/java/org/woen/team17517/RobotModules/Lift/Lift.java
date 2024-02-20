@@ -27,7 +27,7 @@ public class Lift implements RobotModule {
     }
     UltRobot robot;
     private boolean liftAtTaget = false;
-    private LiftPosition position;
+    private LiftPosition position = LiftPosition.DOWN;
     public static double kp;
     public static double ki;
     public static double ks = 0;
@@ -39,9 +39,9 @@ public class Lift implements RobotModule {
     }
     public Lift(UltRobot robot) {
         this.robot = robot;
-        liftMotor = robot.devices.liftMotor;
-        buttonUp = robot.devices.buttonUp;
-        buttonDown = robot.devices.buttonDown;
+        liftMotor = robot.hardware.intakeAndLiftMotors.liftMotor;
+        buttonUp = robot.hardware.sensors.buttonUp;
+        buttonDown = robot.hardware.sensors.buttonDown;
         voltage = 12;
     }
     public boolean getUpSwitch(){
@@ -99,7 +99,7 @@ public class Lift implements RobotModule {
 
         double liftPower = 0;
         double liftGravityPower = 0.05;
-        double liftMovePower = 0.5;
+        double liftMovePower = 0.8;
         switch (liftMode){
             case AUTO:
                 switch (targetPosition) {
@@ -138,10 +138,10 @@ public class Lift implements RobotModule {
             break;
             case  MANUALLIMIT:
                 if(manualTargetUp && !getUpSwitch()){
-                    liftPower = liftMovePower*0.8;
+                    liftPower = liftMovePower*0.6;
                     setPower(liftPower);
                 }else if (manualTargetDown && !getDownSwitch()){
-                    liftPower = -liftMovePower*0.8;
+                    liftPower = -liftMovePower*0.1;
                     setPower(liftPower);
                 }else{
                     if(!getDownSwitch()) liftPower = liftGravityPower;

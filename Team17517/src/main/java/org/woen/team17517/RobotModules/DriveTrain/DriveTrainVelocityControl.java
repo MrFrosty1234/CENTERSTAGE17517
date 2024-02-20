@@ -101,11 +101,11 @@ public class DriveTrainVelocityControl implements RobotModule {
     {
         this.robot = robot;
 
-        left_front_drive = robot.devices.left_front_drive;
-        left_back_drive =  robot.devices.left_back_drive;
+        left_front_drive = robot.hardware.driveTrainMotors.left_front_drive;
+        left_back_drive =  robot.hardware.driveTrainMotors.left_back_drive;
 
-        right_front_drive = robot.devices.right_front_drive;
-        right_back_drive = robot.devices.right_back_drive;
+        right_front_drive = robot.hardware.driveTrainMotors.right_front_drive;
+        right_back_drive = robot.hardware.driveTrainMotors.right_back_drive;
         voltage = 12;
 
         reset();
@@ -145,9 +145,9 @@ public class DriveTrainVelocityControl implements RobotModule {
     }
     private void  odUpdate()
     {
-        this.yEnc = robot.odometryNew.getVelCleanY();
-        this.xEnc = robot.odometryNew.getVelCleanX();
-        this.hEnc = robot.odometryNew.getVelCleanH();
+        this.yEnc = robot.odometry.getVelCleanY();
+        this.xEnc = robot.odometry.getVelCleanX();
+        this.hEnc = robot.odometry.getVelCleanH();
     }
     private static double odometrConstant =  8192;
     private static double diameter = 9.6;
@@ -159,6 +159,9 @@ public class DriveTrainVelocityControl implements RobotModule {
     private static double encConstant = PI*diameter/(encConstNoGearbox / gearboxRatio);
     private static double maxMotorRpm = 280.0;
     private static double maxLinearSpeed = (maxMotorRpm / 60.0) * diameter * PI;
+    private static double maxLinearSpeedOd = 60000;//TODO
+    private static double maxAngleSpeedOd = 30000;//TODO
+    private static double maxSideSpeedOd = 60000;//TODO
     private final double maxAngularSpeed = Math.toDegrees(maxLinearSpeed/trackLength);
     private double smToEnc(double target)
     {
@@ -183,9 +186,11 @@ public class DriveTrainVelocityControl implements RobotModule {
         return speedY.PID(target,yEnc,this.voltage);
     }
     public double linearVelocityPercent(double target){
-        return smToEnc(maxLinearSpeed)*target;
+        return maxLinearSpeedOd*target;
     }
-    public double angularVelocityPercent(double target){return target*smToDegrees(maxAngularSpeed);}
+    public double angularVelocityPercent(double target){
+        return target*maxAngleSpeedOd;
+    }
     public double getMetersPerSecondSpeed(double target)
     {
         return target/encConstant* gearboxRatio *diameter*Math.PI;
@@ -199,13 +204,13 @@ public class DriveTrainVelocityControl implements RobotModule {
         targetH = h;
     }
     public void moveGlobalCord(Vector2D vector, double targetH){
-        vector.vectorRat(-robot.odometryNew.getH());
+        vector.vectorRat(-robot.odometry.getH());
         this.vector.setCord(vector.getX(),vector.getY());
         this.targetH = targetH;
     }
     public void moveGlobalCord(double x, double y, double targetH){
         vector.setCord(x,y);
-        vector.vectorRat(-robot.odometryNew.getH());
+        vector.vectorRat(-robot.odometry.getH());
         this.targetH = targetH;
     }
 

@@ -11,7 +11,7 @@ import org.woen.team17517.Service.Button;
 import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 
-@Autonomous
+
 public class AutonomBaseClass extends LinearOpMode{
     public UltRobot robot;
     DcMotor left_front_drive;

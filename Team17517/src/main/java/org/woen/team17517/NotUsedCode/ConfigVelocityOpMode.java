@@ -7,8 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.woen.team17517.RobotModules.UltRobot;
 import static java.lang.Math.signum;
-@Config
-@TeleOp
+
 public class ConfigVelocityOpMode extends LinearOpMode {
     UltRobot robot;
     public static double x=0;

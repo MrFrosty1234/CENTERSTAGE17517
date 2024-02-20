@@ -35,6 +35,10 @@ public class Vector2D
     public static Vector2D vectorSum(Vector2D vector1, Vector2D vector2){
       return new Vector2D(vector1.x + vector2.x,vector1.y+ vector2.y);
     }
+    public void vectorSum(Vector2D vector){
+        x = x + vector.getX();
+        y = y + vector.getY();
+    }
 
     public void vectorRatOld(double angle){
         double radius = vectorRadius(x,y);

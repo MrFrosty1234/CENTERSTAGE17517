@@ -14,8 +14,8 @@ public class Lighting implements RobotModule {
     UltRobot robot;
     public Lighting(UltRobot robot) {
         this.robot = robot;
-        light = robot.devices.odometrLeft;
-        light2 = robot.devices.lightning;
+        light = robot.hardware.lights.light1;
+        light2 = robot.hardware.lights.light2;
     }
 
     public void setPower(double x) {
