@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
+import org.woen.team17517.RobotModules.EndGame.Plane;
 import org.woen.team17517.RobotModules.Grabber.GrabberNew;
 import org.woen.team17517.RobotModules.Grabber.PixelsCount;
 import org.woen.team17517.RobotModules.Lift.Lift;
@@ -37,6 +38,7 @@ public class UltRobot {
     public Timer timer;
     public RobotModule[] robotModules;
     public Hardware hardware;
+    public Plane plane;
     private final List<LynxModule> revHubs;
 
     public UltRobot(LinearOpMode linearOpMode1) {
@@ -54,6 +56,7 @@ public class UltRobot {
         testAprilTagPipeline = new TestAprilTagPipeline(this);
         odometry = new OdometryNew(this);
         driveTrain = new DriveTrain(this);
+        plane = new Plane(this);
         this.robotModules = new RobotModule[]{telemetryOutput,timer, voltageSensorPoint,
                  driveTrainVelocityControl,lift,grabber,pixelsCount, gyro, lighting,driveTrain,odometry};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
