@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
@@ -29,10 +30,12 @@ public class Gyroscope implements IRobotModule {
 
     private double _oldRadians, _allRadians, _allDegree, _radianSpeed, _degreeSpeed, _radianAccel, _degreeAccel, _oldRadianSpeed, _maxRadianSpeed, _maxRadianAccel, _startRotateRadian;
 
-    private static boolean _isInited = false;
+    private BaseCollector _collector;
 
     @Override
     public void Init(BaseCollector collector) {
+        _collector = collector;
+
         _imu = Devices.IMU;
         _odometrs = collector.GetModule(OdometryHandler.class);
 
@@ -41,10 +44,8 @@ public class Gyroscope implements IRobotModule {
 
     @Override
     public void Start() {
-        if(!_isInited) {
+        if(_collector instanceof AutonomCollector) {
             Reset();
-
-            //_isInited = true;
         }
         _deltaTime.reset();
     }

@@ -3,6 +3,7 @@ package org.woen.team18742.Modules.Odometry;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
@@ -31,10 +32,12 @@ public class OdometryHandler implements IRobotModule {
     private final Vector2 _maxSpeed = new Vector2(), _maxAccel = new Vector2();
     private final ElapsedTime _deltaTime = new ElapsedTime();
 
-    private static boolean _isInited = false;
+    private BaseCollector _collector;
 
     @Override
     public void Init(BaseCollector collector) {
+        _collector = collector;
+
         _odometerXLeft = new EncoderControl(Devices.OdometerXLeft, Configs.Odometry.EncoderconstatOdometr, Configs.Odometry.DiametrOdometr);
         _odometerY = new EncoderControl(Devices.OdometerY, Configs.Odometry.EncoderconstatOdometr, Configs.Odometry.DiametrOdometr);
         _odometerXRight = new EncoderControl(Devices.OdometerXRight, Configs.Odometry.EncoderconstatOdometr, Configs.Odometry.DiametrOdometr);
@@ -52,9 +55,11 @@ public class OdometryHandler implements IRobotModule {
         _odometerXRight.Start();
         _odometerXLeft.Start();
 
-        Position = Bios.GetStartPosition().Position.clone();
+        if(_collector instanceof AutonomCollector) {
+            Position = Bios.GetStartPosition().Position.clone();
 
-        Reset();
+            Reset();
+        }
     }
 
     public double GetSpeedOdometerXLeft() {

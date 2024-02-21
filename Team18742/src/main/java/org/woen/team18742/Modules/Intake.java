@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.woen.team18742.Collectors.AutonomCollector;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Lift.Lift;
@@ -24,9 +25,12 @@ public class Intake implements IRobotModule {
     private AnalogInput pixelSensor1; // Датчик присутствия пикселей над прижимом
     private Brush _brush;
     private Lift _lift;
+    private BaseCollector _collector;
 
     @Override
     public void Init(BaseCollector collector) {
+        _collector = collector;
+
         pixelSensor1 = Devices.PixelSensor;
         gripper = Devices.Gripper;
         clamp = Devices.Clamp;
@@ -63,7 +67,11 @@ public class Intake implements IRobotModule {
     @Override
     public void Start() {
         setGripper(false);
-        LineServoClose();
+
+        if(_collector instanceof AutonomCollector)
+            LineServoClose();
+        else
+            LineServoOpen();
     }
 
     public boolean IsTurnNormal() {
