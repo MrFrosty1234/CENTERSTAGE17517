@@ -63,6 +63,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("AutoMode",robot.driveTrain.autoMode);
             telemetry.addData("isAtPos",robot.driveTrain.isAtPosition());
 
+
             telemetry.addData("error X", errorMap.get("X"));
             telemetry.addData("target X", targetMap.get("X"));
             telemetry.addData("pos X", positionMap.get("X"));

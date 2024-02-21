@@ -54,10 +54,30 @@ public class OdometryNew implements RobotModule {
     public double getH(){return h;}
     public Vector2D getPositionVector(){return vector;}
     private Vector2D vectorDeltaPosition = new Vector2D();
+    private long startVelTime = System.currentTimeMillis();
+    private double mathSpeedY = 0;
+    private double mathSpeedX = 0;
+    private double mathSpeedH = 0;
+    private double posHOld = 0;
+    private double posYOld = 0;
+    private double posXOld = 0;
     private void velocityUpdate(){
+        double posH = (odometrLeftY.getCurrentPosition()+odometrRightY.getCurrentPosition())/2d;
+        double posY = (odometrLeftY.getCurrentPosition()-odometrRightY.getCurrentPosition())/2d;
+        double posX = -odometrX.getCurrentPosition();
+        long deltaTime = System.currentTimeMillis() - startVelTime;
+        if(deltaTime > 1){
+            mathSpeedX = (posX-posXOld)/deltaTime;
+            mathSpeedY = (posY-posYOld)/deltaTime;
+            mathSpeedH = (posH-posHOld)/deltaTime;
+        }
         velX = -odometrX.getVelocity();
         velY = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
         velH = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
+
+        velH = velH + Math.round((mathSpeedH-velH)/(double)Short.MAX_VALUE)*(double)Short.MAX_VALUE;
+        velX = velX + Math.round((mathSpeedX-velX)/(double)Short.MAX_VALUE)*(double)Short.MAX_VALUE;
+        velY = velY + Math.round((mathSpeedY-velY)/(double)Short.MAX_VALUE)*(double)Short.MAX_VALUE;
     }
     private void odometerUpdate(){
         this.yEnc = ((double) -odometrRightY.getCurrentPosition() + (double) odometrLeftY.getCurrentPosition())/2d;
