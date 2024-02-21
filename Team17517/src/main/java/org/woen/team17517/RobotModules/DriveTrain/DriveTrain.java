@@ -99,43 +99,12 @@ public class DriveTrain implements RobotModule{
         reset();
         autoMode = true;
     }
-    public void moveGlobalY(double y){
-        targetVector.setCord(positionVector.getX(),y);
-        reset();
-        autoMode = true;
-    }
-    public void moveGlobalH(double h){
-        targetH = h;
-        reset();
-        autoMode = true;
-    }
     public void moveRobot(double x, double y, double h){
         targetVector = Vector2D.vectorSum(positionVector,new Vector2D(x,y));
         targetH = posH + h;
         reset();
         autoMode = true;
     }
-
-    public void moveRobotX(double x){
-        targetVector = Vector2D.vectorSum(positionVector, new Vector2D(x,0));
-        reset();
-        autoMode = true;
-    }
-    public void moveRobotY(double y){
-        targetVector = Vector2D.vectorSum(positionVector, new Vector2D(0,y));
-        reset();
-        autoMode = true;
-    }
-    public void moveRobotH(double h){
-        targetH = posH+h;
-        autoMode = true;
-    }
-    public void moveGlobalX(double x){
-        targetVector.setCord(x,positionVector.getY());
-        reset();
-        autoMode = true;
-    }
-
     public void update(){
         if (autoMode) {
             voltage = robot.voltageSensorPoint.getVol();
@@ -195,10 +164,7 @@ public class DriveTrain implements RobotModule{
         }
 
     public boolean isAtPosition(){
-        if(autoMode) {
-            return Math.abs(errH) < minErrH && Math.abs(errX) < minErrX && Math.abs(errY) < minErrY;
-        }else{
-            return true;}
+        return !autoMode || (Math.abs(errH) < minErrH && Math.abs(errX) < minErrX && Math.abs(errY) < minErrY);
     }
 }
 
