@@ -76,7 +76,7 @@ public class Lift implements IRobotModule {
     }
 
     public boolean isDown() {
-        return _liftPose == LiftPose.DOWN && (_endingDownState);
+        return _liftPose == LiftPose.DOWN && _endingDownState;
     }
 
     public boolean isUp() {

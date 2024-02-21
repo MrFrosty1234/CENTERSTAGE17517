@@ -17,7 +17,7 @@ public class Bios {
             new Pair<>("BlueForward", StartRobotPosition.BLUE_FORWAD),
     };
 
-    private static int _selectedVariant = 0;
+    private static int _selectedVariant = 2;
     private static final String _key = "startPos";
 
     public Bios(Gamepad gamepad){

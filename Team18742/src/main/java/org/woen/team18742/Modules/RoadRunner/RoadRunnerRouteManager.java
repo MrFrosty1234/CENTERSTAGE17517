@@ -154,7 +154,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         if (!_isTrajectoryEnd)
             _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
 
-        if (_waiters.size() == 0) {
+        if (_waiters.size() == 0 && _worldTargetPose != null) {
             PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
                     .compute(_worldTargetPose,
                             new Pose2d(_odometry.Position.X, _odometry.Position.Y, _gyro.GetRadians()),
@@ -162,6 +162,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
             _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
         }
+        else
+            _driveTrain.Stop();
     }
 
     public class TrajectoryAction implements Action {

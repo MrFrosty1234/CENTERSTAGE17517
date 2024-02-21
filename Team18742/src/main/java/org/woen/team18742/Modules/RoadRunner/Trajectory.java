@@ -3,6 +3,7 @@ package org.woen.team18742.Modules.RoadRunner;
 import static java.lang.Math.PI;
 
 import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.ftccommon.FtcAboutActivity;
 
 import org.woen.team18742.Modules.Camera.CameraRobotPosition;
 import org.woen.team18742.Modules.StartRobotPosition;
@@ -11,16 +12,26 @@ import org.woen.team18742.Tools.Bios;
 public class Trajectory {
     public static RoadRunnerRouteManager.MyTrajectoryBuilder GetTrajectory(RoadRunnerRouteManager.MyTrajectoryBuilder builder,
                                                                            StartRobotPosition startPos, CameraRobotPosition camera) {
-        builder
-                .strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(84)), -PI / 2)
-                .linePixelOpen()
-                .waitSeconds(5)
-                .strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(130)), -PI / 2)
-                .strafeToLinearHeading(new Vector2d(ToInch(-110.9), ToInch(130)), 0)
-
-        // .strafeToLinearHeading(new Vector2d(-97.9, 100), -PI / 2)
-
-        ;
+        builder.strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(90)), -PI / 2);
+        builder.linePixelOpen();
+        builder.strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(93)), 0);
+        builder.brushOn();
+        builder.brushDown();
+        builder.strafeToLinearHeading(new Vector2d(ToInch(-153.9), ToInch(90)), 0);
+        builder.waitPixel();
+        builder.strafeToLinearHeading(new Vector2d(ToInch(117.9), ToInch(90)), 0);
+        builder.liftMiddle();
+        builder.waitSeconds(2);
+        builder.pixelDeGripp();
+        builder.strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(93)), 0);
+        builder.brushOn();
+        builder.brushDown();
+        builder.strafeToLinearHeading(new Vector2d(ToInch(-153.9), ToInch(86)), 0);
+        builder.waitPixel();
+        builder.strafeToLinearHeading(new Vector2d(ToInch(117.9), ToInch(92)), 0);
+        builder.liftMiddle();
+        builder.waitSeconds(2);
+        builder.pixelDeGripp();
 
 //        switch (startPos) {
 //            case BLUE_BACK: {
@@ -249,7 +260,7 @@ public class Trajectory {
         return builder;
     }
 
-    private static double ToInch(double value){
+    private static double ToInch(double value) {
         return value;
     }
 }
