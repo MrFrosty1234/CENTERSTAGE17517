@@ -61,6 +61,7 @@ public class TelemetryOutput implements RobotModule {
             HashMap<String,Double> errorMap = robot.driveTrain.getErrors();
             HashMap<String,Double> positionMap = robot.driveTrain.getPosition();
             telemetry.addData("AutoMode",robot.driveTrain.autoMode);
+            telemetry.addData("isAtPosition",robot.driveTrain.isAtPosition());
 
             telemetry.addData("error X", errorMap.get("X"));
             telemetry.addData("target X", targetMap.get("X"));

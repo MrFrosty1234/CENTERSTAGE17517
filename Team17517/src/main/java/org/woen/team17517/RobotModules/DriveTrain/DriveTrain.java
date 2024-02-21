@@ -88,7 +88,7 @@ public class DriveTrain implements RobotModule{
         errorMap.put("Y",errY);
         return errorMap;
     }
-    public void reset(){
+    public void resetTimer(){
         timer.reset();
         timer.seconds();
     }
@@ -96,43 +96,14 @@ public class DriveTrain implements RobotModule{
     public void moveGlobal(double x, double y, double h) {
         targetVector.setCord(x,y);
         targetH = h;
-        reset();
-        autoMode = true;
-    }
-    public void moveGlobalY(double y){
-        targetVector.setCord(positionVector.getX(),y);
-        reset();
-        autoMode = true;
-    }
-    public void moveGlobalH(double h){
-        targetH = h;
-        reset();
-        autoMode = true;
-    }
-    public void moveRobot(double x, double y, double h){
-        targetVector = Vector2D.vectorSum(positionVector,new Vector2D(x,y));
-        targetH = posH + h;
-        reset();
+        resetTimer();
         autoMode = true;
     }
 
-    public void moveRobotX(double x){
-        targetVector = Vector2D.vectorSum(positionVector, new Vector2D(x,0));
-        reset();
-        autoMode = true;
-    }
-    public void moveRobotY(double y){
-        targetVector = Vector2D.vectorSum(positionVector, new Vector2D(0,y));
-        reset();
-        autoMode = true;
-    }
-    public void moveRobotH(double h){
-        targetH = posH+h;
-        autoMode = true;
-    }
-    public void moveGlobalX(double x){
-        targetVector.setCord(x,positionVector.getY());
-        reset();
+    public void moveRobot(double x, double y, double h){
+        targetVector = Vector2D.vectorSum(positionVector,new Vector2D(x,y));
+        targetH = posH + h;
+        resetTimer();
         autoMode = true;
     }
 
@@ -192,13 +163,11 @@ public class DriveTrain implements RobotModule{
             */
             robot.driveTrainVelocityControl.moveGlobalCord(X, Y, H);
         }
-        }
+    }
 
+    @Override
     public boolean isAtPosition(){
-        if(autoMode) {
-            return Math.abs(errH) < minErrH && Math.abs(errX) < minErrX && Math.abs(errY) < minErrY;
-        }else{
-            return true;}
+        return (Math.abs(errH) < minErrH && Math.abs(errX) < minErrX && Math.abs(errY) < minErrY)||!autoMode;
     }
 }
 
