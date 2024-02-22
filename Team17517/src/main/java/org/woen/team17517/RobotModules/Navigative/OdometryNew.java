@@ -71,6 +71,9 @@ public class OdometryNew implements RobotModule {
             mathSpeedY = (posY-posYOld)/deltaTime;
             mathSpeedH = (posH-posHOld)/deltaTime;
         }
+        posXOld = posX;
+        posYOld = posY;
+        posHOld = posH;
         velX = -odometrX.getVelocity();
         velY = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
         velH = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
