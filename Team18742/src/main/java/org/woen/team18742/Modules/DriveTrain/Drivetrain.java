@@ -1,25 +1,19 @@
-package org.woen.team18742.Modules;
+package org.woen.team18742.Modules.DriveTrain;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 import static java.lang.Math.PI;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.Manager.BulkInit;
+import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
-import org.woen.team18742.Modules.Odometry.CVOdometry;
-import org.woen.team18742.Modules.Odometry.OdometrsOdometry;
-import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.Motor.EncoderControl;
 import org.woen.team18742.Tools.Motor.Motor;
 import org.woen.team18742.Tools.Motor.ReductorType;
-import org.woen.team18742.Tools.PIDF;
-import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 @Module
@@ -28,8 +22,6 @@ public class Drivetrain implements IRobotModule {
     private EncoderControl _leftForwardEncoder, _rightForwardEncoder, _leftBackEncoder, _rightBackEncoder;
 
     private Gyroscope _gyro;
-    private CVOdometry _cvOdometry;
-    private OdometryHandler _odometry;
 
     @Override
     public void Start() {
@@ -70,34 +62,16 @@ public class Drivetrain implements IRobotModule {
         _rightBackDrive.setDirection(REVERSE);
 
         _gyro = collector.GetModule(Gyroscope.class);
-        _cvOdometry = collector.GetModule(CVOdometry.class);
-        _odometry = collector.GetModule(OdometryHandler.class);
     }
 
     private void DriveDirection(Vector2 speed, double rotate) {
-        /*if(HitCheck())
-            Stop();*/
-
         _leftForwardDrive.setPower(speed.X - speed.Y - rotate);
         _rightBackDrive.setPower(speed.X - speed.Y + rotate);
         _leftBackDrive.setPower(speed.X + speed.Y - rotate);
         _rightForwardDrive.setPower(speed.X + speed.Y + rotate);
     }
 
-    private boolean HitCheck(){
-        if(_cvOdometry.IsNear()){
-            if(Math.abs(Math.signum(_odometry.Speed.X) - Math.signum(_cvOdometry.TagPos.X)) < 0.1 ||
-                    Math.abs(Math.signum(_odometry.Speed.Y) - Math.signum(_cvOdometry.TagPos.Y)) < 0.1)
-                return true;
-        }
-
-        return false;
-    }
-
     private void DriveEncoderDirection(Vector2 speed, double rotate) {
-        /*if(HitCheck())
-            Stop();*/
-
         _leftForwardDrive.setEncoderPower(speed.X - speed.Y - rotate);
         _rightBackDrive.setEncoderPower(speed.X - speed.Y + rotate);
         _leftBackDrive.setEncoderPower(speed.X + speed.Y - rotate);
@@ -113,7 +87,7 @@ public class Drivetrain implements IRobotModule {
 
         DriveEncoderDirection(new Vector2(cmSpeed.X / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat,
                 cmSpeed.Y / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat),
-                (rotate * (Configs.DriveTrainWheels.Radius * 2d) / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat) / Configs.Odometry.RotateLag);
+                (rotate * (Configs.DriveTrainWheels.WheelsRadius * 2d) / (PI * Configs.DriveTrainWheels.wheelDiameter) * Configs.DriveTrainWheels.encoderconstat) / Configs.Odometry.RotateLag);
     }
 
     public void ResetEncoders() {

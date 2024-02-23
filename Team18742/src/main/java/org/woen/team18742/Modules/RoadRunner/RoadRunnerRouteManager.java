@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.AccelConstraint;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.Actions;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.HolonomicController;
 import com.acmerobotics.roadrunner.MecanumKinematics;
@@ -16,26 +15,22 @@ import com.acmerobotics.roadrunner.Pose2dDual;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.PoseVelocity2dDual;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
-import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Time;
 import com.acmerobotics.roadrunner.TimeTrajectory;
 import com.acmerobotics.roadrunner.TimeTurn;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Brush.StaksBrush;
 import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.CameraRobotPosition;
-import org.woen.team18742.Modules.Drivetrain;
+import org.woen.team18742.Modules.DriveTrain.Drivetrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
@@ -70,7 +65,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
     private PidRouteManager _automaticPid;
     private StaksBrush _staksBrush;
 
-    private final MecanumKinematics _mecanumKinematics = new MecanumKinematics(Configs.DriveTrainWheels.Radius * 2 + 5, 1 / Configs.Odometry.YLag);
+    private final MecanumKinematics _mecanumKinematics = new MecanumKinematics(Configs.DriveTrainWheels.WheelsRadius * 2 + 5, 1 / Configs.Odometry.YLag);
 
     private final TurnConstraints _turnConstraints = new TurnConstraints(Configs.DriveTrainWheels.MaxSpeedTurn, -Configs.DriveTrainWheels.MaxTurnAccel, Configs.DriveTrainWheels.MaxTurnAccel);
 
@@ -151,18 +146,18 @@ public class RoadRunnerRouteManager implements IRobotModule {
     public void Update() {
         if (!Configs.GeneralSettings.IsAutonomEnable) return;
 
-        if (!_isTrajectoryEnd)
+        if (!_isTrajectoryEnd) {
             _isTrajectoryEnd = !_trajectory.run(new TelemetryPacket());
 
-        if (_waiters.size() == 0 && _worldTargetPose != null) {
-            PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
-                    .compute(_worldTargetPose,
-                            new Pose2d(_odometry.Position.X, _odometry.Position.Y, _gyro.GetRadians()),
-                            new PoseVelocity2d(new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.GetSpeedRadians()));
+            if (_waiters.size() == 0 && _worldTargetPose != null) {
+                PoseVelocity2dDual<Time> command = new HolonomicController(Configs.PositionConnection.Axial, Configs.PositionConnection.Lateral, Configs.PositionConnection.Heading, Configs.SpeedConnection.Axial, Configs.SpeedConnection.Lateral, Configs.SpeedConnection.Heading)
+                        .compute(_worldTargetPose,
+                                new Pose2d(_odometry.Position.X, _odometry.Position.Y, _gyro.GetRadians()),
+                                new PoseVelocity2d(new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.GetSpeedRadians()));
 
-            _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
-        }
-        else
+                _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
+            }
+        } else
             _driveTrain.Stop();
     }
 

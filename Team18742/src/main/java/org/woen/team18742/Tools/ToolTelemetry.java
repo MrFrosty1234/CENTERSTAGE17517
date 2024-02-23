@@ -46,6 +46,25 @@ public class ToolTelemetry {
         }
     }
 
+    public static void DrawPolygon(Vector2[] points, Color color){
+        DrawPolygon(points, color.toString());
+    }
+
+    public static void DrawPolygon(Vector2[] points, String color){
+        if(Configs.GeneralSettings.TelemetryOn){
+            double[] x = new double[points.length], y = new double[points.length];
+
+            for(int i = 0; i < points.length; i++) {
+                x[i] = DistanceUnit.INCH.fromCm(points[i].X);
+                y[i] = DistanceUnit.INCH.fromCm(points[i].Y);
+            }
+
+            _packet.fieldOverlay().setFill(color);
+            _packet.fieldOverlay().setRotation(0);
+            _packet.fieldOverlay().fillPolygon(x, y);
+        }
+    }
+
     public static void DrawRect(Vector2 pos, Vector2 size, double rotate, Color color) {
         DrawRect(pos, size, rotate, color.toString());
     }

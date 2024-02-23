@@ -114,8 +114,6 @@ public class OdometryHandler implements IRobotModule {
         } else
             Position = pos;
 
-        ToolTelemetry.DrawCircle(pos, Configs.DriveTrainWheels.Radius, Color.BLUE);
-
         Speed = Configs.GeneralSettings.IsUseOdometers ? _odometry.Speed : _encoderOdometry.Speed;
 
         Accel.X = (Speed.X - _oldSpeed.X) / _deltaTime.seconds();
