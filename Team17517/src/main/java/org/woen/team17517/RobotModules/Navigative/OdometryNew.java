@@ -119,8 +119,8 @@ public class OdometryNew implements RobotModule {
     }
 
     private void odometerUpdate(){
-        this.yEnc = ((double) odometrRightY.getCurrentPosition() + (double) odometrLeftY.getCurrentPosition())/2d;
-        this.xEnc = odometrX.getCurrentPosition();
+        this.yEnc = (robot.hardware.odometers.getPosition(odometrRightY) + robot.hardware.odometers.getPosition(odometrLeftY))/2d;
+        this.xEnc = robot.hardware.odometers.getPosition(odometrX);
         h = robot.gyro.getAngle();
     }
     public void update(){
