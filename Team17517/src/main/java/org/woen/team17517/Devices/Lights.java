@@ -1,4 +1,4 @@
-package Devices;
+package org.woen.team17517.Devices;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;

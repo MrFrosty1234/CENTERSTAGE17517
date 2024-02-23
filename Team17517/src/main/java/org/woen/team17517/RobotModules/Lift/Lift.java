@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.Button;
 import org.woen.team17517.Service.PIDMethod;
 import org.woen.team17517.Service.RobotModule;
 
@@ -44,11 +45,12 @@ public class Lift implements RobotModule {
         buttonDown = robot.hardware.sensors.buttonDown;
         voltage = 12;
     }
+    Button up   = new Button();
+    Button down = new Button();
     public boolean getUpSwitch(){
         return false;
-    }
-    public boolean getDownSwitch(){return buttonDown.getState();}
-
+    }//up.update(buttonUp.getState();
+    public boolean getDownSwitch(){return down.update(buttonDown.getState());}
 
     public void setPower(double x) {
         liftMotor.setPower(x);
@@ -179,7 +181,7 @@ public class Lift implements RobotModule {
     private  boolean manualTargetDown = false;
     @Override
     public boolean isAtPosition() {
-        return liftAtTaget;
+        return true;//liftAtTaget;
     }
 
 }

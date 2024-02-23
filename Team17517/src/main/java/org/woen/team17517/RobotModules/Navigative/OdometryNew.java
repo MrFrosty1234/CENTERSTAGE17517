@@ -5,7 +5,6 @@ import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
 
-
 public class OdometryNew implements RobotModule {
     UltRobot robot;
     private Vector2D vector = new Vector2D();
@@ -14,7 +13,6 @@ public class OdometryNew implements RobotModule {
     private final DcMotorEx odometrX;
     private double xEncOld = 0;
     private double yEncOld = 0;
-    private double hOld;
     private double h;
     private  double yEnc;
     private double xEnc;
@@ -24,19 +22,17 @@ public class OdometryNew implements RobotModule {
         odometrRightY = robot.hardware.odometers.odometrRightY;
         odometrLeftY =  robot.hardware.odometers.odometrLeftY;
         odometrX = robot.hardware.odometers.odometrX;
-
+        robot.hardware.odometers.setDirection(odometrX,-1);
+        robot.hardware.odometers.setDirection(odometrRightY,-1);
+        robot.hardware.odometers.setDirection(odometrLeftY,1);
         vector.setCord(0,0);
         h = 0;
     }
     private double velX = 0;
     private double velY = 0;
     private double velH = 0;
-    public double getCleanLeftY() {
-        return odometrLeftY.getVelocity();
-    }
-    public double getCleanRightY() {
-        return -odometrRightY.getVelocity();
-    }
+    public double getCleanLeftY() {return robot.hardware.odometers.getVelocity(odometrLeftY);}
+    public double getCleanRightY(){return robot.hardware.odometers.getVelocity(odometrRightY);}
 
     public double getVelCleanX() {
         return velX;
@@ -52,71 +48,88 @@ public class OdometryNew implements RobotModule {
 
     public Vector2D getPositionVector(){return vector;}
     private Vector2D vectorDeltaPosition = new Vector2D();
-    private long startVelTime = System.currentTimeMillis();
-    private double mathSpeedY = 0;
-    private double mathSpeedX = 0;
-    private double mathSpeedH = 0;
-    private double posHOld = 0;
-    private double posYOld = 0;
-    private double posXOld = 0;
-    private double hardVelX = 0;
-    private double hardVelY = 0;
-    private double hardVelH = 0;
-    private void velocityUpdate(){
-        double posH = (odometrLeftY.getCurrentPosition()+odometrRightY.getCurrentPosition())/2d;
-        double posY = (odometrLeftY.getCurrentPosition()-odometrRightY.getCurrentPosition())/2d;
-        double posX = -odometrX.getCurrentPosition();
-        long deltaTime = System.currentTimeMillis() - startVelTime;
-        if(deltaTime > 500){
-            mathSpeedX = (posX-posXOld)/deltaTime;
-            mathSpeedY = (posY-posYOld)/deltaTime;
-            mathSpeedH = (posH-posHOld)/deltaTime;
-            posXOld = posX;
-            posYOld = posY;
-            posHOld = posH;
+    private double startVelTime = System.nanoTime()/1_000_000d;
+    private double mathSpeedOdometerRightY = 0;
+    private double mathSpeedOdometerX = 0;
+    private double mathSpeedOdometerLeftY = 0;
+    private double posOdometerLeftYOld = 0;
+    private double posOdometerRightYOld = 0;
+    private double posOdometerXOld = 0;
+    private double hardVelOdometrX = 0;
+    private double hardVelOdometerRightY = 0;
+    private double hardVelOdometerLeftY = 0;
+    public double posOdometerX =0;
+    public double posOdometerRightY =0;
+    public double posOdometerLeftY =0;
+    public double velOdometerX=0;
+    public double velOdometerRightY=0;
+    public double velOdometerLeftY =0;
+    private void odometerVelocityUpdate(){
+        overflowDef();
+        velX = velOdometerX;
+        velY = (velOdometerLeftY + velOdometerRightY)/2d;
+        velH = (velOdometerLeftY - velOdometerRightY)/2d;
+    }
+    private void overflowDef(){
+        double deltaTime = System.nanoTime()/1_000_000d - startVelTime;
+
+        posOdometerX      = robot.hardware.odometers.getPosition(odometrX);
+        posOdometerRightY = robot.hardware.odometers.getPosition(odometrRightY);
+        posOdometerLeftY  = robot.hardware.odometers.getPosition(odometrLeftY);
+
+        if(deltaTime > 0.1){
+            mathSpeedOdometerX      = (posOdometerX - posOdometerXOld) / deltaTime;
+            mathSpeedOdometerRightY = (posOdometerRightY - posOdometerRightYOld) / deltaTime;
+            mathSpeedOdometerLeftY  = (posOdometerLeftY - posOdometerLeftYOld) / deltaTime;
+
+            posOdometerXOld      = posOdometerX;
+            posOdometerRightYOld = posOdometerRightY;
+            posOdometerLeftYOld  = posOdometerLeftY;
+
+            startVelTime = System.nanoTime()/1_000_000d;
         }
-        hardVelX = -odometrX.getVelocity();
-        hardVelY = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
-        hardVelH = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
 
-        velH = hardVelH + Math.round( (mathSpeedH-hardVelH) / (double)Short.MAX_VALUE ) * (double)Short.MAX_VALUE;
-        velX = hardVelX + Math.round( (mathSpeedX-hardVelX) / (double)Short.MAX_VALUE ) * (double)Short.MAX_VALUE;
-        velY = hardVelY + Math.round( (mathSpeedY-hardVelY) / (double)Short.MAX_VALUE ) * (double)Short.MAX_VALUE;
-    }
+        hardVelOdometrX       = robot.hardware.odometers.getVelocity(odometrX);
+        hardVelOdometerRightY = robot.hardware.odometers.getVelocity(odometrRightY);
+        hardVelOdometerLeftY  = robot.hardware.odometers.getVelocity(odometrLeftY);
 
-    public double getHardVelH() {
-        return hardVelH;
-    }
-    public double getHardVelY() {
-        return hardVelY;
-    }
-    public double getHardVelX() {
-        return hardVelX;
+        velOdometerX      = hardVelOdometrX + Math.round( (mathSpeedOdometerX - hardVelOdometrX) / (double) 0x10000 ) * (double)0x10000;
+        velOdometerLeftY = hardVelOdometerLeftY + Math.round( (mathSpeedOdometerLeftY - hardVelOdometerLeftY) / (double) 0x10000 ) * (double)0x10000;
+        velOdometerRightY = hardVelOdometerRightY + Math.round( (mathSpeedOdometerRightY - hardVelOdometerRightY) / (double) 0x10000 ) * (double)0x10000;
     }
 
-    public double getMathSpeedH() {
-        return mathSpeedH;
+    public double getHardVelOdometerLeftY() {
+        return hardVelOdometerLeftY;
     }
-    public double getMathSpeedX() {
-        return mathSpeedX;
+    public double getHardVelOdometerRightY() {
+        return hardVelOdometerRightY;
     }
-    public double getMathSpeedY() {
-        return mathSpeedY;
+    public double getHardVelOdometrX() {
+        return hardVelOdometrX;
+    }
+
+    public double getMathSpeedOdometerLeftY() {
+        return mathSpeedOdometerLeftY;
+    }
+    public double getMathSpeedOdometerX() {
+        return mathSpeedOdometerX;
+    }
+    public double getMathSpeedOdometerRightY() {
+        return mathSpeedOdometerRightY;
     }
 
     private void odometerUpdate(){
-        this.yEnc = ((double) -odometrRightY.getCurrentPosition() + (double) odometrLeftY.getCurrentPosition())/2d;
-        this.xEnc = -odometrX.getCurrentPosition();
+        this.yEnc = ((double) odometrRightY.getCurrentPosition() + (double) odometrLeftY.getCurrentPosition())/2d;
+        this.xEnc = odometrX.getCurrentPosition();
         h = robot.gyro.getAngle();
     }
     public void update(){
-        velocityUpdate();
+        odometerVelocityUpdate();
         odometerUpdate();
         vectorDeltaPosition.setCord(xEnc-xEncOld,yEnc-yEncOld);
         vectorDeltaPosition.vectorRat(h);
         vector.vectorSum(vectorDeltaPosition);
         xEncOld = xEnc;
         yEncOld = yEnc;
-        hOld=h;
     }
 }

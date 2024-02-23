@@ -19,7 +19,7 @@ import org.woen.team17517.Service.TelemetryOutput;
 import org.woen.team17517.Service.Timer;
 import org.woen.team17517.Service.VoltageSensorPoint;
 
-import Devices.Hardware;
+import org.woen.team17517.Devices.Hardware;
 
 
 public class UltRobot {

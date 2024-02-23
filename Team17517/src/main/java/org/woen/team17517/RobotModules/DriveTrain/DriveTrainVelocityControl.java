@@ -212,6 +212,16 @@ public class DriveTrainVelocityControl implements RobotModule {
         powerX = moveX(vector.getX());
         powerY = moveY(vector.getY());
 
+        if (Math.abs(powerH) < 0.03){
+            powerH = 0;
+        }
+        if (Math.abs(powerX) < 0.03){
+            powerX = 0;
+        }
+        if (Math.abs(powerY) < 0.03){
+            powerY = 0;
+        }
+
         left_front_drive.setPower(powerX + powerY + powerH);
         right_front_drive.setPower(-powerX + powerY - powerH);
         left_back_drive.setPower(-powerX + powerY + powerH);
