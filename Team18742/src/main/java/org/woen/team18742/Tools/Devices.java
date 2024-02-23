@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.woen.team18742.Tools.Motor.EncoderOnly;
-import org.woen.team18742.Tools.Motor.MotorOnly;
+//import org.woen.team18742.Tools.Motor.DcMotorEx;
+//import org.woen.team18742.Tools.Motor.DcMotorEx;
 
 import java.util.List;
 
@@ -57,10 +57,10 @@ public class Devices {
 
         LiftMotor = map.get(DcMotorEx.class, "liftMotor");
 
-        BrushMotor = map.get(MotorOnly.class, "odometerXRightBrush");
-        OdometerXLeft = map.get(EncoderOnly.class, "odometerXLeft");
-        OdometerY = map.get(EncoderOnly.class, "odometrYLED");
-        OdometerXRight = map.get(EncoderOnly.class, "odometerXRightBrush");
+        BrushMotor = map.get(DcMotorEx.class, "odometerXRightBrush");
+        OdometerXLeft = map.get(DcMotorEx.class, "odometerXLeft");
+        OdometerY = map.get(DcMotorEx.class, "odometrYLED");
+        OdometerXRight = map.get(DcMotorEx.class, "odometerXRightBrush");
 
         Camera = map.get(WebcamName.class, "Webcam 1");
 
@@ -87,8 +87,8 @@ public class Devices {
 
         VoltageSensor = map.get(VoltageSensor.class, "Control Hub");
 
-        LightingMotor = map.get(MotorOnly.class, "odometrYLED");;
-        HookMotor = map.get(MotorOnly.class, "odometerXLeft");
+        LightingMotor = map.get(DcMotorEx.class, "odometrYLED");;
+        HookMotor = map.get(DcMotorEx.class, "odometerXLeft");
 
         LineServo = map.get(Servo.class, "lineServo");
 
