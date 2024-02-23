@@ -34,7 +34,6 @@ public class OdometryNew implements RobotModule {
     public double getCleanLeftY() {
         return odometrLeftY.getVelocity();
     }
-
     public double getCleanRightY() {
         return -odometrRightY.getVelocity();
     }
@@ -45,13 +44,12 @@ public class OdometryNew implements RobotModule {
     public double getVelCleanY() {
         return velY;
     }
-
     public double getVelCleanH() {return velH;}
 
     public double getX(){return vector.getX();}
-
     public double getY(){return vector.getY();}
     public double getH(){return h;}
+
     public Vector2D getPositionVector(){return vector;}
     private Vector2D vectorDeltaPosition = new Vector2D();
     private long startVelTime = System.currentTimeMillis();
@@ -61,12 +59,15 @@ public class OdometryNew implements RobotModule {
     private double posHOld = 0;
     private double posYOld = 0;
     private double posXOld = 0;
+    private double hardVelX = 0;
+    private double hardVelY = 0;
+    private double hardVelH = 0;
     private void velocityUpdate(){
         double posH = (odometrLeftY.getCurrentPosition()+odometrRightY.getCurrentPosition())/2d;
         double posY = (odometrLeftY.getCurrentPosition()-odometrRightY.getCurrentPosition())/2d;
         double posX = -odometrX.getCurrentPosition();
         long deltaTime = System.currentTimeMillis() - startVelTime;
-        if(deltaTime > 1){
+        if(deltaTime > 500){
             mathSpeedX = (posX-posXOld)/deltaTime;
             mathSpeedY = (posY-posYOld)/deltaTime;
             mathSpeedH = (posH-posHOld)/deltaTime;
@@ -74,14 +75,35 @@ public class OdometryNew implements RobotModule {
             posYOld = posY;
             posHOld = posH;
         }
-        double hardVelX = -odometrX.getVelocity();
-        double hardVelY = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
-        double hardVelH = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
+        hardVelX = -odometrX.getVelocity();
+        hardVelY = (odometrLeftY.getVelocity()-odometrRightY.getVelocity())/2d;
+        hardVelH = (odometrLeftY.getVelocity()+odometrRightY.getVelocity())/2d;
 
         velH = hardVelH + Math.round( (mathSpeedH-hardVelH) / (double)Short.MAX_VALUE ) * (double)Short.MAX_VALUE;
         velX = hardVelX + Math.round( (mathSpeedX-hardVelX) / (double)Short.MAX_VALUE ) * (double)Short.MAX_VALUE;
         velY = hardVelY + Math.round( (mathSpeedY-hardVelY) / (double)Short.MAX_VALUE ) * (double)Short.MAX_VALUE;
     }
+
+    public double getHardVelH() {
+        return hardVelH;
+    }
+    public double getHardVelY() {
+        return hardVelY;
+    }
+    public double getHardVelX() {
+        return hardVelX;
+    }
+
+    public double getMathSpeedH() {
+        return mathSpeedH;
+    }
+    public double getMathSpeedX() {
+        return mathSpeedX;
+    }
+    public double getMathSpeedY() {
+        return mathSpeedY;
+    }
+
     private void odometerUpdate(){
         this.yEnc = ((double) -odometrRightY.getCurrentPosition() + (double) odometrLeftY.getCurrentPosition())/2d;
         this.xEnc = -odometrX.getCurrentPosition();

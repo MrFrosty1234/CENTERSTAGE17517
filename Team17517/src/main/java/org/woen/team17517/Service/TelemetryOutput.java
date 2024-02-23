@@ -21,7 +21,7 @@ public class TelemetryOutput implements RobotModule {
     public static boolean odometryAndCamera = false;
     public static boolean ftcMap = false;
     public static boolean encoders = false;
-    public  static  boolean cleanOdometry = false;
+    public  static  boolean velocityOdometry = false;
     double dlin =40;
     double shir =40;
     public static boolean opticalSensor = false;
@@ -108,12 +108,18 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("y",robot.odometry.getY());
             telemetry.addData("heading",robot.odometry.getH());
         }
-        if (cleanOdometry){
+        if (velocityOdometry){
             telemetry.addData("xVel",robot.odometry.getVelCleanX());
             telemetry.addData("yVel",robot.odometry.getVelCleanY());
             telemetry.addData("heading",robot.odometry.getVelCleanH());
             telemetry.addData("leftY", robot.odometry.getCleanLeftY());
             telemetry.addData("RightY", robot.odometry.getCleanRightY());
+            telemetry.addData("hardSpeedY",robot.odometry.getHardVelY());
+            telemetry.addData("hardSpeedX",robot.odometry.getHardVelX());
+            telemetry.addData("hardSpeedH",robot.odometry.getHardVelH());
+            telemetry.addData("mathSpeedX",robot.odometry.getMathSpeedX());
+            telemetry.addData("mathSpeedY",robot.odometry.getMathSpeedY());
+            telemetry.addData("mathSpeedH",robot.odometry.getMathSpeedH());
         }
         if(velocity){
             HashMap<String,Double> encoderMap = robot.driveTrainVelocityControl.getEncoders();
