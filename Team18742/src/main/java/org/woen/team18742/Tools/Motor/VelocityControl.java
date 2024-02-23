@@ -24,7 +24,6 @@ public class VelocityControl {
     private double mathSpeed = 0d;
 
     public void Update() {
-
         double encoderPosition = _encoder.getCurrentPosition();
 
         double hardwareSpeed = _encoder.getVelocity();
@@ -40,5 +39,6 @@ public class VelocityControl {
 
     public void Start() {
         _deltaTime.reset();
+        _oldPosition = _encoder.getCurrentPosition();
     }
 }
