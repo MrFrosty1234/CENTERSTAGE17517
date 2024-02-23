@@ -157,6 +157,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
                 _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
             }
+            else
+                _driveTrain.Stop();
         } else
             _driveTrain.Stop();
     }
@@ -279,12 +281,13 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder liftMiddle(double ds) {
-            _builder = _builder.endTrajectory();
+            endTrajectory();
             _builder = _builder.afterTime(ds, () -> _lift.SetLiftPose(LiftPose.MIDDLE_LOWER));
             return this;
         }
 
         public MyTrajectoryBuilder waitLift() {
+            endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _lift.isATarget());
                 _startWaitTime = _time.seconds();
@@ -299,13 +302,13 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushOn(double ds) {
-            _builder = _builder.endTrajectory();
+            endTrajectory();
             _builder = _builder.afterTime(ds, () -> _brush.BrushEnable());
             return this;
         }
 
         public MyTrajectoryBuilder waitPixel() {
-            _builder = _builder.endTrajectory();
+            endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
                 _waiters.add(() -> _intake.isPixelGripped());
                 _startWaitTime = _time.seconds();
@@ -332,7 +335,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder waitSeconds(double time) {
-            _builder = _builder.endTrajectory();
+            endTrajectory();
             _builder = _builder.waitSeconds(time);
             return this;
         }
@@ -372,7 +375,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder brushDown(double ds) {
-            _builder = _builder.endTrajectory();
+            endTrajectory();
             _builder = _builder.afterTime(ds, () -> _staksBrush.servoSetDownPose());
             return this;
         }
@@ -383,8 +386,14 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder linePixelOpen(double ds) {
-            _builder = _builder.endTrajectory();
+            endTrajectory();
             _builder = _builder.afterTime(ds, () -> _intake.LineServoOpen());
+
+            return this;
+        }
+
+        public MyTrajectoryBuilder endTrajectory(){
+            _builder = _builder.endTrajectory();
 
             return this;
         }
