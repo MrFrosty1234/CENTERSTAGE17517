@@ -117,7 +117,7 @@ public class Configs {
     public static class DriveTrainWheels {
         public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 125, MaxSpeedTurn = Math.toRadians(110), speed = 0.5;
         public static double MaxTurnAccel = Math.toRadians(110);
-        public static double Radius = 15.7;
+        public static double WheelsRadius = 15.7;
     }
 
     @Config

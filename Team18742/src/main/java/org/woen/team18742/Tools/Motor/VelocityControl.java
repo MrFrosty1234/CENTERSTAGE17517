@@ -21,24 +21,24 @@ public class VelocityControl {
         _encoder = encoder;
     }
 
-    private double mathSpeed = 0d;
+    private double _mathSpeed;
 
     public void Update() {
-
         double encoderPosition = _encoder.getCurrentPosition();
 
         double hardwareSpeed = _encoder.getVelocity();
 
         if (_deltaTime.seconds() > 0.085) {
-            mathSpeed = (encoderPosition - _oldPosition) / _deltaTime.seconds();
+            _mathSpeed = (encoderPosition - _oldPosition) / _deltaTime.seconds();
             _deltaTime.reset();
             _oldPosition = encoderPosition;
         }
 
-        _speed = hardwareSpeed + Math.round((mathSpeed - hardwareSpeed) / (double) Short.MAX_VALUE) * (double) Short.MAX_VALUE;
+        _speed = hardwareSpeed + Math.round((_mathSpeed - hardwareSpeed) / (double) Short.MAX_VALUE) * (double) Short.MAX_VALUE;
     }
 
     public void Start() {
         _deltaTime.reset();
+        _oldPosition = _encoder.getCurrentPosition();
     }
 }

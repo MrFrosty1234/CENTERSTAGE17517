@@ -12,14 +12,13 @@ import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
+import org.woen.team18742.Tools.Timers.Timer;
 
 @Module
 public class Hook implements IRobotModule {
     private Servo _hookServoLeft;
     private Servo _hookServoRight;
     private DcMotorEx _hookMotor;
-    private StaksBrush _stackBrush;
-    private Brush _brush;
     private Lighting _lighting;
     private boolean _isOpen = false;
     private final ElapsedTime _endGameTime = new ElapsedTime();
@@ -39,25 +38,24 @@ public class Hook implements IRobotModule {
         _hookServoRight = Devices.HookServoRight;
         _hookMotor = Devices.HookMotor;
 
-        _stackBrush = collector.GetModule(StaksBrush.class);
-        _brush = collector.GetModule(Brush.class);
         _lighting = collector.GetModule(Lighting.class);
     }
+
+    private Timer _hookTimer = new Timer();
 
     public void Active(boolean timerBypass) {
         if((_endGameTime.seconds() < 90 && !timerBypass) || _isOpen)
             return;
 
-        for(ServoImplEx i : Devices.Servs)
-            i.setPwmDisable();
-
         _hookServoLeft.setPosition(Configs.Hook.ServoHookOpenLeft);
         _hookServoRight.setPosition(Configs.Hook.ServoHookOpenRight);
 
-        _lighting.Disable();
+        _hookTimer.Start(800, ()->{
+            _lighting.Disable();
 
-        _brush.BrushEnable();
-        _stackBrush.servoSetDownPose();
+            for(ServoImplEx i : Devices.Servs)
+                i.setPwmDisable();
+        });
 
         _isOpen = true;
     }

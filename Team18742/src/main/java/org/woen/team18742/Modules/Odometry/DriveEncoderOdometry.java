@@ -6,7 +6,7 @@ import static java.lang.Math.sin;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.Drivetrain;
+import org.woen.team18742.Modules.DriveTrain.Drivetrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;

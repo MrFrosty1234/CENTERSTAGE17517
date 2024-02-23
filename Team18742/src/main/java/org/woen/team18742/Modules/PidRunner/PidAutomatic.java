@@ -4,7 +4,7 @@ import static java.lang.Math.PI;
 import static java.lang.Math.signum;
 
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.Drivetrain;
+import org.woen.team18742.Modules.DriveTrain.Drivetrain;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.AutonomModule;
 import org.woen.team18742.Modules.Manager.IRobotModule;
@@ -12,7 +12,6 @@ import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Battery;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.PIDF;
-import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
 @AutonomModule
