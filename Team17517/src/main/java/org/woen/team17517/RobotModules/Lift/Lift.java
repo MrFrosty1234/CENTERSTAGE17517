@@ -34,18 +34,17 @@ public class Lift implements RobotModule {
         return liftMode;
     }
     UltRobot robot;
-    private boolean liftAtTarget = false;
-
-    public static double kp;
-    public static double ki;
+    private boolean liftAtTarget = true;
+    public static double kp = 0;
+    public static double ki = 0;
     public static double ks = 0;
     public static double kd = 0;
-    public static double maxI;
-    public static double velKp;
-    public static double velKi;
+    public static double maxI  = 0;
+    public static double velKp = 0;
+    public static double velKi = 0;
     public static double velKs = 0;
     public static double velKd = 0;
-    public static double velMaxI;
+    public static double velMaxI = 0;
     PIDMethod pid = new PIDMethod(kp,ki,kd,ks,maxI);
     PIDMethod pidVelocity = new PIDMethod(velKp,velKi,velKd,velKs,velMaxI);
     public void setLiftMode(LiftMode mode){
@@ -102,9 +101,11 @@ public class Lift implements RobotModule {
         switch (liftMode) {
             case AUTO:
                 power = pid.PID(targetPosition.value, getPosition(),voltage);
+                liftAtTarget = Math.abs(targetPosition.value-getPosition())<5;
                 break;
             case MANUALLIMIT:
                 power = pidVelocity.PID(targetSpeed,speed,voltage);
+                liftAtTarget = true;
                 break;
         }
     }
@@ -117,9 +118,6 @@ public class Lift implements RobotModule {
         setLiftMode(MANUALLIMIT);
     }
     private double maxSpeed = 2400;
-    private boolean manualTargetUp = false;
-
-    private  boolean manualTargetDown = false;
     @Override
     public boolean isAtPosition() {
         return liftAtTarget;
