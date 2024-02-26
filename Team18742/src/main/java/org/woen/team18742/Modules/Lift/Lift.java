@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team18742.Collectors.BaseCollector;
-import org.woen.team18742.Modules.Intake;
+import org.woen.team18742.Modules.Intake.Intake;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
@@ -19,7 +19,7 @@ public class Lift implements IRobotModule {
 
     private boolean _endingUpState = false, _endingDownState = false;
 
-    private final PIDF _liftPIDF = new PIDF(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef, 0.0001, 0, 1, 1);
+    private final PIDF _liftPIDF = new PIDF(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef, Configs.LiftPid.GCoef, 0, 1, 0.3);
     private Intake _intake;
 
     @Override

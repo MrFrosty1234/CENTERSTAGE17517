@@ -1,4 +1,4 @@
-package org.woen.team18742.Modules;
+package org.woen.team18742.Modules.Intake;
 
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -44,6 +44,8 @@ public class Intake implements IRobotModule {
     private final Timer _normalTimer = new Timer();
     private boolean _oldTurnPos = false;
 
+    private GripperStates _gripperState = GripperStates.OPEN;
+
     public void updateTurner() {
         if (_lift.isTurnPosPassed()) {
             servoTurn.setPosition(Configs.Intake.servoTurnTurned);
@@ -66,8 +68,6 @@ public class Intake implements IRobotModule {
 
     @Override
     public void Start() {
-        setGripper(false);
-
         if(_collector instanceof AutonomCollector)
             LineServoClose();
         else
@@ -80,23 +80,11 @@ public class Intake implements IRobotModule {
 
     private boolean _isTurned = true;
 
-    private boolean _pixelGripped = false;
-
-    public void setGripper(boolean grip) {
-        if (grip) {
-            gripper.setPosition(Configs.Intake.servoGripperGripped);
-        } else {
-            gripper.setPosition(Configs.Intake.servoGripperNormal);
-        }
-
-        _pixelGripped = grip;
-    }
-
     public boolean isPixelGripped() {
-        return _pixelGripped;
+        return _gripperState != GripperStates.OPEN;
     }
 
-    public void setClamp(boolean clampIk) {
+    private void setClamp(boolean clampIk) {
         if (clampIk) {
             clamp.setPosition(Configs.Intake.servoClampClamped);
         } else if(_lift.isDown()) {
@@ -108,25 +96,37 @@ public class Intake implements IRobotModule {
     }
 
 
-    ElapsedTime pixelTimer = new ElapsedTime();
+    private ElapsedTime _pixelTimer = new ElapsedTime();
 
     private boolean isPixelDetected() {
         if (pixelSensor1.getVoltage() >= Configs.Intake.pixelSensorvoltage || !_brush.isBrusnOn())
-            pixelTimer.reset();
-        return pixelTimer.milliseconds() > Configs.Intake.pixelDetectTimeMs;
+            _pixelTimer.reset();
+        return _pixelTimer.milliseconds() > Configs.Intake.pixelDetectTimeMs;
     }
 
-    ElapsedTime _clampTimer = new ElapsedTime();
-    double clampTimerconst = 800;
+    private ElapsedTime _clampTimer = new ElapsedTime();
+    private double _clampTimerconst = 800;
 
     public void releaseGripper() {
-        if(_lift.isDown() || !_lift.isATarget())
+        if(_lift.isDown() || !_lift.isATarget() || !isPixelGripped())
             return;
 
-        setGripper(false);
-        _clampTimer.reset();
+        if(_gripperState == GripperStates.ONE_GRIPPED) {
+            _clampTimer.reset();
 
-        _liftTimer.Start(400, () -> _lift.SetLiftPose(LiftPose.DOWN));
+            _liftTimer.Start(400, () -> _lift.SetLiftPose(LiftPose.DOWN));
+
+            _gripperState = GripperStates.OPEN;
+
+            return;
+        }
+
+        _gripperState = GripperStates.ONE_GRIPPED;
+    }
+
+    public void releaseAllGripper(){
+        releaseGripper();
+        releaseGripper();
     }
 
     private final Timer _liftTimer = new Timer();
@@ -134,17 +134,18 @@ public class Intake implements IRobotModule {
     @Override
     public void Update() {
         if (isPixelDetected() && _lift.isDown()) {
-            setGripper(true);
-            setClamp(_clampTimer.milliseconds() < clampTimerconst && _lift.isDown());
+            _gripperState = GripperStates.ALL_GRIPPED;
+            setClamp(_clampTimer.milliseconds() < _clampTimerconst);
         } else {
             _clampTimer.reset();
-            setClamp(!_pixelGripped && _lift.isDown());
+            setClamp(!isPixelGripped() && _lift.isDown());
         }
+
+        gripper.setPosition(_gripperState.getServoPosition());
 
         updateTurner();
 
         ToolTelemetry.AddLine("Pixels:" + pixelSensor1.getVoltage());
-        ToolTelemetry.AddLine("Detected:" + isPixelDetected());
     }
 
     public void LineServoOpen(){

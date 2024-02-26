@@ -32,7 +32,7 @@ import org.woen.team18742.Modules.Camera.Camera;
 import org.woen.team18742.Modules.Camera.CameraRobotPosition;
 import org.woen.team18742.Modules.DriveTrain.Drivetrain;
 import org.woen.team18742.Modules.Gyroscope;
-import org.woen.team18742.Modules.Intake;
+import org.woen.team18742.Modules.Intake.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.AutonomModule;
@@ -325,7 +325,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
         public MyTrajectoryBuilder pixelDeGripp(double ds) {
             _builder = _builder.endTrajectory();
-            _builder = _builder.afterTime(ds, () -> _intake.releaseGripper());
+            _builder = _builder.afterTime(ds, () -> _intake.releaseAllGripper());
             return this;
         }
 

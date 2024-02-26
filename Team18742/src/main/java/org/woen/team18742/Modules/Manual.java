@@ -6,6 +6,7 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Brush.StaksBrush;
 import org.woen.team18742.Modules.DriveTrain.Drivetrain;
+import org.woen.team18742.Modules.Intake.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
 import org.woen.team18742.Modules.Lift.LiftPose;
 import org.woen.team18742.Modules.Manager.IRobotModule;
@@ -58,7 +59,7 @@ public class Manual implements IRobotModule {
         boolean launchPlane = _gamepad.square;
         boolean liftUp = _gamepad.dpad_up;
         boolean liftAverage = _gamepad.dpad_right;
-        boolean liftAverageDown = _gamepad.dpad_down;
+        boolean allGrip = _gamepad.dpad_down;
         boolean hookDown = _gamepad.dpad_left;
         boolean grip = _gamepad.triangle;
         boolean brushOn = _gamepad.cross;
@@ -70,6 +71,9 @@ public class Manual implements IRobotModule {
 
         if (grip && !_gripOld)
             _intake.releaseGripper();
+
+        if(allGrip)
+            _intake.releaseAllGripper();
 
         if (brushOn) {
             if (!_brush.isBrusnOn())
@@ -94,8 +98,6 @@ public class Manual implements IRobotModule {
             _lift.SetLiftPose(LiftPose.UP);
         else if (liftAverage)
             _lift.SetLiftPose(LiftPose.MIDDLE_UPPER);
-        else if (liftAverageDown)
-            _lift.SetLiftPose(LiftPose.MIDDLE_LOWER);
 
         if (hookActive > 0.2)
             _hook.Active(timerBypass);

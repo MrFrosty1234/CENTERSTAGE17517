@@ -28,13 +28,13 @@ public class VelocityControl {
 
         double hardwareSpeed = _encoder.getVelocity();
 
-        if (_deltaTime.seconds() > 0.085) {
+        if (_deltaTime.seconds() > 0.088) {
             _mathSpeed = (encoderPosition - _oldPosition) / _deltaTime.seconds();
             _deltaTime.reset();
             _oldPosition = encoderPosition;
         }
 
-        _speed = hardwareSpeed + Math.round((_mathSpeed - hardwareSpeed) / (double) Short.MAX_VALUE) * (double) Short.MAX_VALUE;
+        _speed = hardwareSpeed + Math.round((_mathSpeed - hardwareSpeed) / (double) (1 << 16)) * (double)(1 << 16);
     }
 
     public void Start() {

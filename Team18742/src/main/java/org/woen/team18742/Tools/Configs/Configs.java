@@ -59,7 +59,7 @@ public class Configs {
 
     @Config
     public static class LiftPid{
-        public static double PCoef = 0.01, ICoef = 0, DCoef = 0, GCoef = 0.1;
+        public static double PCoef = 0.01, ICoef = 0.0001, DCoef = 0, GCoef = 0.1;
         public static double DOWN_MOVE_POWER = -0.00003, DOWN_AT_TARGET_POWER = 0, DOWN_MOVE_POWER_FAST = -0.02;
     }
 
@@ -132,10 +132,11 @@ public class Configs {
         public static double servoTurnTurned = 0.7;
         public static double servoGripperNormal = 0.59;
         public static double servoGripperGripped = 0.33;
+        public static double servoGripperGrippedOne = 0.4;
         public static double servoClampClamped = 0.7;
         public static double servoClampReleased = 0.54;
         public static double servoClampReleasedLift = 0.42;
-        public static double pixelDetectTimeMs = 375;
+        public static double pixelDetectTimeMs = 325;
         public static double LineServoOpen = 0;
         public static double LineServoClose = 0.625;
     }

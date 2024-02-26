@@ -16,6 +16,8 @@ public class CrashDefend implements IRobotModule {
     private Gyroscope _gyro;
     private Drivetrain _driveTrain;
 
+    private Square _square;
+
     @Override
     public void Init(BaseCollector collector) {
         _odometry = collector.GetModule(OdometryHandler.class);
@@ -25,7 +27,7 @@ public class CrashDefend implements IRobotModule {
 
     @Override
     public void Update() {
-        ToolTelemetry.DrawPolygon(new Vector2[]{
+        _square = new Square(
                 Vector2.Plus(_odometry.Position,
                         new Vector2(Configs.DriveTrainWheels.WheelsRadius, Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians())),
                 Vector2.Plus(_odometry.Position,
@@ -34,6 +36,48 @@ public class CrashDefend implements IRobotModule {
                         new Vector2(-Configs.DriveTrainWheels.WheelsRadius, -Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians())),
                 Vector2.Plus(_odometry.Position,
                         new Vector2(-Configs.DriveTrainWheels.WheelsRadius, Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians()))
-        }, Color.BLUE);
+        );
+
+        Triangle[] triangles = _square.GetTriangles();
+
+
+        ToolTelemetry.DrawPolygon(_square.GetPoints(), Color.BLUE);
+    }
+
+    private class Triangle {
+        public Vector2 p1, p2, p3;
+
+        public Triangle(Vector2 p1, Vector2 p2, Vector2 p3) {
+            this.p1 = p1;
+            this.p2 = p2;
+            this.p3 = p3;
+        }
+    }
+
+    private class Square {
+        public Vector2 p1, p2, p3, p4;
+
+        public Square(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4) {
+            this.p1 = p1;
+            this.p2 = p2;
+            this.p3 = p3;
+            this.p4 = p4;
+        }
+
+        public Vector2[] GetPoints() {
+            return new Vector2[]{
+                    p1,
+                    p2,
+                    p3,
+                    p4
+            };
+        }
+
+        public Triangle[] GetTriangles() {
+            return new Triangle[]{
+                    new Triangle(_square.p1, _square.p2, _square.p3),
+                    new Triangle(_square.p3, _square.p4, _square.p1)
+            };
+        }
     }
 }

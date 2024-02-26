@@ -18,8 +18,8 @@ public enum LiftPose {
                 return POSE_MIDDLE_LOWER;
             case DOWN:
                 return POSE_DOWN;
-            default:
-                return 0;
         }
+
+        throw new RuntimeException("attempt to find non-existent lift position");
     }
 }

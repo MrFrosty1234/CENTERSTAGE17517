@@ -66,12 +66,12 @@ public class PIDF {
     }
 
     public double Update(double error) {
-        _integrall += error;
+        _integrall += error * _time.milliseconds();
 
         if(Math.abs(_integrall) >= _limitI)
             _integrall = signum(_integrall) * _limitI;
 
-        double u = error * _pCoef + (_integrall * _iCoef * _time.milliseconds()) + (error - _errOld) * (_dCoef / _time.milliseconds()) + -_gCof;
+        double u = error * _pCoef + (_integrall * _iCoef) + (error - _errOld) * (_dCoef / _time.milliseconds()) + -_gCof;
 
         Err = error;
 
