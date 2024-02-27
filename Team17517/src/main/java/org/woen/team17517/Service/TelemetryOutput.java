@@ -41,7 +41,7 @@ public class TelemetryOutput implements RobotModule {
         if(lift) {
             telemetry.addData("cleanPos", robot.lift.getCleanPosition());
             telemetry.addData("lift mode", robot.lift.getLiftMode());
-            telemetry.addData("posEncoder", robot.lift.getEncoderPosition());
+            telemetry.addData("posEncoder", robot.lift.getPosition());
             telemetry.addData("liftTarget", robot.lift.getTargetPosition());
             telemetry.addData("isAtPosition", robot.lift.isAtPosition());
             telemetry.addData("buttonDown", robot.lift.getDownSwitch());

@@ -39,7 +39,7 @@ public abstract class TeleOPForFedorov extends TeleOPBase {
      else if (liftDownBut.update(liftDownAuto)) teleOpModules.liftDownAndOpenGrabber();
 
 
-     if (openGrabberBut.update(openAndFinishGrabber)&&robot.lift.getPosition()!= LiftPosition.DOWN) teleOpModules.openGrabber();
+     if (openGrabberBut.update(openAndFinishGrabber)&&robot.lift.getPosition()!= LiftPosition.DOWN.value) teleOpModules.openGrabber();
      else if (closeGrabberBut.update(closeAndSafeGrabber))                                         teleOpModules.closeGrabber();
 
 
@@ -68,14 +68,14 @@ public abstract class TeleOPForFedorov extends TeleOPBase {
      if (closeGrabberMunBut.update(closeGrabberMun)) robot.grabber.close();
 
 
-     if (brushIn)       robot.grabber.brushIn();
+     if      (brushIn)       robot.grabber.brushIn();
      else if (brushOut) robot.grabber.brushOut();
      else               robot.grabber.brushOff();
 
 
-     if(liftDownMan)                                          robot.lift.setManualTargetDown();
-     else if (liftUpMan)                                      robot.lift.setManualTargetUp();
-     else if (robot.lift.getLiftMode()== LiftMode.MANUALLIMIT) robot.lift.setStopManualTarget();
+     if      (liftDownMan)                                           robot.lift.setSpeed(-2000);
+     else if (liftUpMan)                                       robot.lift.setSpeed(2000);
+     else if (robot.lift.getLiftMode()== LiftMode.MANUALLIMIT) robot.lift.setSpeed(0);
 
      robot.allUpdate();
  }
