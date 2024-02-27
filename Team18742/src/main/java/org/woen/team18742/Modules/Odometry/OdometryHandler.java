@@ -27,7 +27,8 @@ public class OdometryHandler implements IRobotModule {
     private final ExponentialFilter _filterX = new ExponentialFilter(Configs.Odometry.XCoef), _filterY = new ExponentialFilter(Configs.Odometry.YCoef);
     private Vector2 _oldSpeed = new Vector2();
 
-    public Vector2 Position = new Vector2(), Speed = new Vector2(), Accel = new Vector2();
+    public Vector2 Speed = new Vector2(), Accel = new Vector2();
+    public static Vector2 Position = new Vector2();
 
     private final Vector2 _maxSpeed = new Vector2(), _maxAccel = new Vector2();
     private final ElapsedTime _deltaTime = new ElapsedTime();

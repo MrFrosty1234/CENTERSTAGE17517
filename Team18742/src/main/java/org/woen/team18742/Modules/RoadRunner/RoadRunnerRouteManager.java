@@ -318,7 +318,8 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder pixelDeGripp() {
-            _builder = _builder.stopAndAdd(() -> _intake.releaseAllGripper());
+            _builder = _builder.stopAndAdd(() -> _intake.releaseAllGripper()).
+            waitSeconds(0.5);
 
             return this;
         }

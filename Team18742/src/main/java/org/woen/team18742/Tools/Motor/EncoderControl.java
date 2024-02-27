@@ -40,6 +40,9 @@ public class EncoderControl {
     }
 
     public void Reset(){
-        _startPos = _encoder.getCurrentPosition();
+        _startPos = 0;
+
+        _encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        _encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }

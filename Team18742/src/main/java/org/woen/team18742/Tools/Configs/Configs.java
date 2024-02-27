@@ -23,12 +23,12 @@ public class Configs {
 
         public static boolean IsCameraDebug = false;
 
-        public static boolean TelemetryOn = true;
+        public static boolean TelemetryOn = trueж
     }
 
     @Config
     public static class Camera{
-        public static int RobotPos = 2;
+        public static int RobotPos = 3;
         public static int BackDropTags[] = new int[]{
           1,2,3,4,5,6
         };
@@ -128,17 +128,17 @@ public class Configs {
     @Config
     public static class Intake{
         public static double pixelSensorvoltage = 0.123;
-        public static double servoTurnNormal = 0.1;
+        public static double servoTurnNormal = 0.09;
         public static double servoTurnTurned = 0.7;
-        public static double servoGripperNormal = 0.59;
-        public static double servoGripperGripped = 0.33;
-        public static double servoGripperGrippedOne = 0.4;
+        public static double servoGripperNormal = 0.5;
+        public static double servoGripperGripped = 0.65;
+        public static double servoGripperGrippedOne = 0.6;
         public static double servoClampClamped = 0.7;
         public static double servoClampReleased = 0.54;
-        public static double servoClampReleasedLift = 0.42;
+        public static double servoClampReleasedLift = 0.48;
         public static double pixelDetectTimeMs = 325;
         public static double LineServoOpen = 0;
-        public static double LineServoClose = 0.625;
+        public static double LineServoClose = 0.62;
     }
 
     @Config
@@ -155,7 +155,7 @@ public class Configs {
 
     @Config
     public static class PositionConnection{
-        public static double Axial = 2.6;
+        public static double Axial = 2.3;
         public static double Lateral = 2.1;
         public static double Heading = 1.8;
     }
@@ -189,7 +189,7 @@ public class Configs {
         public static double RIGHT_SERVO_FWD = 1.0;
         public static double RIGHT_SERVO_REV = 0.0;
         public static double SERVO_LIFT_DOWN = 0.617;
-        public static double SERVO_LIFT_UP = 0.850;
+        public static double SERVO_LIFT_UP = 0.827;
     }
 
     @Config

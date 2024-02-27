@@ -28,7 +28,9 @@ public class Gyroscope implements IRobotModule {
 
     private final ElapsedTime _deltaTime = new ElapsedTime();
 
-    private double _oldRadians, _allRadians, _allDegree, _radianSpeed, _degreeSpeed, _radianAccel, _degreeAccel, _oldRadianSpeed, _maxRadianSpeed, _maxRadianAccel, _startRotateRadian;
+    private double _oldRadians, _allRadians, _allDegree, _radianSpeed, _degreeSpeed, _radianAccel, _degreeAccel, _oldRadianSpeed, _maxRadianSpeed, _maxRadianAccel;
+
+    private static double _startRotateRadian;
 
     private BaseCollector _collector;
 

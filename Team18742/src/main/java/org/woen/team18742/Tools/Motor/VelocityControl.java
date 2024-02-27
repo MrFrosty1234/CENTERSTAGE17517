@@ -39,6 +39,6 @@ public class VelocityControl {
 
     public void Start() {
         _deltaTime.reset();
-        _oldPosition = _encoder.getCurrentPosition();
+        //_oldPosition = _encoder.getCurrentPosition();
     }
 }
