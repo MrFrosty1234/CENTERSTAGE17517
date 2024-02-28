@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
-import org.woen.team17517.Service.PIDMethod;
+import org.woen.team17517.Service.PID;
 import org.woen.team17517.Service.RobotModule;
 
 
@@ -45,8 +45,8 @@ public class Lift implements RobotModule {
     public static double velKs = 0;
     public static double velKd = 0;
     public static double velMaxI = 0;
-    PIDMethod pid = new PIDMethod(kp,ki,kd,ks,maxI);
-    PIDMethod pidVelocity = new PIDMethod(velKp,velKi,velKd,velKs,velMaxI);
+    PID pid = new PID(kp,ki,kd,ks,maxI);
+    PID pidVelocity = new PID(velKp,velKi,velKd,velKs,velMaxI);
     public void setLiftMode(LiftMode mode){
         liftMode = mode;
     }
@@ -100,11 +100,11 @@ public class Lift implements RobotModule {
         voltage = robot.voltageSensorPoint.getVol();
         switch (liftMode) {
             case AUTO:
-                power = pid.PID(targetPosition.value, getPosition(),voltage);
+                power = pid.pid(targetPosition.value, getPosition(),voltage);
                 liftAtTarget = Math.abs(targetPosition.value-getPosition())<5;
                 break;
             case MANUALLIMIT:
-                power = pidVelocity.PID(targetSpeed,speed,voltage);
+                power = pidVelocity.pid(targetSpeed,speed,voltage);
                 liftAtTarget = true;
                 break;
         }

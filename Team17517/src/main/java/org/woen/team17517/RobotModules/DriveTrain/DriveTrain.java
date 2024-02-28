@@ -64,7 +64,7 @@ public class DriveTrain implements RobotModule{
     private PID pidX = new PID(kPX,kIX,kDX,ImaxX);
     private PID pidY = new PID(kPY,kIY,kDY,ImaxY);
     private PID pidH = new PID(kPH,kIH,kDH,ImaxH);
-    private static double kt = 5;
+    public static double kt = 5;
 
     HashMap<String,Double> positionMap = new HashMap<>();
     HashMap<String,Double> targetMap = new HashMap<>();
