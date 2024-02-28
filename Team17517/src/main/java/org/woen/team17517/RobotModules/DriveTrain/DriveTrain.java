@@ -55,15 +55,17 @@ public class DriveTrain implements RobotModule{
     public static double minErrY;
     public static double minErrH;
 
+    public static double kg = 0;
+
     public static double u_X = 0;
     public static double u_H = 0;
     public static double u_Y = 0;
     public static double u_max = 2000;
 
 
-    private PID pidX = new PID(kPX,kIX,kDX,ImaxX);
-    private PID pidY = new PID(kPY,kIY,kDY,ImaxY);
-    private PID pidH = new PID(kPH,kIH,kDH,ImaxH);
+    private PID pidX = new PID(kPX,kIX,kDX,ImaxX, kg);
+    private PID pidY = new PID(kPY,kIY,kDY,ImaxY, kg);
+    private PID pidH = new PID(kPH,kIH,kDH,ImaxH, kg);
     public static double kt = 5;
 
     HashMap<String,Double> positionMap = new HashMap<>();
@@ -120,9 +122,9 @@ public class DriveTrain implements RobotModule{
             }
 
 
-            pidX.setCoefficent(kPX, kIX, kDX, 0, ImaxX);
-            pidY.setCoefficent(kPY, kIY, kDY, 0, ImaxY);
-            pidH.setCoefficent(kPH, kIH, kDH, 0, ImaxH);
+            pidX.setCoefficent(kPX, kIX, kDX, 0, ImaxX, kg);
+            pidY.setCoefficent(kPY, kIY, kDY, 0, ImaxY, kg);
+            pidH.setCoefficent(kPH, kIH, kDH, 0, ImaxH, kg);
 
             X = pidX.pid(targetVector.getX(), positionVector.getX(), voltage);
             Y = pidY.pid(targetVector.getY(), positionVector.getY(), voltage);

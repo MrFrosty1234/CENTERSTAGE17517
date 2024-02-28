@@ -39,6 +39,7 @@ public class Lift implements RobotModule {
     public static double ki = 0;
     public static double ks = 0;
     public static double kd = 0;
+    public static double kg = 0;
     public static double maxI  = 0;
     public static double velKp = 0;
     public static double velKi = 0;
@@ -46,7 +47,7 @@ public class Lift implements RobotModule {
     public static double velKd = 0;
     public static double velMaxI = 0;
     PID pid = new PID(kp,ki,kd,ks,maxI);
-    PID pidVelocity = new PID(velKp,velKi,velKd,velKs,velMaxI);
+    PID pidVelocity = new PID(velKp,velKi,velKd,velKs,velMaxI,kg);
     public void setLiftMode(LiftMode mode){
         liftMode = mode;
     }
@@ -62,7 +63,7 @@ public class Lift implements RobotModule {
         return false;
     }
     public boolean getDownSwitch(){return down.update(buttonDown.getState());}
-    public void setPower(double x) {liftMotor.setPower(x);}
+    public void setPower(double x) {liftMotor.setPower(x+kg);}
 
     public void moveUP(){
         setTargetPosition(UP);
@@ -91,12 +92,13 @@ public class Lift implements RobotModule {
         }if (getDownSwitch()){
             encoderError = liftMotor.getCurrentPosition() - DOWN.value;
         }
+        setPower(power);
         speed = liftMotor.getVelocity();
     }
     private double power = 0;
     public void update() {
         updatePosition();
-        pid.setCoefficent(kp, ki, kd, ks, maxI);
+        pid.setCoefficent(kp, ki, kd, ks, maxI,kg);
         voltage = robot.voltageSensorPoint.getVol();
         switch (liftMode) {
             case AUTO:
@@ -108,6 +110,7 @@ public class Lift implements RobotModule {
                 liftAtTarget = true;
                 break;
         }
+        setPower(power);
     }
     public void setSpeed(double speed){
         targetSpeed = speed;

@@ -39,6 +39,8 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static double ksX = 0.000016;
     public static double kSlide = 1;
 
+    public static double kg = 0;
+
     public final double odToEnc = 98;
     private PID speedX = new PID(kpX, kiX,kdX,ksX,maxIX);
     private PID speedH = new PID(kpRat,kiRat,kdRat,ksY,maxIY);
@@ -203,9 +205,9 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.voltage = robot.voltageSensorPoint.getVol();
 
 
-        this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat);
-        this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX);
-        this.speedY.setCoefficent(kpY,kiY,kdY,ksY,maxIY);
+        this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat,kg);
+        this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX,kg);
+        this.speedY.setCoefficent(kpY,kiY,kdY,ksY,maxIY,kg);
 
 
         powerH = moveRat(targetH);

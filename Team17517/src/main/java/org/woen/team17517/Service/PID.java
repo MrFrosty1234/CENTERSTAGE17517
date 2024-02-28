@@ -2,20 +2,21 @@ package org.woen.team17517.Service;
 import com.acmerobotics.dashboard.config.Config;
 @Config
 public  class PID {
-    public PID(double kp, double ki, double kd, Double maxI){
-            setCoefficent(kp, ki, kd,0,maxI);
+    public PID(double kp, double ki, double kd, Double maxI,double kg){
+            setCoefficent(kp, ki, kd,0, maxI, kg);
     }
-    public PID(double kp, double ki, double kd, double ks, Double maxI){
-        setCoefficent(kp,ki,kd,ks,maxI);
+    public PID(double kp, double ki, double kd, double ks, Double maxI,double kg){
+        setCoefficent(kp,ki,kd,ks,maxI,kg);
     }
-    private double kp,kd,ki,ks = 0;
+    private double kp,kd,ki,ks,kg = 0;
     Double maxI = Double.POSITIVE_INFINITY;
-    public void setCoefficent(double kp, double ki, double kd, double ks,Double maxI){
+    public void setCoefficent(double kp, double ki, double kd, double ks,Double maxI,double kg){
         this.kp = kp;
         this.ki = ki;
         this.kd = kd;
         this.ks = ks;
         this.maxI = maxI;
+        this.kg =kg;
     }
     private double timeOld = System.nanoTime();
     private Double deltaTime = null;
@@ -49,7 +50,7 @@ public  class PID {
         if(I<-maxI){
             I = -maxI;
         }
-        double PID = (I + D + P)* V +target*ks;
+        double PID = (I + D + P)* V +target*ks+kg;
         double timeNow = (double) System.nanoTime() / 1_000_000d;
         deltaTime = Double.valueOf(timeNow - timeOld);
         timeOld = timeNow;
