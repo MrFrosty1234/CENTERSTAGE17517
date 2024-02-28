@@ -252,8 +252,12 @@ public class RoadRunnerRouteManager implements IRobotModule {
     public final class MyTrajectoryBuilder {
         private TrajectoryActionBuilder _builder;
 
+        private VelConstraint _velBuildConstraint;
+
         public MyTrajectoryBuilder(TrajectoryActionBuilder builder) {
             _builder = builder;
+
+            _velBuildConstraint = _velConstraint;
         }
 
         public Action build() {
@@ -261,12 +265,12 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder splineTo(Vector2d vec, double tangent) {
-            _builder = _builder.splineTo(vec, tangent);
+            _builder = _builder.splineTo(vec, tangent, _velBuildConstraint, _accelConstraint);
             return this;
         }
 
         public MyTrajectoryBuilder splineToConstantHeading(Vector2d vec, double tangent) {
-            _builder = _builder.splineToConstantHeading(vec, tangent);
+            _builder = _builder.splineToConstantHeading(vec, tangent, _velBuildConstraint, _accelConstraint);
             return this;
         }
 
@@ -350,27 +354,27 @@ public class RoadRunnerRouteManager implements IRobotModule {
         }
 
         public MyTrajectoryBuilder strafeTo(Vector2d pos) {
-            _builder = _builder.strafeTo(pos);
+            _builder = _builder.strafeTo(pos, _velBuildConstraint, _accelConstraint);
             return this;
         }
 
         public MyTrajectoryBuilder lineToX(double pos) {
-            _builder = _builder.lineToX(pos);
+            _builder = _builder.lineToX(pos, _velBuildConstraint, _accelConstraint);
             return this;
         }
 
         public MyTrajectoryBuilder lineToY(double pos) {
-            _builder = _builder.lineToY(pos);
+            _builder = _builder.lineToY(pos, _velBuildConstraint, _accelConstraint);
             return this;
         }
 
         public MyTrajectoryBuilder strafeToLinearHeading(Vector2d vec, double heading) {
-            _builder = _builder.strafeToLinearHeading(vec, heading);
+            _builder = _builder.strafeToLinearHeading(vec, heading, _velBuildConstraint, _accelConstraint);
             return this;
         }
 
         public MyTrajectoryBuilder splineToLinearHeading(Pose2d pose, double tangent){
-            _builder = _builder.splineToLinearHeading(pose, tangent);
+            _builder = _builder.splineToLinearHeading(pose, tangent, _velBuildConstraint, _accelConstraint);
             return this;
         }
 
@@ -400,6 +404,15 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
         public MyTrajectoryBuilder endTrajectory(){
             _builder = _builder.endTrajectory();
+
+            return this;
+        }
+
+        public MyTrajectoryBuilder setSpeed(double speed){
+            if(Math.abs(speed) >= 1)
+                speed = Math.signum(speed);
+
+            _velBuildConstraint = new MinVelConstraint(Arrays.asList(_mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX * speed), new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn * speed)));
 
             return this;
         }
