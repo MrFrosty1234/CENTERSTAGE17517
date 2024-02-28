@@ -5,8 +5,7 @@ import static java.lang.Math.abs;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.woen.team17517.RobotModules.UltRobot;
-import org.woen.team17517.Service.PIDMethod;
+import org.woen.team17517.RobotModules.UltRobot;import org.woen.team17517.Service.PID;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
 
@@ -62,10 +61,10 @@ public class DriveTrain implements RobotModule{
     public static double u_max = 2000;
 
 
-    private PIDMethod pidX = new PIDMethod(kPX,kIX,kDX,ImaxX);
-    private PIDMethod pidY = new PIDMethod(kPY,kIY,kDY,ImaxY);
-    private PIDMethod pidH = new PIDMethod(kPH,kIH,kDH,ImaxH);
-    private static double kt = 5;
+    private PID pidX = new PID(kPX,kIX,kDX,ImaxX);
+    private PID pidY = new PID(kPY,kIY,kDY,ImaxY);
+    private PID pidH = new PID(kPH,kIH,kDH,ImaxH);
+    public static double kt = 5;
 
     HashMap<String,Double> positionMap = new HashMap<>();
     HashMap<String,Double> targetMap = new HashMap<>();
@@ -125,9 +124,9 @@ public class DriveTrain implements RobotModule{
             pidY.setCoefficent(kPY, kIY, kDY, 0, ImaxY);
             pidH.setCoefficent(kPH, kIH, kDH, 0, ImaxH);
 
-            X = pidX.PID(targetVector.getX(), positionVector.getX(), voltage);
-            Y = pidY.PID(targetVector.getY(), positionVector.getY(), voltage);
-            H = pidH.PID(targetH, posH, voltage);
+            X = pidX.pid(targetVector.getX(), positionVector.getX(), voltage);
+            Y = pidY.pid(targetVector.getY(), positionVector.getY(), voltage);
+            H = pidH.pid(targetH, posH, voltage);
             /*
             u_X = timer.seconds()*kt;
 

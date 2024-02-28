@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.woen.team17517.RobotModules.UltRobot;
-import org.woen.team17517.Service.PIDMethod;
+import org.woen.team17517.Service.PID;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
 
@@ -40,9 +40,9 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static double kSlide = 1;
 
     public final double odToEnc = 98;
-    private PIDMethod speedX = new PIDMethod(kpX, kiX,kdX,ksX,maxIX);
-    private PIDMethod speedH = new PIDMethod(kpRat,kiRat,kdRat,ksY,maxIY);
-    private PIDMethod speedY = new PIDMethod(kpY, kiY,kdY,ksRat,maxIRat);
+    private PID speedX = new PID(kpX, kiX,kdX,ksX,maxIX);
+    private PID speedH = new PID(kpRat,kiRat,kdRat,ksY,maxIY);
+    private PID speedY = new PID(kpY, kiY,kdY,ksRat,maxIRat);
     public Map<String, Double> getPIDX(){
         HashMap<String, Double> pidX = new HashMap<>();
         pidX.put("P",speedX.getP());
@@ -160,15 +160,15 @@ public class DriveTrainVelocityControl implements RobotModule {
     private static double maxAngleSpeedOd = 30000;
     private double moveRat(double target)
     {
-        return speedH.PID(target,hEnc,this.voltage);
+        return speedH.pid(target,hEnc,this.voltage);
     }
     private double moveX(double target)
     {
-        return speedX.PID(target,xEnc,this.voltage);
+        return speedX.pid(target,xEnc,this.voltage);
     }
     private double moveY(double target)
     {
-        return speedY.PID(target,yEnc,this.voltage);
+        return speedY.pid(target,yEnc,this.voltage);
     }
     public double linearVelocityPercent(double target){
         return maxLinearSpeedOd*target;
