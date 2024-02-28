@@ -2,6 +2,7 @@ package org.woen.team18742.Modules.RoadRunner;
 
 import static java.lang.Math.PI;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.ftccommon.FtcAboutActivity;
 
@@ -64,18 +65,23 @@ public class Trajectory {
             }
 
             case RIGHT: {
-                builder.strafeToLinearHeading(new Vector2d(ToInch(-123), ToInch(50)), PI / 2)
+                builder.strafeToLinearHeading(new Vector2d(ToInch(-138), ToInch(50)), PI / 2)
+                        .strafeToLinearHeading(new Vector2d(ToInch(-123), ToInch(50)), PI / 2)
                         .waitSeconds(0.5)
                         .linePixelOpen()
+                        .strafeToLinearHeading(new Vector2d(ToInch(-120), ToInch(30)), 0)
                         .brushOn()
                         .brushDown()
-                        .strafeToLinearHeading(new Vector2d(ToInch(-150), ToInch(30)), 0)
+                        .strafeToLinearHeading(new Vector2d(ToInch(-148), ToInch(33)), 0)
                         .waitSeconds(5)
                         .splineTo(new Vector2d(ToInch(-97.9), ToInch(30)), 0);
 
                 break;
             }
         }
+        builder.strafeToLinearHeading(new Vector2d(ToInch(60), ToInch(30)), 0)
+        .splineToConstantHeading(new Vector2d(ToInch(100.9), ToInch(80)), 0);
+              //  .splineToLinearHeading(new Pose2d(new Vector2d(),));
 
         return builder;
     }

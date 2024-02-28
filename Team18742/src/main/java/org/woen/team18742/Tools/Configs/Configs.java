@@ -23,7 +23,7 @@ public class Configs {
 
         public static boolean IsCameraDebug = false;
 
-        public static boolean TelemetryOn = trueж
+        public static boolean TelemetryOn = true;
     }
 
     @Config
@@ -133,7 +133,7 @@ public class Configs {
         public static double servoGripperNormal = 0.5;
         public static double servoGripperGripped = 0.65;
         public static double servoGripperGrippedOne = 0.6;
-        public static double servoClampClamped = 0.7;
+        public static double servoClampClamped = 0.735;
         public static double servoClampReleased = 0.54;
         public static double servoClampReleasedLift = 0.48;
         public static double pixelDetectTimeMs = 325;
@@ -182,10 +182,10 @@ public class Configs {
 
     @Config
     public static class StackBrush{
-        public static double LEFT_SERVO_STOP = 0.435;
+        public static double LEFT_SERVO_STOP = 0.495;
         public static double LEFT_SERVO_FWD = 0.0;
         public static double LEFT_SERVO_REV = 1.0;
-        public static double RIGHT_SERVO_STOP = 0.421;
+        public static double RIGHT_SERVO_STOP = 0.496;
         public static double RIGHT_SERVO_FWD = 1.0;
         public static double RIGHT_SERVO_REV = 0.0;
         public static double SERVO_LIFT_DOWN = 0.617;

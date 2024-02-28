@@ -369,6 +369,11 @@ public class RoadRunnerRouteManager implements IRobotModule {
             return this;
         }
 
+        public MyTrajectoryBuilder splineToLinearHeading(Pose2d pose, double tangent){
+            _builder = _builder.splineToLinearHeading(pose, tangent);
+            return this;
+        }
+
         public MyTrajectoryBuilder brushDown() {
             _builder = _builder.stopAndAdd(() -> _staksBrush.servoSetDownPose());
 

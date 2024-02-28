@@ -28,7 +28,7 @@ public class VelocityControl {
 
         double hardwareSpeed = _encoder.getVelocity();
 
-        if (_deltaTime.seconds() > 0.088) {
+        if (_deltaTime.seconds() > 0.085) {
             _mathSpeed = (encoderPosition - _oldPosition) / _deltaTime.seconds();
             _deltaTime.reset();
             _oldPosition = encoderPosition;

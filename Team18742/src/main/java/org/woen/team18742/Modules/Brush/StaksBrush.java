@@ -44,8 +44,8 @@ public class StaksBrush implements IRobotModule {
         rightStacksBrush.setPosition(Configs.StackBrush.RIGHT_SERVO_STOP);
         servoSetUpPose();
 
-        leftStacksBrush.setPwmDisable();
-        rightStacksBrush.setPwmDisable();
+        //leftStacksBrush.setPwmDisable();
+        //rightStacksBrush.setPwmDisable();
     }
 
     public void servoSetUpPose() {

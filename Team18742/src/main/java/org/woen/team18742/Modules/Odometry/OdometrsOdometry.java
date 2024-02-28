@@ -66,5 +66,10 @@ public class OdometrsOdometry implements IRobotModule {
         _deltaTime.reset();
 
         Position = Bios.GetStartPosition().Position.clone();
+
+        double odometrXLeft = _odometrs.GetOdometerXLeft(), odometrY = _odometrs.GetOdometerY(), odometrXRight = _odometrs.GetOdometerXRight();
+        _oldOdometrXLeft = odometrXLeft;
+        _oldOdometrXRight = odometrXRight;
+        _oldOdometrY = odometrY;
     }
 }
