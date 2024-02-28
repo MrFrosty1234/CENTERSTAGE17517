@@ -133,10 +133,9 @@ public class OdometryHandler implements IRobotModule {
             _maxAccel.Y = Math.abs(Accel.Y);
 
         ToolTelemetry.AddLine("pos " + Position);
-        ToolTelemetry.AddLine("drive speed " + Speed);
-        ToolTelemetry.AddLine("drive accel " + Accel);
-        ToolTelemetry.AddLine("max drive speed " + _maxSpeed);
-        ToolTelemetry.AddLine("max drive accel " + _maxAccel);
+        ToolTelemetry.AddLine("odometerXLeft = " + GetOdometerXLeft());
+        ToolTelemetry.AddLine("odometerXRight = " + GetOdometerXRight());
+        ToolTelemetry.AddLine("odometerY = " + GetOdometerY());
 
         _oldSpeed = Speed.clone();
         _deltaTime.reset();

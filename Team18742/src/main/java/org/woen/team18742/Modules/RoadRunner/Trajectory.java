@@ -72,16 +72,19 @@ public class Trajectory {
                         .strafeToLinearHeading(new Vector2d(ToInch(-120), ToInch(30)), 0)
                         .brushOn()
                         .brushDown()
-                        .strafeToLinearHeading(new Vector2d(ToInch(-148), ToInch(33)), 0)
+                        .strafeToLinearHeading(new Vector2d(ToInch(-153), ToInch(26)), 0)
                         .waitSeconds(5)
                         .splineTo(new Vector2d(ToInch(-97.9), ToInch(30)), 0);
 
                 break;
             }
         }
-        builder.strafeToLinearHeading(new Vector2d(ToInch(60), ToInch(30)), 0)
-        .splineToConstantHeading(new Vector2d(ToInch(100.9), ToInch(80)), 0);
-              //  .splineToLinearHeading(new Pose2d(new Vector2d(),));
+        builder
+                .strafeToLinearHeading(new Vector2d(ToInch(60), ToInch(27)), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(130), ToInch(23)), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(90), ToInch(30)), 0)
+                .splineToConstantHeading(new Vector2d(ToInch(100.9), ToInch(80)), 0);
+        //  .splineToLinearHeading(new Pose2d(new Vector2d(),));
 
         return builder;
     }
