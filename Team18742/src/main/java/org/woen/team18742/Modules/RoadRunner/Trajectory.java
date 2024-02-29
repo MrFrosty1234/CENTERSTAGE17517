@@ -70,11 +70,13 @@ public class Trajectory {
                         .waitSeconds(0.5)
                         .linePixelOpen()
                         .strafeToLinearHeading(new Vector2d(ToInch(-120), ToInch(30)), 0)
+                        .setSpeed(0.4)
                         .brushOn()
                         .brushDown()
                         .strafeToLinearHeading(new Vector2d(ToInch(-153), ToInch(26)), 0)
-                        .waitSeconds(5)
-                        .splineTo(new Vector2d(ToInch(-97.9), ToInch(30)), 0);
+                        .waitPixel()
+                        .splineTo(new Vector2d(ToInch(-97.9), ToInch(30)), 0)
+                        .setSpeed(1);
 
                 break;
             }
@@ -83,7 +85,29 @@ public class Trajectory {
                 .strafeToLinearHeading(new Vector2d(ToInch(60), ToInch(27)), 0)
                 .strafeToLinearHeading(new Vector2d(ToInch(130), ToInch(23)), 0)
                 .strafeToLinearHeading(new Vector2d(ToInch(90), ToInch(30)), 0)
-                .splineToConstantHeading(new Vector2d(ToInch(100.9), ToInch(80)), 0);
+                .setSpeed(0.4);
+                builder.splineToConstantHeading(new Vector2d(ToInch(122.9), ToInch(80)), 0);//y подопрать по начальной позиции
+                //поднять лифт
+                builder.liftMiddle()
+                .waitSeconds(1.5)
+                .pixelDeGripp()
+                        .setSpeed(1)
+                .strafeToLinearHeading(new Vector2d(ToInch(60), ToInch(27)), 0)
+                //опустить щётки
+                .brushOn()
+                .brushDown()
+                .strafeToLinearHeading(new Vector2d(ToInch(-140), ToInch(26)), 0)
+                //ограничить скорость и подъезд к стопке
+                        .setSpeed(0.4)
+                .strafeToLinearHeading(new Vector2d(ToInch(-153), ToInch(26)), 0)
+//хаваем
+                        .waitPixel()
+                        .setSpeed(1)
+                .waitSeconds(5)
+                .splineToConstantHeading(new Vector2d(ToInch(-97.9), ToInch(28)), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(90), ToInch(27)), 0)
+                .splineToConstantHeading(new Vector2d(ToInch(122.9), ToInch(80)), 0)//не обязательно y подопрать по начальной позиции
+        ;
         //  .splineToLinearHeading(new Pose2d(new Vector2d(),));
 
         return builder;
