@@ -182,7 +182,7 @@ public class Configs {
 
     @Config
     public static class StackBrush{
-        public static double LEFT_SERVO_STOP = 0.495;
+        public static double LEFT_SERVO_STOP = 0.4958;
         public static double LEFT_SERVO_FWD = 0.0;
         public static double LEFT_SERVO_REV = 1.0;
         public static double RIGHT_SERVO_STOP = 0.496;

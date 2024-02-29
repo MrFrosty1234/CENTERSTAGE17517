@@ -46,7 +46,7 @@ public class Gyroscope implements IRobotModule {
 
     @Override
     public void Start() {
-        if(_collector instanceof AutonomCollector) {
+        if (_collector instanceof AutonomCollector) {
             Reset();
         }
         _deltaTime.reset();
@@ -72,13 +72,13 @@ public class Gyroscope implements IRobotModule {
     public void Update() {
         _filter.UpdateCoef(Configs.Gyroscope.MergerCoefSeconds);
 
-        if (Configs.GeneralSettings.IsUseOdometers) {
+        if (true) {
             double odometerTurn = ChopAngle((-_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft + _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2);
             _radianSpeed = (-_odometrs.GetSpeedOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft + _odometrs.GetSpeedOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
 
-            _allRadians = ChopAngle((odometerTurn + ChopAngle(_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - _startRotateRadian)) / 2d);
-        }
-        else {
+            _allRadians = odometerTurn;
+            //_allRadians = ChopAngle((odometerTurn + ChopAngle(_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - _startRotateRadian)) / 2d);
+        } else {
             _allRadians = ChopAngle(_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - _startRotateRadian);
             _radianSpeed = ChopAngle(_allRadians - _oldRadians) / _deltaTime.seconds();
         }
@@ -87,10 +87,10 @@ public class Gyroscope implements IRobotModule {
 
         _radianAccel = ChopAngle(_radianSpeed - _oldRadianSpeed) / _deltaTime.seconds();
 
-        if(Math.abs(_radianSpeed) > _maxRadianSpeed)
+        if (Math.abs(_radianSpeed) > _maxRadianSpeed)
             _maxRadianSpeed = Math.abs(_radianSpeed);
 
-        if(Math.abs(_radianAccel) > _maxRadianAccel)
+        if (Math.abs(_radianAccel) > _maxRadianAccel)
             _maxRadianAccel = Math.abs(_radianAccel);
 
         _allDegree = toDegrees(_allRadians);
@@ -116,8 +116,8 @@ public class Gyroscope implements IRobotModule {
         _oldRadians = 0;
     }
 
-    public static double ChopAngle(double angle){
-        while (Math.abs(angle) > PI){
+    public static double ChopAngle(double angle) {
+        while (Math.abs(angle) > PI) {
             angle -= 2 * PI * signum(angle);
         }
 

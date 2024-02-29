@@ -123,7 +123,7 @@ public class CVOdometry implements IRobotModule {
             }
         }
 
-        if(suitableDetections == 0 || Math.sqrt(_handler.Speed.X * _handler.Speed.X + _handler.Speed.Y * _handler.Speed.Y) > 70){
+        if(suitableDetections == 0 || Math.sqrt(_handler.Speed.X * _handler.Speed.X + _handler.Speed.Y * _handler.Speed.Y) > 70 || Math.abs(_gyro.GetSpeedRadians()) > 0.8){
             IsZero = true;
 
             return;
