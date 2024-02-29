@@ -57,7 +57,7 @@ public class Trajectory {
                         .waitPixel()
                         .setSpeed(1)
                         .splineTo(new Vector2d(ToInch(-97.9), ToInch(30)), 0)
-                        ;
+                ;
 
                 break;
             }
@@ -68,8 +68,8 @@ public class Trajectory {
                 .setSpeed(0.8);
         switch (camera) {
             case RIGHT:
-            builder.splineToConstantHeading(new Vector2d(ToInch(131.9), ToInch(67)), 0);//y подопрать по начальной позиции
- break;
+                builder.splineToConstantHeading(new Vector2d(ToInch(131.9), ToInch(67)), 0);//y подопрать по начальной позиции
+                break;
             case LEFT:
                 builder.splineToConstantHeading(new Vector2d(ToInch(131.9), ToInch(81)), 0);//y подопрать по начальной позиции
                 break;

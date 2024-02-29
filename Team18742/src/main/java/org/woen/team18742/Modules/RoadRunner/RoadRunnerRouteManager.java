@@ -292,7 +292,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
         public MyTrajectoryBuilder waitLift() {
             endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
-                        _waiters.add(() -> _lift.isATarget());
+                        _waiters.add(() -> _lift.isATarget() && _intake.IsTurned());
                         _startWaitTime = _time.seconds();
                     });
             return this;
