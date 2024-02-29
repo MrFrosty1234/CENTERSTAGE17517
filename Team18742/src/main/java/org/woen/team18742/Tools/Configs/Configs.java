@@ -123,6 +123,7 @@ public class Configs {
     @Config
     public static class Gyroscope{
         public static double MergerCoefSeconds = 0.7;
+        public static long Iterations = 10;
     }
 
     @Config

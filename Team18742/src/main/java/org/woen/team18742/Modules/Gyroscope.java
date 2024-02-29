@@ -20,19 +20,22 @@ import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.ExponentialFilter;
 import org.woen.team18742.Tools.ToolTelemetry;
 
+import kotlin.ULong;
+
 @Module
 public class Gyroscope implements IRobotModule {
     private IMU _imu;
     private OdometryHandler _odometrs;
-    private final ExponentialFilter _filter = new ExponentialFilter(Configs.Gyroscope.MergerCoefSeconds);
-
     private final ElapsedTime _deltaTime = new ElapsedTime();
 
-    private double _oldRadians, _allRadians, _allDegree, _radianSpeed, _degreeSpeed, _radianAccel, _degreeAccel, _oldRadianSpeed, _maxRadianSpeed, _maxRadianAccel;
+    private double _oldRadians, _allRadians, _allDegree, _radianSpeed, _degreeSpeed, _radianAccel, _degreeAccel, _oldRadianSpeed, _maxRadianSpeed, _maxRadianAccel, _oldOdometer, _odometer;
 
     private static double _startRotateRadian;
 
     private BaseCollector _collector;
+
+    private long _iterations = 0;
+    private ExponentialFilter _margeFilter = new ExponentialFilter(Configs.Gyroscope.MergerCoefSeconds);
 
     @Override
     public void Init(BaseCollector collector) {
@@ -70,20 +73,27 @@ public class Gyroscope implements IRobotModule {
 
     @Override
     public void Update() {
-        _filter.UpdateCoef(Configs.Gyroscope.MergerCoefSeconds);
+        _margeFilter.UpdateCoef(Configs.Gyroscope.MergerCoefSeconds);
 
-        if (true) {
-            double odometerTurn = ChopAngle((-_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft + _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2);
+        if (Configs.GeneralSettings.IsUseOdometers) {
+            double odometerTurn = ChopAngle(ChopAngle((-_odometrs.GetOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft + _odometrs.GetOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2) + Bios.GetStartPosition().Rotation);
             _radianSpeed = (-_odometrs.GetSpeedOdometerXLeft() / Configs.Odometry.RadiusOdometrXLeft + _odometrs.GetSpeedOdometerXRight() / Configs.Odometry.RadiusOdometrXRight) / 2;
 
-            _allRadians = odometerTurn;
-            //_allRadians = ChopAngle((odometerTurn + ChopAngle(_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - _startRotateRadian)) / 2d);
+            if(_iterations % Configs.Gyroscope.Iterations == 0){
+                double gyroRotate = ChopAngle(ChopAngle(_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - _startRotateRadian) + Bios.GetStartPosition().Rotation);
+
+                _allRadians = _margeFilter.UpdateRaw(odometerTurn, odometerTurn - gyroRotate);
+            }
+            else
+                _allRadians += ChopAngle(odometerTurn - _oldOdometer);
+
+            _oldOdometer = odometerTurn;
         } else {
             _allRadians = ChopAngle(_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - _startRotateRadian);
             _radianSpeed = ChopAngle(_allRadians - _oldRadians) / _deltaTime.seconds();
         }
 
-        _allRadians = ChopAngle(_allRadians + Bios.GetStartPosition().Rotation);
+        _iterations++;
 
         _radianAccel = ChopAngle(_radianSpeed - _oldRadianSpeed) / _deltaTime.seconds();
 
@@ -111,7 +121,8 @@ public class Gyroscope implements IRobotModule {
 
     public void Reset() {
         _startRotateRadian = _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-        _filter.Reset();
+
+        _margeFilter.Reset();
 
         _oldRadians = 0;
     }
