@@ -83,9 +83,6 @@ public class CrashDefend implements IRobotModule {
             if (p1.X <= point.X && point.X <= p2.X && p1.Y <= point.Y && point.Y <= p2.Y)
                 return true;
 
-            if (l.p1.X <= point.X && point.X <= l.p2.X && l.p1.Y <= point.Y && point.Y <= l.p2.Y)
-                return true;
-
             return false;
         }
     }

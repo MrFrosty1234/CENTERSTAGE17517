@@ -13,39 +13,18 @@ import org.woen.team18742.Tools.Bios;
 public class Trajectory {
     public static RoadRunnerRouteManager.MyTrajectoryBuilder GetTrajectory(RoadRunnerRouteManager.MyTrajectoryBuilder builder,
                                                                            StartRobotPosition startPos, CameraRobotPosition camera) {
-        /*builder.strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(88)), -PI / 2);
-        builder.linePixelOpen();
-        builder.strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(93)), 0);
-        builder.brushOn();
-        builder.brushDown();
-        builder.strafeToLinearHeading(new Vector2d(ToInch(-149.9), ToInch(90)), 0);
-        builder.waitPixel();
-        builder.strafeToLinearHeading(new Vector2d(ToInch(70.9), ToInch(89)), 0);
-        builder.strafeToLinearHeading(new Vector2d(ToInch(125.9), ToInch(80)), 0);
-        builder.liftMiddle();
-        builder.waitSeconds(1.6);
-        builder.pixelDeGripp();
-        //builder.waitSeconds(0.7);
-        builder.strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(108 )), 0);
-        builder.brushOn();
-        builder.brushDown();
-        builder.strafeToLinearHeading(new Vector2d(ToInch(-146), ToInch(94)), 0);
-        builder.waitPixel();
-        builder.strafeToLinearHeading(new Vector2d(ToInch(70.9), ToInch(92)), 0);
-        builder.strafeToLinearHeading(new Vector2d(ToInch(124.9), ToInch(80)), 0);
-        builder.liftMiddle();
-        builder.waitSeconds(1.6);
-        builder.pixelDeGripp();*/
-
         switch (camera) {
             case FORWARD: {
-                builder.strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(38)), PI / 2)
+                builder.strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(28)), PI / 2)
+                        .strafeToLinearHeading(new Vector2d(ToInch(-97.9), ToInch(38)), PI / 2)
+
                         .waitSeconds(0.5)
                         .linePixelOpen()
                         .brushOn()
                         .brushDown()
                         .strafeToLinearHeading(new Vector2d(ToInch(-150), ToInch(30)), 0)
-                        .waitSeconds(5)
+                        .waitPixel()
+                        .setSpeed(1)
                         .splineTo(new Vector2d(ToInch(-97.9), ToInch(30)), 0);
 
                 break;
@@ -58,7 +37,8 @@ public class Trajectory {
                         .brushOn()
                         .brushDown()
                         .strafeToLinearHeading(new Vector2d(ToInch(-149.9), ToInch(90)), 0)
-                        .waitSeconds(5)
+                        .waitPixel()
+                        .setSpeed(1)
                         .strafeTo(new Vector2d(ToInch(-97.9), ToInch(30)));
 
                 break;
@@ -73,43 +53,53 @@ public class Trajectory {
                         .setSpeed(0.4)
                         .brushOn()
                         .brushDown()
-                        .strafeToLinearHeading(new Vector2d(ToInch(-153), ToInch(26)), 0)
+                        .strafeToLinearHeading(new Vector2d(ToInch(-150), ToInch(26)), 0)
                         .waitPixel()
+                        .setSpeed(1)
                         .splineTo(new Vector2d(ToInch(-97.9), ToInch(30)), 0)
-                        .setSpeed(1);
+                        ;
 
                 break;
             }
         }
         builder
-                .strafeToLinearHeading(new Vector2d(ToInch(110), ToInch(23)), 0)
-                .strafeToLinearHeading(new Vector2d(ToInch(90), ToInch(30)), 0)
-                .setSpeed(0.4);
-                builder.splineToConstantHeading(new Vector2d(ToInch(129.9), ToInch(86)), 0);//y подопрать по начальной позиции
-                //поднять лифт
-                builder.liftMiddle()
-                .waitSeconds(1.5)
+                .strafeToLinearHeading(new Vector2d(ToInch(30), ToInch(27)), 0)
+                .liftMiddle()
+                .setSpeed(0.8);
+        switch (camera) {
+            case RIGHT:
+            builder.splineToConstantHeading(new Vector2d(ToInch(131.9), ToInch(67)), 0);//y подопрать по начальной позиции
+ break;
+            case LEFT:
+                builder.splineToConstantHeading(new Vector2d(ToInch(131.9), ToInch(81)), 0);//y подопрать по начальной позиции
+                break;
+            case FORWARD:
+                builder.splineToConstantHeading(new Vector2d(ToInch(131.9), ToInch(75)), 0);//y подопрать по начальной позиции
+                break;
+        }//поднять лифт
+        builder
+                .waitLift()
                 .pixelDeGripp()
-                        .setSpeed(1)
+                .setSpeed(1)
                 .strafeToLinearHeading(new Vector2d(ToInch(60), ToInch(27)), 0)
                 //опустить щётки
                 .brushOn()
                 .brushDown()
-                .strafeToLinearHeading(new Vector2d(ToInch(-140), ToInch(26)), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(-140), ToInch(30)), 0)
                 //ограничить скорость и подъезд к стопке
-                        .setSpeed(0.4)
-                .strafeToLinearHeading(new Vector2d(ToInch(-152), ToInch(29)), 0)
+                .setSpeed(0.8)
+                .strafeToLinearHeading(new Vector2d(ToInch(-150), ToInch(36)), 0)
 //хаваем
-                        .waitPixel()
-                        .setSpeed(1)
+                .waitPixel()
+                .setSpeed(1)
                 //.waitSeconds(5)
-                .splineToConstantHeading(new Vector2d(ToInch(-97.9), ToInch(28)), 0)
-                .strafeToLinearHeading(new Vector2d(ToInch(90), ToInch(27)), 0)
-                .splineToConstantHeading(new Vector2d(ToInch(127.9), ToInch(85)), 0)//не обязательно y подопрать по начальной позиции
-                        .liftMiddle()
-                        .waitSeconds(1.5)
-                        .pixelDeGripp()
-                        .setSpeed(1);
+                //.splineToConstantHeading(new Vector2d(ToInch(-97.9), ToInch(28)), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(30), ToInch(27)), 0)
+                .liftMiddle()
+                .strafeToLinearHeading(new Vector2d(ToInch(127.9), ToInch(85)), 0)//не обязательно y подопрать по начальной позиции
+                .waitLift()
+                .pixelDeGripp()
+                .setSpeed(1);
         //  .splineToLinearHeading(new Pose2d(new Vector2d(),));
 
         return builder;

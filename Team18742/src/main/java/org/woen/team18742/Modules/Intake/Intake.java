@@ -26,6 +26,7 @@ public class Intake implements IRobotModule {
     private Brush _brush;
     private Lift _lift;
     private BaseCollector _collector;
+    private ElapsedTime _turnedTime = new ElapsedTime();
 
     @Override
     public void Init(BaseCollector collector) {

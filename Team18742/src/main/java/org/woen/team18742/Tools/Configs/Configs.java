@@ -129,7 +129,7 @@ public class Configs {
     @Config
     public static class Intake{
         public static double pixelSensorvoltage = 0.123;
-        public static double servoTurnNormal = 0.09;
+        public static double servoTurnNormal = 0.06;
         public static double servoTurnTurned = 0.7;
         public static double servoGripperNormal = 0.5;
         public static double servoGripperGripped = 0.65;

@@ -24,29 +24,9 @@ public class MeepMeep18742 {
 
         myBot.runAction(myBot.getDrive()
                 .actionBuilder(new Pose2d(ToInch(-93.7), ToInch(156.4), -PI/2))
-                .strafeToLinearHeading(new Vector2d(ToInch(-138), ToInch(50)), PI / 2)
-                .strafeToLinearHeading(new Vector2d(ToInch(-123), ToInch(50)), PI / 2)
-                .waitSeconds(0.5)
-                .strafeToLinearHeading(new Vector2d(ToInch(-120), ToInch(30)), 0)
-                .strafeToLinearHeading(new Vector2d(ToInch(-153), ToInch(26)), 0)
-                .waitSeconds(1)
-                .splineTo(new Vector2d(ToInch(-97.9), ToInch(28)), 0)
-                .strafeToLinearHeading(new Vector2d(ToInch(60), ToInch(27)), 0)
-                .strafeToLinearHeading(new Vector2d(ToInch(130), ToInch(23)), 0)
-                .strafeToLinearHeading(new Vector2d(ToInch(90), ToInch(30)), 0)
-                .splineToConstantHeading(new Vector2d(ToInch(122.9), ToInch(80)), 0)//y подопрать по начальной позиции
-                //поднять лифт
-                .strafeToLinearHeading(new Vector2d(ToInch(60), ToInch(27)), 0)
-  //опустить щётки
-                .strafeToLinearHeading(new Vector2d(ToInch(-140), ToInch(26)), 0)
-                //ограничить скорость и подъезд к стопке
-                .strafeToLinearHeading(new Vector2d(ToInch(-153), ToInch(26)), 0)
-//хаваем
-                        .waitSeconds(5)
-                .splineToConstantHeading(new Vector2d(ToInch(-97.9), ToInch(28)), 0)
-                .strafeToLinearHeading(new Vector2d(ToInch(90), ToInch(27)), 0)
-                .splineToConstantHeading(new Vector2d(ToInch(122.9), ToInch(80)), 0)//не обязательно y подопрать по начальной позиции
-
+                .splineToConstantHeading(new Vector2d(ToInch(-97.9), ToInch(28)), 100)
+                .strafeToLinearHeading(new Vector2d(ToInch(30), ToInch(27)), 0)
+                .strafeToLinearHeading(new Vector2d(ToInch(127.9), ToInch(85)), 0)//не обязательно y подопрать по начальной позиции
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
