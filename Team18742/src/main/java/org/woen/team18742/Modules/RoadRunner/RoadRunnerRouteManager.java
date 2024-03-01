@@ -158,8 +158,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
                             new PoseVelocity2d(new Vector2d(_odometry.Speed.X, _odometry.Speed.Y), _gyro.GetSpeedRadians()));
 
             _driveTrain.SetCMSpeed(new Vector2(command.linearVel.x.value(), command.linearVel.y.value()), command.angVel.value());
-        }
-        else
+        } else
             _driveTrain.Stop();
     }
 
@@ -293,9 +292,9 @@ public class RoadRunnerRouteManager implements IRobotModule {
         public MyTrajectoryBuilder waitLift() {
             endTrajectory();
             _builder = _builder.stopAndAdd(() -> {
-                _waiters.add(() -> _lift.isATarget());
-                _startWaitTime = _time.seconds();
-            });
+                        _waiters.add(() -> _lift.isATarget() && _intake.IsTurned());
+                        _startWaitTime = _time.seconds();
+                    });
             return this;
         }
 
@@ -323,7 +322,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
 
         public MyTrajectoryBuilder pixelDeGripp() {
             _builder = _builder.stopAndAdd(() -> _intake.releaseAllGripper()).
-            waitSeconds(0.5);
+                    waitSeconds(0.5);
 
             return this;
         }
@@ -373,7 +372,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
             return this;
         }
 
-        public MyTrajectoryBuilder splineToLinearHeading(Pose2d pose, double tangent){
+        public MyTrajectoryBuilder splineToLinearHeading(Pose2d pose, double tangent) {
             _builder = _builder.splineToLinearHeading(pose, tangent, _velBuildConstraint, _accelConstraint);
             return this;
         }
@@ -402,14 +401,14 @@ public class RoadRunnerRouteManager implements IRobotModule {
             return this;
         }
 
-        public MyTrajectoryBuilder endTrajectory(){
+        public MyTrajectoryBuilder endTrajectory() {
             _builder = _builder.endTrajectory();
 
             return this;
         }
 
-        public MyTrajectoryBuilder setSpeed(double speed){
-            if(Math.abs(speed) >= 1)
+        public MyTrajectoryBuilder setSpeed(double speed) {
+            if (Math.abs(speed) >= 1)
                 speed = Math.signum(speed);
 
             _velBuildConstraint = new MinVelConstraint(Arrays.asList(_mecanumKinematics.new WheelVelConstraint(Configs.DriveTrainWheels.MaxSpeedX * speed), new AngularVelConstraint(Configs.DriveTrainWheels.MaxSpeedTurn * speed)));

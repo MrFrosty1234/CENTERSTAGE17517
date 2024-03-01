@@ -10,6 +10,8 @@ import com.acmerobotics.roadrunner.Vector2d;
 
 
 public class Vector2 {
+    public final static Vector2 ZERO = new Vector2(0, 0);
+
     public double X;
     public double Y;
 

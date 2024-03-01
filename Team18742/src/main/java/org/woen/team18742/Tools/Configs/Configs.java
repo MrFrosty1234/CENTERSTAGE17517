@@ -129,7 +129,7 @@ public class Configs {
     @Config
     public static class Intake{
         public static double pixelSensorvoltage = 0.123;
-        public static double servoTurnNormal = 0.09;
+        public static double servoTurnNormal = 0.06;
         public static double servoTurnTurned = 0.7;
         public static double servoGripperNormal = 0.5;
         public static double servoGripperGripped = 0.65;
@@ -137,7 +137,7 @@ public class Configs {
         public static double servoClampClamped = 0.735;
         public static double servoClampReleased = 0.54;
         public static double servoClampReleasedLift = 0.48;
-        public static double pixelDetectTimeMs = 325;
+        public static double pixelDetectTimeMs = 305;
         public static double LineServoOpen = 0;
         public static double LineServoClose = 0.62;
     }
