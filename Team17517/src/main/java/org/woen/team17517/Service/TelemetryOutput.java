@@ -41,11 +41,14 @@ public class TelemetryOutput implements RobotModule {
         if(lift) {
             telemetry.addData("cleanPos", robot.lift.getCleanPosition());
             telemetry.addData("lift mode", robot.lift.getLiftMode());
-            telemetry.addData("posEncoder", robot.lift.getPosition());
+            telemetry.addData("pos", robot.lift.getPosition());
             telemetry.addData("liftTarget", robot.lift.getTargetPosition());
             telemetry.addData("isAtPosition", robot.lift.isAtPosition());
             telemetry.addData("buttonDown", robot.lift.getDownSwitch());
             telemetry.addData("buttonUp", robot.lift.getUpSwitch());
+            telemetry.addData("speed",robot.lift.getSpeed());
+            telemetry.addData("speedForPid",robot.lift.getSpeedForPid());
+            telemetry.addData("targetSpeed",robot.lift.getTargetSpeed());
         }
         if (opticalSensor){
             telemetry.addData("PixelsIn",robot.pixelsCount.isTwoPixelsCount());
@@ -118,7 +121,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("leftY", robot.odometry.getCleanLeftY());
             telemetry.addData("RightY", robot.odometry.getCleanRightY());
             telemetry.addData("hardSpeedY",robot.odometry.getHardVelOdometerRightY());
-            telemetry.addData("hardSpeedX",robot.odometry.getHardVelOdometrX());
+            telemetry.addData("hardSpeedX",robot.odometry.getHardVelOdometerX());
             telemetry.addData("hardSpeedH",robot.odometry.getHardVelOdometerLeftY());
             telemetry.addData("mathSpeedX",robot.odometry.getMathSpeedOdometerX());
             telemetry.addData("mathSpeedY",robot.odometry.getMathSpeedOdometerRightY());

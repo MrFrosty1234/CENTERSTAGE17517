@@ -18,21 +18,21 @@ public class DriveTrainVelocityControl implements RobotModule {
     UltRobot robot;
     private double voltage;
 
-    public static double kdX = 0;
-    public static double kiX = 0.0000012;
-    public static double kpX = 0.0000015;
+    public static double kdX = 0.0002;
+    public static double kiX = 0.000000025;
+    public static double kpX = 0.000015;
 
     public static double kdRat = 0;
     public static double kiRat = 0.0015;
     public static double kpRat = 0.000008;
 
-    public static double kdY  = 0;
-    public static double kiY = 0.0000012;
-    public static double kpY = 0.0000014;
+    public static double kdY = 0.0002;
+    public static double kiY = 0.000000025;
+    public static double kpY = 0.000015;
 
     public static  double maxIY = 0.03;
-    public static  double maxIRat = 0.03;
-    public static  double maxIX = 0.03;
+    public static  double maxIRat = 0.04;
+    public static  double maxIX = 0.04;
 
     public static double ksRat = 0.000025;
     public static double ksY = 0.0000116;
@@ -42,9 +42,9 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static double kg = 0;
 
     public final double odToEnc = 98;
-    private PID speedX = new PID(kpX, kiX,kdX,ksX,maxIX);
+    private PID speedX = new PID(kpX,kiX,kdX,ksX,maxIX);
     private PID speedH = new PID(kpRat,kiRat,kdRat,ksY,maxIY);
-    private PID speedY = new PID(kpY, kiY,kdY,ksRat,maxIRat);
+    private PID speedY = new PID(kpY,kiY,kdY,ksRat,maxIRat);
     public Map<String, Double> getPIDX(){
         HashMap<String, Double> pidX = new HashMap<>();
         pidX.put("P",speedX.getP());
@@ -151,14 +151,14 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.xEnc = robot.odometry.getVelCleanX();
         this.hEnc = robot.odometry.getVelCleanH();
     }
-    private static double transmission = 19d/16d;
-    private static double maxMotorRoundPerSecond = 5d/transmission;
-    private static double lightOfWheel = 9.6d*PI;
-    private static double maxRobotSpeed = lightOfWheel * maxMotorRoundPerSecond;
-    private static double lightOfOdometer = 4.8d*PI;
-    private static double maxRoundOdometerPerSecond = maxRobotSpeed/lightOfOdometer;
-    private static double odometerConstant = 8192;
-    private static double maxLinearSpeedOd = maxRoundOdometerPerSecond*odometerConstant;
+    private static final double transmission = 19d/16d;
+    private static final double maxMotorRoundPerSecond = 5d/transmission;
+    private static final double lightOfWheel = 9.6d*PI;
+    private static final double maxRobotSpeed = lightOfWheel * maxMotorRoundPerSecond;
+    private static final double lightOfOdometer = 4.8d*PI;
+    private static final double maxRoundOdometerPerSecond = maxRobotSpeed/lightOfOdometer;
+    private static final double odometerConstant = 8192;
+    private static final double maxLinearSpeedOd = maxRoundOdometerPerSecond*odometerConstant;
     private static double maxAngleSpeedOd = 30000;
     private double moveRat(double target)
     {
@@ -205,22 +205,22 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.voltage = robot.voltageSensorPoint.getVol();
 
 
-        this.speedH.setCoefficent(kpRat,kiRat,kdRat,ksRat,maxIRat,kg);
-        this.speedX.setCoefficent(kpX,kiX,kdX,ksX,maxIX,kg);
-        this.speedY.setCoefficent(kpY,kiY,kdY,ksY,maxIY,kg);
+        this.speedH.setCoeficent(kpRat,kiRat,kdRat,ksRat,maxIRat,kg);
+        this.speedX.setCoeficent(kpX,kiX,kdX,ksX,maxIX,kg);
+        this.speedY.setCoeficent(kpY,kiY,kdY,ksY,maxIY,kg);
 
 
         powerH = moveRat(targetH);
         powerX = moveX(vector.getX());
         powerY = moveY(vector.getY());
 
-        if (Math.abs(powerH) < 0.03){
+        if (Math.abs(powerH) < 0.015){
             powerH = 0;
         }
-        if (Math.abs(powerX) < 0.03){
+        if (Math.abs(powerX) < 0.015){
             powerX = 0;
         }
-        if (Math.abs(powerY) < 0.03){
+        if (Math.abs(powerY) < 0.015){
             powerY = 0;
         }
 
