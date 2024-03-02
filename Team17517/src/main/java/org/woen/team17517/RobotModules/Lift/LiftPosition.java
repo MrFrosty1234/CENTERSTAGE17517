@@ -1,11 +1,23 @@
 package org.woen.team17517.RobotModules.Lift;
 
-public enum LiftPosition {
-    DOWN(0), UP(950),BACKDROPDOWN(400);
-    public int value;
+import com.acmerobotics.dashboard.config.Config;
 
-    LiftPosition(int value) {
-        this.value = value;
+@Config
+public enum LiftPosition {
+    DOWN,UP,BACKDROPDOWN;
+    public static int down;
+    public static int up;
+    public static int backdropdown;
+    public int get(){
+        switch (this){
+            default:
+            case DOWN:
+                return down;
+            case UP:
+                return up;
+            case BACKDROPDOWN:
+                return backdropdown;
+        }
     }
 }
 

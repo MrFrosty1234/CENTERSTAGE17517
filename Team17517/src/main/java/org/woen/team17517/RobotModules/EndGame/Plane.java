@@ -3,11 +3,10 @@ package org.woen.team17517.RobotModules.EndGame;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.woen.team17517.RobotModules.UltRobot;
-import org.woen.team17517.Service.RobotModule;
 
 @Config
 
-public class Plane implements RobotModule{
+public class Plane{
     UltRobot robot;
 
     public Plane (UltRobot robot) {
@@ -19,23 +18,11 @@ public class Plane implements RobotModule{
     public static double notStartPose = 0;
     public static double notAimedPos = 0;
 
-    @Override
-    public void update(){
-        robot.hardware.planeServos.aimPlaneServo.setPosition(notAimedPos);
-        robot.hardware.planeServos.startPlaneServo.setPosition(notStartPose);
-    }
-
-    public void planeServoUp(){
+    public void aim(){
         robot.hardware.planeServos.aimPlaneServo.setPosition(aimPos);
     }
-
-    public void planeServoShoot(){
+    public void shoot(){
         robot.hardware.planeServos.startPlaneServo.setPosition(startPos);
     }
 
-    public void planeShoot(){
-        planeServoUp();
-        robot.timer.getTimeForTimer(1);
-        planeServoShoot();
-    }
 }

@@ -20,11 +20,11 @@ public class TestDriveTrainVelocity extends LinearOpMode {
         while (opModeIsActive()){
             robot.updateWhilePositionFalse(new Runnable[]{
                     () -> robot.driveTrainVelocityControl.moveRobotCord(x,y,h),
-                    () -> robot.timer.getTimeForTimer(1),
+                    () -> robot.timer.getTimeForTimer(3),
                     () -> robot.driveTrainVelocityControl.moveRobotCord(0,0,0),
                     () -> robot.timer.getTimeForTimer(1),
                     () -> robot.driveTrainVelocityControl.moveRobotCord(-x,-y,-h),
-                    () -> robot.timer.getTimeForTimer(1),
+                    () -> robot.timer.getTimeForTimer(3),
                     () -> robot.driveTrainVelocityControl.moveRobotCord(0,0,0),
                     () -> robot.timer.getTimeForTimer(1),
             });

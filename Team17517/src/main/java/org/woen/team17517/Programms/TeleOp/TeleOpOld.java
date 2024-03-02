@@ -1,6 +1,6 @@
 package org.woen.team17517.Programms.TeleOp;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
-public class TeleOp extends TeleOPBase{
+public class TeleOpOld extends TeleOPBase{
     @Override
     public void buttonsUpdate(){
         liftUpAuto            = gamepad1.triangle;
@@ -13,10 +13,10 @@ public class TeleOp extends TeleOPBase{
         liftDownMan           = gamepad1.dpad_down;
         openGrabberMun        = gamepad1.dpad_left;
         closeGrabberMun       = gamepad1.dpad_right;
-        startPlane            = gamepad1.right_trigger>0.1;
+        startPlane            = gamepad1.right_trigger > 0.1;
         aimPlane              = gamepad1.right_bumper;
-        forwardSpeed           = -robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y);
-        sideSpeed              = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_x);
-        angleSpeed             = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x);
+        forwardSpeed          = -robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y*Math.abs(gamepad1.left_stick_y));
+        sideSpeed             = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_x*Math.abs(gamepad1.left_stick_x));
+        angleSpeed            = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x*Math.abs(gamepad1.right_stick_x))*0.75;
     }
 }
