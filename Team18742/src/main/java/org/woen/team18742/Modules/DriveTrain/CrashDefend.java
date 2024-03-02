@@ -7,13 +7,14 @@ import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Gyroscope;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
+import org.woen.team18742.Modules.Manager.TeleopModule;
 import org.woen.team18742.Modules.Odometry.OdometryHandler;
 import org.woen.team18742.Tools.Color;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.ToolTelemetry;
 import org.woen.team18742.Tools.Vector2;
 
-@Module
+@TeleopModule
 public class CrashDefend implements IRobotModule {
     private OdometryHandler _odometry;
     private Gyroscope _gyro;
@@ -23,7 +24,17 @@ public class CrashDefend implements IRobotModule {
             new Square(Vector2.ZERO, new Vector2(50, 50))
     };
 
-    private ElapsedTime _deltaTime = new ElapsedTime();
+    private final ElapsedTime _deltaTime = new ElapsedTime();
+
+    private boolean _isDisable = false;
+
+    public void Disable(){
+        _isDisable = true;
+    }
+
+    public void Enable(){
+        _isDisable = false;
+    }
 
     @Override
     public void Init(BaseCollector collector) {
@@ -33,26 +44,38 @@ public class CrashDefend implements IRobotModule {
     }
 
     @Override
-    public void Update() {
-        Square _robot = new Square(
-                Vector2.Plus(_odometry.Position,
-                        new Vector2(Configs.DriveTrainWheels.WheelsRadius, Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians())),
-                Vector2.Plus(_odometry.Position,
-                        new Vector2(Configs.DriveTrainWheels.WheelsRadius, -Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians())),
-                Vector2.Plus(_odometry.Position,
-                        new Vector2(-Configs.DriveTrainWheels.WheelsRadius, -Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians())),
-                Vector2.Plus(_odometry.Position,
-                        new Vector2(-Configs.DriveTrainWheels.WheelsRadius, Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians()))
-        );
+    public void LastUpdate() {
+        if(!_isDisable) {
+            Square robot = new Square(
+                    Vector2.Plus(_odometry.Position,
+                            new Vector2(Configs.DriveTrainWheels.WheelsRadius, Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians())),
+                    Vector2.Plus(_odometry.Position,
+                            new Vector2(Configs.DriveTrainWheels.WheelsRadius, -Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians())),
+                    Vector2.Plus(_odometry.Position,
+                            new Vector2(-Configs.DriveTrainWheels.WheelsRadius, -Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians())),
+                    Vector2.Plus(_odometry.Position,
+                            new Vector2(-Configs.DriveTrainWheels.WheelsRadius, Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians()))
+            );
 
-        ToolTelemetry.DrawPolygon(_robot.GetPoints(), Color.BLUE);
+            ToolTelemetry.DrawPolygon(robot.GetPoints(), Color.BLUE);
 
-        for (Square i : _zones) {
-            if(IsContains(i, _robot))
-                ToolTelemetry.DrawPolygon(i.GetPoints(), Color.RED);
-            else
-                ToolTelemetry.DrawPolygon(i.GetPoints(), Color.ORANGE);
+            Vector2 shift = new Vector2(_odometry.Speed.X * _deltaTime.seconds(), _odometry.Speed.Y * _deltaTime.seconds());
+
+            Square nextSquare = new Square(Vector2.Plus(shift, robot.p1),
+                    Vector2.Plus(shift, robot.p2),
+                    Vector2.Plus(shift, robot.p3),
+                    Vector2.Plus(shift, robot.p4));
+
+            for (Square i : _zones) {
+                if (IsContains(i, nextSquare)) {
+                    ToolTelemetry.DrawPolygon(i.GetPoints(), Color.RED);
+                    _driveTrain.Stop();
+                } else
+                    ToolTelemetry.DrawPolygon(i.GetPoints(), Color.ORANGE);
+            }
         }
+
+        _deltaTime.reset();
     }
 
     private static boolean IsContains(Square s1, Square s2) {
@@ -60,7 +83,7 @@ public class CrashDefend implements IRobotModule {
             for (Line j : s2.GetLines()) {
                 Vector2 point = new Vector2();
 
-                if(i.isContains(j, point))
+                if (i.isContains(j, point))
                     return true;
             }
         }
@@ -126,5 +149,10 @@ public class CrashDefend implements IRobotModule {
                     new Line(p4, p1)
             };
         }
+    }
+
+    @Override
+    public void Start() {
+        _deltaTime.reset();
     }
 }

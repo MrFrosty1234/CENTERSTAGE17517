@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Brush.StaksBrush;
+import org.woen.team18742.Modules.DriveTrain.CrashDefend;
 import org.woen.team18742.Modules.DriveTrain.Drivetrain;
 import org.woen.team18742.Modules.Intake.Intake;
 import org.woen.team18742.Modules.Lift.Lift;
@@ -27,6 +28,7 @@ public class Manual implements IRobotModule {
     private Drivetrain _drivetrain;
     private Hook _hook;
     private StaksBrush _stacksBrush;
+    private CrashDefend _defend;
 
     @Override
     public void Init(BaseCollector collector) {
@@ -40,17 +42,16 @@ public class Manual implements IRobotModule {
         _drivetrain = collector.GetModule(Drivetrain.class);
         _hook = collector.GetModule(Hook.class);
         _stacksBrush = collector.GetModule(StaksBrush.class);
+        _defend = collector.GetModule(CrashDefend.class);
     }
 
     @Override
     public void Update() {
-        if(_lift.isDown()) {
+        if (_lift.isDown()) {
             _drivetrain.SimpleDriveDirection(
                     new Vector2(-_gamepad.left_stick_y, -_gamepad.left_stick_x),
                     -_gamepad.right_stick_x);
-        }
-        else
-        {
+        } else {
             _drivetrain.SimpleDriveDirection(
                     new Vector2(-_gamepad.left_stick_y * 0.2, -_gamepad.left_stick_x * 0.2),
                     -_gamepad.right_stick_x * 0.3);
@@ -72,12 +73,14 @@ public class Manual implements IRobotModule {
         if (grip && !_gripOld)
             _intake.releaseGripper();
 
-        if(allGrip)
+        if (allGrip)
             _intake.releaseAllGripper();
 
         if (brushOn) {
-            if (!_brush.isBrusnOn())
+            if (!_brush.isBrusnOn()) {
                 _brush.BrushEnable();
+                _gamepad.rumble(500);
+            }
         } else if (brushReverseAndOff) {
             _brush.BrushDisable();
             _brush.RevTimeRes();
@@ -102,12 +105,17 @@ public class Manual implements IRobotModule {
         if (hookActive > 0.2)
             _hook.Active(timerBypass);
 
-        if(hookUp > 0.8)
+        if (hookUp > 0.8)
             _hook.hookUp();
-        else if(hookDown)
+        else if (hookDown)
             _hook.hookDown();
         else
             _hook.Stop();
+
+        if(timerBypass)
+            _defend.Disable();
+        else
+            _defend.Enable();
 
         _gripOld = grip;
         _brushOld = brushOn;
