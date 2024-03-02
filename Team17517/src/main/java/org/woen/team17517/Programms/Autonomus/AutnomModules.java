@@ -38,15 +38,15 @@ public class AutnomModules {
     }
     public void eatPixels() {
         robot.updateWhilePositionFalse(new Runnable[]{
-                () -> robot.grabber.brushOut(),
+                () -> robot.brush.out(),
                 () -> robot.timer.getTimeForTimer(1),
-                () -> robot.grabber.brushIn(),
+                () -> robot.brush.in(),
                 () -> robot.timer.getTimeForTimer(2),
                 () -> robot.grabber.close(),
                 () -> robot.timer.getTimeForTimer(0.1),
-                () -> robot.grabber.brushOut(),
+                () -> robot.brush.out(),
                 () -> robot.timer.getTimeForTimer(1),
-                () -> robot.grabber.brushOff(),
+                () -> robot.brush.off(),
                 () -> robot.timer.getTimeForTimer(0.1),
         });
     }

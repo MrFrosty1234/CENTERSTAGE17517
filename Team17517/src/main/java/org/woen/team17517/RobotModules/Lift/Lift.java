@@ -49,8 +49,8 @@ public class Lift implements RobotModule {
     public static double velKs = 0;
     public static double velKd = 0;
     public static double velMaxI = 0;
-    PID pid = new PID(kp,ki,kd,0,maxI);
-    PID pidVelocity = new PID(velKp,velKi,velKd,velKs,velMaxI);
+    PID pid = new PID(kp,ki,kd,0,maxI,kg);
+    PID pidVelocity = new PID(velKp,velKi,velKd,velKs,velMaxI,velKg);
     public void setLiftMode(LiftMode mode){
         liftMode = mode;
     }
