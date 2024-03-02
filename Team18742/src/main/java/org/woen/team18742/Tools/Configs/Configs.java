@@ -67,13 +67,13 @@ public class Configs {
     public static class LiftPoses{
         public static int POSE_UP = 1100;
         public static int POSE_MIDDLE_UPPER = 490;
-        public static int POSE_MIDDLE_LOWER = 380;
+        public static int POSE_MIDDLE_LOWER = 300;
         public static int POSE_DOWN = -40;
     }
 
     @Config
     public static class Lift{
-        public static double TurnPos = 320;
+        public static double TurnPos = 250;
     }
 
     @Config
@@ -108,14 +108,14 @@ public class Configs {
     public static class Brush{
         public static double protectionCurrentAmps = 3.3;
         public static double protectionTimeThresholdMs = 700;
-        public static double reverseTimeThresholdMs = 900;
+        public static double reverseTimeThresholdMs = 930;
         public static double brushPower = 1.0;
         public static double brushPowerReverse = -0.7;
     }
 
     @Config
     public static class DriveTrainWheels {
-        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 125, MaxSpeedTurn = Math.toRadians(110), speed = 0.5;
+        public static double wheelDiameter = 9.6, encoderconstat = 480d / (26d / 22d), MaxSpeedX = 137, MaxSpeedTurn = Math.toRadians(110), speed = 0.5;
         public static double MaxTurnAccel = Math.toRadians(110);
         public static double WheelsRadius = 15.7;
     }
@@ -128,30 +128,30 @@ public class Configs {
 
     @Config
     public static class Intake{
-        public static double pixelSensorvoltage = 0.123;
+        public static double pixelSensorvoltage = 0.13;
         public static double servoTurnNormal = 0.06;
-        public static double servoTurnTurned = 0.7;
+        public static double servoTurnTurned = 0.645;
         public static double servoGripperNormal = 0.5;
         public static double servoGripperGripped = 0.65;
         public static double servoGripperGrippedOne = 0.6;
-        public static double servoClampClamped = 0.735;
-        public static double servoClampReleased = 0.54;
-        public static double servoClampReleasedLift = 0.48;
-        public static double pixelDetectTimeMs = 305;
+        public static double servoClampClamped = 0.741;
+        public static double servoClampReleased = 0.64;
+        public static double servoClampReleasedLift = 0.45;
+        public static double pixelDetectTimeMs = 315;
         public static double LineServoOpen = 0;
-        public static double LineServoClose = 0.62;
+        public static double LineServoClose = 0.58;
     }
 
     @Config
     public static class Plane{
         public static double servoplaneOtkrit = 0.17;
-        public static double servoplaneneOtkrit = 0.03;
+        public static double servoplaneneOtkrit = 0.08;
     }
 
     @Config
     public static class Route{
-        public static double MinProfileAccel = -70;
-        public static double MaxProfileAccel = 70;
+        public static double MinProfileAccel = -75;
+        public static double MaxProfileAccel = 75;
     }
 
     @Config
@@ -189,8 +189,8 @@ public class Configs {
         public static double RIGHT_SERVO_STOP = 0.496;
         public static double RIGHT_SERVO_FWD = 1.0;
         public static double RIGHT_SERVO_REV = 0.0;
-        public static double SERVO_LIFT_DOWN = 0.617;
-        public static double SERVO_LIFT_UP = 0.827;
+        public static double SERVO_LIFT_DOWN = 0.03;
+        public static double SERVO_LIFT_UP = 0.27;
     }
 
     @Config

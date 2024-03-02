@@ -54,8 +54,6 @@ public class Intake implements IRobotModule {
             _isTurned = false;
 
             _oldTurnPos = true;
-
-            _turnedTime.reset();
         } else {
             servoTurn.setPosition(Configs.Intake.servoTurnNormal);
 
@@ -66,6 +64,8 @@ public class Intake implements IRobotModule {
             }
 
             _oldTurnPos = false;
+
+            _turnedTime.reset();
         }
     }
 

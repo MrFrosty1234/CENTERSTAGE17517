@@ -52,7 +52,7 @@ public class Manual implements IRobotModule {
         else
         {
             _drivetrain.SimpleDriveDirection(
-                    new Vector2(-_gamepad.left_stick_y * 0.3, -_gamepad.left_stick_x * 0.3),
+                    new Vector2(-_gamepad.left_stick_y * 0.2, -_gamepad.left_stick_x * 0.2),
                     -_gamepad.right_stick_x * 0.3);
         }
 

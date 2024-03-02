@@ -93,6 +93,8 @@ public class Gyroscope implements IRobotModule {
             _radianSpeed = ChopAngle(_allRadians - _oldRadians) / _deltaTime.seconds();
         }
 
+        _allRadians = ChopAngle(_allRadians);
+
         _iterations++;
 
         _radianAccel = ChopAngle(_radianSpeed - _oldRadianSpeed) / _deltaTime.seconds();
