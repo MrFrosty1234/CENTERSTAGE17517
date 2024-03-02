@@ -24,7 +24,7 @@ public class Odometers{
         odometrRightY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
     public double getVelocity(DcMotorEx odometer){
-        return odometer.getCurrentPosition()*directionMap.get(odometer);
+        return odometer.getVelocity()*directionMap.get(odometer);
     }
     public double getPosition(DcMotorEx odometer){
         return odometer.getCurrentPosition()*directionMap.get(odometer);

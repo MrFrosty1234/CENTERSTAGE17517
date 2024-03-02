@@ -2,15 +2,15 @@ package org.woen.team17517.Service;
 import com.acmerobotics.dashboard.config.Config;
 @Config
 public  class PID {
-    public PID(double kp, double ki, double kd, Double maxI,double kg){
-            setCoefficent(kp, ki, kd,0, maxI, kg);
+    public PID(double kp, double ki, double kd, double ks, Double maxI){
+            setCoeficent(kp,ki,kd,ks,maxI,kg);
     }
-    public PID(double kp, double ki, double kd, double ks, Double maxI,double kg){
-        setCoefficent(kp,ki,kd,ks,maxI,kg);
+    public void setKg(double kg) {
+        this.kg = kg;
     }
     private double kp,kd,ki,ks,kg = 0;
     Double maxI = Double.POSITIVE_INFINITY;
-    public void setCoefficent(double kp, double ki, double kd, double ks,Double maxI,double kg){
+    public void setCoeficent(double kp, double ki, double kd, double ks, Double maxI, double kg){
         this.kp = kp;
         this.ki = ki;
         this.kd = kd;

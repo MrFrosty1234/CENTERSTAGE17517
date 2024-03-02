@@ -25,6 +25,11 @@ public class Lift implements RobotModule {
     private double voltage;
     private LiftPosition targetPosition = DOWN;
     private double targetSpeed = 0;
+
+    public double getTargetSpeed() {return targetSpeed;}
+
+    public double getSpeed() {return speed;}
+
     public LiftPosition getTargetPosition(){
         return targetPosition;
     }
@@ -37,17 +42,18 @@ public class Lift implements RobotModule {
     private boolean liftAtTarget = true;
     public static double kp = 0;
     public static double ki = 0;
-    public static double ks = 0;
     public static double kd = 0;
     public static double kg = 0;
     public static double maxI  = 0;
+
     public static double velKp = 0;
+    public static double velKg = 0;
     public static double velKi = 0;
     public static double velKs = 0;
     public static double velKd = 0;
     public static double velMaxI = 0;
-    PID pid = new PID(kp,ki,kd,ks,maxI);
-    PID pidVelocity = new PID(velKp,velKi,velKd,velKs,velMaxI,kg);
+    PID pid = new PID(kp,ki,kd,0,maxI);
+    PID pidVelocity = new PID(velKp,velKi,velKd,velKs,velMaxI);
     public void setLiftMode(LiftMode mode){
         liftMode = mode;
     }
@@ -63,7 +69,10 @@ public class Lift implements RobotModule {
         return false;
     }
     public boolean getDownSwitch(){return down.update(buttonDown.getState());}
-    public void setPower(double x) {liftMotor.setPower(x+kg);}
+    public void setPower(double target) {
+        double power = pidVelocity.pid(target,liftMotor.getVelocity(),voltage);
+        liftMotor.setPower(power);
+    }
 
     public void moveUP(){
         setTargetPosition(UP);
@@ -92,25 +101,31 @@ public class Lift implements RobotModule {
         }if (getDownSwitch()){
             encoderError = liftMotor.getCurrentPosition() - DOWN.value;
         }
-        setPower(power);
         speed = liftMotor.getVelocity();
     }
-    private double power = 0;
-    public void update() {
+
+    public double getPidPosInputForPid() {
+        return pidPosInputForPid;
+    }
+
+    private double pidPosInputForPid = 0;
+    public void update(){
         updatePosition();
-        pid.setCoefficent(kp, ki, kd, ks, maxI,kg);
+        pid.setCoeficent(kp, ki, kd, 0, maxI, kg);
+        pidVelocity.setCoeficent(velKp,velKi,velKd,velKs,velMaxI,velKg);
         voltage = robot.voltageSensorPoint.getVol();
         switch (liftMode) {
             case AUTO:
-                power = pid.pid(targetPosition.value, getPosition(),voltage);
-                liftAtTarget = Math.abs(targetPosition.value-getPosition())<5;
+                pidPosInputForPid = pid.pid(targetPosition.value,getPosition(),voltage);
+                liftAtTarget = abs(targetPosition.value-getPosition())<5;
                 break;
             case MANUALLIMIT:
-                power = pidVelocity.pid(targetSpeed,speed,voltage);
+                pidPosInputForPid = pidVelocity.pid(targetSpeed,speed,voltage);
                 liftAtTarget = true;
                 break;
         }
-        setPower(power);
+
+        setPower(pidPosInputForPid);
     }
     public void setSpeed(double speed){
         targetSpeed = speed;
