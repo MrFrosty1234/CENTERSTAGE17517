@@ -42,9 +42,9 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static double kg = 0;
 
     public final double odToEnc = 98;
-    private PID speedX = new PID(kpX,kiX,kdX,ksX,maxIX);
-    private PID speedH = new PID(kpRat,kiRat,kdRat,ksY,maxIY);
-    private PID speedY = new PID(kpY,kiY,kdY,ksRat,maxIRat);
+    private PID speedX = new PID(kpX,kiX,kdX,ksX,maxIX,0);
+    private PID speedH = new PID(kpRat,kiRat,kdRat,ksY,maxIY,0);
+    private PID speedY = new PID(kpY,kiY,kdY,ksRat,maxIRat,0);
     public Map<String, Double> getPIDX(){
         HashMap<String, Double> pidX = new HashMap<>();
         pidX.put("P",speedX.getP());
