@@ -1,6 +1,7 @@
 package org.woen.team18742.Modules.DriveTrain;
 
 import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.woen.team18742.Collectors.BaseCollector;
 import org.woen.team18742.Modules.Gyroscope;
@@ -21,6 +22,8 @@ public class CrashDefend implements IRobotModule {
     private Square[] _zones = new Square[]{
             new Square(Vector2.ZERO, new Vector2(50, 50))
     };
+
+    private ElapsedTime _deltaTime = new ElapsedTime();
 
     @Override
     public void Init(BaseCollector collector) {
@@ -55,7 +58,9 @@ public class CrashDefend implements IRobotModule {
     private static boolean IsContains(Square s1, Square s2) {
         for (Line i : s1.GetLines()) {
             for (Line j : s2.GetLines()) {
-                if(i.isContains(j))
+                Vector2 point = new Vector2();
+
+                if(i.isContains(j, point))
                     return true;
             }
         }
@@ -71,13 +76,13 @@ public class CrashDefend implements IRobotModule {
             this.p2 = p2;
         }
 
-        public boolean isContains(Line l) {
+        public boolean isContains(Line l, Vector2 point) {
             double parallelism = (p1.X - p2.X) * (l.p1.Y - l.p2.Y) - (p1.Y - p2.Y) * (l.p1.X - l.p2.X);
 
             if (Math.abs(parallelism) < 0.01d)
                 return false;
 
-            Vector2 point = new Vector2(((p1.X * p2.Y - p1.Y * p2.X) * (l.p1.X - l.p2.X) - (p1.X - p2.X) * (l.p1.X * l.p2.Y - l.p1.Y * l.p2.X)) / parallelism,
+            point = new Vector2(((p1.X * p2.Y - p1.Y * p2.X) * (l.p1.X - l.p2.X) - (p1.X - p2.X) * (l.p1.X * l.p2.Y - l.p1.Y * l.p2.X)) / parallelism,
                     ((p1.X * p2.Y - p1.Y * p2.X) * (l.p1.Y - l.p2.Y) - (p1.Y - p2.Y) * (l.p1.X * l.p2.Y - l.p1.Y * l.p2.Y)) / parallelism);
 
             if (p1.X <= point.X && point.X <= p2.X && p1.Y <= point.Y && point.Y <= p2.Y)
