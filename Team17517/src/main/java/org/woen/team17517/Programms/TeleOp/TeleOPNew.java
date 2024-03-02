@@ -31,6 +31,23 @@ public class TeleOPNew extends LinearOpMode {
     String planeStatus = "Stay";
     UltRobot robot;
     TeleOpModules teleOpModules;
+    public void buttonsUpdate(){
+        liftUpAuto            = gamepad1.triangle;
+        liftDownAuto          = gamepad1.cross;
+        brushIn               = gamepad1.left_trigger > 0.1;
+        brushOut              = gamepad1.left_bumper;
+        openAndFinishGrabber  = gamepad1.circle;
+        closeAndSafeGrabber   = gamepad1.square;
+        liftUpMan             = gamepad1.dpad_up;
+        liftDownMan           = gamepad1.dpad_down;
+        openGrabberMun        = gamepad1.dpad_left;
+        closeGrabberMun       = gamepad1.dpad_right;
+        startPlane            = gamepad1.right_trigger>0.1;
+        aimPlane              = gamepad1.right_bumper;
+        forwardSpeed           = -robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y);
+        sideSpeed              = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_x);
+        angleSpeed             = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x);
+    }
     public void runOpMode(){
         robot = new UltRobot(this);
         teleOpModules = new TeleOpModules(robot);
@@ -39,33 +56,12 @@ public class TeleOPNew extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
-
             telemetry.addData("Lift",robot.lift.getLiftMode().toString()+robot.lift.getPosition());
             telemetry.addData("Grabber",robot.grabber.getTargetProgib().toString()+robot.grabber.getTargetOpenClose());
             telemetry.addData("Plane",planeStatus);
             robot.telemetryOutput.teleOp = telemetryTeleOp;
 
-            boolean liftUpAuto            = gamepad1.triangle;
-            boolean liftDownAuto          = gamepad1.cross;
-
-            boolean brushIn               = gamepad1.left_trigger > 0.1;
-            boolean brushOut              = gamepad1.left_bumper;
-
-            boolean openAndFinishGrabber  = gamepad1.circle;
-            boolean closeAndSafeGrabber   = gamepad1.square;
-
-            boolean liftUpMan             = gamepad1.dpad_up;
-            boolean liftDownMan           = gamepad1.dpad_down;
-
-            boolean openGrabberMun        = gamepad1.dpad_left;
-            boolean closeGrabberMun       = gamepad1.dpad_right;
-
-            boolean startPlane            = gamepad1.right_trigger>0.1;
-            boolean aimPlane              = gamepad1.right_bumper;
-
-            double forwardSpeed = -robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y);
-            double sideSpeed    = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_x);
-            double angleSpeed   = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x);
+            buttonsUpdate();
 
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
 
@@ -115,4 +111,19 @@ public class TeleOPNew extends LinearOpMode {
             robot.allUpdate();
         }
     }
+    boolean liftUpAuto            ;
+    boolean liftDownAuto          ;
+    boolean brushIn               ;
+    boolean brushOut              ;
+    boolean openAndFinishGrabber  ;
+    boolean closeAndSafeGrabber   ;
+    boolean liftUpMan             ;
+    boolean liftDownMan           ;
+    boolean openGrabberMun        ;
+    boolean closeGrabberMun       ;
+    boolean startPlane            ;
+    boolean aimPlane              ;
+    double forwardSpeed           ;
+    double sideSpeed              ;
+    double angleSpeed             ;
 }
