@@ -47,7 +47,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("buttonDown", robot.lift.getDownSwitch());
             telemetry.addData("buttonUp", robot.lift.getUpSwitch());
             telemetry.addData("speed",robot.lift.getSpeed());
-            telemetry.addData("speedForPid",robot.lift.getSpeedForPid());
+            telemetry.addData("speedForPid",robot.lift.getPidPosInputForPid());
             telemetry.addData("targetSpeed",robot.lift.getTargetSpeed());
         }
         if (opticalSensor){

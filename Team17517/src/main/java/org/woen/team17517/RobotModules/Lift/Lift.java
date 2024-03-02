@@ -104,11 +104,11 @@ public class Lift implements RobotModule {
         speed = liftMotor.getVelocity();
     }
 
-    public double getSpeedForPid() {
-        return speedForPid;
+    public double getPidPosInputForPid() {
+        return pidPosInputForPid;
     }
 
-    private double speedForPid = 0;
+    private double pidPosInputForPid = 0;
     public void update(){
         updatePosition();
         pid.setCoeficent(kp, ki, kd, 0, maxI, kg);
@@ -116,16 +116,16 @@ public class Lift implements RobotModule {
         voltage = robot.voltageSensorPoint.getVol();
         switch (liftMode) {
             case AUTO:
-                speedForPid = pid.pid(targetPosition.value,getPosition(),voltage);
+                pidPosInputForPid = pid.pid(targetPosition.value,getPosition(),voltage);
                 liftAtTarget = abs(targetPosition.value-getPosition())<5;
                 break;
             case MANUALLIMIT:
-                speedForPid = pidVelocity.pid(targetSpeed,speed,voltage);
+                pidPosInputForPid = pidVelocity.pid(targetSpeed,speed,voltage);
                 liftAtTarget = true;
                 break;
         }
 
-        setPower(speedForPid);
+        setPower(pidPosInputForPid);
     }
     public void setSpeed(double speed){
         targetSpeed = speed;
