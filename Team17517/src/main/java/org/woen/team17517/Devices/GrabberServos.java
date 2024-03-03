@@ -9,8 +9,11 @@ public class GrabberServos{
         this.hardwareMap = hardwareMap;
         grabberServo = hardwareMap.get(Servo.class,"pixelServoLift");
         upServo = hardwareMap.get(Servo.class,"pixelServoLeft");
-        downServo = hardwareMap.get(Servo.class,"pixelServoRight");}
+        backWallServo = hardwareMap.get(Servo.class,"pixelServoRight");
+        autonomServo = hardwareMap.get(Servo.class, "autonomServo");
+    }
     public Servo upServo;
-    public Servo downServo;
+    public Servo backWallServo;
     public Servo grabberServo;
+    public Servo autonomServo;
 }

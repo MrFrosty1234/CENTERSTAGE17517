@@ -6,6 +6,7 @@ import org.woen.team17517.RobotModules.Lift.LiftMode;
 import org.woen.team17517.RobotModules.Lift.LiftPosition;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
+import org.woen.team17517.Service.TelemetryOutput;
 
 @Config
 public abstract class TeleOPBase extends LinearOpMode {
@@ -32,15 +33,14 @@ public abstract class TeleOPBase extends LinearOpMode {
     public void runOpMode(){
         robot = new UltRobot(this);
         teleOpModules = new TeleOpModules(robot);
-        robot.telemetryOutput.teleOp = telemetryTeleOp;
-
         waitForStart();
 
         while(opModeIsActive()){
             telemetry.addData("Lift",robot.lift.getLiftMode().toString()+robot.lift.getPosition());
-            telemetry.addData("Grabber",robot.grabber.getTargetProgib().toString()+robot.grabber.getTargetOpenClose());
+            telemetry.addData("Grabber",robot.grabber.getProgibTarget().toString()+robot.grabber.getOpenCloseTarget());
             telemetry.addData("Plane",planeStatus);
-            robot.telemetryOutput.teleOp = telemetryTeleOp;
+
+            TelemetryOutput.teleOp = telemetryTeleOp;
 
             buttonsUpdate();
 
@@ -51,7 +51,7 @@ public abstract class TeleOPBase extends LinearOpMode {
             else if (liftDownBut.update(liftDownAuto)) teleOpModules.liftDownAndOpenGrabber();
 
 
-            if (openGrabberBut.update(openAndFinishGrabber)&&robot.lift.getPosition() > LiftPosition.DOWN.value) teleOpModules.openGrabber();
+            if (openGrabberBut.update(openAndFinishGrabber)&&robot.lift.getPosition() > LiftPosition.DOWN.get()) teleOpModules.openGrabber();
             else if (closeGrabberBut.update(closeAndSafeGrabber))                                         teleOpModules.closeGrabber();
 
 
@@ -76,13 +76,13 @@ public abstract class TeleOPBase extends LinearOpMode {
             }
 
 
-            if (openGrabberMunBut.update(openGrabberMun))   robot.grabber.open();
-            if (closeGrabberMunBut.update(closeGrabberMun)) robot.grabber.close();
+            if (openGrabberMunBut.update(openGrabberMun))   robot.grabber.open();robot.grabber.backWallOpen();
+            if (closeGrabberMunBut.update(closeGrabberMun)) robot.grabber.close();robot.grabber.backWallClose();
 
 
-            if (brushIn)       robot.grabber.brushIn();
-            else if (brushOut) robot.grabber.brushOut();
-            else               robot.grabber.brushOff();
+            if (brushIn)       robot.brush.in();
+            else if (brushOut) robot.brush.out();
+            else               robot.brush.off();
 
 
             if(liftDownMan)                                          robot.lift.setSpeed(-2000);

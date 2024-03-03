@@ -25,11 +25,8 @@ public class Lift implements RobotModule {
     private double voltage;
     private LiftPosition targetPosition = DOWN;
     private double targetSpeed = 0;
-
     public double getTargetSpeed() {return targetSpeed;}
-
     public double getSpeed() {return speed;}
-
     public LiftPosition getTargetPosition(){
         return targetPosition;
     }
@@ -52,8 +49,8 @@ public class Lift implements RobotModule {
     public static double velKs = 0;
     public static double velKd = 0;
     public static double velMaxI = 0;
-    PID pid = new PID(kp,ki,kd,0,maxI);
-    PID pidVelocity = new PID(velKp,velKi,velKd,velKs,velMaxI);
+    PID pid = new PID(kp,ki,kd,0,maxI,kg);
+    PID pidVelocity = new PID(velKp,velKi,velKd,velKs,velMaxI,velKg);
     public void setLiftMode(LiftMode mode){
         liftMode = mode;
     }
@@ -97,9 +94,9 @@ public class Lift implements RobotModule {
         cleanPosition = liftMotor.getCurrentPosition();
         encoderPosition = cleanPosition - encoderError;
         if (getUpSwitch()){
-            encoderError = liftMotor.getCurrentPosition() - LiftPosition.UP.value;
+            encoderError = liftMotor.getCurrentPosition() - LiftPosition.UP.get();
         }if (getDownSwitch()){
-            encoderError = liftMotor.getCurrentPosition() - DOWN.value;
+            encoderError = liftMotor.getCurrentPosition() - DOWN.get();
         }
         speed = liftMotor.getVelocity();
     }
@@ -116,8 +113,8 @@ public class Lift implements RobotModule {
         voltage = robot.voltageSensorPoint.getVol();
         switch (liftMode) {
             case AUTO:
-                pidPosInputForPid = pid.pid(targetPosition.value,getPosition(),voltage);
-                liftAtTarget = abs(targetPosition.value-getPosition())<5;
+                pidPosInputForPid = pid.pid(targetPosition.get(),getPosition(),voltage);
+                liftAtTarget = abs(targetPosition.get()-getPosition())<5;
                 break;
             case MANUALLIMIT:
                 pidPosInputForPid = pidVelocity.pid(targetSpeed,speed,voltage);
@@ -131,14 +128,12 @@ public class Lift implements RobotModule {
         targetSpeed = speed;
         setLiftMode(MANUALLIMIT);
     }
-    public void setPercentSpeed(double percent){
-        targetSpeed = percent*maxSpeed;
-        setLiftMode(MANUALLIMIT);
+    public double getSpeedPercent(double percent){
+        return percent*maxSpeed;
     }
     private double maxSpeed = 2400;
     @Override
     public boolean isAtPosition() {
         return liftAtTarget;
     }
-
 }

@@ -51,13 +51,12 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("targetSpeed",robot.lift.getTargetSpeed());
         }
         if (opticalSensor){
-            telemetry.addData("PixelsIn",robot.pixelsCount.isTwoPixelsCount());
+            telemetry.addData("PixelsIn",robot.pixelsCount.isPixels());
             telemetry.addData("Up",robot.pixelsCount.getUpVolt());
-            telemetry.addData("Down",robot.pixelsCount.getDownVolt());
         }
         if (grabber){
-            telemetry.addData("GrabberProgibTarget",robot.grabber.getTargetProgib());
-            telemetry.addData("GrabberTargetOpenClose",robot.grabber.getTargetOpenClose());
+            telemetry.addData("GrabberProgibTarget",robot.grabber.getProgibTarget());
+            telemetry.addData("GrabberTargetOpenClose",robot.grabber.getOpenCloseTarget());
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.driveTrain.getTargets();

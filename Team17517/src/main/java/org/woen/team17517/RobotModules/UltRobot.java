@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
 import org.woen.team17517.RobotModules.EndGame.Plane;
+import org.woen.team17517.RobotModules.Grabber.Brush;
 import org.woen.team17517.RobotModules.Grabber.GrabberNew;
 import org.woen.team17517.RobotModules.Grabber.PixelsCount;
 import org.woen.team17517.RobotModules.Lift.Lift;
@@ -20,6 +21,8 @@ import org.woen.team17517.Service.Timer;
 import org.woen.team17517.Service.VoltageSensorPoint;
 
 import org.woen.team17517.Devices.Hardware;
+
+import org.woen.team17517.Programms.TeleOp.TeleOpWhithAutomat.Intake;
 
 
 public class UltRobot {
@@ -38,7 +41,9 @@ public class UltRobot {
     public Timer timer;
     public RobotModule[] robotModules;
     public Hardware hardware;
+    public Brush brush;
     public Plane plane;
+    public Intake intake;
     private final List<LynxModule> revHubs;
 
     public UltRobot(LinearOpMode linearOpMode1) {
@@ -49,16 +54,19 @@ public class UltRobot {
         lift = new Lift(this);
         grabber = new GrabberNew(this);
         pixelsCount = new PixelsCount(this);
+        brush = new Brush(this);
         voltageSensorPoint = new VoltageSensorPoint(this);
         driveTrainVelocityControl = new DriveTrainVelocityControl(this);
         gyro = new Gyro(this);
         lighting = new Lighting(this);
         testAprilTagPipeline = new TestAprilTagPipeline(this);
+        intake = new Intake(this);
         odometry = new OdometryNew(this);
         driveTrain = new DriveTrain(this);
         plane = new Plane(this);
-        this.robotModules = new RobotModule[]{telemetryOutput,timer, voltageSensorPoint,
-                 driveTrainVelocityControl,lift,grabber,pixelsCount, gyro, lighting,driveTrain,odometry};
+
+        this.robotModules = new RobotModule[]{telemetryOutput,timer, voltageSensorPoint,brush,
+                 driveTrainVelocityControl,intake,lift,grabber,pixelsCount, gyro, lighting,driveTrain,odometry};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }

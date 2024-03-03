@@ -2,7 +2,7 @@ package org.woen.team17517.Service;
 import com.acmerobotics.dashboard.config.Config;
 @Config
 public  class PID {
-    public PID(double kp, double ki, double kd, double ks, Double maxI){
+    public PID(double kp, double ki, double kd, double ks, Double maxI, double kg){
             setCoeficent(kp,ki,kd,ks,maxI,kg);
     }
     public void setKg(double kg) {

@@ -28,22 +28,24 @@ public class TeleOpModules {
     public void closeGrabber(){
         robot.updateWhilePositionFalse(new Runnable[]{
                 ()->robot.grabber.close(),
-                ()->robot.grabber.brushOut(),
+                ()->robot.brush.out(),
+                ()->robot.grabber.backWallClose(),
                 ()->robot.timer.getTimeForTimer(1)
         });
     }
     public void openGrabber(){
         robot.grabber.finish();
         robot.grabber.open();
+        robot.grabber.backWallOpen();
     }
     public void eatPixels(){
         this.liftDownAndOpenGrabber();
-        while(!robot.pixelsCount.isTwoPixelsCount()){
-            robot.grabber.brushIn();
+        while(!robot.pixelsCount.isPixels()){
+            robot.brush.in();
         }
         robot.grabber.close();
         robot.updateWhilePositionFalse(new Runnable[]{
-                ()->robot.grabber.brushOut(),
+                ()->robot.brush.out(),
                 ()->robot.timer.getTimeForTimer(1)
         });
     }

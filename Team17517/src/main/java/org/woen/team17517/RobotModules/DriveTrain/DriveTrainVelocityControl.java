@@ -18,33 +18,32 @@ public class DriveTrainVelocityControl implements RobotModule {
     UltRobot robot;
     private double voltage;
 
-    public static double kdX = 0.0002;
-    public static double kiX = 0.000000025;
-    public static double kpX = 0.000015;
+    public static double kdX = 0       ;
+    public static double kiX = 2.5e-8 ;
+    public static double kpX = 0.000006;
+
+
+    public static double kdY = 0       ;
+    public static double kiY = 2.5e-8  ;
+    public static double kpY = 0.000006;
 
     public static double kdRat = 0;
     public static double kiRat = 0.0015;
     public static double kpRat = 0.000008;
 
-    public static double kdY = 0.0002;
-    public static double kiY = 0.000000025;
-    public static double kpY = 0.000015;
-
-    public static  double maxIY = 0.03;
+    public static  double maxIY = 0.05;
     public static  double maxIRat = 0.04;
     public static  double maxIX = 0.04;
 
     public static double ksRat = 0.000025;
-    public static double ksY = 0.0000116;
-    public static double ksX = 0.000016;
-    public static double kSlide = 1;
+    public static double ksY = 0.0000115;
+    public static double ksX = 0.0000115;
+    public static double kSlide = 1.2;
 
-    public static double kg = 0;
 
-    public final double odToEnc = 98;
-    private PID speedX = new PID(kpX,kiX,kdX,ksX,maxIX);
-    private PID speedH = new PID(kpRat,kiRat,kdRat,ksY,maxIY);
-    private PID speedY = new PID(kpY,kiY,kdY,ksRat,maxIRat);
+    private PID speedX = new PID(kpX,kiX,kdX,ksX,maxIX,0);
+    private PID speedH = new PID(kpRat,kiRat,kdRat,ksY,maxIY,0);
+    private PID speedY = new PID(kpY,kiY,kdY,ksRat,maxIRat,0);
     public Map<String, Double> getPIDX(){
         HashMap<String, Double> pidX = new HashMap<>();
         pidX.put("P",speedX.getP());
@@ -205,13 +204,13 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.voltage = robot.voltageSensorPoint.getVol();
 
 
-        this.speedH.setCoeficent(kpRat,kiRat,kdRat,ksRat,maxIRat,kg);
-        this.speedX.setCoeficent(kpX,kiX,kdX,ksX,maxIX,kg);
-        this.speedY.setCoeficent(kpY,kiY,kdY,ksY,maxIY,kg);
+        this.speedH.setCoeficent(kpRat,kiRat,kdRat,ksRat,maxIRat,0);
+        this.speedX.setCoeficent(kpX,kiX,kdX,ksX,maxIX,0);
+        this.speedY.setCoeficent(kpY,kiY,kdY,ksY,maxIY,0);
 
 
         powerH = moveRat(targetH);
-        powerX = moveX(vector.getX());
+        powerX = moveX(vector.getX())*kSlide;
         powerY = moveY(vector.getY());
 
         if (Math.abs(powerH) < 0.015){

@@ -3,17 +3,19 @@ package org.woen.team17517.RobotModules.Grabber;
 import com.acmerobotics.dashboard.config.Config;
 
 @Config
-public enum GrabberOpenClosePosition {
+public enum BackWallTarget {
     OPEN,CLOSE;
-    public static double open;
-    public static double close;
+    public static double openValue = 0.5;
+    public static double closeValue = 0.5;
     public double get(){
         switch (this){
-            case CLOSE:
-                return close;
-            default:
             case OPEN:
-                return open;
+                return openValue;
+            case CLOSE:
+                return closeValue;
+            default:
+                return -1;
         }
+
     }
 }

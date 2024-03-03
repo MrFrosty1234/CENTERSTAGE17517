@@ -63,9 +63,9 @@ public class DriveTrain implements RobotModule{
     public static double u_max = 2000;
 
 
-    private PID pidX = new PID(kPX,kIX,kDX,0,ImaxX);
-    private PID pidY = new PID(kPY,kIY,kDY,0,ImaxY);
-    private PID pidH = new PID(kPH,kIH,kDH,0,ImaxH);
+    private PID pidX = new PID(kPX,kIX,kDX,0,ImaxX,0);
+    private PID pidY = new PID(kPY,kIY,kDY,0,ImaxY,0);
+    private PID pidH = new PID(kPH,kIH,kDH,0,ImaxH,0);
     public static double kt = 5;
 
     HashMap<String,Double> positionMap = new HashMap<>();
