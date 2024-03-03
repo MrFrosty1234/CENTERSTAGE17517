@@ -10,6 +10,9 @@ import org.woen.team18742.Modules.Manager.Module;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.PIDF;
+import org.woen.team18742.Tools.Timers.Timer;
+
+import java.sql.Time;
 
 @Module
 public class Lift implements IRobotModule {
@@ -47,7 +50,7 @@ public class Lift implements IRobotModule {
 
     @Override
     public void Update() {
-        _liftPIDF.UpdateCoefs(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef,Configs.LiftPid.GCoef,0);
+        _liftPIDF.UpdateCoefs(Configs.LiftPid.PCoef, Configs.LiftPid.ICoef, Configs.LiftPid.DCoef, Configs.LiftPid.GCoef, 0);
 
         _endingUpState = _endSwitchUp.getState();
         _endingDownState = _endswitchDown.getState();
@@ -57,14 +60,14 @@ public class Lift implements IRobotModule {
         else if (!_intake.IsTurnNormal() && Math.abs(Configs.Lift.TurnPos - _liftMotor.getCurrentPosition()) < 60)
             _liftMotor.setPower(Math.max(_liftPIDF.Update(Configs.Lift.TurnPos - _liftMotor.getCurrentPosition()), Configs.LiftPid.DOWN_MOVE_POWER));
         else {
-            if (!_endingDownState) {
-                if(isTurnPosPassed())
+            if (_endingDownState)
+                _liftMotor.setPower(Configs.LiftPid.DOWN_AT_TARGET_POWER);
+            else {
+                if (isTurnPosPassed())
                     _liftMotor.setPower(Math.min(Configs.LiftPid.DOWN_MOVE_POWER * (_liftMotor.getCurrentPosition() / 580d), Configs.LiftPid.DOWN_MOVE_POWER));
                 else
                     _liftMotor.setPower(Configs.LiftPid.DOWN_MOVE_POWER_FAST);
             }
-            else
-                _liftMotor.setPower(Configs.LiftPid.DOWN_AT_TARGET_POWER);
         }
 
         if (_endingDownState)
@@ -72,11 +75,11 @@ public class Lift implements IRobotModule {
     }
 
     public boolean isATarget() {
-        return (_liftPose == LiftPose.UP && _endingUpState) || (_liftPose == LiftPose.DOWN && _endingDownState) || ((_liftPose == LiftPose.MIDDLE_LOWER || _liftPose == LiftPose.MIDDLE_UPPER) && Math.abs(_liftPIDF.Err) < 100);
+        return (_liftPose == LiftPose.UP && _endingUpState) || ((_liftPose == LiftPose.MIDDLE_LOWER || _liftPose == LiftPose.MIDDLE_UPPER) && Math.abs(_liftPIDF.Err) < 100) || (_liftPose == LiftPose.DOWN && _endingDownState);
     }
 
     public boolean isDown() {
-        return _liftPose == LiftPose.DOWN && _endingDownState;
+        return _liftPose == LiftPose.DOWN && isATarget();
     }
 
     public boolean isUp() {
@@ -97,9 +100,14 @@ public class Lift implements IRobotModule {
     @Override
     public void Start() {
         _liftPIDF.Start();
+        _liftPIDF.Update(0);
+        _liftPose = LiftPose.UP;
+        _kostilTimer.Start(15, ()->_liftPose = LiftPose.DOWN);
     }
 
-    public boolean isTurnPosPassed(){
+    private Timer _kostilTimer = new Timer();
+
+    public boolean isTurnPosPassed() {
         return _liftMotor.getCurrentPosition() > Configs.Lift.TurnPos;
     }
 

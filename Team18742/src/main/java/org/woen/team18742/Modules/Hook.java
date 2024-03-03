@@ -10,11 +10,12 @@ import org.woen.team18742.Modules.Brush.Brush;
 import org.woen.team18742.Modules.Brush.StaksBrush;
 import org.woen.team18742.Modules.Manager.IRobotModule;
 import org.woen.team18742.Modules.Manager.Module;
+import org.woen.team18742.Modules.Manager.TeleopModule;
 import org.woen.team18742.Tools.Configs.Configs;
 import org.woen.team18742.Tools.Devices;
 import org.woen.team18742.Tools.Timers.Timer;
 
-@Module
+@TeleopModule
 public class Hook implements IRobotModule {
     private Servo _hookServoLeft;
     private Servo _hookServoRight;

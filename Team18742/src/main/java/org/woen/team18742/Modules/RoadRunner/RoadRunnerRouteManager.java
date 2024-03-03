@@ -245,7 +245,7 @@ public class RoadRunnerRouteManager implements IRobotModule {
     }
 
     private MyTrajectoryBuilder ActionBuilder(Pose2d beginPose) {
-        return new MyTrajectoryBuilder(new TrajectoryActionBuilder(TrajectoryAction::new, TrajectoryAction::new, beginPose, 1e-6, 0.0, _turnConstraints, _velConstraint, _accelConstraint, 0.2, 0.1));
+        return new MyTrajectoryBuilder(new TrajectoryActionBuilder(TrajectoryAction::new, TrajectoryAction::new, beginPose, 1e-6, 0.0, _turnConstraints, _velConstraint, _accelConstraint, 0.3, 0.1));
     }
 
     public final class MyTrajectoryBuilder {

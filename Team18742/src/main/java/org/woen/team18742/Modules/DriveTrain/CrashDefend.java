@@ -45,7 +45,7 @@ public class CrashDefend implements IRobotModule {
 
     @Override
     public void LastUpdate() {
-        if(!_isDisable) {
+        if(false) {
             Square robot = new Square(
                     Vector2.Plus(_odometry.Position,
                             new Vector2(Configs.DriveTrainWheels.WheelsRadius, Configs.DriveTrainWheels.WheelsRadius).Turn(_gyro.GetRadians())),
