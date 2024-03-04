@@ -79,7 +79,7 @@ public class Manual implements IRobotModule {
         if (brushOn) {
             if (!_brush.isBrusnOn()) {
                 _brush.BrushEnable();
-                _gamepad.rumble(500);
+                _gamepad.rumble(300);
             }
         } else if (brushReverseAndOff) {
             _brush.BrushDisable();
