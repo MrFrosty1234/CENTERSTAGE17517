@@ -85,9 +85,9 @@ public abstract class TeleOPBase extends LinearOpMode {
             else               robot.brush.off();
 
 
-            if(liftDownMan)                                          robot.lift.setSpeed(-2000);
-            else if (liftUpMan)                                      robot.lift.setSpeed(2000);
-            else if (robot.lift.getLiftMode()==LiftMode.MANUALLIMIT) robot.lift.setSpeed(0);
+            if(liftDownMan)                                          ;
+            else if (liftUpMan)                                      ;
+            else if (robot.lift.getLiftMode()==LiftMode.MANUALLIMIT) ;
 
             robot.allUpdate();
         }

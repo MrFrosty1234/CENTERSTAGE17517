@@ -3,6 +3,7 @@ package org.woen.team17517.RobotModules.Grabber;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.Button;
 import org.woen.team17517.Service.RobotModule;
 
 public class PixelsCount implements RobotModule {
@@ -23,8 +24,10 @@ public class PixelsCount implements RobotModule {
         return up;
     }
     private void  updatePixelsCount(){
-        up = upSensor.getVoltage() < 0.5;
+        up = upSensor.getVoltage() < 0.4;
     }
+    Button but = new Button();
+    double startTime = System.currentTimeMillis();
     public void update(){
         upVolt = upSensor.getVoltage();
         updatePixelsCount();

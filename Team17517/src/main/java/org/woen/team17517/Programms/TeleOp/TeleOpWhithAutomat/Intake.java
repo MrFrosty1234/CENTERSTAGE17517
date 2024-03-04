@@ -28,19 +28,19 @@ public class Intake implements RobotModule {
     public void off(){
         isOn = false;
     }
-    public void setSituation(Situation situation) {
-        this.situation = situation;
+    public void setState(State state) {
+        this.state = state;
     }
 
-    public Situation getSituation() {
-        return situation;
+    public State getState() {
+        return state;
     }
 
-    Situation situation = Situation.WAITINGUP;
+    State state = State.WAITINGDOWN;
     private double startTime = System.currentTimeMillis();
     public void update(){
         if (isOn) {
-            switch (situation) {
+            switch (state) {
                 case EATING:
                     grabber.backWallClose();
                     grabber.open();
@@ -49,40 +49,46 @@ public class Intake implements RobotModule {
                         brush.in();
                     }else{
                         startTime = System.currentTimeMillis();
-                        situation = Situation.REVERSINGAFTEREATING;
+                        state = State.REVERSINGAFTEREATING;
                     }
                     break;
                 case REVERSINGAFTEREATING:
-                    grabber.close();
+                    if(System.currentTimeMillis() - startTime<1000) {
+                        grabber.close();
+                    }
                     if(System.currentTimeMillis() - startTime < 1500)
                         brush.out();
                     else {
                         startTime = System.currentTimeMillis();
                         brush.off();
-                        situation = Situation.WAITINGDOWN;
+                        state = State.WAITINGDOWN;
                     }
                     break;
                 case WAITINGDOWN:
                     lift.moveDown();
                     brush.off();
+                    grabber.down();
                     grabber.close();
                     grabber.backWallClose();
                     break;
                 case WAITINGBACKDROPDOWN:
                     lift.moveBackDropDown();
                     grabber.finish();
-                    grabber.open();
+                    grabber.close();
                     grabber.backWallClose();
                 case WAITINGUP:
                     lift.moveUP();
                     grabber.finish();
-                    grabber.open();
+                    grabber.close();
                     grabber.backWallClose();
                     break;
                 case SCORING:
                     grabber.finish();
                     grabber.open();
                     grabber.backWallOpen();
+                    if (!pixelsCount.isPixels()){
+                        state = State.WAITINGDOWN;
+                    }
                     break;
 
             }

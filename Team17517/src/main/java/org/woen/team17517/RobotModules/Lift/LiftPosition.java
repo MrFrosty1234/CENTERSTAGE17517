@@ -5,9 +5,9 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public enum LiftPosition {
     DOWN,UP,BACKDROPDOWN;
-    public static int down;
-    public static int up;
-    public static int backdropdown;
+    public static int down = 0;
+    public static int up = 905;
+    public static int backdropdown = 450;
     public int get(){
         switch (this){
             default:

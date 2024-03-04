@@ -42,13 +42,12 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("cleanPos", robot.lift.getCleanPosition());
             telemetry.addData("lift mode", robot.lift.getLiftMode());
             telemetry.addData("pos", robot.lift.getPosition());
-            telemetry.addData("liftTarget", robot.lift.getTargetPosition());
+            telemetry.addData("liftTarget", robot.lift.getTargetPosition().get());
             telemetry.addData("isAtPosition", robot.lift.isAtPosition());
             telemetry.addData("buttonDown", robot.lift.getDownSwitch());
             telemetry.addData("buttonUp", robot.lift.getUpSwitch());
-            telemetry.addData("speed",robot.lift.getSpeed());
-            telemetry.addData("speedForPid",robot.lift.getPidPosInputForPid());
-            telemetry.addData("targetSpeed",robot.lift.getTargetSpeed());
+            telemetry.addData("Current", robot.lift.getCurent());
+            telemetry.addData("speedForPid",robot.lift.getPower());
         }
         if (opticalSensor){
             telemetry.addData("PixelsIn",robot.pixelsCount.isPixels());

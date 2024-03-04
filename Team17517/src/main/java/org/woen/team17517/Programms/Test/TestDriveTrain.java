@@ -18,12 +18,7 @@ public class TestDriveTrain extends LinearOpMode {
         robot = new UltRobot(this);
         waitForStart();
         while (opModeIsActive()){
-            robot.updateWhilePositionFalse(new Runnable[]{
-                    () -> robot.driveTrain.moveGlobal(x,y,h),
-                    () -> robot.timer.getTimeForTimer(1),
-                    () -> robot.driveTrain.moveGlobal(-x,-y,-h),
-                    () -> robot.timer.getTimeForTimer(1),
-            });
+            robot.lighting.smooth();
             robot.allUpdate();
         }
     }

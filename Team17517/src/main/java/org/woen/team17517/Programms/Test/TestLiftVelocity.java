@@ -17,14 +17,10 @@ public class TestLiftVelocity extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()){
             robot.updateWhilePositionFalse(new Runnable[]{
-                    () -> robot.lift.setSpeed(x),
-                    () -> robot.timer.getTimeForTimer(0.5),
-                    () -> robot.lift.setSpeed(0),
+                    () -> robot.lift.moveUP(),
                     () -> robot.timer.getTimeForTimer(1),
-                    () -> robot.lift.setSpeed(-x),
-                    () -> robot.timer.getTimeForTimer(0.5),
-                    () -> robot.lift.setSpeed(0),
-                    () -> robot.timer.getTimeForTimer(1),
+                    () -> robot.lift.moveBackDropDown(),
+                    () -> robot.timer.getTimeForTimer(1)
             });
             robot.allUpdate();
         }

@@ -16,7 +16,7 @@ public  class PID {
         this.kd = kd;
         this.ks = ks;
         this.maxI = maxI;
-        this.kg =kg;
+        this.kg = kg;
     }
     private double timeOld = System.nanoTime();
     private Double deltaTime = null;

@@ -1,5 +1,5 @@
 package org.woen.team17517.Programms.TeleOp.TeleOpWhithAutomat;
 
-public enum Situation {
+public enum State {
     EATING,WAITINGDOWN,REVERSINGAFTEREATING,WAITINGUP,WAITINGBACKDROPDOWN,SCORING
 }
