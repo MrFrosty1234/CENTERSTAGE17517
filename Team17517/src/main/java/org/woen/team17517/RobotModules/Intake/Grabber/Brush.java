@@ -1,6 +1,6 @@
-package org.woen.team17517.RobotModules.Grabber;
+package org.woen.team17517.RobotModules.Intake.Grabber;
 
-import static org.woen.team17517.RobotModules.Grabber.BrushMode.*;
+import static org.woen.team17517.RobotModules.Intake.Grabber.BrushMode.*;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 

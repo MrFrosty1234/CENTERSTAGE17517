@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
 import org.woen.team17517.RobotModules.EndGame.Plane;
-import org.woen.team17517.RobotModules.Grabber.Brush;
-import org.woen.team17517.RobotModules.Grabber.GrabberNew;
-import org.woen.team17517.RobotModules.Grabber.PixelsCount;
-import org.woen.team17517.RobotModules.Lift.Lift;
+import org.woen.team17517.RobotModules.Intake.Grabber.Brush;
+import org.woen.team17517.RobotModules.Intake.Grabber.GrabberNew;
+import org.woen.team17517.RobotModules.Intake.Grabber.PixelsCount;
+import org.woen.team17517.RobotModules.Intake.Lift.Lift;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.Navigative.Gyro;
 import org.woen.team17517.RobotModules.Navigative.OdometryNew;
@@ -22,7 +22,7 @@ import org.woen.team17517.Service.VoltageSensorPoint;
 
 import org.woen.team17517.Devices.Hardware;
 
-import org.woen.team17517.Programms.TeleOp.TeleOpWhithAutomat.Intake;
+import org.woen.team17517.RobotModules.Intake.Intake;
 
 
 public class UltRobot {

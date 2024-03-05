@@ -1,9 +1,9 @@
-package org.woen.team17517.Programms.TeleOp.TeleOpWhithAutomat;
+package org.woen.team17517.RobotModules.Intake;
 
-import org.woen.team17517.RobotModules.Grabber.Brush;
-import org.woen.team17517.RobotModules.Grabber.GrabberNew;
-import org.woen.team17517.RobotModules.Grabber.PixelsCount;
-import org.woen.team17517.RobotModules.Lift.Lift;
+import org.woen.team17517.RobotModules.Intake.Grabber.Brush;
+import org.woen.team17517.RobotModules.Intake.Grabber.GrabberNew;
+import org.woen.team17517.RobotModules.Intake.Grabber.PixelsCount;
+import org.woen.team17517.RobotModules.Intake.Lift.Lift;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 
@@ -53,9 +53,7 @@ public class Intake implements RobotModule {
                     }
                     break;
                 case REVERSINGAFTEREATING:
-                    if(System.currentTimeMillis() - startTime<1000) {
-                        grabber.close();
-                    }
+                    grabber.close();
                     if(System.currentTimeMillis() - startTime < 1500)
                         brush.out();
                     else {
@@ -76,6 +74,7 @@ public class Intake implements RobotModule {
                     grabber.finish();
                     grabber.close();
                     grabber.backWallClose();
+                    break;
                 case WAITINGUP:
                     lift.moveUP();
                     grabber.finish();

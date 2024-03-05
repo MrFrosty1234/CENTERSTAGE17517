@@ -1,6 +1,6 @@
-package org.woen.team17517.Programms.TeleOp.TeleOpWhithAutomat;
+package org.woen.team17517.Programms.TeleOp;
 
-import static org.woen.team17517.Programms.TeleOp.TeleOpWhithAutomat.State.*;
+import static org.woen.team17517.RobotModules.Intake.State.*;
 
 import static java.lang.Math.abs;
 

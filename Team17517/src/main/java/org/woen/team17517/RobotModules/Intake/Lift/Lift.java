@@ -1,9 +1,5 @@
-package org.woen.team17517.RobotModules.Lift;
+package org.woen.team17517.RobotModules.Intake.Lift;
 
-import static org.woen.team17517.RobotModules.Lift.LiftMode.AUTO;
-import static org.woen.team17517.RobotModules.Lift.LiftPosition.BACKDROPDOWN;
-import static org.woen.team17517.RobotModules.Lift.LiftPosition.DOWN;
-import static org.woen.team17517.RobotModules.Lift.LiftPosition.UP;
 import static java.lang.Math.abs;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -16,8 +12,6 @@ import org.woen.team17517.Service.Button;
 import org.woen.team17517.Service.PID;
 import org.woen.team17517.Service.RobotModule;
 
-import java.util.Objects;
-
 
 @Config
 public class Lift implements RobotModule {
@@ -25,13 +19,13 @@ public class Lift implements RobotModule {
     private DigitalChannel buttonUp;
     private DigitalChannel buttonDown;
     private double voltage;
-    private LiftPosition targetPosition = DOWN;
+    private LiftPosition targetPosition = LiftPosition.DOWN;
     private double targetSpeed = 0;
     public LiftPosition getTargetPosition(){
         return targetPosition;
     }
     private void setTargetPosition(LiftPosition targetPosition){this.targetPosition = targetPosition;}
-    private LiftMode liftMode = AUTO;
+    private LiftMode liftMode = LiftMode.AUTO;
     public LiftMode getLiftMode(){
         return liftMode;
     }
@@ -63,16 +57,16 @@ public class Lift implements RobotModule {
     }
 
     public void moveUP(){
-        setTargetPosition(UP);
-        setLiftMode(AUTO);
+        setTargetPosition(LiftPosition.UP);
+        setLiftMode(LiftMode.AUTO);
     }
     public void moveDown(){
-        setTargetPosition(DOWN);
-        setLiftMode(AUTO);
+        setTargetPosition(LiftPosition.DOWN);
+        setLiftMode(LiftMode.AUTO);
     }
     public void moveBackDropDown(){
-        setTargetPosition(BACKDROPDOWN);
-        setLiftMode(AUTO);
+        setTargetPosition(LiftPosition.BACKDROPDOWN);
+        setLiftMode(LiftMode.AUTO);
     }
 
     private int encoderError  = 0;
@@ -86,7 +80,7 @@ public class Lift implements RobotModule {
         if (getUpSwitch()){
             encoderError = liftMotor.getCurrentPosition() - LiftPosition.UP.get();
         }if (buttonDown.getState()){
-            encoderError = liftMotor.getCurrentPosition() - DOWN.get();
+            encoderError = liftMotor.getCurrentPosition() - LiftPosition.DOWN.get();
         }
     }
 
@@ -99,7 +93,7 @@ public class Lift implements RobotModule {
         updatePosition();
         pid.setCoeficent(kp, ki, kd, 0, maxI, kg);
         voltage = robot.voltageSensorPoint.getVol();
-        if (targetPosition != DOWN) {
+        if (targetPosition != LiftPosition.DOWN) {
             power = pid.pid(targetPosition.get(), getPosition(), voltage);
             liftAtTarget = abs(targetPosition.get() - getPosition()) < 5;
         } else {

@@ -2,8 +2,8 @@ package org.woen.team17517.Programms.TeleOp;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.woen.team17517.RobotModules.Lift.LiftMode;
-import org.woen.team17517.RobotModules.Lift.LiftPosition;
+import org.woen.team17517.RobotModules.Intake.Lift.LiftMode;
+import org.woen.team17517.RobotModules.Intake.Lift.LiftPosition;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
 import org.woen.team17517.Service.TelemetryOutput;

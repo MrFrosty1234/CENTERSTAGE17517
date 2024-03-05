@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules.Lift;
+package org.woen.team17517.RobotModules.Intake.Lift;
 
 import com.acmerobotics.dashboard.config.Config;
 

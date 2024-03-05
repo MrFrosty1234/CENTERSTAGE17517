@@ -1,4 +1,4 @@
-package org.woen.team17517.RobotModules.Grabber;
+package org.woen.team17517.RobotModules.Intake.Grabber;
 
 import com.acmerobotics.dashboard.config.Config;
 
