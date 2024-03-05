@@ -1,5 +1,6 @@
 package org.woen.team17517.RobotModules.Intake;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team17517.RobotModules.Intake.Grabber.Brush;
 import org.woen.team17517.RobotModules.Intake.Grabber.GrabberNew;
 import org.woen.team17517.RobotModules.Intake.Grabber.PixelsCount;
@@ -37,30 +38,34 @@ public class Intake implements RobotModule {
     }
 
     State state = State.WAITINGDOWN;
-    private double startTime = System.currentTimeMillis();
+    private double startaReversTime = System.currentTimeMillis();
+    private double startBrushTime = System.currentTimeMillis();
     public void update(){
         if (isOn) {
             switch (state) {
+                case SAVEBRUSH:
+                    if(System.currentTimeMillis() - startBrushTime < 1000) brush.out();
+                    else                                                   state = State.EATING;
+                    break;
                 case EATING:
                     grabber.backWallClose();
                     grabber.open();
                     grabber.down();
+                    if (robot.hardware.intakeAndLiftMotors.brushMotor.getCurrent(CurrentUnit.AMPS) > 0.9){
+                        startBrushTime = System.currentTimeMillis();
+                        state = state.SAVEBRUSH;
+                    }
                     if(!pixelsCount.isPixels()){
                         brush.in();
                     }else{
-                        startTime = System.currentTimeMillis();
+                        startaReversTime = System.currentTimeMillis();
                         state = State.REVERSINGAFTEREATING;
                     }
                     break;
                 case REVERSINGAFTEREATING:
                     grabber.close();
-                    if(System.currentTimeMillis() - startTime < 1500)
-                        brush.out();
-                    else {
-                        startTime = System.currentTimeMillis();
-                        brush.off();
-                        state = State.WAITINGDOWN;
-                    }
+                    if(System.currentTimeMillis() - startaReversTime < 1500) brush.out();
+                    else                                                     state = State.WAITINGDOWN;
                     break;
                 case WAITINGDOWN:
                     lift.moveDown();
@@ -85,11 +90,8 @@ public class Intake implements RobotModule {
                     grabber.finish();
                     grabber.open();
                     grabber.backWallOpen();
-                    if (!pixelsCount.isPixels()){
-                        state = State.WAITINGDOWN;
-                    }
+                    if (!pixelsCount.isPixels()) state = State.WAITINGDOWN;
                     break;
-
             }
         }
     }
