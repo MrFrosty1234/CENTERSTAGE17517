@@ -44,7 +44,7 @@ public class PipeLine implements VisionProcessor {
 
     public static double hBlueDown = 20;
     public static double cBlueDown = 130;
-    public static double vBlueDowm = 150;
+    public static double vBlueDowm = 100;
     public static double hBlueUp = 140;
     public static double cBlueUp = 255;
     public static double vBlueUp = 255;
