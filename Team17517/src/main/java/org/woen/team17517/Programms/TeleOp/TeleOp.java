@@ -6,6 +6,7 @@ import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -39,6 +40,7 @@ public class TeleOp extends LinearOpMode {
             aim         = gamepad1.circle;
             shoot       = gamepad1.square;
 
+            robot.lighting.lightMode = Lighting.LightningMode.ON;
 
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
 
