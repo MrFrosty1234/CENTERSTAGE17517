@@ -38,7 +38,9 @@ public class AutonomCameraBlueNear extends LinearOpMode {
                             () -> autnomModules.move(0, 22000, 0, 0.5),
                             () -> autnomModules.move(0, 0, -12000, 1.15),
                             () -> autnomModules.move(-8000, -30000, 0, 2.3),
-                            () -> autnomModules.move(0, 30000, 0, 0.5)
+                            () -> autnomModules.move(0, 30000, 0, 0.5),
+                            () -> autnomModules.move(30000, 0, 0, 0.6),
+                            () -> autnomModules.move(0, 40000, 0, 1.6),
                     }
 
             );
@@ -47,8 +49,10 @@ public class AutonomCameraBlueNear extends LinearOpMode {
                             () -> autnomModules.move(0, -40000, 0, 0.9),
                             () -> autnomModules.move(10000, 30000, 0, 0.5),
                             () -> autnomModules.move(0, 0, -12000, 1),
-                            () -> autnomModules.move(-3000, -30000, 0, 2.8),
+                            () -> autnomModules.move(-3000, -33000, 0, 2.8),
                             () -> autnomModules.move(0, 30000, 0, 0.5),
+                            () -> autnomModules.move(-30000, 0, 0, 1),
+                            () -> autnomModules.move(0, 80000, 0, 2),
 
                     }
             );

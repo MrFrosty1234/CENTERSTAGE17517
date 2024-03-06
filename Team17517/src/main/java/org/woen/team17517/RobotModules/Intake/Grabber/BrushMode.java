@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public enum BrushMode {
     IN,OUT,OFF;
-    public static double in = 0.8;
+    public static double in = 1;
     public static double out = -0.5;
     public static double of = 0;
     public double get(){
