@@ -16,7 +16,5 @@ public class Brush implements RobotModule{
     public void in(){target = IN;}
     public void out(){target = OUT;}
     public void off(){target = OFF;}
-    public void update(){
-        motor.setPower(target.get());
-    }
+    public void update(){motor.setPower(target.get());}
 }

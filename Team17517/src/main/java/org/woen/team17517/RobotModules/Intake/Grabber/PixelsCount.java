@@ -14,7 +14,7 @@ public class PixelsCount implements RobotModule {
     }
     private boolean pixelIn;
     public boolean isPixels() {
-        return pixelIn && System.currentTimeMillis()-startTime>500;
+        return pixelIn && System.currentTimeMillis()-startTime>1200;
     }
     private void updatePixelsCount(){
         pixelIn = sensor.getVoltage() < 0.4;

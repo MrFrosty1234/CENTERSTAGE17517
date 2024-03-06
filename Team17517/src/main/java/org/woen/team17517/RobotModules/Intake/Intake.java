@@ -51,7 +51,7 @@ public class Intake implements RobotModule {
                     grabber.backWallClose();
                     grabber.open();
                     grabber.down();
-                    if (robot.hardware.intakeAndLiftMotors.brushMotor.getCurrent(CurrentUnit.AMPS) > 0.9){
+                    if (robot.hardware.intakeAndLiftMotors.brushMotor.getCurrent(CurrentUnit.AMPS) > 4){
                         startBrushTime = System.currentTimeMillis();
                         state = state.SAVEBRUSH;
                     }
@@ -76,12 +76,14 @@ public class Intake implements RobotModule {
                     break;
                 case WAITINGBACKDROPDOWN:
                     lift.moveBackDropDown();
+                    brush.off();
                     grabber.finish();
                     grabber.close();
                     grabber.backWallClose();
                     break;
                 case WAITINGUP:
                     lift.moveUP();
+                    brush.off();
                     grabber.finish();
                     grabber.close();
                     grabber.backWallClose();
@@ -90,7 +92,9 @@ public class Intake implements RobotModule {
                     grabber.finish();
                     grabber.open();
                     grabber.backWallOpen();
-                    if (!pixelsCount.isPixels()) state = State.WAITINGDOWN;
+                    if (!pixelsCount.isPixels()) {
+                        state = State.WAITINGDOWN;
+                    }
                     break;
             }
         }

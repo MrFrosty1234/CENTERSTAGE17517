@@ -46,6 +46,7 @@ public class GrabberNew implements RobotModule {
         return backWallTarget;
     }
     public void openPurplePixel(){autonomServoTarget = PurplePixelServo.OPEN;}
+    public void closePurplePixel(){autonomServoTarget = PurplePixelServo.CLOSE;}
     private void closePurplepIxel(){autonomServoTarget = PurplePixelServo.CLOSE;}
     private BackWallTarget backWallTarget = BackWallTarget.CLOSE;
     private GrabberPosition progibTarget = GrabberPosition.DOWN;

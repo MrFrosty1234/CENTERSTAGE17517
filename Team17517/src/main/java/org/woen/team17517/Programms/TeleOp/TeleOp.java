@@ -36,7 +36,7 @@ public class TeleOp extends LinearOpMode {
             openGrabber = gamepad1.left_bumper;
             liftUp      = gamepad1.dpad_up;
             liftCentre  = gamepad1.dpad_down;
-            liftDown    = gamepad1.cross;
+            liftDown    = gamepad1.right_stick_button;
             aim         = gamepad1.circle;
             shoot       = gamepad1.square;
 
@@ -49,7 +49,7 @@ public class TeleOp extends LinearOpMode {
             if (liftUp)      robot.intake.setState(WAITINGUP);
             if (liftCentre)  robot.intake.setState(WAITINGBACKDROPDOWN);
             if (liftDown)    robot.intake.setState(WAITINGDOWN);
-            if(aim)          robot.plane.aim();
+            if (aim)          robot.plane.aim();
             if (shoot)       robot.plane.shoot();
             telemetry.addLine(robot.intake.getState().toString());
             robot.allUpdate();

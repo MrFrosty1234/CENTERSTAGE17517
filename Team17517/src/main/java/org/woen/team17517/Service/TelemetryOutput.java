@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team17517.RobotModules.UltRobot;
 
 import java.util.HashMap;
@@ -55,6 +56,7 @@ public class TelemetryOutput implements RobotModule {
         if (grabber){
             telemetry.addData("GrabberProgibTarget",robot.grabber.getProgibTarget());
             telemetry.addData("GrabberTargetOpenClose",robot.grabber.getOpenCloseTarget());
+            telemetry.addData("BrushCurrent", robot.hardware.intakeAndLiftMotors.brushMotor.getCurrent(CurrentUnit.AMPS));
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.driveTrain.getTargets();

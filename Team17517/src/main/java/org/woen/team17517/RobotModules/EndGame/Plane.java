@@ -14,7 +14,7 @@ public class Plane{
     }
 
     public static double aimPos = 0.35;
-    public static double startPos = 0.9;
+    public static double startPos = 1;
     public static double notStartPose = 0;
     public static double notAimedPos = 0;
 

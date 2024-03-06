@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 public enum PurplePixelServo {
     OPEN, CLOSE;
     public static double openServo = 0;
-    public static double closeSevo = 0.5;
+    public static double closeSevo = 1;
     public double get(){
         switch (this){
             case OPEN:
