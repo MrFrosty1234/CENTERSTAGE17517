@@ -17,7 +17,7 @@ import org.woen.team17517.Service.RobotModule;
 public class Lift implements RobotModule {
     private DcMotorEx liftMotor;
     private DigitalChannel buttonUp;
-    private DigitalChannel buttonDown;
+    public DigitalChannel buttonDown;
     private double voltage;
     private LiftPosition targetPosition = LiftPosition.DOWN;
     private double targetSpeed = 0;
@@ -45,6 +45,7 @@ public class Lift implements RobotModule {
         liftMotor = robot.hardware.intakeAndLiftMotors.liftMotor;
         buttonUp = robot.hardware.sensors.buttonUp;
         buttonDown = robot.hardware.sensors.buttonDown;
+        encoderError = liftMotor.getCurrentPosition()-LiftPosition.UP.get();
         voltage = 12;
     }
     Button down = new Button();
@@ -58,19 +59,20 @@ public class Lift implements RobotModule {
 
     public void moveUP(){
         setTargetPosition(LiftPosition.UP);
-        setLiftMode(LiftMode.AUTO);
     }
     public void moveDown(){
         setTargetPosition(LiftPosition.DOWN);
-        setLiftMode(LiftMode.AUTO);
     }
     public void moveBackDropDown(){
         setTargetPosition(LiftPosition.BACKDROPDOWN);
-        setLiftMode(LiftMode.AUTO);
     }
 
-    private int encoderError  = 0;
-    private int encoderPosition = 0;
+    public void moveToMiddle(){
+        setTargetPosition(LiftPosition.MIDDLE);
+    }
+
+    private int encoderError;
+    private int encoderPosition = LiftPosition.DOWN.get();
     public int getPosition() {return encoderPosition;}
     private int cleanPosition = 0;
     public int getCleanPosition() {return cleanPosition;}
@@ -79,7 +81,8 @@ public class Lift implements RobotModule {
         encoderPosition = cleanPosition - encoderError;
         if (getUpSwitch()){
             encoderError = liftMotor.getCurrentPosition() - LiftPosition.UP.get();
-        }if (buttonDown.getState()){
+        }
+        if (getDownSwitch()){
             encoderError = liftMotor.getCurrentPosition() - LiftPosition.DOWN.get();
         }
     }
@@ -93,12 +96,16 @@ public class Lift implements RobotModule {
         updatePosition();
         pid.setCoeficent(kp, ki, kd, 0, maxI, kg);
         voltage = robot.voltageSensorPoint.getVol();
-        if (targetPosition != LiftPosition.DOWN) {
-            power = pid.pid(targetPosition.get(), getPosition(), voltage);
-            liftAtTarget = abs(targetPosition.get() - getPosition()) < 5;
-        } else {
-            liftAtTarget = buttonDown.getState();
-            power =  liftAtTarget?0:-0.25 ;
+        if(getPosition()>-10) {
+            if (targetPosition != LiftPosition.DOWN) {
+                power = pid.pid(targetPosition.get(), getPosition(), voltage);
+                liftAtTarget = abs(targetPosition.get() - getPosition()) < 5;
+            } else {
+                liftAtTarget = buttonDown.getState();
+                power = liftAtTarget ? 0 : -0.4;
+            }
+        }else{
+            power = 0.1;
         }
         setPower(power);
     }

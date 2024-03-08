@@ -65,8 +65,8 @@ public class UltRobot {
         driveTrain = new DriveTrain(this);
         plane = new Plane(this);
 
-        this.robotModules = new RobotModule[]{telemetryOutput,timer, voltageSensorPoint,brush,
-                 driveTrainVelocityControl,intake,lift,grabber,pixelsCount, gyro, lighting,driveTrain,odometry};
+        this.robotModules = new RobotModule[]{driveTrainVelocityControl,odometry,gyro,driveTrain,intake,lift,grabber,brush,
+                pixelsCount,lighting,voltageSensorPoint,telemetryOutput,timer,};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }

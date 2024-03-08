@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 public enum GrabberPosition {
     FINISH,SAFE,DOWN;
     public static double safe = 0.5;
-    public static double down = 0.97;
+    public static double down = 0.98;
     public static double finish = 0.425;
     public double get(){
         switch (this){

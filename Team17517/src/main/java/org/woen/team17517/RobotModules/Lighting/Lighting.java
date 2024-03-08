@@ -1,6 +1,5 @@
 package org.woen.team17517.RobotModules.Lighting;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.woen.team17517.RobotModules.UltRobot;
@@ -9,7 +8,7 @@ import org.woen.team17517.Service.RobotModule;
 public class Lighting implements RobotModule {
 
     public LightningMode lightMode = LightningMode.ON;
-    DcMotor light;
+    DcMotorEx light;
     DcMotorEx light2;
     UltRobot robot;
     public Lighting(UltRobot robot) {
@@ -19,13 +18,12 @@ public class Lighting implements RobotModule {
     }
 
     public void setPower(double x) {
-        light2.setPower(-x);
+        light2.setPower(x);
         light.setPower(-x);
     }
 
-    public void smooth() {
-        double t = System.currentTimeMillis() / 1000.0;
-        setPower((Math.sin(t) + 1) / 2);
+    public void on() {
+        lightMode = LightningMode.ON;
     }
 
 
@@ -37,14 +35,11 @@ public class Lighting implements RobotModule {
             case OFF:
                 setPower(0);
                 break;
-            case SMOOTH:
-                smooth();
-                break;
         }
     }
 
     public enum LightningMode {
-        OFF, ON, SMOOTH
+        OFF, ON
     }
 }
 

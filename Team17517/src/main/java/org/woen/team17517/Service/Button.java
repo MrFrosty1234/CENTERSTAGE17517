@@ -9,7 +9,7 @@ public class Button {
     }
     public boolean update(boolean button){
         now = button;
-        boolean indicator = now != old && now;
+        boolean indicator = (now != old) && now;
         old = now;
         return indicator;
     }

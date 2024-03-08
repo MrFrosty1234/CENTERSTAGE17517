@@ -18,7 +18,7 @@ public class TestDriveTrain extends LinearOpMode {
         robot = new UltRobot(this);
         waitForStart();
         while (opModeIsActive()){
-            robot.lighting.smooth();
+            robot.lighting.on();
             robot.allUpdate();
         }
     }

@@ -13,15 +13,18 @@ public class PixelsCount implements RobotModule {
         sensor =  robot.hardware.sensors.upPixelsSensor;
     }
     private boolean pixelIn;
-    public boolean isPixels() {
-        return pixelIn && System.currentTimeMillis()-startTime>1200;
+    public boolean isPixels(int a) {
+        return pixelIn && System.currentTimeMillis() - startInTime > a;
     }
-    private void updatePixelsCount(){
-        pixelIn = sensor.getVoltage() < 0.4;
+    public boolean isFree(int a){
+        return !pixelIn && System.currentTimeMillis()-startFreeTime>a;
     }
-    private double startTime = System.currentTimeMillis();
+    private void updatePixelsCount(){pixelIn = sensor.getVoltage() < 0.12;}
+    private double startInTime = System.currentTimeMillis();
+    private double startFreeTime = System.currentTimeMillis();
     public void update(){
         updatePixelsCount();
-        if(!pixelIn) startTime = System.currentTimeMillis();
+        if(!pixelIn) startInTime = System.currentTimeMillis();
+        if (pixelIn) startFreeTime = System.currentTimeMillis();
     }
 }

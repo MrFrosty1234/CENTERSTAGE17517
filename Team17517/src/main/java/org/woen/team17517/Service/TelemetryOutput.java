@@ -51,7 +51,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("speedForPid",robot.lift.getPower());
         }
         if (opticalSensor){
-            telemetry.addData("PixelsIn",robot.pixelsCount.isPixels());
+            telemetry.addData("PixelsIn",robot.pixelsCount.isPixels(10000));
         }
         if (grabber){
             telemetry.addData("GrabberProgibTarget",robot.grabber.getProgibTarget());

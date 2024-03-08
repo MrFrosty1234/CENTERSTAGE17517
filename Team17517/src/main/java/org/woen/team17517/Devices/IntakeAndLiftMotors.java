@@ -10,7 +10,8 @@ public class IntakeAndLiftMotors{
     public IntakeAndLiftMotors(HardwareMap hardwareMap){this.hardwareMap = hardwareMap;
         brushMotor = hardwareMap.get(DcMotorEx.class,"intakeMotor");
         liftMotor  = hardwareMap.get(DcMotorEx.class,"liftMotor");
-        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }

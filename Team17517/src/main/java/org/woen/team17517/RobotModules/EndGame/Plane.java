@@ -13,16 +13,28 @@ public class Plane{
         this.robot = robot;
     }
 
-    public static double aimPos = 0.35;
-    public static double startPos = 1;
-    public static double notStartPose = 0;
-    public static double notAimedPos = 0;
+    public static double upPos = 0.35;
+    public static double shootPos = 0.5;
+    public static double downPos = 0.1;
+    public enum PlaneStatus{
+        SHOOT,UP,DOWN
+    }
+    private PlaneStatus status = PlaneStatus.DOWN;
 
-    public void aim(){
-        robot.hardware.planeServos.aimPlaneServo.setPosition(aimPos);
+    public PlaneStatus getStatus() {
+        return status;
+    }
+
+    public void up(){
+        robot.hardware.planeServos.aimPlaneServo.setPosition(upPos);
+        status = PlaneStatus.UP;
     }
     public void shoot(){
-        robot.hardware.planeServos.startPlaneServo.setPosition(startPos);
+        robot.hardware.planeServos.startPlaneServo.setPosition(shootPos);
+        status = PlaneStatus.SHOOT;
     }
-
+    public void down(){
+        robot.hardware.planeServos.aimPlaneServo.setPosition(downPos);
+        status = PlaneStatus.DOWN;
+    }
 }

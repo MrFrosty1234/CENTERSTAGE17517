@@ -38,15 +38,4 @@ public class TeleOpModules {
         robot.grabber.open();
         robot.grabber.backWallOpen();
     }
-    public void eatPixels(){
-        this.liftDownAndOpenGrabber();
-        while(!robot.pixelsCount.isPixels()){
-            robot.brush.in();
-        }
-        robot.grabber.close();
-        robot.updateWhilePositionFalse(new Runnable[]{
-                ()->robot.brush.out(),
-                ()->robot.timer.getTimeForTimer(1)
-        });
-    }
 }
