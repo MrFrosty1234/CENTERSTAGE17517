@@ -26,12 +26,13 @@ public class TeleOp extends LinearOpMode {
         robot = new UltRobot(this);
         waitForStart();
         robot.intake.on();
+        double tStart = System.currentTimeMillis() / 1000.0;
         while (opModeIsActive()){
             forwardSpeed          = -robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.left_stick_y*abs(gamepad1.left_stick_y));
             sideSpeed             = robot.driveTrainVelocityControl.linearVelocityPercent(gamepad1.right_trigger-gamepad1.left_trigger+
                                                                                                 gamepad1.left_stick_x*Math.abs(gamepad1.left_stick_x));
             angleSpeed            = robot.driveTrainVelocityControl.angularVelocityPercent(gamepad1.right_stick_x* abs(gamepad1.right_stick_x))*0.75;
-
+            double tNow = System.currentTimeMillis() / 1000.0;
             eatPixels   = gamepad1.right_bumper;
             openGrabber = gamepad1.left_bumper;
             liftUp      = gamepad1.dpad_up;
@@ -50,7 +51,7 @@ public class TeleOp extends LinearOpMode {
             if (liftDown)    robot.intake.setState(WAITINGDOWN);
             if (planeUp)     robot.plane.up();
             if (planeDown)   robot.plane.down();
-            if (shoot)       robot.plane.shoot();
+            if (shoot && (tNow - tStart) > 90)       robot.plane.shoot();
 
             telemetry.addLine(robot.intake.getState().toString());
             telemetry.addData("Plane",robot.plane.getStatus().toString());

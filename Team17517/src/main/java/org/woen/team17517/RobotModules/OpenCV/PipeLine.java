@@ -33,19 +33,19 @@ public class PipeLine implements VisionProcessor {
     Mat img_range_red1 = new Mat();
     Mat img_range_red2 = new Mat();
     Mat img_range_blue = new Mat();
-    public static double hRedDown1 = 130;
+    public static double hRedDown1 = 160;
     public static double hRedDown2 = 0;
-    public static double cRedDown = 110;
-    public static double vRedDowm = 90;
+    public static double cRedDown = 100;
+    public static double vRedDown = 170;
     public static double hRedUp1 = 180;
-    public static double hRedUp2 = 10;
+    public static double hRedUp2 = 20;
     public static double cRedUp = 255;
-    public static double vRedUp = 180;
+    public static double vRedUp = 255;
 
-    public static double hBlueDown = 20;
-    public static double cBlueDown = 130;
-    public static double vBlueDowm = 100;
-    public static double hBlueUp = 140;
+    public static double hBlueDown = 90;
+    public static double cBlueDown = 230;
+    public static double vBlueDown = 130;
+    public static double hBlueUp = 150;
     public static double cBlueUp = 255;
     public static double vBlueUp = 255;
 
@@ -75,9 +75,9 @@ public class PipeLine implements VisionProcessor {
         new Mat(frame, new Rect(0,0,(int)x,(int)y/2)).copyTo(frame);
 
 
-        inRange(frame, new Scalar(hRedDown1, cRedDown, vRedDowm), new Scalar(hRedUp1, cRedUp, vRedUp), img_range_red1);
-        inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDowm), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
-        inRange(frame, new Scalar(hRedDown2, cRedDown, vRedDowm), new Scalar(hRedUp2, cRedUp, vRedUp), img_range_red2);
+        inRange(frame, new Scalar(hRedDown1, cRedDown, vRedDown), new Scalar(hRedUp1, cRedUp, vRedUp), img_range_red1);
+        inRange(frame, new Scalar(hBlueDown, cBlueDown, vBlueDown), new Scalar(hBlueUp, cBlueUp, vBlueUp), img_range_blue);
+        inRange(frame, new Scalar(hRedDown2, cRedDown, vRedDown), new Scalar(hRedUp2, cRedUp, vRedUp), img_range_red2);
 
         Core.bitwise_or(img_range_red2,img_range_red1,img_range_red);
         Core.bitwise_or(img_range_red,img_range_blue,frame);

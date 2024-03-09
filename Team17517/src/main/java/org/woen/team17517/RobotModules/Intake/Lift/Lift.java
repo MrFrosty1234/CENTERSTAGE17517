@@ -34,7 +34,7 @@ public class Lift implements RobotModule {
     public static double kp = 0.01;
     public static double ki = 0;
     public static double kd = 0;
-    public static double kg = 0.1;
+    public static double kg = 0.13;
     public static double maxI  = 0;
     PID pid = new PID(kp,ki,kd,0,maxI,kg);
     public void setLiftMode(LiftMode mode){
@@ -99,7 +99,7 @@ public class Lift implements RobotModule {
         if(getPosition()>-10) {
             if (targetPosition != LiftPosition.DOWN) {
                 power = pid.pid(targetPosition.get(), getPosition(), voltage);
-                liftAtTarget = abs(targetPosition.get() - getPosition()) < 5;
+                liftAtTarget = abs(targetPosition.get() - getPosition()) < 15;
             } else {
                 liftAtTarget = buttonDown.getState();
                 power = liftAtTarget ? 0 : -0.4;

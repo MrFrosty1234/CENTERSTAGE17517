@@ -23,17 +23,23 @@ public class AutnomModules {
 
         });
     }
+    public void fullHide(){
+        move(0,0,12000,2);
+    }
+    public void halfHide(){
+        move(0,0,12000,1);
+    }
+
     public void scoring() {
         robot.updateWhilePositionFalse(new Runnable[]{
                 () -> robot.intake.setState(State.SCORING),
-                () -> robot.timer.getTimeForTimer(0.2),
+                () -> robot.timer.getTimeForTimer(0.5)
         });
     }
 
     public void backdropLow() {
         robot.updateWhilePositionFalse(new Runnable[]{
                 () -> robot.intake.setState(State.WAITINGBACKDROPDOWN),
-                () -> robot.timer.getTimeForTimer(0.1)
         });
     }
 
