@@ -50,7 +50,7 @@ public class Intake implements RobotModule {
             switch (state) {
                 case SAVEBRUSH:
                     light.on();
-                    if(System.currentTimeMillis() - startSaveTime < 1000) brush.out();
+                    if(System.currentTimeMillis() - startSaveTime < 2000) brush.out();
                     else {
                         startOffDefenseStart = System.currentTimeMillis();
                         state = State.EATING;
@@ -61,9 +61,9 @@ public class Intake implements RobotModule {
                     if((robot.hardware.intakeAndLiftMotors.brushMotor.getCurrent(CurrentUnit.AMPS) > 4) &&
                             System.currentTimeMillis() - startOffDefenseStart > 1000){
                         startSaveTime = System.currentTimeMillis();
-                        state = state.SAVEBRUSH;
+                        state = State.SAVEBRUSH;
                     }
-                    if(pixelsCount.isPixels(1000)){
+                    if(pixelsCount.isPixels(500)){
                         robot.linearOpMode.gamepad1.rumble(400);
                         startReversTime = System.currentTimeMillis();
                         state = State.REVERSINGAFTEREATING;
@@ -118,7 +118,7 @@ public class Intake implements RobotModule {
                         grabber.finish();
                         grabber.open();
                         grabber.backWallOpen();
-                        if (pixelsCount.isFree(500)) {
+                        if (pixelsCount.isFree(1000)) {
                             state = State.WAITINGDOWN;
                         }
                     }else {

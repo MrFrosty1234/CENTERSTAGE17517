@@ -37,13 +37,13 @@ public class AutonomCameraRedNear extends LinearOpMode {
         robot.linearOpMode.telemetry.addData("Pos", pipeLine);
         robot.grabber.closePurplePixel();
         if (pipeLine.pos == 1) {
-            autnomModules.move(0, -28000, 0, 1.05);
-            autnomModules.move(0, -14000, -12000, 0.9);
+            autnomModules.move(0, -28000, 0, 0.9);
+            autnomModules.move(0, -14000, -9000, 0.9);
             autnomModules.move(0, 30000, 0, 0.9);
             robot.grabber.openPurplePixel();
-            autnomModules.move(0, 0, 12000, 2);
+            autnomModules.move(0, 0, 24000, 0.75);
             autnomModules.backdropLow();
-            autnomModules.move(12500, -30000, 0, 2.4);
+            autnomModules.move(15000, -35000, 0, 2.4);
             autnomModules.scoring();
             autnomModules.move(0, 20000, 0, 0.1);
             autnomModules.move(-30000, 0, 0, 1);
@@ -53,20 +53,19 @@ public class AutonomCameraRedNear extends LinearOpMode {
             autnomModules.move(-10500, 30000, 0, 0.5);
             autnomModules.move(0, 0, 12000, 1.1);
             autnomModules.backdropLow();
-            autnomModules.move(8500, -33000, 0, 2.8);
+            autnomModules.move(5000, -33000, 0, 1.8);
             autnomModules.scoring();
-            autnomModules.move(0, 30000, 0, 0.25);
+            autnomModules.move(0, 30000, 0, 0.15);
             autnomModules.move(-30000, 0, 0, 0.9);
         } else if (pipeLine.pos == 3) {
-            autnomModules.move(-9500, -18000, 0, 1.6);
+            autnomModules.move(-19000, -32000, 0, 1.1);
             robot.grabber.openPurplePixel();
             autnomModules.move(0, 22000, 0, 0.5);
-            autnomModules.move(0, 0, 12000, 1.15);
-            autnomModules.bacBoardPixels();
-            autnomModules.move(8000, -30000, 0, 2.3);
+            autnomModules.backdropLow();
+            autnomModules.move(0, 0, 24000, 0.4);
+            autnomModules.move(9000, -32000, 0, 1.3);
             autnomModules.scoring();
-            robot.timer.getTimeForTimer(0.2);
-            autnomModules.move(0, 30000, 0, 0.5);
+            autnomModules.move(0, 30000, 0, 0.2);
             autnomModules.move(-30000, 0, 0, 0.9);
         }
     }

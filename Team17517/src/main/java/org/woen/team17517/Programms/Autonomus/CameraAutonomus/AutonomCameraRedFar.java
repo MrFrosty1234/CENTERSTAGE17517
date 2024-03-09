@@ -12,7 +12,7 @@ import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 
 @Autonomous
-public class AutonomCameraBlueNear extends LinearOpMode {
+public class AutonomCameraRedFar extends LinearOpMode {
     UltRobot robot;
     PipeLine pipeLine;
     AutnomModules autnomModules;
@@ -37,36 +37,18 @@ public class AutonomCameraBlueNear extends LinearOpMode {
         robot.linearOpMode.telemetry.addData("Pos", pipeLine);
         robot.grabber.closePurplePixel();
         if (pipeLine.pos == 1) {
-            autnomModules.move(13000, -30000, 0, 1.1);
+            autnomModules.move(9500, -18000, -10000, 1.6);
             robot.grabber.openPurplePixel();
-            autnomModules.move(0, 22000, 0, 0.5);
-            autnomModules.backdropLow();
-            autnomModules.move(0, 0, -24000, 0.2);
-            autnomModules.move(-3000, -35000, 0, 1.3);
-            autnomModules.scoring();
-            autnomModules.move(0, 30000, 0, 0.2);
-            autnomModules.move(30000, 0, 0, 0.9);
+            autnomModules.move(15000,40000,0,2.4);
         } else if (pipeLine.pos == 2) {
-            autnomModules.move(0, -40000, 0, 0.9);
+            autnomModules.move(0, -40000, -10000, 0.9);
             robot.grabber.openPurplePixel();
-            autnomModules.move(10500, 30000, 0, 0.5);
-            autnomModules.move(0, 0, -12000, 1.1);
-            autnomModules.backdropLow();
-            autnomModules.move(-5000, -33000, 0, 1.8);
-            autnomModules.scoring();
-            autnomModules.move(0, 30000, 0, 0.15);
-            autnomModules.move(-30000, 0, 0, 0.9);
+            autnomModules.move(10000,40000,0,2);
         } else if (pipeLine.pos == 3) {
-            autnomModules.move(0, -28000, 0, 0.9);
-            autnomModules.move(0, -14000, 9000, 0.9);
-            autnomModules.move(0, 30000, 0, 0.9);
+            autnomModules.move(0, -28000, 0, 1.05);
+            autnomModules.move(0, -14000, 12000, 0.9);
+            autnomModules.move(0, 30000, 0, 1.3);
             robot.grabber.openPurplePixel();
-            autnomModules.move(0, 0, -24000, 0.75);
-            autnomModules.backdropLow();
-            autnomModules.move(-16500, -35000, 0, 2.4);
-            autnomModules.scoring();
-            autnomModules.move(0, 20000, 0, 0.1);
-            autnomModules.move(30000, 0, 0, 1);
         }
     }
 }
