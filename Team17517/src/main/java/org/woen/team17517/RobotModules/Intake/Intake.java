@@ -63,7 +63,8 @@ public class Intake implements RobotModule {
                         startSaveTime = System.currentTimeMillis();
                         state = state.SAVEBRUSH;
                     }
-                    if(pixelsCount.isPixels(2000)){
+                    if(pixelsCount.isPixels(1000)){
+                        robot.linearOpMode.gamepad1.rumble(400);
                         startReversTime = System.currentTimeMillis();
                         state = State.REVERSINGAFTEREATING;
                     }else if (lift.buttonDown.getState()){
@@ -117,7 +118,7 @@ public class Intake implements RobotModule {
                         grabber.finish();
                         grabber.open();
                         grabber.backWallOpen();
-                        if (pixelsCount.isFree(2000)) {
+                        if (pixelsCount.isFree(500)) {
                             state = State.WAITINGDOWN;
                         }
                     }else {
