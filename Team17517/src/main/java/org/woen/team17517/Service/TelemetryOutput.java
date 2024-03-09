@@ -139,6 +139,9 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("powerY",powerMap.get("powerY"));
             telemetry.addData("powerX",powerMap.get("powerX"));
             telemetry.addData("powerH",powerMap.get("powerH"));
+            telemetry.addData("targetAngle",robot.driveTrainVelocityControl.getTargetAngle());
+            telemetry.addData("posAngle",robot.driveTrainVelocityControl.getAngle());
+
         }
         telemetry.update();
     }

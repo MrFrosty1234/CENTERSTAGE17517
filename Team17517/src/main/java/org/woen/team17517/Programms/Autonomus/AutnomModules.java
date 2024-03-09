@@ -23,7 +23,6 @@ public class AutnomModules {
 
         });
     }
-
     public void scoring() {
         robot.updateWhilePositionFalse(new Runnable[]{
                 () -> robot.intake.setState(State.SCORING),

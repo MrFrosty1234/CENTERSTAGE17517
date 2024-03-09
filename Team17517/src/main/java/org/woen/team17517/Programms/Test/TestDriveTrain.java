@@ -14,12 +14,17 @@ public class TestDriveTrain extends LinearOpMode {
     public static double y = 0;
     public static double h = 0;
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
         robot = new UltRobot(this);
         waitForStart();
         while (opModeIsActive()){
-            robot.lighting.on();
-            robot.allUpdate();
+            robot.updateWhilePositionFalse(new Runnable[]{
+                    ()->robot.driveTrainVelocityControl.moveAngle(h),
+                    ()->robot.driveTrainVelocityControl.moveWithAngleControl(x,y),
+                    ()->robot.timer.getTimeForTimer(0.5),
+                    ()->robot.driveTrainVelocityControl.moveWithAngleControl(-x,-y),
+                    ()->robot.timer.getTimeForTimer(0.5),
+            });
         }
     }
 }

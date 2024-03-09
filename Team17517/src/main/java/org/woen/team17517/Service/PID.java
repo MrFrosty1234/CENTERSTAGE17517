@@ -30,8 +30,12 @@ public  class PID {
     }
     public double getP(){return P;}
     public double getD(){return D;}
+    private boolean isAngle = false;
+    public void setIsAngle(boolean angle) {isAngle = angle;}
+
     public double pid(double target, double enc, double voltage) {
         double wrong = target - enc;
+        if(isAngle) wrong = Vector2D.getAngleError(wrong);
         P = kp * wrong;
         if (deltaTime != null) {
             I = I + wrong * deltaTime * ki;

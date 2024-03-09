@@ -117,7 +117,7 @@ public class DriveTrain implements RobotModule{
             errY = targetVector.getY() - positionVector.getY();
             errH = targetH - posH;
 
-            while (Math.abs(errH) > 360) {
+            while (Math.abs(errH) > 180) {
                 targetH -= 360 * Math.signum(targetH - posH);
             }
 

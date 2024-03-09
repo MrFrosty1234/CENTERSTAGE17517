@@ -25,7 +25,8 @@ public class Gyro implements RobotModule {
         gyro = robot.linearOpMode.hardwareMap.get(IMU.class,"imu");
         Orientation hubRotation = xyzOrientation(xRotation, yRotation, headingRotation);
 
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(hubRotation);
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot
+                (RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
         gyro.initialize(new IMU.    Parameters(orientationOnRobot));
         reset();
     }
@@ -33,7 +34,7 @@ public class Gyro implements RobotModule {
         gyro.resetYaw();
     }
     public void update(){
-        angle = gyro.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        angle = -gyro.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
     public double getAngle(){
         return angle;

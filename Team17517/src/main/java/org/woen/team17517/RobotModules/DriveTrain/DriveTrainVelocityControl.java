@@ -144,8 +144,10 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.hEnc = (left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
                 right_front_drive.getVelocity() - right_back_drive.getVelocity())/4.0;
     }
+    private double angle = 0;
     private void  odUpdate()
     {
+        angle = robot.odometry.getH();
         this.yEnc = robot.odometry.getVelCleanY();
         this.xEnc = robot.odometry.getVelCleanX();
         this.hEnc = robot.odometry.getVelCleanH();
@@ -177,20 +179,49 @@ public class DriveTrainVelocityControl implements RobotModule {
     public double angularVelocityPercent(double target){
         return target*maxAngleSpeedOd;
     }
+    public static double kpAngle=450;
+    public static double kiAngle=0;
+    public static double kdAngle=0;
+    public static double ksAngle=0;
+    public static double maxIAngle;
+    PID pidAngle = new PID(kpAngle,kiAngle,kdAngle,ksAngle,maxIAngle,0);
+    private double targetAngle = 0;
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public double getTargetAngle() {
+        return targetAngle;
+    }
+
+    public void moveAngle(double target){
+        isGlobal = true;
+        pidAngle.setIsAngle(true);
+        targetAngle = target;
+    }
+    public void moveWithAngleControl(double x, double y){
+        isGlobal = true;
+        this.vector.setCord(x,y);
+    }
     public void moveRobotCord(Vector2D vector, double h){
-         this.vector.setCord(vector.getX(),vector.getY());
-         targetH = h;
+        isGlobal = false;
+        this.vector.setCord(vector.getX(),vector.getY());
+        targetH = h;
     }
     public void moveRobotCord(double x, double y, double h){
+        isGlobal = false;
         this.vector.setCord(x,y);
         targetH = h;
     }
     public void moveGlobalCord(Vector2D vector, double targetH){
+        isGlobal = false;
         vector.vectorRat(-robot.odometry.getH());
         this.vector.setCord(vector.getX(),vector.getY());
         this.targetH = targetH;
     }
     public void moveGlobalCord(double x, double y, double targetH){
+        isGlobal = false;
         vector.setCord(x,y);
         vector.vectorRat(-robot.odometry.getH());
         this.targetH = targetH;
@@ -199,6 +230,12 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double powerH = 0;
     private double powerX = 0;
     private double powerY = 0;
+    private boolean isGlobal=false;
+    @Override
+    public boolean isAtPosition(){
+        return !isGlobal || Math.abs(Vector2D.getAngleError(targetAngle-angle))<10;
+
+    }
     public void update() {
         odUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
@@ -207,7 +244,8 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.speedH.setCoeficent(kpRat,kiRat,kdRat,ksRat,maxIRat,0);
         this.speedX.setCoeficent(kpX,kiX,kdX,ksX,maxIX,0);
         this.speedY.setCoeficent(kpY,kiY,kdY,ksY,maxIY,0);
-
+        this.pidAngle.setCoeficent(kpAngle,kiAngle,kdAngle,ksAngle,maxIAngle,0);
+        if(isGlobal) targetH = pidAngle.pid(targetAngle,angle,voltage);
 
         powerH = moveRat(targetH);
         powerX = moveX(vector.getX())*kSlide;

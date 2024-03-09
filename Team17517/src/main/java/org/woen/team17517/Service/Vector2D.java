@@ -28,6 +28,10 @@ public class Vector2D
     public double vectorRadians(double x, double y){
         return Math.atan2(y,x);
     }
+    public static double getAngleError(double error){
+        while (abs(error)>180) error-=360*signum(error);
+        return error;
+    }
     public void vectorRadiusAndAngle(double radius, double angle){
          this.x = cos(angle)*radius;
          this.y = sin(angle)*radius;
