@@ -16,9 +16,10 @@ public class AutnomModules {
 
     public void move(double x, double y, double h, double time) {
         robot.updateWhilePositionFalse(new Runnable[]{
-                () -> robot.driveTrainVelocityControl.moveRobotCord(x, y, h),
+                ()-> robot.driveTrainVelocityControl.moveAngle(h),
+                () -> robot.driveTrainVelocityControl.moveWithAngleControl(x,y),
                 () -> robot.timer.getTimeForTimer(time),
-                () -> robot.driveTrainVelocityControl.moveRobotCord(0, 0, 0),
+                () -> robot.driveTrainVelocityControl.moveWithAngleControl(0,0),
                 () -> robot.timer.getTimeForTimer(0.1),
 
         });
@@ -32,7 +33,7 @@ public class AutnomModules {
 
     public void scoring() {
         robot.updateWhilePositionFalse(new Runnable[]{
-                () -> robot.intake.setState(State.SCORING),
+                () -> robot.intake.scoring(),
                 () -> robot.timer.getTimeForTimer(0.5)
         });
     }

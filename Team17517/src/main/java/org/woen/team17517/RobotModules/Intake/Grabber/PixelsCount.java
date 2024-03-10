@@ -21,7 +21,7 @@ public class PixelsCount implements RobotModule {
     }
     private void updatePixelsCount(){pixelIn = sensor.getVoltage() < 0.12;}
     private double startInTime = System.currentTimeMillis();
-    private double startFreeTime = System.currentTimeMillis();
+    public double startFreeTime = System.currentTimeMillis();
     public void update(){
         updatePixelsCount();
         if(!pixelIn) startInTime = System.currentTimeMillis();

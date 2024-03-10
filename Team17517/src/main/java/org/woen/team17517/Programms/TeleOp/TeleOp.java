@@ -22,9 +22,12 @@ public class TeleOp extends LinearOpMode {
     boolean planeUp        ;
     boolean shoot          ;
     boolean planeDown      ;
+    boolean revers;
+    boolean backDropOff    ;
     public void runOpMode(){
         robot = new UltRobot(this);
         waitForStart();
+        robot.plane.down();
         robot.intake.on();
         double tStart = System.currentTimeMillis() / 1000.0;
         while (opModeIsActive()){
@@ -41,17 +44,24 @@ public class TeleOp extends LinearOpMode {
             planeUp     = gamepad1.triangle;
             planeDown   = gamepad1.cross;
             shoot       = gamepad1.square;
+            revers = gamepad1.dpad_right;
+            backDropOff = gamepad1.dpad_left;
 
-            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed, forwardSpeed, angleSpeed);
+            robot.driveTrainVelocityControl.moveRobotCord(sideSpeed,
+                   robot.intake.getState()== WAITINGUP&&robot.intake.getState()
+                   !=WAITINBACKDROPCENTER?forwardSpeed>0?forwardSpeed:forwardSpeed/2:forwardSpeed, angleSpeed);
 
-            if (eatPixels)   robot.intake.setState(EATING);
-            if (openGrabber) robot.intake.setState(SCORING);
+            if (eatPixels)   robot.intake.setState( EATING);
+            if (openGrabber) robot.intake.scoring();
             if (liftUp)      robot.intake.setState(WAITINGUP);
             if (liftCentre)  robot.intake.setState(WAITINBACKDROPCENTER);
             if (liftDown)    robot.intake.setState(WAITINGDOWN);
             if (planeUp)     robot.plane.up();
             if (planeDown)   robot.plane.down();
             if (shoot && (tNow - tStart) > 90)       robot.plane.shoot();
+            if (revers)       robot.intake.setState(SAVEBRUSH);
+
+
 
             telemetry.addLine(robot.intake.getState().toString());
             telemetry.addData("Plane",robot.plane.getStatus().toString());

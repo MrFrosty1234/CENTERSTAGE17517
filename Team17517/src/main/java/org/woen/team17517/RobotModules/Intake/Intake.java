@@ -42,9 +42,11 @@ public class Intake implements RobotModule {
     }
 
     State state = State.WAITINGDOWN;
+    public void scoring(){state = State.SCORING;startScoring = System.currentTimeMillis();}
     private double startReversTime = System.currentTimeMillis();
     private double startSaveTime = System.currentTimeMillis();
     private double startOffDefenseStart = System.currentTimeMillis();
+    private double startScoring = System.currentTimeMillis();
     public void update(){
         if (isOn) {
             switch (state) {
@@ -118,7 +120,7 @@ public class Intake implements RobotModule {
                         grabber.finish();
                         grabber.open();
                         grabber.backWallOpen();
-                        if (pixelsCount.isFree(1000)) {
+                        if (pixelsCount.isFree(1000)&&System.currentTimeMillis()-startScoring>1000) {
                             state = State.WAITINGDOWN;
                         }
                     }else {
