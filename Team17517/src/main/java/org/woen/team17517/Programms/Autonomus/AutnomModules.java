@@ -38,6 +38,17 @@ public class AutnomModules {
         });
     }
 
+    public void eatWhite(){
+        robot.updateWhilePositionFalse(new Runnable[]{
+                () -> robot.intake.setState(State.EATING)
+        });
+    }
+    public void reverseEatWhite(){
+        robot.updateWhilePositionFalse(new Runnable[]{
+                () -> robot.intake.setState(State.REVERSINGAFTEREATING)
+        });
+    }
+
     public void bacBoardPixels() {
         robot.updateWhilePositionFalse(new Runnable[]{
                 () -> robot.grabber.close(),
@@ -52,6 +63,12 @@ public class AutnomModules {
                 () -> robot.grabber.safe(),
                 () -> robot.lift.moveDown(),
                 () -> robot.grabber.down()
+        });
+    }
+
+    public void timer(double time){
+        robot.updateWhilePositionFalse(new Runnable[]{
+                () -> robot.timer.getTimeForTimer(time),
         });
     }
 
