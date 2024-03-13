@@ -147,20 +147,21 @@ public class DriveTrainVelocityControl implements RobotModule {
     private double angle = 0;
     private void  odUpdate()
     {
-        angle = robot.odometry.getH();
-        this.yEnc = robot.odometry.getVelCleanY();
-        this.xEnc = robot.odometry.getVelCleanX();
-        this.hEnc = robot.odometry.getVelCleanH();
+        angle = robot.odometry.getGlobalAngle();
+        this.yEnc = robot.odometry.getVelLocalY();
+        this.xEnc = robot.odometry.getVelLocalX();
+        this.hEnc = robot.odometry.getVelLocalH();
     }
     private static final double transmission = 19d/16d;
     private static final double maxMotorRoundPerSecond = 5d/transmission;
     private static final double lightOfWheel = 9.6d*PI;
-    private static final double maxRobotSpeed = lightOfWheel * maxMotorRoundPerSecond;
+    public  static final double maxRobotSpeed = lightOfWheel * maxMotorRoundPerSecond;
     private static final double lightOfOdometer = 4.8d*PI;
     private static final double maxRoundOdometerPerSecond = maxRobotSpeed/lightOfOdometer;
     private static final double odometerConstant = 8192;
-    private static final double maxLinearSpeedOd = maxRoundOdometerPerSecond*odometerConstant;
-    private static double maxAngleSpeedOd = 30000;
+    public  static final double maxLinearSpeedOd = maxRoundOdometerPerSecond*odometerConstant;
+    private static final double trackLight = 27d;
+    public  static final double maxAngleSpeedOd = maxLinearSpeedOd/trackLight;
     private double moveRat(double target)
     {
         return speedH.pid(target,hEnc,this.voltage);
@@ -216,14 +217,14 @@ public class DriveTrainVelocityControl implements RobotModule {
     }
     public void moveGlobalCord(Vector2D vector, double targetH){
         isGlobal = false;
-        vector.vectorRat(-robot.odometry.getH());
+        vector.turn(-robot.odometry.getGlobalAngle());
         this.vector.setCord(vector.getX(),vector.getY());
         this.targetH = targetH;
     }
     public void moveGlobalCord(double x, double y, double targetH){
         isGlobal = false;
         vector.setCord(x,y);
-        vector.vectorRat(-robot.odometry.getH());
+        vector.turn(-robot.odometry.getGlobalAngle());
         this.targetH = targetH;
     }
 

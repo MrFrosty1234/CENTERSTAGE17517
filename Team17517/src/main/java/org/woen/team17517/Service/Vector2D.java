@@ -36,21 +36,19 @@ public class Vector2D
          this.x = cos(angle)*radius;
          this.y = sin(angle)*radius;
     }
-    public static Vector2D vectorSum(Vector2D vector1, Vector2D vector2){
+    public static Vector2D plus(Vector2D vector1, Vector2D vector2){
       return new Vector2D(vector1.x + vector2.x,vector1.y+ vector2.y);
     }
-    public void vectorSum(Vector2D vector){
+    public void plus(Vector2D vector){
         x = x + vector.getX();
         y = y + vector.getY();
     }
 
-    public void vectorRatOld(double angle){
-        double radius = vectorRadius(x,y);
-        double angleNew = vectorRadians(x,y)-angle;
-        x = cos(angleNew)*radius;
-        y = sin(angleNew)*radius;
+    public void minus(Vector2D vector){
+        x = x - vector.getX();
+        y = y - vector.getY();
     }
-    public void vectorRat(double angle){
+    public void turn(double angle){
         x = x * cos(angle) - y * sin(angle);
         y = x * sin(angle) + y * cos(angle);
     }

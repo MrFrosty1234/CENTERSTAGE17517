@@ -17,7 +17,7 @@ public class TelemetryOutput implements RobotModule {
     public static boolean lift = false;
     public static boolean driveTrain = false;
     public static boolean teleOp = false;
-    public static boolean odometry = false;
+    public static boolean globalOometry = false;
     public static boolean velocity = false;
     public static boolean odometryAndCamera = false;
     public static boolean ftcMap = false;
@@ -105,20 +105,12 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("liftUpAuto",liftUpAuto);
             telemetry.addData("liftDownAuto",liftDownAuto);
         }
-        if(odometry){
-            telemetry.addData("x",robot.odometry.getX());
-            telemetry.addData("y",robot.odometry.getY());
-            telemetry.addData("heading",robot.odometry.getH());
-            telemetry.addData("cleanX", robot.odometry.posOdometerLeftY);
-            telemetry.addData("cleanY", robot.odometry.posOdometerRightY);
-            telemetry.addData("cleanH", robot.odometry.posOdometerX);
+        if(globalOometry){
+            telemetry.addData("x",robot.odometry.getGlobalPosX());
+            telemetry.addData("y",robot.odometry.getGlobalPosY());
+            telemetry.addData("heading",robot.odometry.getGlobalAngle());
         }
         if (velocityOdometry){
-            telemetry.addData("xVel",robot.odometry.getVelCleanX());
-            telemetry.addData("yVel",robot.odometry.getVelCleanY());
-            telemetry.addData("heading",robot.odometry.getVelCleanH());
-            telemetry.addData("leftY", robot.odometry.getCleanLeftY());
-            telemetry.addData("RightY", robot.odometry.getCleanRightY());
             telemetry.addData("hardSpeedY",robot.odometry.getHardVelOdometerRightY());
             telemetry.addData("hardSpeedX",robot.odometry.getHardVelOdometerX());
             telemetry.addData("hardSpeedH",robot.odometry.getHardVelOdometerLeftY());

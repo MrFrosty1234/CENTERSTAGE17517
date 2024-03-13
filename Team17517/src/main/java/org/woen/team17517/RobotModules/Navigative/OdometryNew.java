@@ -8,47 +8,37 @@ import org.woen.team17517.Service.Vector2D;
 
 public class OdometryNew implements RobotModule {
     UltRobot robot;
-    private Vector2D vector = new Vector2D();
+    private Vector2D vectorPositionGlobal = new Vector2D();
+    private Vector2D vectorVelocityGlobal = new Vector2D();
+    private Vector2D vectorPositionLocal = new Vector2D();
+    private Vector2D vectorVelovityLocal = new Vector2D();
+
     private final DcMotorEx odometerRightY;
     private final DcMotorEx odometrLeftY;
     private final DcMotorEx odometrX;
-    private double xEncOld = 0;
-    private double yEncOld = 0;
     private double h;
-    private  double yEnc;
-    private double xEnc;
     public OdometryNew(UltRobot robot){
         this.robot = robot;
-
         odometerRightY = robot.hardware.odometers.odometrRightY;
         odometrLeftY =  robot.hardware.odometers.odometrLeftY;
         odometrX = robot.hardware.odometers.odometrX;
         robot.hardware.odometers.setDirection(odometrX,-1);
         robot.hardware.odometers.setDirection(odometerRightY,-1);
         robot.hardware.odometers.setDirection(odometrLeftY,1);
-        vector.setCord(0,0);
+        vectorPositionGlobal.setCord(0,0);
         h = 0;
     }
-    private double velX = 0;
-    private double velY = 0;
     private double velH = 0;
-    public double getCleanLeftY() {return robot.hardware.odometers.getVelocity(odometrLeftY);}
-    public double getCleanRightY(){return robot.hardware.odometers.getVelocity(odometerRightY);}
+    public double getVelLocalX() {return vectorVelovityLocal.getX();}
+    public double getVelLocalY() {return vectorVelovityLocal.getY();}
+    public double getVelLocalH() {return velH;}
+    public double getVelGlobalX() {return vectorVelocityGlobal.getX();}
+    public double getVelGlobalY() {return vectorVelocityGlobal.getY();}
+    public double getGlobalPosX(){return vectorPositionGlobal.getX();}
+    public double getGlobalPosY(){return vectorPositionGlobal.getY();}
+    public double getGlobalAngle(){return h;}
 
-    public double getVelCleanX() {
-        return velX;
-    }
-    public double getVelCleanY() {
-        return velY;
-    }
-    public double getVelCleanH() {return velH;}
-
-    public double getX(){return vector.getX();}
-    public double getY(){return vector.getY();}
-    public double getH(){return h;}
-
-    public Vector2D getPositionVector(){return vector;}
-    private Vector2D vectorDeltaPosition = new Vector2D();
+    public Vector2D getPositionVector(){return vectorPositionGlobal;}
     private double startVelTime = (double) System.nanoTime() /ElapsedTime.SECOND_IN_NANO;
     private double mathSpeedOdometerRightY = 0;
     private double mathSpeedOdometerX = 0;
@@ -59,18 +49,13 @@ public class OdometryNew implements RobotModule {
     private double hardVelOdometerX = 0;
     private double hardVelOdometerRightY = 0;
     private double hardVelOdometerLeftY = 0;
-    public double posOdometerX =0;
-    public double posOdometerRightY =0;
-    public double posOdometerLeftY =0;
-    public double velOdometerX=0;
-    public double velOdometerRightY=0;
-    public double velOdometerLeftY =0;
-    private void odometerVelocityUpdate(){
-        overflowDef();
-        velX = velOdometerX;
-        velY = (velOdometerLeftY + velOdometerRightY)/2d;
-        velH = (velOdometerLeftY - velOdometerRightY)/2d;
-    }
+    private double posOdometerX =0;
+    private double posOdometerRightY =0;
+    private double posOdometerLeftY =0;
+    private double velOdometerX=0;
+    private double velOdometerRightY=0;
+    private double velOdometerLeftY =0;
+
     private void overflowDef(){
         double deltaTime = (double) System.nanoTime() / ElapsedTime.SECOND_IN_NANO - startVelTime;
 
@@ -115,22 +100,42 @@ public class OdometryNew implements RobotModule {
     public double getMathSpeedOdometerX() {
         return mathSpeedOdometerX;
     }
-    public double getMathSpeedOdometerRightY() {
-        return mathSpeedOdometerRightY;
+    public double getMathSpeedOdometerRightY() {return mathSpeedOdometerRightY;}
+    private void localVelocityUpdate(){
+        overflowDef();
+        double velX = velOdometerX;
+        double velY = (velOdometerLeftY + velOdometerRightY)/2d;
+        velH = (velOdometerLeftY - velOdometerRightY)/2d;
+        vectorVelovityLocal.setCord(velX,velY);
     }
-
-    private void odometerUpdate(){
-        this.yEnc = (robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometrLeftY))/2d;
-        this.xEnc = robot.hardware.odometers.getPosition(odometrX);
+    private void localPositionUpdate(){
+        double yEnc = (robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometrLeftY))/2d;
+        double xEnc = robot.hardware.odometers.getPosition(odometrX);
         h = robot.gyro.getAngle();
+        vectorPositionLocal.setCord(xEnc,yEnc);
+    }
+    private Vector2D vectorDeltaPosition = new Vector2D();
+    private Vector2D vectorPositionLocalOld = new Vector2D();
+    private void globalPositionUpdate(){
+        vectorDeltaPosition = vectorPositionLocal;
+        vectorDeltaPosition.minus(vectorPositionLocalOld);
+        vectorDeltaPosition.turn(h);
+        vectorPositionGlobal.plus(vectorDeltaPosition);
+        vectorPositionLocalOld = vectorPositionLocal;
+    }
+    private Vector2D vectorDeltaVelocity = new Vector2D();
+    private Vector2D vectorVelocityLocalOld = new Vector2D();
+    private void globalVelocityUpdate(){
+        vectorDeltaVelocity = vectorVelovityLocal;
+        vectorDeltaVelocity.minus(vectorVelocityLocalOld);
+        vectorDeltaVelocity.turn(h);
+        vectorVelocityGlobal.plus(vectorDeltaVelocity);
+        vectorVelocityLocalOld = vectorVelovityLocal;
     }
     public void update(){
-        odometerVelocityUpdate();
-        odometerUpdate();
-        vectorDeltaPosition.setCord(xEnc-xEncOld,yEnc-yEncOld);
-        vectorDeltaPosition.vectorRat(h);
-        vector.vectorSum(vectorDeltaPosition);
-        xEncOld = xEnc;
-        yEncOld = yEnc;
+        localVelocityUpdate();
+        localPositionUpdate();
+        globalVelocityUpdate();
+        globalPositionUpdate();
     }
 }

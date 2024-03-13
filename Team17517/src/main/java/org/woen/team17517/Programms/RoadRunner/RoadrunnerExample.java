@@ -1,4 +1,4 @@
-package org.woen.team17517.Programms;
+package org.woen.team17517.Programms.RoadRunner;
 
 import static java.lang.Math.toRadians;
 
@@ -81,7 +81,7 @@ public class RoadrunnerExample extends LinearOpMode {
                 /* double targetX = targetVector.x.value();
                 double targetY = targetVector.y.value();
                 double targetHeading = heading.value().toDouble(); //in global coords
-                double velForward = linearVel.x.value();
+                double velForward = linearVel.x.value);
                 double velSide = linearVel.y.value();
                 double velHeading = angVel.value(); //in robot coords */
 
@@ -102,9 +102,6 @@ public class RoadrunnerExample extends LinearOpMode {
                 //drivetrainVelocity.setCMSpeed(targetVelForward, targetVelSide, targetVelTurn)
             } while (timeSeconds < trajectoryDuration && opModeIsActive());
         }
-
-
-
     }
 
 }

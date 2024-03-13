@@ -101,7 +101,7 @@ public class DriveTrain implements RobotModule{
         autoMode = true;
     }
     public void moveRobot(double x, double y, double h){
-        targetVector = Vector2D.vectorSum(positionVector,new Vector2D(x,y));
+        targetVector = Vector2D.plus(positionVector,new Vector2D(x,y));
         targetH = posH + h;
         reset();
         autoMode = true;
@@ -111,7 +111,7 @@ public class DriveTrain implements RobotModule{
             voltage = robot.voltageSensorPoint.getVol();
 
             positionVector = robot.odometry.getPositionVector();
-            posH = robot.odometry.getH();
+            posH = robot.odometry.getGlobalAngle();
 
             errX = targetVector.getX() - positionVector.getX();
             errY = targetVector.getY() - positionVector.getY();
