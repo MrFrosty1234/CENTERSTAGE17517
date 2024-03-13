@@ -43,7 +43,7 @@ public class Vector2D
         x = x + vector.getX();
         y = y + vector.getY();
     }
-    public void copy(Vector2D vector){
+    public void copyFrom(Vector2D vector){
         setCord(vector.getX(),vector.getY());
     }
     public void minus(Vector2D vector){

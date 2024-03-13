@@ -118,20 +118,20 @@ OdometryNew implements RobotModule {
     private Vector2D vectorDeltaPosition = new Vector2D();
     private Vector2D vectorPositionLocalOld = new Vector2D();
     private void globalPositionUpdate(){
-        vectorDeltaPosition.copy(vectorPositionLocal);
+        vectorDeltaPosition.copyFrom(vectorPositionLocal);
         vectorDeltaPosition.minus(vectorPositionLocalOld);
-        vectorPositionLocalOld.copy(vectorPositionLocal);
+        vectorPositionLocalOld.copyFrom(vectorPositionLocal);
         vectorDeltaPosition.turn(h);
         vectorPositionGlobal.plus(vectorDeltaPosition);
     }
     private Vector2D vectorDeltaVelocity = new Vector2D();
     private Vector2D vectorVelocityLocalOld = new Vector2D();
     private void globalVelocityUpdate(){
-        vectorDeltaVelocity.copy(vectorVelovityLocal);
+        vectorDeltaVelocity.copyFrom(vectorVelovityLocal);
         vectorDeltaVelocity.minus(vectorVelocityLocalOld);
         vectorDeltaVelocity.turn(h);
         vectorVelocityGlobal.plus(vectorDeltaVelocity);
-        vectorVelocityLocalOld.copy(vectorVelovityLocal);
+        vectorVelocityLocalOld.copyFrom(vectorVelovityLocal);
     }
     @Override
     public void update(){
