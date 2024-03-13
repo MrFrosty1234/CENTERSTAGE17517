@@ -6,7 +6,8 @@ import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
 
-public class OdometryNew implements RobotModule {
+public class
+OdometryNew implements RobotModule {
     UltRobot robot;
     private Vector2D vectorPositionGlobal = new Vector2D();
     private Vector2D vectorVelocityGlobal = new Vector2D();
@@ -117,21 +118,22 @@ public class OdometryNew implements RobotModule {
     private Vector2D vectorDeltaPosition = new Vector2D();
     private Vector2D vectorPositionLocalOld = new Vector2D();
     private void globalPositionUpdate(){
-        vectorDeltaPosition = vectorPositionLocal;
+        vectorDeltaPosition.copy(vectorPositionLocal);
         vectorDeltaPosition.minus(vectorPositionLocalOld);
+        vectorPositionLocalOld.copy(vectorPositionLocal);
         vectorDeltaPosition.turn(h);
         vectorPositionGlobal.plus(vectorDeltaPosition);
-        vectorPositionLocalOld = vectorPositionLocal;
     }
     private Vector2D vectorDeltaVelocity = new Vector2D();
     private Vector2D vectorVelocityLocalOld = new Vector2D();
     private void globalVelocityUpdate(){
-        vectorDeltaVelocity = vectorVelovityLocal;
+        vectorDeltaVelocity.copy(vectorVelovityLocal);
         vectorDeltaVelocity.minus(vectorVelocityLocalOld);
         vectorDeltaVelocity.turn(h);
         vectorVelocityGlobal.plus(vectorDeltaVelocity);
-        vectorVelocityLocalOld = vectorVelovityLocal;
+        vectorVelocityLocalOld.copy(vectorVelovityLocal);
     }
+    @Override
     public void update(){
         localVelocityUpdate();
         localPositionUpdate();
