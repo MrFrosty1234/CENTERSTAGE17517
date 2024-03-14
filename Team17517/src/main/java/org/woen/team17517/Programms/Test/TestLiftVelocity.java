@@ -17,7 +17,7 @@ public class TestLiftVelocity extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()){
             robot.updateWhilePositionFalse(new Runnable[]{
-                    () -> robot.lift.moveUP(),
+                    () -> robot.lift.moveToMiddle(),
                     () -> robot.timer.getTimeForTimer(1),
                     () -> robot.lift.moveBackDropDown(),
                     () -> robot.timer.getTimeForTimer(1)

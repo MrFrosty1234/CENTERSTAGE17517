@@ -47,7 +47,7 @@ public class AutonomCameraBlueNear extends LinearOpMode {
             autnomModules.move(0, 30000, -90, 0.2);
             autnomModules.move(30000, 0, -90, 0.9);
         } else if (pipeLine.pos == 2) {
-            autnomModules.move(0, -40000, 0,0.9);
+            autnomModules.move(0, -40000, 0,0.65);
             robot.grabber.openPurplePixel();
             autnomModules.move(10500, 30000, 0, 0.5);
             autnomModules.move(0, 0, -90, 0);
@@ -55,7 +55,12 @@ public class AutonomCameraBlueNear extends LinearOpMode {
             autnomModules.move(-11000, -31000, -90, 1.8);
             autnomModules.scoring();
             autnomModules.move(0, 30000, -90, 0.15);
-            autnomModules.move(30000, 0, -90, 1.1);
+            autnomModules.move(-30000, 0, -90, 0.25);
+            autnomModules.move(0,50000,-90,1.3);
+            autnomModules.timer(1.5);
+            autnomModules.eatWhite();
+            autnomModules.move(0,30000,-90,0.5);
+            autnomModules.reverseEatWhite();
         } else if (pipeLine.pos == 3) {
             autnomModules.move(0, -28000, 0, 1);
             autnomModules.move(20000, 28000, 0, 1);
