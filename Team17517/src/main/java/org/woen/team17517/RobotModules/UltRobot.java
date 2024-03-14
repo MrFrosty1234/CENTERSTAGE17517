@@ -3,6 +3,7 @@ package org.woen.team17517.RobotModules;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.woen.team17517.RobotModules.DriveTrain.Builder;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
 import org.woen.team17517.RobotModules.EndGame.Plane;
@@ -41,6 +42,7 @@ public class UltRobot {
     public Timer timer;
     public RobotModule[] robotModules;
     public Hardware hardware;
+    public Builder mover;
     public Brush brush;
     public Plane plane;
     public Intake intake;
@@ -51,6 +53,7 @@ public class UltRobot {
         hardware = new Hardware(linearOpMode1.hardwareMap);
         telemetryOutput = new TelemetryOutput(this);
         timer = new Timer(this);
+        mover= new Builder(this);
         lift = new Lift(this);
         grabber = new GrabberNew(this);
         pixelsCount = new PixelsCount(this);
@@ -65,8 +68,8 @@ public class UltRobot {
         driveTrain = new DriveTrain(this);
         plane = new Plane(this);
 
-        this.robotModules = new RobotModule[]{driveTrainVelocityControl,odometry,gyro,driveTrain,intake,lift,grabber,brush,
-                pixelsCount,lighting,voltageSensorPoint,telemetryOutput,timer,};
+        this.robotModules = new RobotModule[]{mover,driveTrainVelocityControl,odometry,gyro,driveTrain,pixelsCount,intake,lift,grabber,brush
+                ,lighting,voltageSensorPoint,telemetryOutput,timer,};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }
@@ -92,14 +95,9 @@ public class UltRobot {
 
 
             while(!isAtPositionAll() && linearOpMode.opModeIsActive()&&((double)   System.currentTimeMillis() /1000d - startTime)<time){
-                linearOpMode.telemetry.addData("posAll", isAtPositionAll());
-                linearOpMode.telemetry.update();
                 allUpdate();
                 linearOpMode.telemetry.addData("posAll", isAtPositionAll());
-                linearOpMode.telemetry.update();
             }
-            linearOpMode.telemetry.addData("posAll", isAtPositionAll());
-            linearOpMode.telemetry.update();
         }
 
     }

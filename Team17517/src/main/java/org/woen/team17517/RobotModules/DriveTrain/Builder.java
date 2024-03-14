@@ -1,4 +1,4 @@
-package org.woen.team17517.Programms.RoadRunner;
+package org.woen.team17517.RobotModules.DriveTrain;
 
 import static java.lang.Math.abs;
 
@@ -52,45 +52,42 @@ public class Builder implements RobotModule {
     public TrajectoryBuilder builder() {
         return builder;
     }
-
-    private List<Trajectory> trajectories;
-
     public void trajectories(List<Trajectory> trajectories) {
         this.trajectories = trajectories;
     }
-
-    private boolean isAtPosition = false;
     ElapsedTime time = new ElapsedTime();
-
-    private Pose2dDual<Time> end = null;
+    private Pose2dDual<Time> end;
+    private boolean isOn = false;
+    public void on(){isOn = true;}
+    public void off(){isOn = false;}
+    private List<Trajectory> trajectories = new ArrayList<>();
+    double error = 0;
+    double errorHeading = 0;
     @Override
     public void update() {
-        Trajectory trajectory = null;
-        Pose2d pose = new Pose2d(robot.odometry.getGlobalPosX(), robot.odometry.getGlobalPosY(),
-                Math.toRadians(robot.odometry.getGlobalAngle()));
-        PoseVelocity2d velocity = new PoseVelocity2d(
-                new Vector2d(robot.odometry.getVelLocalX(), robot.odometry.getVelLocalY()),
-                robot.odometry.getVelLocalH());
-        HolonomicController controller = new HolonomicController(kPSide, kPForward, kPTurn);
-        if (trajectories != null && !trajectories.isEmpty()) {
-            isAtPosition = false;
-            trajectory = trajectories.get(0);
-            TimeTrajectory timeTrajectory = new TimeTrajectory(trajectory);
-            double duration = timeTrajectory.duration;
-            end = timeTrajectory.get(duration);
-            double error = timeTrajectory.get(duration).value().position.minus(pose.position).norm();
-            double errorHeading = timeTrajectory.get(duration).value().heading.real - pose.heading.real;
-            Pose2dDual<Time> target = timeTrajectory.get(time.seconds());
-            PoseVelocity2dDual<Time> targetVelocity = controller.compute(target, pose, velocity);
-            robot.driveTrainVelocityControl.moveRobotCord(
-                    targetVelocity.linearVel.y.value(),
-                    targetVelocity.linearVel.x.value(),
-                    targetVelocity.angVel.value()
-            );
-            if (abs(errorHeading) < 0.1 && abs(error) < 1000) trajectories.remove(0);isAtPosition = true;
-        }else{
-            isAtPosition = true;
-            if(end!=null) {
+        if(isOn){
+            Pose2d pose = new Pose2d(robot.odometry.getGlobalPosX(), robot.odometry.getGlobalPosY(),
+                    Math.toRadians(robot.odometry.getGlobalAngle()));
+            PoseVelocity2d velocity = new PoseVelocity2d(
+                    new Vector2d(robot.odometry.getVelLocalX(), robot.odometry.getVelLocalY()),
+                    robot.odometry.getVelLocalH());
+            HolonomicController controller = new HolonomicController(kPSide, kPForward, kPTurn);
+            if(!trajectories.isEmpty()) {
+                Trajectory trajectory = trajectories.get(0);
+                TimeTrajectory timeTrajectory = new TimeTrajectory(trajectory);
+                double duration = timeTrajectory.duration;
+                end = timeTrajectory.get(duration);
+                error        = timeTrajectory.get(duration).value().position.minus(pose.position).norm();
+                errorHeading = timeTrajectory.get(duration).value().heading.real - pose.heading.real;
+                Pose2dDual<Time> target = timeTrajectory.get(time.seconds());
+                PoseVelocity2dDual<Time> targetVelocity = controller.compute(target, pose, velocity);
+                robot.driveTrainVelocityControl.moveRobotCord(
+                        targetVelocity.linearVel.y.value(),
+                        targetVelocity.linearVel.x.value(),
+                        targetVelocity.angVel.value()
+                );
+                if(isAtPosition())trajectories.remove(0);
+            }else{
                 PoseVelocity2dDual<Time> targetVelocity = controller.compute(end, pose, velocity);
                 robot.driveTrainVelocityControl.moveRobotCord(
                         targetVelocity.linearVel.y.value(),
@@ -103,7 +100,7 @@ public class Builder implements RobotModule {
 
     @Override
     public boolean isAtPosition() {
-        return isAtPosition;
+        return !isOn || (abs(errorHeading) < 0.1 && abs(error) < 1000);
 
     }
 }

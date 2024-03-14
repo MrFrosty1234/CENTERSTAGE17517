@@ -3,17 +3,30 @@ package org.woen.meepmeep17517;
 import static java.lang.Math.PI;
 import static java.lang.Math.toRadians;
 
+import com.acmerobotics.roadrunner.AngularVelConstraint;
+import com.acmerobotics.roadrunner.MecanumKinematics;
+import com.acmerobotics.roadrunner.MinVelConstraint;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.VelConstraint;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import java.util.Arrays;
+
 public class MeepMeep17517 {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
+        double kPForward = .0;
+        double kPSide = .0;
+        double kPTurn = .0;
+        double wheelDiameter = 9.6;
+        double xMultiplier = 1.2;
+        MecanumKinematics kinematics = new MecanumKinematics(wheelDiameter, xMultiplier);
         double maxVel = 400d;
         double maxAccel = 400d;
         double maxAngVel = Math.toRadians(270d);
@@ -26,8 +39,15 @@ public class MeepMeep17517 {
                 .build();
 
         myBot.runAction(myBot.getDrive()
-                .actionBuilder(new Pose2d(-150*INCH_TO_CM, 150*INCH_TO_CM, 0))
-                                .splineToLinearHeading(new Pose2d(50*INCH_TO_CM,150*INCH_TO_CM,toRadians(45)),toRadians(90))
+                .actionBuilder(new Pose2d(12,70,Math.toRadians(-90)))
+                                .strafeTo(new Vector2d(12,32.5))
+                                .strafeTo(new Vector2d(12,47))
+                                .splineToLinearHeading(new Pose2d(42,35,Math.toRadians(180)),-1)
+                                .splineToLinearHeading(new Pose2d(35,20,Math.toRadians(180)),5)
+                                .splineToLinearHeading(new Pose2d(-52,11,Math.toRadians(180)),-10, new MinVelConstraint(
+                                      Arrays.asList(kinematics.new WheelVelConstraint(100),new AngularVelConstraint(Math.toRadians(10)))
+                                ))
+
                 //.splineTo(new Vector2d(100 * INCH_TO_CM, 30 * INCH_TO_CM), 0)
                 //.lineToX(30 * INCH_TO_CM)
                 //.turn(PI / 2)
@@ -36,7 +56,7 @@ public class MeepMeep17517 {
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
-                .setBackgroundAlpha(0.95f)
+                .setBackgroundAlpha(0.5f)
                 .addEntity(myBot)
                 .start();
     }
