@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 public class MeepMeep17517 {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep meepMeep = new MeepMeep(600);
         double kPForward = .0;
         double kPSide = .0;
         double kPTurn = .0;
@@ -39,19 +39,21 @@ public class MeepMeep17517 {
                 .build();
 
         myBot.runAction(myBot.getDrive()
-                .actionBuilder(new Pose2d(12,70,Math.toRadians(-90)))
-                                .strafeTo(new Vector2d(12,32.5))
-                                .strafeTo(new Vector2d(12,47))
-                                .splineToLinearHeading(new Pose2d(42,35,Math.toRadians(180)),-1)
-                                .splineToLinearHeading(new Pose2d(35,20,Math.toRadians(180)),5)
-                                .splineToLinearHeading(new Pose2d(-52,11,Math.toRadians(180)),-10, new MinVelConstraint(
-                                      Arrays.asList(kinematics.new WheelVelConstraint(100),new AngularVelConstraint(Math.toRadians(10)))
+                .actionBuilder(new Pose2d(-34,56,Math.toRadians(-90)))
+                                .strafeTo(new Vector2d(-34,30))
+                                .splineToLinearHeading(new Pose2d(-60,24,Math.toRadians(180)),0, new MinVelConstraint(
+                                      Arrays.asList(kinematics.new WheelVelConstraint(68000),new AngularVelConstraint(Math.toRadians(80)))
                                 ))
-
-                //.splineTo(new Vector2d(100 * INCH_TO_CM, 30 * INCH_TO_CM), 0)
-                //.lineToX(30 * INCH_TO_CM)
-                //.turn(PI / 2)
-                //.lineToY(-30 * INCH_TO_CM)
+                        .splineToLinearHeading(new Pose2d(-16,5,Math.toRadians(180)),0, new MinVelConstraint(
+                        Arrays.asList(kinematics.new WheelVelConstraint(68000),new AngularVelConstraint(Math.toRadians(100)))
+                )).endTrajectory()
+                        .strafeTo(new Vector2d(52,30))
+                .splineToLinearHeading(new Pose2d(20,10,Math.toRadians(180)),0, new MinVelConstraint(
+                        Arrays.asList(kinematics.new WheelVelConstraint(68000),new AngularVelConstraint(Math.toRadians(40)))
+                ))
+                .splineToLinearHeading(new Pose2d(-50,10,Math.toRadians(180)),0, new MinVelConstraint(
+                        Arrays.asList(kinematics.new WheelVelConstraint(100),new AngularVelConstraint(Math.toRadians(40)))
+                ))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
