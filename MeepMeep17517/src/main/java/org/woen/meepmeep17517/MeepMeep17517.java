@@ -21,14 +21,8 @@ import java.util.Arrays;
 public class MeepMeep17517 {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
-        double kPForward = .0;
-        double kPSide = .0;
-        double kPTurn = .0;
-        double wheelDiameter = 9.6;
-        double xMultiplier = 1.2;
-        MecanumKinematics kinematics = new MecanumKinematics(wheelDiameter, xMultiplier);
-        double maxVel = 400d;
-        double maxAccel = 400d;
+        double maxVel = 200d;
+        double maxAccel = 200d;
         double maxAngVel = Math.toRadians(270d);
         double maxAngAccel = Math.toRadians(270d);
         double trackWidth = 35d;
@@ -40,23 +34,22 @@ public class MeepMeep17517 {
 
         myBot.runAction(myBot.getDrive()
                 .actionBuilder(new Pose2d(12,70,Math.toRadians(-90)))
-                                .strafeTo(new Vector2d(12,32.5))
-                                .strafeTo(new Vector2d(12,47))
-                                .splineToLinearHeading(new Pose2d(42,35,Math.toRadians(180)),-1)
-                                .splineToLinearHeading(new Pose2d(35,20,Math.toRadians(180)),5)
-                                .splineToLinearHeading(new Pose2d(-52,11,Math.toRadians(180)),-10, new MinVelConstraint(
-                                      Arrays.asList(kinematics.new WheelVelConstraint(100),new AngularVelConstraint(Math.toRadians(10)))
-                                ))
-
-                //.splineTo(new Vector2d(100 * INCH_TO_CM, 30 * INCH_TO_CM), 0)
-                //.lineToX(30 * INCH_TO_CM)
-                //.turn(PI / 2)
-                //.lineToY(-30 * INCH_TO_CM)
+                .strafeTo(new Vector2d(12,32.5))
+                .strafeTo(new Vector2d(12,47))
+                .splineToLinearHeading(new Pose2d(42,35,Math.toRadians(180)),-1)
+                .endTrajectory()
+                .strafeTo(new Vector2d(47,24))
+                .splineToConstantHeading(new Vector2d(0,12),-3)
+                .splineToConstantHeading(new Vector2d(-54,12),0)
+                .endTrajectory()
+                .splineToConstantHeading(new Vector2d(0,12),0)
+                .splineToConstantHeading(new Vector2d(47,14),0)
+                .strafeToConstantHeading(new Vector2d(42,35))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
-                .setBackgroundAlpha(0.5f)
+                .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
                 .start();
     }
