@@ -20,9 +20,9 @@ import java.util.Arrays;
 
 public class MeepMeep17517 {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
-        double maxVel = 200d;
-        double maxAccel = 200d;
+        MeepMeep meepMeep = new MeepMeep(600);
+        double maxVel = 250d;
+        double maxAccel = 250d;
         double maxAngVel = Math.toRadians(270d);
         double maxAngAccel = Math.toRadians(270d);
         double trackWidth = 35d;
@@ -33,18 +33,29 @@ public class MeepMeep17517 {
                 .build();
 
         myBot.runAction(myBot.getDrive()
-                .actionBuilder(new Pose2d(12,70,Math.toRadians(0)))
-                .strafeTo(new Vector2d(12,32.5))
-                .strafeTo(new Vector2d(12,47))
-                .splineToLinearHeading(new Pose2d(42,35,Math.toRadians(180)),-1)
+                .actionBuilder(new Pose2d(12, 70, Math.toRadians(-90)))
+                .strafeTo(new Vector2d(12, 32.5))
+                .strafeTo(new Vector2d(12, 35))
+                .splineToLinearHeading(new Pose2d(42, 35, Math.toRadians(0)), 0)
                 .endTrajectory()
-                .strafeTo(new Vector2d(47,24))
-                .splineToConstantHeading(new Vector2d(0,12),-3)
-                .splineToConstantHeading(new Vector2d(-54,12),0)
+                .splineToConstantHeading(new Vector2d(30, 13), -30)
+                .strafeTo(new Vector2d(-55, 11))
                 .endTrajectory()
-                .splineToConstantHeading(new Vector2d(0,12),0)
-                .splineToConstantHeading(new Vector2d(47,14),0)
-                .strafeToConstantHeading(new Vector2d(42,35))
+                .strafeTo(new Vector2d(30, 13))
+                .splineToConstantHeading(new Vector2d(50, 33), 0)
+                .endTrajectory()
+                .strafeTo(new Vector2d(30, 13))
+                .strafeTo(new Vector2d(-55, 11))
+                .endTrajectory()
+                .strafeTo(new Vector2d(30, 13))
+                .splineToConstantHeading(new Vector2d(50, 33), 0)
+                .endTrajectory()
+                .strafeTo(new Vector2d(30, 13))
+                .strafeTo(new Vector2d(-55, 11))
+                .endTrajectory()
+                .strafeTo(new Vector2d(30, 13))
+                .splineToConstantHeading(new Vector2d(50, 33), 0)
+                .endTrajectory()
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
