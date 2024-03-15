@@ -27,7 +27,8 @@ import org.woen.team17517.Service.RobotModule;
 import java.util.*;
 
 public class Builder implements RobotModule {
-    public Builder(UltRobot robot) {
+    public Builder(UltRobot robot)
+    {
         this.robot = robot;
     }
 
@@ -78,7 +79,7 @@ public class Builder implements RobotModule {
                 double duration = timeTrajectory.duration;
                 end = timeTrajectory.get(duration);
                 error        = timeTrajectory.get(duration).value().position.minus(pose.position).norm();
-                errorHeading = timeTrajectory.get(duration).value().heading.real - pose.heading.real;
+                errorHeading = timeTrajectory.get(duration).value().heading.toDouble() - pose.heading.toDouble();
                 Pose2dDual<Time> target = timeTrajectory.get(time.seconds());
                 PoseVelocity2dDual<Time> targetVelocity = controller.compute(target, pose, velocity);
                 robot.driveTrainVelocityControl.moveRobotCord(
@@ -87,7 +88,7 @@ public class Builder implements RobotModule {
                         targetVelocity.angVel.value()
                 );
                 if(isAtPosition())trajectories.remove(0);
-            }else{
+            }else if (end!=null){
                 PoseVelocity2dDual<Time> targetVelocity = controller.compute(end, pose, velocity);
                 robot.driveTrainVelocityControl.moveRobotCord(
                         targetVelocity.linearVel.y.value(),

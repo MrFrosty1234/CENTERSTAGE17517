@@ -18,59 +18,50 @@ public class AutnomModules {
 
     public AutnomModules(UltRobot robot) {
         this.robot = robot;
+        trajectories = robot.mover.builder()
+                .strafeTo(new Vector2d(12, 32.5))
+                .strafeTo(new Vector2d(12, 47))
+                .splineToLinearHeading(new Pose2d(42, 35, Math.toRadians(180)), -1)
+
+                .strafeTo(new Vector2d(47, 24))
+                .splineToConstantHeading(new Vector2d(0, 12), -3)
+                .splineToConstantHeading(new Vector2d(-54, 12), 0)
+
+                .splineToConstantHeading(new Vector2d(0, 12), 0)
+                .splineToConstantHeading(new Vector2d(47, 14), 0)
+                .strafeToConstantHeading(new Vector2d(42, 35))
+                .build();
     }
 
     public void move(double x, double y, double h, double time) {
-        robot.updateWhilePositionFalse(new Runnable[]{
+        robot.updateWhilePositionFalse(
                 () -> robot.driveTrainVelocityControl.moveAngle(h),
                 () -> robot.driveTrainVelocityControl.moveWithAngleControl(x, y),
                 () -> robot.timer.getTimeForTimer(time),
                 () -> robot.driveTrainVelocityControl.moveWithAngleControl(0, 0),
-                () -> robot.timer.getTimeForTimer(0.1),
-
-        });
+                () -> robot.timer.getTimeForTimer(0.1));
     }
 
-    List<Trajectory> trajectories = robot.mover.builder()
-            .strafeTo(new Vector2d(12, 32.5))
-            .strafeTo(new Vector2d(12, 47))
-            .splineToLinearHeading(new Pose2d(42, 35, Math.toRadians(180)), -1)
-
-            .strafeTo(new Vector2d(47, 24))
-            .splineToConstantHeading(new Vector2d(0, 12), -3)
-            .splineToConstantHeading(new Vector2d(-54, 12), 0)
-
-            .splineToConstantHeading(new Vector2d(0, 12), 0)
-            .splineToConstantHeading(new Vector2d(47, 14), 0)
-            .strafeToConstantHeading(new Vector2d(42, 35))
-            .build();
+    List<Trajectory> trajectories ;
     public void scoring() {
-        robot.updateWhilePositionFalse(new Runnable[]{
+        robot.updateWhilePositionFalse(
                 () -> robot.intake.scoring(),
-                () -> robot.timer.getTimeForTimer(0.5)
-        });
+                () -> robot.timer.getTimeForTimer(0.5));
     }
 
     public void backdropLow() {
-        robot.updateWhilePositionFalse(new Runnable[]{
-                () -> robot.intake.setState(State.WAITINGBACKDROPDOWN),
-        });
+        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.WAITINGBACKDROPDOWN));
     }
 
     public void eatWhite(){
-        robot.updateWhilePositionFalse(new Runnable[]{
-                () -> robot.intake.setState(State.EATING)
-        });
+        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.EATING));
     }
     public void reverseEatWhite(){
-        robot.updateWhilePositionFalse(new Runnable[]{
-                () -> robot.intake.setState(State.REVERSINGAFTEREATING)
-        });
+        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.REVERSINGAFTEREATING));
     }
 
     public void bacBoardPixels() {
-        robot.updateWhilePositionFalse(new Runnable[]{
-                () -> robot.grabber.close(),
+        robot.updateWhilePositionFalse(() -> robot.grabber.close(),
                 () -> robot.grabber.safe(),
                 () -> robot.timer.getTimeForTimer(0.2),
                 () -> robot.lift.moveUP(),
@@ -81,18 +72,15 @@ public class AutnomModules {
                 () -> robot.timer.getTimeForTimer(0.5),
                 () -> robot.grabber.safe(),
                 () -> robot.lift.moveDown(),
-                () -> robot.grabber.down()
-        });
+                () -> robot.grabber.down());
     }
 
     public void timer(double time){
-        robot.updateWhilePositionFalse(new Runnable[]{
-                () -> robot.timer.getTimeForTimer(time),
-        });
+        robot.updateWhilePositionFalse(() -> robot.timer.getTimeForTimer(time));
     }
 
     public void eatPixels() {
-        robot.updateWhilePositionFalse(new Runnable[]{
+        robot.updateWhilePositionFalse(
                 () -> robot.brush.out(),
                 () -> robot.timer.getTimeForTimer(1),
                 () -> robot.brush.in(),
@@ -102,7 +90,6 @@ public class AutnomModules {
                 () -> robot.brush.out(),
                 () -> robot.timer.getTimeForTimer(1),
                 () -> robot.brush.off(),
-                () -> robot.timer.getTimeForTimer(0.1),
-        });
+                () -> robot.timer.getTimeForTimer(0.1));
     }
 }
