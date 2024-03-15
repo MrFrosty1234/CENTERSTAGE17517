@@ -91,13 +91,13 @@ public class PipeLine implements VisionProcessor {
 
 
         if (cx <= 240) {
-            pos = 1;
+            pos = -1;
         }
         if (cx < 443 && cx >= 240) {
-            pos = 2;
+            pos = 0;
         }
         if (cx >= 443) {
-            pos = 3;
+            pos = 1;
         }
 
         return frame;
