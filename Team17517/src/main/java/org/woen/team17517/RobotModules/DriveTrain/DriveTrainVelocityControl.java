@@ -155,13 +155,16 @@ public class DriveTrainVelocityControl implements RobotModule {
     private static final double transmission = 19d/16d;
     private static final double maxMotorRoundPerSecond = 5d/transmission;
     private static final double lightOfWheel = 9.6d*PI;
-    public  static final double maxRobotSpeed = lightOfWheel * maxMotorRoundPerSecond;
+    public  static final double maxLinerSpeedSm = lightOfWheel * maxMotorRoundPerSecond;
     private static final double lightOfOdometer = 4.8d*PI;
-    private static final double maxRoundOdometerPerSecond = maxRobotSpeed/lightOfOdometer;
+    private static final double maxRoundOdometerPerSecond = maxLinerSpeedSm /lightOfOdometer;
     private static final double odometerConstant = 8192;
     public  static final double maxLinearSpeedOd = maxRoundOdometerPerSecond*odometerConstant;
     private static final double trackLight = 27d;
-    public  static final double maxAngleSpeedOd = maxLinearSpeedOd/trackLight  ;
+    public  static final double maxAngleSpeedOd = maxLinearSpeedOd/trackLight;
+    public static double toEnc(double target){
+        return target*maxLinearSpeedOd/maxLinerSpeedSm;
+    }
     private double moveRat(double target)
     {
         return speedH.pid(target,hEnc,this.voltage);

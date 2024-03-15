@@ -87,7 +87,7 @@ public class UltRobot {
         }
     }
 
-    public void updateWhilePositionFalseTimer(double time,Runnable[] runnables){
+    public void updateWhilePositionFalseTimer(double time,Runnable...runnables){
         for (Runnable runnable : runnables){
             runnable.run();
             allUpdate();
@@ -101,7 +101,7 @@ public class UltRobot {
         }
 
     }
-    public void updateWhilePositionFalse(Runnable[] runnables){
+    public void updateWhilePositionFalse(Runnable... runnables){
         for (Runnable runnable : runnables){
             runnable.run();
             allUpdate();

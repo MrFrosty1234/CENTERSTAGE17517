@@ -33,7 +33,7 @@ public class MeepMeep17517 {
                 .build();
 
         myBot.runAction(myBot.getDrive()
-                .actionBuilder(new Pose2d(12,70,Math.toRadians(-90)))
+                .actionBuilder(new Pose2d(12,70,Math.toRadians(0)))
                 .strafeTo(new Vector2d(12,32.5))
                 .strafeTo(new Vector2d(12,47))
                 .splineToLinearHeading(new Pose2d(42,35,Math.toRadians(180)),-1)

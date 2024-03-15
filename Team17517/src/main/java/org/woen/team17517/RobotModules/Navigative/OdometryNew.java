@@ -14,6 +14,7 @@ OdometryNew implements RobotModule {
     private Vector2D vectorPositionLocal = new Vector2D();
     private Vector2D vectorVelovityLocal = new Vector2D();
 
+    StartPosition startPosition = StartPosition.REDBACK;
     private final DcMotorEx odometerRightY;
     private final DcMotorEx odometrLeftY;
     private final DcMotorEx odometrX;
@@ -121,8 +122,9 @@ OdometryNew implements RobotModule {
         vectorDeltaPosition.copyFrom(vectorPositionLocal);
         vectorDeltaPosition.minus(vectorPositionLocalOld);
         vectorPositionLocalOld.copyFrom(vectorPositionLocal);
-        vectorDeltaPosition.turn(h);
+        vectorDeltaPosition.turn(h+startPosition.getAngle());
         vectorPositionGlobal.plus(vectorDeltaPosition);
+        vectorPositionGlobal.plus(startPosition.getVector());
     }
     private Vector2D vectorDeltaVelocity = new Vector2D();
     private Vector2D vectorVelocityLocalOld = new Vector2D();
