@@ -148,8 +148,8 @@ public class DriveTrainVelocityControl implements RobotModule {
     private void  odUpdate()
     {
         angle = robot.odometry.getGlobalAngle();
-        this.yEnc = robot.odometry.getVelLocalY();
-        this.xEnc = robot.odometry.getVelLocalX();
+        this.yEnc = toEnc(robot.odometry.getVelLocalY());
+        this.xEnc = toEnc(robot.odometry.getVelLocalX());
         this.hEnc = robot.odometry.getVelLocalH();
     }
     private static final double transmission = 19d/16d;
@@ -165,6 +165,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static double toEnc(double target){
         return target*maxLinearSpeedOd/maxLinerSpeedSm;
     }
+    public static double toSm(double target){return target*maxLinerSpeedSm/maxLinearSpeedOd;}
     private double moveRat(double target)
     {
         return speedH.pid(target,hEnc,this.voltage);

@@ -1,7 +1,8 @@
 package org.woen.team17517.RobotModules.Navigative;
+import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.toSm;
+
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
@@ -9,12 +10,11 @@ import org.woen.team17517.Service.Vector2D;
 public class
 OdometryNew implements RobotModule {
     UltRobot robot;
-    private Vector2D vectorPositionGlobal = new Vector2D();
+    public StartPosition startPosition = StartPosition.BLUEBACK;
+    private Vector2D vectorPositionGlobal = startPosition.getVector();
     private Vector2D vectorVelocityGlobal = new Vector2D();
     private Vector2D vectorPositionLocal = new Vector2D();
     private Vector2D vectorVelovityLocal = new Vector2D();
-
-    StartPosition startPosition = StartPosition.REDBACK;
     private final DcMotorEx odometerRightY;
     private final DcMotorEx odometrLeftY;
     private final DcMotorEx odometrX;
@@ -27,7 +27,6 @@ OdometryNew implements RobotModule {
         robot.hardware.odometers.setDirection(odometrX,-1);
         robot.hardware.odometers.setDirection(odometerRightY,-1);
         robot.hardware.odometers.setDirection(odometrLeftY,1);
-        vectorPositionGlobal.setCord(0,0);
         h = 0;
     }
     private double velH = 0;
@@ -103,17 +102,20 @@ OdometryNew implements RobotModule {
         return mathSpeedOdometerX;
     }
     public double getMathSpeedOdometerRightY() {return mathSpeedOdometerRightY;}
+    public static double ENC_TO_ANGLE = 126.68033d;
     private void localVelocityUpdate(){
         overflowDef();
-        double velX = velOdometerX;
-        double velY = (velOdometerLeftY + velOdometerRightY)/2d;
-        velH = (velOdometerLeftY - velOdometerRightY)/2d;
+        double velX = toSm(velOdometerX);
+        double velY = toSm((velOdometerLeftY + velOdometerRightY)/2d);
+        velH = ((velOdometerLeftY - velOdometerRightY)/2d)/ ENC_TO_ANGLE;
         vectorVelovityLocal.setCord(velX,velY);
     }
+    public double hEncoder = 0;
     private void localPositionUpdate(){
-        double yEnc = (robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometrLeftY))/2d;
-        double xEnc = robot.hardware.odometers.getPosition(odometrX);
-        h = robot.gyro.getAngle();
+        double yEnc = toSm((robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometrLeftY))/2d);
+        double xEnc = toSm(robot.hardware.odometers.getPosition(odometrX));
+        h = robot.gyro.getAngle()+startPosition.getAngle();
+        hEncoder = (-robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometrLeftY))/2d;
         vectorPositionLocal.setCord(xEnc,yEnc);
     }
     private Vector2D vectorDeltaPosition = new Vector2D();
@@ -122,9 +124,8 @@ OdometryNew implements RobotModule {
         vectorDeltaPosition.copyFrom(vectorPositionLocal);
         vectorDeltaPosition.minus(vectorPositionLocalOld);
         vectorPositionLocalOld.copyFrom(vectorPositionLocal);
-        vectorDeltaPosition.turn(h+startPosition.getAngle());
+        vectorDeltaPosition.turn(h);
         vectorPositionGlobal.plus(vectorDeltaPosition);
-        vectorPositionGlobal.plus(startPosition.getVector());
     }
     private Vector2D vectorDeltaVelocity = new Vector2D();
     private Vector2D vectorVelocityLocalOld = new Vector2D();

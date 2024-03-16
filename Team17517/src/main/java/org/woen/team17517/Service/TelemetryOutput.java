@@ -25,7 +25,7 @@ public class TelemetryOutput implements RobotModule {
     public  static  boolean velocityOdometry = false;
     double dlin =40;
     double shir =40;
-    public static boolean opticalSensor = false;
+    public static boolean RoadRunner = false;
     public double [] rectXPoints = new double[2];
     public double [] rectYPoints = new double[2];
 
@@ -50,8 +50,10 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("Current", robot.lift.getCurent());
             telemetry.addData("speedForPid",robot.lift.getPower());
         }
-        if (opticalSensor){
-            telemetry.addData("PixelsIn",robot.pixelsCount.isPixels(10000));
+        if (RoadRunner){
+            telemetry.addData("error",robot.mover.error);
+            telemetry.addData("y",robot.mover.getPose().position.y);
+            telemetry.addData("x",robot.mover.getPose().position.x);
         }
         if (grabber){
             telemetry.addData("GrabberProgibTarget",robot.grabber.getProgibTarget());
@@ -109,6 +111,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("x",robot.odometry.getGlobalPosX());
             telemetry.addData("y",robot.odometry.getGlobalPosY());
             telemetry.addData("heading",robot.odometry.getGlobalAngle());
+            telemetry.addData("encoderAngle",robot.odometry.hEncoder);
         }
         if (velocityOdometry){
             telemetry.addData("hardSpeedY",robot.odometry.getHardVelOdometerRightY());

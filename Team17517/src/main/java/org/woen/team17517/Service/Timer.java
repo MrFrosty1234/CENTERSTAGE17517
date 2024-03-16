@@ -16,9 +16,6 @@ public class Timer implements RobotModule {
     double startTime = 0;
     double currentMatchTime = 0;
     UltRobot robot;
-
-    private double startTimeForRR;
-    private final ElapsedTime time = new ElapsedTime();
     private List<BooleanSupplier> wait = new ArrayList<>();
 
     public Timer(UltRobot robot) {
@@ -36,12 +33,9 @@ public class Timer implements RobotModule {
     }
 
     public void waitLift(){
-       robot.updateWhilePositionFalse(new Runnable[]{
-               () -> {
-                   wait.add(()-> robot.lift.isAtPosition() && robot.intake.isAtPosition());
-                   startTimeForRR = time.seconds();
-               }
-       });
+       robot.updateWhilePositionFalse(
+               () -> wait.add(()-> robot.lift.isAtPosition())
+       );
     }
 
     @Override
@@ -50,6 +44,5 @@ public class Timer implements RobotModule {
     }
 
     @Override
-    public void update() {
-    }
+    public void update() {}
 }

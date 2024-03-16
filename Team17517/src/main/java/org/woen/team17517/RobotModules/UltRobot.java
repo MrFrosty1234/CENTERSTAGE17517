@@ -53,7 +53,6 @@ public class UltRobot {
         hardware = new Hardware(linearOpMode1.hardwareMap);
         telemetryOutput = new TelemetryOutput(this);
         timer = new Timer(this);
-        mover= new Builder(this);
         lift = new Lift(this);
         grabber = new GrabberNew(this);
         pixelsCount = new PixelsCount(this);
@@ -67,6 +66,7 @@ public class UltRobot {
         odometry = new OdometryNew(this);
         driveTrain = new DriveTrain(this);
         plane = new Plane(this);
+        mover= new Builder(this);
 
         this.robotModules = new RobotModule[]{mover,driveTrainVelocityControl,odometry,gyro,driveTrain,pixelsCount,intake,lift,grabber,brush
                 ,lighting,voltageSensorPoint,telemetryOutput,timer,};
