@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.Vector2d;
 
+import org.woen.team17517.RobotModules.Intake.Lift.LiftPosition;
 import org.woen.team17517.RobotModules.Intake.State;
 import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
@@ -48,7 +49,7 @@ public class AutnomModules {
     }
 
     public void backdropLow() {
-        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.WAITINGBACKDROPDOWN));
+        robot.updateWhilePositionFalse(() -> robot.intake.waitUp(LiftPosition.BACKDROPDOWN));
     }
 
     public void eatWhite(){

@@ -54,7 +54,7 @@ public class TeleOp extends LinearOpMode {
             backDropOff = gamepad1.dpad_left;
             openGrabberOne = but.update(openGrabberOne);
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed,
-                    robot.lift.getPosition()>200||forwardSpeed<0?forwardSpeed/2:forwardSpeed,angleSpeed);
+                    robot.lift.getPosition()>200&&forwardSpeed<0?forwardSpeed/2:forwardSpeed,angleSpeed);
 
             if (eatPixels)   robot.intake.setState(EAT);
             if (openGrabber) robot.intake.scoring();
