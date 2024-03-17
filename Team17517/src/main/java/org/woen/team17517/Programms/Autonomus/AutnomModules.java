@@ -4,8 +4,6 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.Vector2d;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.vision.VisionPortal;
 import org.woen.team17517.RobotModules.Intake.State;
 import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
@@ -54,10 +52,10 @@ public class AutnomModules {
     }
 
     public void eatWhite(){
-        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.EATING));
+        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.EAT));
     }
     public void reverseEatWhite(){
-        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.REVERSINGAFTEREATING));
+        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.REVERS_AFTER_EAT));
     }
 
     public void bacBoardPixels() {

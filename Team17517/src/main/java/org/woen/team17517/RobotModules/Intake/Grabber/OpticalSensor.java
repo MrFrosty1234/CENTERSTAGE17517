@@ -3,12 +3,13 @@
 import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.Button;
 import org.woen.team17517.Service.RobotModule;
 
-public class PixelsCount implements RobotModule {
+public class OpticalSensor implements RobotModule {
     UltRobot robot;
     AnalogInput sensor;
-    public PixelsCount(UltRobot robot){
+    public OpticalSensor(UltRobot robot){
         this.robot = robot;
         sensor =  robot.hardware.sensors.upPixelsSensor;
     }
@@ -18,6 +19,10 @@ public class PixelsCount implements RobotModule {
     }
     public boolean isFree(int a){
         return !pixelIn && System.currentTimeMillis()-startFreeTime>a;
+    }
+    Button but = new Button();
+    public boolean isFreeOne(){
+        return but.update(!pixelIn);
     }
     private void updatePixelsCount(){pixelIn = sensor.getVoltage() < 0.12;}
     private double startInTime = System.currentTimeMillis();

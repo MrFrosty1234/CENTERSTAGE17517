@@ -1,5 +1,8 @@
 package org.woen.team17517.Programms.TeleOp;
 
+import static org.woen.team17517.RobotModules.Intake.Lift.LiftPosition.BACKDROPDOWN;
+import static org.woen.team17517.RobotModules.Intake.Lift.LiftPosition.MIDDLE;
+import static org.woen.team17517.RobotModules.Intake.Lift.LiftPosition.UP;
 import static org.woen.team17517.RobotModules.Intake.State.*;
 
 import static java.lang.Math.abs;
@@ -7,6 +10,7 @@ import static java.lang.Math.abs;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.Button;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOp extends LinearOpMode {
@@ -24,6 +28,8 @@ public class TeleOp extends LinearOpMode {
     boolean planeDown      ;
     boolean revers;
     boolean backDropOff    ;
+    boolean openGrabberOne ;
+    Button but = new Button();
     public void runOpMode(){
         robot = new UltRobot(this);
         waitForStart();
@@ -46,20 +52,19 @@ public class TeleOp extends LinearOpMode {
             shoot       = gamepad1.square;
             revers = gamepad1.dpad_right;
             backDropOff = gamepad1.dpad_left;
-
+            openGrabberOne = but.update(openGrabberOne);
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed,
-                   robot.intake.getState()== WAITINGUP&&robot.intake.getState()
-                   !=WAITINBACKDROPCENTER?forwardSpeed>0?forwardSpeed:forwardSpeed/2:forwardSpeed, angleSpeed);
+                    robot.lift.getPosition()>200||forwardSpeed<0?forwardSpeed/2:forwardSpeed,angleSpeed);
 
-            if (eatPixels)   robot.intake.setState( EATING);
+            if (eatPixels)   robot.intake.setState(EAT);
             if (openGrabber) robot.intake.scoring();
-            if (liftUp)      robot.intake.setState(WAITINGUP);
-            if (liftCentre)  robot.intake.setState(WAITINBACKDROPCENTER);
-            if (liftDown)    robot.intake.setState(WAITINGDOWN);
+            if (liftUp)      robot.intake.waitUp(UP);
+            if (liftCentre)  robot.intake.waitUp(MIDDLE);
+            if (liftDown)    robot.intake.setState(WAIT_DOWN);
             if (planeUp)     robot.plane.up();
             if (planeDown)   robot.plane.down();
             if (shoot && (tNow - tStart) > 90)       robot.plane.shoot();
-            if (revers)       robot.intake.setState(SAVEBRUSH);
+            if (revers)       robot.intake.setState(SAVE_BRUSH);
 
 
 

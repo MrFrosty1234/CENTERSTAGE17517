@@ -9,7 +9,7 @@ import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
 import org.woen.team17517.RobotModules.EndGame.Plane;
 import org.woen.team17517.RobotModules.Intake.Grabber.Brush;
 import org.woen.team17517.RobotModules.Intake.Grabber.GrabberNew;
-import org.woen.team17517.RobotModules.Intake.Grabber.PixelsCount;
+import org.woen.team17517.RobotModules.Intake.Grabber.OpticalSensor;
 import org.woen.team17517.RobotModules.Intake.Lift.Lift;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.Navigative.Gyro;
@@ -30,7 +30,7 @@ public class UltRobot {
     public DriveTrain driveTrain;
     public Lift lift;
     public GrabberNew grabber;
-    public PixelsCount pixelsCount;
+    public OpticalSensor opticalSensor;
     public Lighting lighting;
     public VoltageSensorPoint voltageSensorPoint;
     public LinearOpMode linearOpMode;
@@ -56,7 +56,7 @@ public class UltRobot {
         mover= new Builder(this);
         lift = new Lift(this);
         grabber = new GrabberNew(this);
-        pixelsCount = new PixelsCount(this);
+        opticalSensor = new OpticalSensor(this);
         brush = new Brush(this);
         voltageSensorPoint = new VoltageSensorPoint(this);
         driveTrainVelocityControl = new DriveTrainVelocityControl(this);
@@ -68,7 +68,7 @@ public class UltRobot {
         driveTrain = new DriveTrain(this);
         plane = new Plane(this);
 
-        this.robotModules = new RobotModule[]{mover,driveTrainVelocityControl,odometry,gyro,driveTrain,pixelsCount,intake,lift,grabber,brush
+        this.robotModules = new RobotModule[]{mover,driveTrainVelocityControl,odometry,gyro,driveTrain, opticalSensor,intake,lift,grabber,brush
                 ,lighting,voltageSensorPoint,telemetryOutput,timer,};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));

@@ -47,11 +47,11 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("isAtPosition", robot.lift.isAtPosition());
             telemetry.addData("buttonDown", robot.lift.getDownSwitch());
             telemetry.addData("buttonUp", robot.lift.getUpSwitch());
-            telemetry.addData("Current", robot.lift.getCurent());
+            telemetry.addData("Current", robot.lift.getCurrent());
             telemetry.addData("speedForPid",robot.lift.getPower());
         }
         if (opticalSensor){
-            telemetry.addData("PixelsIn",robot.pixelsCount.isPixels(10000));
+            telemetry.addData("PixelsIn",robot.opticalSensor.isPixels(10000));
         }
         if (grabber){
             telemetry.addData("GrabberProgibTarget",robot.grabber.getProgibTarget());

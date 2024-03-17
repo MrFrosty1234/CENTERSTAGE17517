@@ -15,20 +15,14 @@ import org.woen.team17517.Service.RobotModule;
 
 @Config
 public class Lift implements RobotModule {
-    private DcMotorEx liftMotor;
-    private DigitalChannel buttonUp;
+    private final DcMotorEx liftMotor;
     public DigitalChannel buttonDown;
     private double voltage;
     private LiftPosition targetPosition = LiftPosition.DOWN;
-    private double targetSpeed = 0;
     public LiftPosition getTargetPosition(){
         return targetPosition;
     }
     private void setTargetPosition(LiftPosition targetPosition){this.targetPosition = targetPosition;}
-    private LiftMode liftMode = LiftMode.AUTO;
-    public LiftMode getLiftMode(){
-        return liftMode;
-    }
     UltRobot robot;
     private boolean liftAtTarget = true;
     public static double kp = 0.01;
@@ -37,13 +31,9 @@ public class Lift implements RobotModule {
     public static double kg = 0.093;
     public static double maxI  = 0;
     PID pid = new PID(kp,ki,kd,0,maxI,kg);
-    public void setLiftMode(LiftMode mode){
-        liftMode = mode;
-    }
     public Lift(UltRobot robot) {
         this.robot = robot;
         liftMotor = robot.hardware.intakeAndLiftMotors.liftMotor;
-        buttonUp = robot.hardware.sensors.buttonUp;
         buttonDown = robot.hardware.sensors.buttonDown;
         encoderError = liftMotor.getCurrentPosition()-LiftPosition.UP.get();
         voltage = 12;
@@ -66,7 +56,7 @@ public class Lift implements RobotModule {
     public void moveBackDropDown(){
         setTargetPosition(LiftPosition.BACKDROPDOWN);
     }
-
+    public void move(LiftPosition pos){setTargetPosition(pos);}
     public void moveToMiddle(){
         setTargetPosition(LiftPosition.MIDDLE);
     }
@@ -109,7 +99,7 @@ public class Lift implements RobotModule {
         }
         setPower(power);
     }
-    public double getCurent(){
+    public double getCurrent(){
         return liftMotor.getCurrent(CurrentUnit.AMPS);
     }
     @Override

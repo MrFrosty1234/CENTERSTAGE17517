@@ -1,11 +1,14 @@
 package org.woen.team17517.RobotModules.Intake;
 
 
+import static org.woen.team17517.RobotModules.Intake.State.*;
+
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team17517.RobotModules.Intake.Grabber.Brush;
 import org.woen.team17517.RobotModules.Intake.Grabber.GrabberNew;
-import org.woen.team17517.RobotModules.Intake.Grabber.PixelsCount;
+import org.woen.team17517.RobotModules.Intake.Grabber.OpticalSensor;
 import org.woen.team17517.RobotModules.Intake.Lift.Lift;
+import org.woen.team17517.RobotModules.Intake.Lift.LiftPosition;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
@@ -18,13 +21,13 @@ public class Intake implements RobotModule {
         grabber = robot.grabber;
         lift = robot.lift;
         brush = robot.brush;
-        pixelsCount = robot.pixelsCount;
+        opticalSensor = robot.opticalSensor;
         light = robot.lighting;
     }
     GrabberNew grabber;
     Lift lift;
     Brush brush;
-    PixelsCount pixelsCount;
+    OpticalSensor opticalSensor;
     Lighting light;
     private boolean isOn = false;
     public void on(){
@@ -36,39 +39,44 @@ public class Intake implements RobotModule {
     public void setState(State state) {
         this.state = state;
     }
-
+    LiftPosition upPos = LiftPosition.UP;
+    public void waitUp(LiftPosition pos){
+        state = WAIT_UP;
+        upPos = pos;
+    }
     public State getState() {
         return state;
     }
-
-    State state = State.WAITINGDOWN;
-    public void scoring(){state = State.SCORING;startScoring = System.currentTimeMillis();}
+    State state = State.WAIT_DOWN;
+    public void scoring(){
+        state = State.SCORING_TWO;
+        opticalSensor.startFreeTime = System.currentTimeMillis();
+    }
     private double startReversTime = System.currentTimeMillis();
     private double startSaveTime = System.currentTimeMillis();
     private double startOffDefenseStart = System.currentTimeMillis();
-    private double startScoring = System.currentTimeMillis();
     public void update(){
         if (isOn) {
             switch (state) {
-                case SAVEBRUSH:
+                case SAVE_BRUSH:
                     light.on();
                     if(System.currentTimeMillis() - startSaveTime < 2000) brush.out();
                     else {
                         startOffDefenseStart = System.currentTimeMillis();
-                        state = State.EATING;
+                        setState(EAT);
                     }
                     break;
-                case EATING:
+                case EAT:
                     light.lightMode = Lighting.LightningMode.OFF;
                     if((robot.hardware.intakeAndLiftMotors.brushMotor.getCurrent(CurrentUnit.AMPS) > 4) &&
                             System.currentTimeMillis() - startOffDefenseStart > 1000){
                         startSaveTime = System.currentTimeMillis();
-                        state = State.SAVEBRUSH;
+                        setState(SAVE_BRUSH);
                     }
-                    if(pixelsCount.isPixels(500)){
+                    if(opticalSensor.isPixels(500)){
                         robot.linearOpMode.gamepad1.rumble(400);
                         startReversTime = System.currentTimeMillis();
-                        state = State.REVERSINGAFTEREATING;
+                        setState(REVERS_AFTER_EAT);
                     }else if (lift.buttonDown.getState()){
                         brush.in();
                         grabber.backWallClose();
@@ -76,13 +84,13 @@ public class Intake implements RobotModule {
                         grabber.down();
                     }
                     break;
-                case REVERSINGAFTEREATING:
+                case REVERS_AFTER_EAT:
                     light.on();
                     grabber.close();
                     if(System.currentTimeMillis() - startReversTime < 1700) brush.out();
-                    else                                                     state = State.WAITINGDOWN;
+                    else                                                         setState(WAIT_DOWN);
                     break;
-                case WAITINGDOWN:
+                case WAIT_DOWN:
                     light.on();
                     lift.moveDown();
                     brush.off();
@@ -90,41 +98,38 @@ public class Intake implements RobotModule {
                     grabber.close();
                     grabber.backWallClose();
                     break;
-                case WAITINGBACKDROPDOWN:
+                case WAIT_UP:
                     light.on();
-                    lift.moveBackDropDown();
+                    lift.move(upPos);
                     brush.off();
                     if(lift.getPosition()>200)grabber.finish();
                     grabber.close();
                     grabber.backWallClose();
                     break;
-                case WAITINBACKDROPCENTER:
-                    light.on();
-                    lift.moveToMiddle();
-                    brush.off();
-                    if(lift.getPosition()>200)grabber.finish();
-                    grabber.close();
-                    grabber.backWallClose();
-                    break;
-                case WAITINGUP:
-                    light.on();
-                    lift.moveUP();
-                    brush.off();
-                    if(lift.getPosition()>200)grabber.finish();
-                    grabber.close();
-                    grabber.backWallClose();
-                    break;
-                case SCORING:
+                case SCORING_TWO:
                     if(lift.getPosition()>200) {
                         light.on();
                         grabber.finish();
                         grabber.open();
                         grabber.backWallOpen();
-                        if (pixelsCount.isFree(1000)&&System.currentTimeMillis()-startScoring>1000) {
-                            state = State.WAITINGDOWN;
+                        if (opticalSensor.isFree(1000)) {
+                            setState(WAIT_DOWN);
                         }
                     }else {
-                        state = State.WAITINGDOWN;
+                        setState(WAIT_DOWN);
+                    }
+                    break;
+                case SCORING_ONE:
+                    if(lift.getPosition()>200) {
+                       light.on();
+                       grabber.finish();
+                       grabber.open();
+                       grabber.backWallOpen();
+                       if(opticalSensor.isFreeOne()){
+                           setState(WAIT_UP);
+                       }
+                    }else {
+                        setState(WAIT_DOWN);
                     }
                     break;
             }
