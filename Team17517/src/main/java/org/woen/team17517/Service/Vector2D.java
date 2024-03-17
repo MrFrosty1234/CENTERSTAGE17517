@@ -51,8 +51,11 @@ public class Vector2D
         y = y - vector.getY();
     }
     public void turn(double angle){
-        x = x * cos(angle) - y * sin(angle);
-        y = x * sin(angle) + y * cos(angle);
+        double angle1 = Math.toRadians(-angle);
+        double x1 = x * cos(angle1) - y * sin(angle1);
+        double y1 = x * sin(angle1) + y * cos(angle1);
+        x = x1;
+        y = y1;
     }
 
 }

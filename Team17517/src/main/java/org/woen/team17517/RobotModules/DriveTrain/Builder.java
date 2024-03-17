@@ -1,7 +1,9 @@
 package org.woen.team17517.RobotModules.DriveTrain;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.toRadians;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.AccelConstraint;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.HolonomicController;
@@ -25,11 +27,23 @@ import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 
 import java.util.*;
-
+@Config
 public class Builder implements RobotModule {
     public Builder(UltRobot robot)
     {
         this.robot = robot;
+        Pose2d beginPose = new Pose2d(robot.odometry.startPosition.getVector().getY(),
+                robot.odometry.startPosition.getVector().getX(),
+                robot.odometry.startPosition.getAngle());
+        MecanumKinematics kinematics = new MecanumKinematics(wheelDiameter, xMultiplier);
+        VelConstraint velConstraint = new MinVelConstraint(Arrays.asList(kinematics.
+                        new WheelVelConstraint(DriveTrainVelocityControl.maxLinerSpeedSm),
+                new AngularVelConstraint(50)
+        ));
+        AccelConstraint accelConstraint = new ProfileAccelConstraint(minAccel, maxAccel);
+        builder = new TrajectoryBuilder(beginPose, 1e-6, 0, velConstraint,
+                accelConstraint, 0.25, 0.1);
+
     }
 
     UltRobot robot;
@@ -38,18 +52,9 @@ public class Builder implements RobotModule {
     public static double kPTurn = .0;
     private final double wheelDiameter = 9.6;
     private final double xMultiplier = 1.2;
-    private final double maxAccel = 2000;
-    private final double minAccel = -2000;
-    private final MecanumKinematics kinematics = new MecanumKinematics(wheelDiameter, xMultiplier);
-    private final Pose2d beginPose = new Pose2d(0, 0, 0);
-    private final VelConstraint velConstraint = new MinVelConstraint(Arrays.asList(kinematics.
-                    new WheelVelConstraint(DriveTrainVelocityControl.maxLinearSpeedOd),
-            new AngularVelConstraint(DriveTrainVelocityControl.maxAngleSpeedOd)
-    ));
-    private final AccelConstraint accelConstraint = new ProfileAccelConstraint(minAccel, maxAccel);
-    protected final TrajectoryBuilder builder = new TrajectoryBuilder(beginPose, 1e-6, 0, velConstraint,
-            accelConstraint, 0.25, 0.1);
-
+    private final double maxAccel = 20;
+    private final double minAccel = -5;
+    protected final TrajectoryBuilder builder;
     public TrajectoryBuilder builder() {
         return builder;
     }
@@ -62,16 +67,27 @@ public class Builder implements RobotModule {
     public void on(){isOn = true;}
     public void off(){isOn = false;}
     private List<Trajectory> trajectories = new ArrayList<>();
-    double error = 0;
+    public double error = 0;
     double errorHeading = 0;
+
+    public Pose2d getPose() {
+        return pose;
+    }
+
+    public PoseVelocity2d getVelocity() {
+        return velocity;
+    }
+
+    Pose2d pose = new Pose2d(0,0,0);
+    PoseVelocity2d velocity = new PoseVelocity2d(new Vector2d(0,0),0);
     @Override
     public void update() {
         if(isOn){
-            Pose2d pose = new Pose2d(robot.odometry.getGlobalPosX(), robot.odometry.getGlobalPosY(),
-                    Math.toRadians(robot.odometry.getGlobalAngle()));
-            PoseVelocity2d velocity = new PoseVelocity2d(
-                    new Vector2d(robot.odometry.getVelLocalX(), robot.odometry.getVelLocalY()),
-                    robot.odometry.getVelLocalH());
+            pose = new Pose2d(robot.odometry.getGlobalPosY(), robot.odometry.getGlobalPosX(),
+                    toRadians(robot.odometry.getGlobalAngle()));
+            velocity = new PoseVelocity2d(
+                    new Vector2d(robot.odometry.getVelLocalY(), robot.odometry.getVelLocalX()),
+                    toRadians(robot.odometry.getVelLocalH()));
             HolonomicController controller = new HolonomicController(kPSide, kPForward, kPTurn);
             if(!trajectories.isEmpty()) {
                 Trajectory trajectory = trajectories.get(0);
@@ -83,8 +99,8 @@ public class Builder implements RobotModule {
                 Pose2dDual<Time> target = timeTrajectory.get(time.seconds());
                 PoseVelocity2dDual<Time> targetVelocity = controller.compute(target, pose, velocity);
                 robot.driveTrainVelocityControl.moveRobotCord(
-                        targetVelocity.linearVel.y.value(),
                         targetVelocity.linearVel.x.value(),
+                        targetVelocity.linearVel.y.value(),
                         targetVelocity.angVel.value()
                 );
                 if(isAtPosition())trajectories.remove(0);
@@ -101,7 +117,6 @@ public class Builder implements RobotModule {
 
     @Override
     public boolean isAtPosition() {
-        return !isOn || (abs(errorHeading) < 0.1 && abs(error) < 1000);
-
+        return !isOn || (abs(errorHeading) < 0.1 && abs(error) < 1);
     }
 }

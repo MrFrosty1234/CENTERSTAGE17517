@@ -27,6 +27,7 @@ public class MeepMeep17517 {
         double maxAngAccel = Math.toRadians(270d);
         double trackWidth = 35d;
         final double INCH_TO_CM = 1d / 2.54d;
+        TrajectoryActionBuilder builder;
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(maxVel * INCH_TO_CM, maxAccel * INCH_TO_CM, maxAngVel, maxAngAccel, trackWidth * INCH_TO_CM)
@@ -34,27 +35,25 @@ public class MeepMeep17517 {
 
         myBot.runAction(myBot.getDrive()
                 .actionBuilder(new Pose2d(12, 70, Math.toRadians(-90)))
-                .strafeTo(new Vector2d(12, 32.5))
-                .strafeTo(new Vector2d(12, 35))
-                .splineToLinearHeading(new Pose2d(42, 35, Math.toRadians(0)), 0)
+                .splineToLinearHeading(new Pose2d(12, 32.5, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(12, 45, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(50, 35, Math.toRadians(0)), 0)
                 .endTrajectory()
-                .splineToConstantHeading(new Vector2d(30, 13), -30)
-                .strafeTo(new Vector2d(-55, 11))
+                .setReversed(true)
+                .splineToConstantHeading(new Vector2d(30, 13), Math.toRadians(180))
+                .setReversed(true)
+                .splineToConstantHeading(new Vector2d(-55, 11), Math.toRadians(180))
                 .endTrajectory()
-                .strafeTo(new Vector2d(30, 13))
-                .splineToConstantHeading(new Vector2d(50, 33), 0)
+                .splineToConstantHeading(new Vector2d(30, 13), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(50, 35), Math.toRadians(0))
                 .endTrajectory()
-                .strafeTo(new Vector2d(30, 13))
-                .strafeTo(new Vector2d(-55, 11))
+                .setReversed(true)
+                .splineToConstantHeading(new Vector2d(30, 13), Math.toRadians(180))
+                .setReversed(true)
+                .splineToConstantHeading(new Vector2d(-55, 11), Math.toRadians(180))
                 .endTrajectory()
-                .strafeTo(new Vector2d(30, 13))
-                .splineToConstantHeading(new Vector2d(50, 33), 0)
-                .endTrajectory()
-                .strafeTo(new Vector2d(30, 13))
-                .strafeTo(new Vector2d(-55, 11))
-                .endTrajectory()
-                .strafeTo(new Vector2d(30, 13))
-                .splineToConstantHeading(new Vector2d(50, 33), 0)
+                .splineToConstantHeading(new Vector2d(30, 13), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(50, 35), Math.toRadians(0))
                 .endTrajectory()
                 .build());
 
