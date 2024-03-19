@@ -1,6 +1,8 @@
 package org.woen.team17517.RobotModules.DriveTrain;
 
+import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.VEL_ANGLE_TO_ENC;
 import static java.lang.Math.abs;
+import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -22,24 +24,25 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 
 import java.util.*;
 @Config
-public class Builder implements RobotModule {
-    public Builder(UltRobot robot)
+public class Mover implements RobotModule {
+    public Mover(UltRobot robot)
     {
         this.robot = robot;
-        Pose2d beginPose = new Pose2d(robot.odometry.startPosition.getVector().getY(),
-                robot.odometry.startPosition.getVector().getX(),
-                robot.odometry.startPosition.getAngle());
+        Pose2d beginPose = new Pose2d(robot.odometry.getGlobalPositionVector().convertToVector2d(),toRadians(robot.odometry.getGlobalAngle()));
+        double wheelDiameter = 9.6;
+        double xMultiplier = 1.2;
         MecanumKinematics kinematics = new MecanumKinematics(wheelDiameter, xMultiplier);
         VelConstraint velConstraint = new MinVelConstraint(Arrays.asList(kinematics.
                         new WheelVelConstraint(DriveTrainVelocityControl.maxLinerSpeedSm),
                 new AngularVelConstraint(50)
         ));
+        double maxAccel = 20;
+        double minAccel = -5;
         AccelConstraint accelConstraint = new ProfileAccelConstraint(minAccel, maxAccel);
         builder = new TrajectoryBuilder(beginPose, 1e-6, 0, velConstraint,
                 accelConstraint, 0.25, 0.1);
@@ -50,10 +53,6 @@ public class Builder implements RobotModule {
     public static double kPForward = .0;
     public static double kPSide = .0;
     public static double kPTurn = .0;
-    private final double wheelDiameter = 9.6;
-    private final double xMultiplier = 1.2;
-    private final double maxAccel = 20;
-    private final double minAccel = -5;
     protected final TrajectoryBuilder builder;
     public TrajectoryBuilder builder() {
         return builder;
@@ -67,15 +66,11 @@ public class Builder implements RobotModule {
     public void on(){isOn = true;}
     public void off(){isOn = false;}
     private List<Trajectory> trajectories = new ArrayList<>();
-    public double error = 0;
-    double errorHeading = 0;
+    private double error = 0;
+    private double errorHeading = 0;
 
     public Pose2d getPose() {
         return pose;
-    }
-
-    public PoseVelocity2d getVelocity() {
-        return velocity;
     }
 
     Pose2d pose = new Pose2d(0,0,0);
@@ -83,10 +78,9 @@ public class Builder implements RobotModule {
     @Override
     public void update() {
         if(isOn){
-            pose = new Pose2d(robot.odometry.getGlobalPosY(), robot.odometry.getGlobalPosX(),
+            pose = new Pose2d(robot.odometry.getGlobalPositionVector().convertToVector2d(),
                     toRadians(robot.odometry.getGlobalAngle()));
-            velocity = new PoseVelocity2d(
-                    new Vector2d(robot.odometry.getVelLocalY(), robot.odometry.getVelLocalX()),
+            velocity = new PoseVelocity2d(robot.odometry.getLocalVelocityVector().convertToVector2d(),
                     toRadians(robot.odometry.getVelLocalH()));
             HolonomicController controller = new HolonomicController(kPSide, kPForward, kPTurn);
             if(!trajectories.isEmpty()) {
@@ -99,9 +93,9 @@ public class Builder implements RobotModule {
                 Pose2dDual<Time> target = timeTrajectory.get(time.seconds());
                 PoseVelocity2dDual<Time> targetVelocity = controller.compute(target, pose, velocity);
                 robot.driveTrainVelocityControl.moveRobotCord(
+                        -targetVelocity.linearVel.y.value(),
                         targetVelocity.linearVel.x.value(),
-                        targetVelocity.linearVel.y.value(),
-                        targetVelocity.angVel.value()
+                        toDegrees(targetVelocity.angVel.value())*VEL_ANGLE_TO_ENC
                 );
                 if(isAtPosition())trajectories.remove(0);
             }else if (end!=null){

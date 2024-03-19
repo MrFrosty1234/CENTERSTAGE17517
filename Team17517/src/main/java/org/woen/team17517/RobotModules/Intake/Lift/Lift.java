@@ -42,7 +42,11 @@ public class Lift implements RobotModule {
     public boolean getUpSwitch(){
         return false;
     }
-    public boolean getDownSwitch(){return down.update(buttonDown.getState());}
+    private boolean downSwitch = false;
+    public boolean getDownSwitch(){
+        return downSwitch;
+    }
+    private void updateSwitch(){downSwitch =  down.update(buttonDown.getState());}
     public void setPower(double target) {
         liftMotor.setPower(target);
     }
@@ -67,11 +71,9 @@ public class Lift implements RobotModule {
     private int cleanPosition = 0;
     public int getCleanPosition() {return cleanPosition;}
     public void updatePosition(){
+        updateSwitch();
         cleanPosition = liftMotor.getCurrentPosition();
         encoderPosition = cleanPosition - encoderError;
-        if (getUpSwitch()){
-            encoderError = liftMotor.getCurrentPosition() - LiftPosition.UP.get();
-        }
         if (getDownSwitch()){
             encoderError = liftMotor.getCurrentPosition() - LiftPosition.DOWN.get();
         }
@@ -84,7 +86,7 @@ public class Lift implements RobotModule {
     private double power = 0;
     public void update(){
         updatePosition();
-        pid.setCoeficent(kp, ki, kd, 0, maxI, kg);
+        pid.setCoefficients(kp, ki, kd, 0, maxI, kg);
         voltage = robot.voltageSensorPoint.getVol();
         if(getPosition()>-10) {
             if (targetPosition != LiftPosition.DOWN) {

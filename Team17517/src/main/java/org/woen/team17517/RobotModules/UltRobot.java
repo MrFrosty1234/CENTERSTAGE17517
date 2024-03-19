@@ -3,7 +3,7 @@ package org.woen.team17517.RobotModules;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.woen.team17517.RobotModules.DriveTrain.Builder;
+import org.woen.team17517.RobotModules.DriveTrain.Mover;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
 import org.woen.team17517.RobotModules.EndGame.Plane;
@@ -13,7 +13,7 @@ import org.woen.team17517.RobotModules.Intake.Grabber.OpticalSensor;
 import org.woen.team17517.RobotModules.Intake.Lift.Lift;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.Navigative.Gyro;
-import org.woen.team17517.RobotModules.Navigative.OdometryNew;
+import org.woen.team17517.RobotModules.Navigative.Localization;
 import org.woen.team17517.RobotModules.OpenCV.TestAprilTagPipeline;
 import java.util.List;
 import org.woen.team17517.Service.RobotModule;
@@ -38,11 +38,11 @@ public class UltRobot {
     public TestAprilTagPipeline testAprilTagPipeline;
     public TelemetryOutput telemetryOutput;
     public DriveTrainVelocityControl driveTrainVelocityControl;
-    public OdometryNew odometry;
+    public Localization odometry;
     public Timer timer;
     public RobotModule[] robotModules;
     public Hardware hardware;
-    public Builder mover;
+    public Mover mover;
     public Brush brush;
     public Plane plane;
     public Intake intake;
@@ -63,10 +63,10 @@ public class UltRobot {
         lighting = new Lighting(this);
         testAprilTagPipeline = new TestAprilTagPipeline(this);
         intake = new Intake(this);
-        odometry = new OdometryNew(this);
+        odometry = new Localization(this);
         driveTrain = new DriveTrain(this);
         plane = new Plane(this);
-        mover= new Builder(this);
+        mover= new Mover(this);
 
         this.robotModules = new RobotModule[]{mover,driveTrainVelocityControl,odometry,gyro,driveTrain, opticalSensor,intake,lift,grabber,brush
                 ,lighting,voltageSensorPoint,telemetryOutput,timer,};

@@ -1,8 +1,5 @@
 package org.woen.team17517.NotUsedCode;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import org.woen.team17517.NotUsedCode.OldAutonomus.AutonomBaseClass;
 
 public class AutonomDriveTrainConfig extends AutonomBaseClass {
@@ -12,9 +9,9 @@ public class AutonomDriveTrainConfig extends AutonomBaseClass {
     public Runnable[] getBlueNearBack(){
         return new Runnable[]{
                 ()-> robot.driveTrainVelocityControl.moveRobotCord(x,y,targetH),
-                ()->robot.timer.getTimeForTimer(1),
+                ()->robot.timer.waitSeconds(1),
                 ()-> robot.driveTrainVelocityControl.moveRobotCord(-x,-y,-targetH),
-                ()->robot.timer.getTimeForTimer(1)
+                ()->robot.timer.waitSeconds(1)
         };
     }
 }

@@ -134,16 +134,6 @@ public class DriveTrainVelocityControl implements RobotModule {
 
         targetH = 0;
     }
-
-     private void  encUpdate()
-    {
-        this.yEnc = (left_back_drive.getVelocity()+ left_front_drive.getVelocity()+
-                right_front_drive.getVelocity()+ right_back_drive.getVelocity())/4.0;
-        this.xEnc = ((-left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
-                right_front_drive.getVelocity()+ right_back_drive.getVelocity())/4.0)*kSlide;
-        this.hEnc = (left_back_drive.getVelocity()+ left_front_drive.getVelocity()-
-                right_front_drive.getVelocity() - right_back_drive.getVelocity())/4.0;
-    }
     private double angle = 0;
     private void  odUpdate()
     {
@@ -152,6 +142,7 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.xEnc = toEnc(robot.odometry.getVelLocalX());
         this.hEnc = robot.odometry.getVelLocalH();
     }
+    public static double VEL_ANGLE_TO_ENC = 126.68033d;
     private static final double transmission = 19d/16d;
     private static final double maxMotorRoundPerSecond = 5d/transmission;
     private static final double lightOfWheel = 9.6d*PI;
@@ -246,10 +237,10 @@ public class DriveTrainVelocityControl implements RobotModule {
         this.voltage = robot.voltageSensorPoint.getVol();
 
 
-        this.speedH.setCoeficent(kpRat,kiRat,kdRat,ksRat,maxIRat,0);
-        this.speedX.setCoeficent(kpX,kiX,kdX,ksX,maxIX,0);
-        this.speedY.setCoeficent(kpY,kiY,kdY,ksY,maxIY,0);
-        this.pidAngle.setCoeficent(kpAngle,kiAngle,kdAngle,ksAngle,maxIAngle,0);
+        this.speedH.setCoefficients(kpRat,kiRat,kdRat,ksRat,maxIRat,0);
+        this.speedX.setCoefficients(kpX,kiX,kdX,ksX,maxIX,0);
+        this.speedY.setCoefficients(kpY,kiY,kdY,ksY,maxIY,0);
+        this.pidAngle.setCoefficients(kpAngle,kiAngle,kdAngle,ksAngle,maxIAngle,0);
         if(isGlobal) targetH = pidAngle.pid(targetAngle,angle,voltage);
 
         powerH = moveRat(targetH);

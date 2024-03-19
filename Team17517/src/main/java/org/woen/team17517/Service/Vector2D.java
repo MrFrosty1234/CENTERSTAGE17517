@@ -2,6 +2,8 @@ package org.woen.team17517.Service;
 
 import static java.lang.Math.*;
 
+import com.acmerobotics.roadrunner.Vector2d;
+
 public class Vector2D
 {
     private double x;
@@ -22,19 +24,9 @@ public class Vector2D
     public double getY(){
         return y;
     }
-    public double vectorRadius(double x, double y){
-        return Math.sqrt(y*y+x*x);
-    }
-    public double vectorRadians(double x, double y){
-        return Math.atan2(y,x);
-    }
     public static double getAngleError(double error){
         while (abs(error)>180) error-=360*signum(error);
         return error;
-    }
-    public void vectorRadiusAndAngle(double radius, double angle){
-         this.x = cos(angle)*radius;
-         this.y = sin(angle)*radius;
     }
     public static Vector2D plus(Vector2D vector1, Vector2D vector2){
       return new Vector2D(vector1.x + vector2.x,vector1.y+ vector2.y);
@@ -42,6 +34,9 @@ public class Vector2D
     public void plus(Vector2D vector){
         x = x + vector.getX();
         y = y + vector.getY();
+    }
+    public Vector2d convertToVector2d(){
+        return new Vector2d(y,-x);
     }
     public void copyFrom(Vector2D vector){
         setCord(vector.getX(),vector.getY());

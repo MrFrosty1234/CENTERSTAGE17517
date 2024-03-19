@@ -3,7 +3,6 @@ package org.woen.team17517.Service;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -16,20 +15,12 @@ public class TelemetryOutput implements RobotModule {
     UltRobot robot;
     public static boolean lift = false;
     public static boolean driveTrain = false;
-    public static boolean teleOp = false;
-    public static boolean globalOometry = false;
+    public static boolean Buttons = false;
+    public static boolean Localization = false;
     public static boolean velocity = false;
-    public static boolean odometryAndCamera = false;
-    public static boolean ftcMap = false;
-    public static boolean encoders = false;
-    public  static  boolean velocityOdometry = false;
-    double dlin =40;
-    double shir =40;
+    public  static  boolean velocityOdometer = false;
     public static boolean opticalSensor = false;
-    public double [] rectXPoints = new double[2];
-    public double [] rectYPoints = new double[2];
-
-    TelemetryPacket packet = new TelemetryPacket();
+    public static boolean roadRunner = false;
     public static boolean grabber = false;
     private final Telemetry telemetry;
     public TelemetryOutput(UltRobot robot){
@@ -44,18 +35,22 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("pos", robot.lift.getPosition());
             telemetry.addData("liftTarget", robot.lift.getTargetPosition().get());
             telemetry.addData("isAtPosition", robot.lift.isAtPosition());
-            telemetry.addData("buttonDown", robot.lift.getDownSwitch());
-            telemetry.addData("buttonUp", robot.lift.getUpSwitch());
+            telemetry.addData("button", robot.lift.getDownSwitch());
             telemetry.addData("Current", robot.lift.getCurrent());
             telemetry.addData("speedForPid",robot.lift.getPower());
         }
         if (opticalSensor){
-            telemetry.addData("PixelsIn",robot.opticalSensor.isPixels(10000));
+            telemetry.addData("PixelsIn",robot.opticalSensor.isPixels(1000));
         }
         if (grabber){
-            telemetry.addData("GrabberProgibTarget",robot.grabber.getProgibTarget());
+            telemetry.addData("GrabberTarget",robot.grabber.getProgibTarget());
             telemetry.addData("GrabberTargetOpenClose",robot.grabber.getOpenCloseTarget());
             telemetry.addData("BrushCurrent", robot.hardware.intakeAndLiftMotors.brushMotor.getCurrent(CurrentUnit.AMPS));
+        }
+        if(roadRunner){
+            telemetry.addData("rrX",robot.mover.getPose().position.x);
+            telemetry.addData("rrY",robot.mover.getPose().position.y);
+            telemetry.addData("rrX",Math.toRadians(robot.mover.getPose().heading.toDouble()));
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.driveTrain.getTargets();
@@ -77,7 +72,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("target H", targetMap.get("H"));
             telemetry.addData("pos H", positionMap.get("H"));
         }
-        if(teleOp) {
+        if(Buttons) {
             boolean liftUpAuto            = robot.linearOpMode.gamepad1.triangle;
             boolean liftDownAuto          = robot.linearOpMode.gamepad1.cross;
 
@@ -104,12 +99,12 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("liftUpAuto",liftUpAuto);
             telemetry.addData("liftDownAuto",liftDownAuto);
         }
-        if(globalOometry){
+        if(Localization){
             telemetry.addData("x",robot.odometry.getGlobalPosX());
             telemetry.addData("y",robot.odometry.getGlobalPosY());
             telemetry.addData("heading",robot.odometry.getGlobalAngle());
         }
-        if (velocityOdometry){
+        if (velocityOdometer){
             telemetry.addData("hardSpeedY",robot.odometry.getHardVelOdometerRightY());
             telemetry.addData("hardSpeedX",robot.odometry.getHardVelOdometerX());
             telemetry.addData("hardSpeedH",robot.odometry.getHardVelOdometerLeftY());
@@ -134,6 +129,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("posAngle",robot.driveTrainVelocityControl.getAngle());
 
         }
+
         telemetry.update();
     }
 }

@@ -110,7 +110,7 @@ public class DriveTrain implements RobotModule{
         if (autoMode) {
             voltage = robot.voltageSensorPoint.getVol();
 
-            positionVector = robot.odometry.getPositionVector();
+            positionVector = robot.odometry.getGlobalPositionVector();
             posH = robot.odometry.getGlobalAngle();
 
             errX = targetVector.getX() - positionVector.getX();
@@ -122,9 +122,9 @@ public class DriveTrain implements RobotModule{
             }
 
 
-            pidX.setCoeficent(kPX, kIX, kDX, 0, ImaxX, kg);
-            pidY.setCoeficent(kPY, kIY, kDY, 0, ImaxY, kg);
-            pidH.setCoeficent(kPH, kIH, kDH, 0, ImaxH, kg);
+            pidX.setCoefficients(kPX, kIX, kDX, 0, ImaxX, kg);
+            pidY.setCoefficients(kPY, kIY, kDY, 0, ImaxY, kg);
+            pidH.setCoefficients(kPH, kIH, kDH, 0, ImaxH, kg);
 
             X = pidX.pid(targetVector.getX(), positionVector.getX(), voltage);
             Y = pidY.pid(targetVector.getY(), positionVector.getY(), voltage);

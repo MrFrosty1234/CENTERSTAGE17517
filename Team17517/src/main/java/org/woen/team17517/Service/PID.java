@@ -3,14 +3,14 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public  class PID {
     public PID(double kp, double ki, double kd, double ks, Double maxI, double kg){
-            setCoeficent(kp,ki,kd,ks,maxI,kg);
+            setCoefficients(kp,ki,kd,ks,maxI,kg);
     }
     public void setKg(double kg) {
         this.kg = kg;
     }
     private double kp,kd,ki,ks,kg = 0;
     Double maxI = Double.POSITIVE_INFINITY;
-    public void setCoeficent(double kp, double ki, double kd, double ks, Double maxI, double kg){
+    public void setCoefficients(double kp, double ki, double kd, double ks, Double maxI, double kg){
         this.kp = kp;
         this.ki = ki;
         this.kd = kd;
@@ -24,7 +24,6 @@ public  class PID {
     private double P = 0;
     private double D = 0;
     private double I = 0;
-    private double V = 0;
     public double getI(){
         return I;
     }
@@ -47,16 +46,16 @@ public  class PID {
         }
         lastWrong = wrong;
 
-        V = 12/voltage;
+        double v = 12 / voltage;
         if(I>maxI){
             I = maxI;
         }
         if(I<-maxI){
             I = -maxI;
         }
-        double PID = (I + D + P)* V +target*ks+kg;
+        double PID = (I + D + P)* v +target*ks+kg;
         double timeNow = (double) System.nanoTime() / 1_000_000d;
-        deltaTime = Double.valueOf(timeNow - timeOld);
+        deltaTime = (double) timeNow - timeOld;
         timeOld = timeNow;
         return PID;
 

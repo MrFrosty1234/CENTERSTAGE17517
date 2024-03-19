@@ -1,13 +1,7 @@
 package org.woen.team17517.NotUsedCode.OldAutonomus;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.woen.team17517.RobotModules.OpenCV.Camera;
-import org.woen.team17517.RobotModules.OpenCV.PipeLine;
 import org.woen.team17517.RobotModules.UltRobot;
 
 public class AutonomForBase extends LinearOpMode {
@@ -22,9 +16,9 @@ public class AutonomForBase extends LinearOpMode {
         while (opModeIsActive()){
             robot.updateWhilePositionFalse(new Runnable[]{
                     ()->robot.driveTrainVelocityControl.moveRobotCord(x,y,targetH),
-                    ()->robot.timer.getTimeForTimer(1),
+                    ()->robot.timer.waitSeconds(1),
                     ()->robot.driveTrainVelocityControl.moveRobotCord(-x,-y,-targetH),
-                    ()->robot.timer.getTimeForTimer(1)
+                    ()->robot.timer.waitSeconds(1)
             });
 
         }
