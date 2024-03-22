@@ -9,6 +9,7 @@ import org.woen.team17517.RobotModules.UltRobot;
 @TeleOp
 public class RoadrunnerTest extends LinearOpMode {
     UltRobot robot;
+
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new UltRobot(this);
@@ -17,7 +18,10 @@ public class RoadrunnerTest extends LinearOpMode {
         while (opModeIsActive()) {
             robot.updateWhilePositionFalse(
                     () -> robot.mover.trajectories(robot.mover.builder()
-                            .strafeTo(new Vector2d(50, 100))
+                            .strafeTo(new Vector2d(-50, 0))
+                            .build()),
+                    () -> robot.mover.trajectories(robot.mover.builder()
+                            .strafeTo(new Vector2d(0, 0))
                             .build())
             );
             robot.allUpdate();

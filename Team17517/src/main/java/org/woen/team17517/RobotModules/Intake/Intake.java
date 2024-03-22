@@ -119,19 +119,6 @@ public class Intake implements RobotModule {
                         setState(WAIT_DOWN);
                     }
                     break;
-                case SCORING_ONE:
-                    if(lift.getPosition()>200) {
-                       light.on();
-                       grabber.finish();
-                       grabber.open();
-                       grabber.backWallOpen();
-                       if(opticalSensor.isFreeOne()){
-                           setState(WAIT_UP);
-                       }
-                    }else {
-                        setState(WAIT_DOWN);
-                    }
-                    break;
             }
         }
     }

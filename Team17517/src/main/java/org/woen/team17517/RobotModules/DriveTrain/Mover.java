@@ -33,6 +33,7 @@ public class Mover implements RobotModule {
     public Mover(UltRobot robot)
     {
         this.robot = robot;
+        robot.hardware.odometers.reset();
         Pose2d beginPose = new Pose2d(robot.odometry.getGlobalPositionVector().convertToVector2d(),toRadians(robot.odometry.getGlobalAngle()));
         double wheelDiameter = 9.6;
         double xMultiplier = 1.2;
@@ -68,9 +69,12 @@ public class Mover implements RobotModule {
     private List<Trajectory> trajectories = new ArrayList<>();
     private double error = 0;
     private double errorHeading = 0;
-
     public Pose2d getPose() {
         return pose;
+    }
+
+    public PoseVelocity2d getVelocity() {
+        return velocity;
     }
 
     Pose2d pose = new Pose2d(0,0,0);
@@ -82,7 +86,7 @@ public class Mover implements RobotModule {
                     toRadians(robot.odometry.getGlobalAngle()));
             velocity = new PoseVelocity2d(robot.odometry.getLocalVelocityVector().convertToVector2d(),
                     toRadians(robot.odometry.getVelLocalH()));
-            HolonomicController controller = new HolonomicController(kPSide, kPForward, kPTurn);
+            HolonomicController controller = new HolonomicController(kPForward, kPSide, kPTurn);
             if(!trajectories.isEmpty()) {
                 Trajectory trajectory = trajectories.get(0);
                 TimeTrajectory timeTrajectory = new TimeTrajectory(trajectory);
@@ -111,6 +115,6 @@ public class Mover implements RobotModule {
 
     @Override
     public boolean isAtPosition() {
-        return !isOn || (abs(errorHeading) < 0.1 && abs(error) < 1);
+        return !isOn || (abs(errorHeading) < 0.1 && abs(error) < 15);
     }
 }

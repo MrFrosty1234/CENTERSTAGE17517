@@ -18,10 +18,13 @@ public class Odometers{
         directionMap.put(odometrLeftY,1);
         directionMap.put(odometrRightY,1);
     }
-    private void reset(){
+    public void reset(){
         odometrX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odometrLeftY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odometrRightY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odometrX.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        odometrLeftY.setMode(DcMotor.RunMode .RUN_WITHOUT_ENCODER);
+        odometrRightY.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public double getVelocity(DcMotorEx odometer){
         return odometer.getVelocity()*directionMap.get(odometer);

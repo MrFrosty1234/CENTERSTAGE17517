@@ -152,7 +152,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     private static final double odometerConstant = 8192;
     public  static final double maxLinearSpeedOd = maxRoundOdometerPerSecond*odometerConstant;
     private static final double trackLight = 27d;
-    public  static final double maxAngleSpeedOd = maxLinearSpeedOd/trackLight;
+    public  static final double maxAngleSpeedOd = 30_000;
     public static double toEnc(double target){
         return target*maxLinearSpeedOd/maxLinerSpeedSm;
     }
@@ -232,6 +232,10 @@ public class DriveTrainVelocityControl implements RobotModule {
         return !isGlobal || Math.abs(Vector2D.getAngleError(targetAngle-angle))<10;
 
     }
+    public double powerLeft_front_drive = 0;
+    public double powerRight_front_drive= 0;
+    public double powerLeft_back_drive  = 0;
+    public double powerRight_back_drive = 0;
     public void update() {
         odUpdate();
         this.voltage = robot.voltageSensorPoint.getVol();
@@ -256,10 +260,13 @@ public class DriveTrainVelocityControl implements RobotModule {
         if (Math.abs(powerY) < 0.015){
             powerY = 0;
         }
-
-        left_front_drive.setPower(powerX + powerY + powerH);
-        right_front_drive.setPower(-powerX + powerY - powerH);
-        left_back_drive.setPower(-powerX + powerY + powerH);
-        right_back_drive.setPower(powerX + powerY - powerH);
+        powerLeft_front_drive = powerX + powerY + powerH   ;
+        powerRight_front_drive  = -powerX + powerY - powerH;
+        powerLeft_back_drive  = -powerX + powerY + powerH  ;
+        powerRight_back_drive = powerX + powerY - powerH   ;
+        left_front_drive.setPower(powerLeft_front_drive);
+        right_front_drive.setPower(powerRight_front_drive);
+        left_back_drive.setPower(powerLeft_back_drive);
+        right_back_drive.setPower(powerRight_back_drive);
     }
 }

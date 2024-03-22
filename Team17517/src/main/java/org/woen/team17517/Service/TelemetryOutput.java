@@ -18,7 +18,7 @@ public class TelemetryOutput implements RobotModule {
     public static boolean Buttons = false;
     public static boolean Localization = false;
     public static boolean velocity = false;
-    public  static  boolean velocityOdometer = false;
+    public static boolean velocityOdometer = false;
     public static boolean opticalSensor = false;
     public static boolean roadRunner = false;
     public static boolean grabber = false;
@@ -50,7 +50,8 @@ public class TelemetryOutput implements RobotModule {
         if(roadRunner){
             telemetry.addData("rrX",robot.mover.getPose().position.x);
             telemetry.addData("rrY",robot.mover.getPose().position.y);
-            telemetry.addData("rrX",Math.toRadians(robot.mover.getPose().heading.toDouble()));
+            telemetry.addData("velX",robot.mover.getVelocity().linearVel.x);
+            telemetry.addData("velY",robot.mover.getVelocity().linearVel.y);
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.driveTrain.getTargets();
@@ -100,8 +101,8 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("liftDownAuto",liftDownAuto);
         }
         if(Localization){
-            telemetry.addData("x",robot.odometry.getGlobalPosX());
-            telemetry.addData("y",robot.odometry.getGlobalPosY());
+            telemetry.addData("xPos",robot.odometry.getGlobalPosX());
+            telemetry.addData("yPos",robot.odometry.getGlobalPosY());
             telemetry.addData("heading",robot.odometry.getGlobalAngle());
         }
         if (velocityOdometer){
@@ -128,6 +129,9 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("targetAngle",robot.driveTrainVelocityControl.getTargetAngle());
             telemetry.addData("posAngle",robot.driveTrainVelocityControl.getAngle());
 
+            telemetry.addData("Power left",robot.driveTrainVelocityControl.powerLeft_front_drive);
+            telemetry.addData("Power right",robot.driveTrainVelocityControl.powerRight_front_drive);
+            telemetry.addData("Power right back", robot.driveTrainVelocityControl.powerRight_back_drive);
         }
 
         telemetry.update();

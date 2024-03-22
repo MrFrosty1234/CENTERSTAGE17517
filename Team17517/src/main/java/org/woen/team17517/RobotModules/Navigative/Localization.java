@@ -2,16 +2,17 @@ package org.woen.team17517.RobotModules.Navigative;
 import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.VEL_ANGLE_TO_ENC;
 import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.toSm;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.RobotModule;
 import org.woen.team17517.Service.Vector2D;
-
+@Config
 public class Localization implements RobotModule {
     UltRobot robot;
     public StartPosition startPosition = StartPosition.ZERO;
-    private final Vector2D vectorPositionGlobal = startPosition.getVector();
+    private final Vector2D vectorPositionGlobal = new Vector2D();
     private final Vector2D vectorVelocityGlobal = new Vector2D();
     private final Vector2D vectorPositionLocal = new Vector2D();
     private final Vector2D vectorVelocityLocal = new Vector2D();
@@ -27,6 +28,7 @@ public class Localization implements RobotModule {
         robot.hardware.odometers.setDirection(odometerX,-1);
         robot.hardware.odometers.setDirection(odometerRightY,-1);
         robot.hardware.odometers.setDirection(odometerLeftY,1);
+        vectorPositionGlobal.copyFrom(startPosition.getVector());
         h = 0;
     }
     private double velH = 0;
@@ -107,10 +109,16 @@ public class Localization implements RobotModule {
         vectorVelocityLocal.setCord(velX,velY);
     }
     public double hEncoder = 0;
+    private double hOld = 0;
+    public static double xOdometerDistance = 11;
     private void localPositionUpdate(){
-        double yEnc = toSm((robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometerLeftY))/2d);
-        double xEnc = toSm(robot.hardware.odometers.getPosition(odometerX));
         h = robot.gyro.getAngle() + startPosition.getAngle();
+        double    deltaH = h - hOld;
+        deltaH = Vector2D.getAngleError(deltaH);
+        hOld = h;
+        robot.linearOpMode.telemetry.addData("dh",deltaH);
+        double yEnc = toSm((robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometerLeftY))/2d);
+        double xEnc = toSm(robot.hardware.odometers.getPosition(odometerX))-Math.toRadians(deltaH)*xOdometerDistance;
         hEncoder = (-robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometerLeftY))/2d;
         vectorPositionLocal.setCord(xEnc,yEnc);
     }
