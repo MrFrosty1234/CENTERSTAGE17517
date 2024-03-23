@@ -116,9 +116,10 @@ public class Localization implements RobotModule {
         double    deltaH = h - hOld;
         deltaH = Vector2D.getAngleError(deltaH);
         hOld = h;
-        robot.linearOpMode.telemetry.addData("dh",deltaH);
+        double xCorrect = xOdometerDistance*Math.toRadians(deltaH);
+        robot.linearOpMode.telemetry.addData("xCorrect",xCorrect);
         double yEnc = toSm((robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometerLeftY))/2d);
-        double xEnc = toSm(robot.hardware.odometers.getPosition(odometerX))-Math.toRadians(deltaH)*xOdometerDistance;
+        double xEnc = toSm(robot.hardware.odometers.getPosition(odometerX));//-xCorrect;
         hEncoder = (-robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometerLeftY))/2d;
         vectorPositionLocal.setCord(xEnc,yEnc);
     }
