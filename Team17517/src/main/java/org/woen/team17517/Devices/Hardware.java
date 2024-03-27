@@ -13,6 +13,7 @@ public class Hardware {
         planeServos = new PlaneServos(hardwareMap);
         sensors = new Sensors(hardwareMap);
         lights = new Lights(hardwareMap);
+        hanging = new Hanging(hardwareMap);
     }
     public IntakeAndLiftMotors intakeAndLiftMotors;
     public DriveTrainMotors    driveTrainMotors;
@@ -21,5 +22,6 @@ public class Hardware {
     public PlaneServos         planeServos;
     public Sensors             sensors;
     public Lights              lights;
+    public Hanging             hanging;
 
 }
