@@ -5,8 +5,8 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public enum BackWallTarget {
     OPEN,CLOSE;
-    public static double openValue = 0.6;
-    public static double closeValue = 0;
+    public static double openValue = 0.8;
+    public static double closeValue = 0.2;
     public double get(){
         switch (this){
             case OPEN:

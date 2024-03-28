@@ -27,7 +27,8 @@ public class GrabberTest extends LinearOpMode {
             telemetry.addLine(robot.grabber.getOpenCloseTarget().toString());
             telemetry.addLine(robot.grabber.getProgibTarget().toString());
             telemetry.addData("Wall",robot.grabber.getBackWallTarget().toString());
-            robot.allUpdate();
+            robot.grabber.update();
+            robot.telemetryOutput.update();
         }
     }
 }

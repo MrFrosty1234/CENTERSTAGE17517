@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 public enum GrabberOpenClosePosition {
     OPEN,CLOSE;
     public static double open  = 0.45;
-    public static double close = 0.3;
+    public static double close = 0.35;
     public double get(){
         switch (this){
             case CLOSE:

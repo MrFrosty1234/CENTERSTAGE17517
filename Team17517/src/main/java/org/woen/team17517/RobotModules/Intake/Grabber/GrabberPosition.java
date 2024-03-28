@@ -5,9 +5,9 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public enum GrabberPosition {
     FINISH,SAFE,DOWN;
-    public static double safe = 0.5;
-    public static double down = 0.988;
-    public static double finish = 0.425;
+    public static double safe = 0.7;
+    public static double down = 0.73;
+    public static double finish = 0.2;
     public double get(){
         switch (this){
             default:

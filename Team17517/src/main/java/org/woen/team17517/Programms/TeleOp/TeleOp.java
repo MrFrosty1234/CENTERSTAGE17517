@@ -42,8 +42,8 @@ public  class TeleOp extends LinearOpMode {
             double tNow = System.currentTimeMillis() / 1000.0;
             eatPixels   = gamepad1.right_bumper;
             openGrabber = gamepad1.left_bumper;
-            liftUp      = gamepad1.dpad_up;
-            liftCentre  = gamepad1.dpad_down;
+            liftUp      = gamepad1.dpad_down;
+            liftCentre  = gamepad1.dpad_up;
             liftDown    = gamepad1.circle;
             planeUp     = gamepad1.triangle;
             planeDown   = gamepad1.cross;
