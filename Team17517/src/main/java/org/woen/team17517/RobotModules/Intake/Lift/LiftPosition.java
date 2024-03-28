@@ -7,7 +7,7 @@ public enum LiftPosition {
     DOWN,UP,BACKDROPDOWN, MIDDLE;
     public static int down = 0;
     public static int up = 1750;
-    public static int backdropdown =1050;
+    public static int backdropdown = 850;
     public static int middle = 1300;
     public int get(){
         switch (this){

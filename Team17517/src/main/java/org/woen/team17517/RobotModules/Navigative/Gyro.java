@@ -37,7 +37,7 @@ public class Gyro implements RobotModule {
         angle = gyro.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
     public double getAngle(){
-        return angle;
+        return -angle;
     }
 
 }

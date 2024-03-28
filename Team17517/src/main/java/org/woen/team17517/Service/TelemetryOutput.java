@@ -22,6 +22,7 @@ public class TelemetryOutput implements RobotModule {
     public static boolean opticalSensor = false;
     public static boolean roadRunner = false;
     public static boolean grabber = false;
+    private double xOld = 0;
     private final Telemetry telemetry;
     public TelemetryOutput(UltRobot robot){
         this.robot = robot;
@@ -104,6 +105,10 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("xPos",robot.odometry.getGlobalPosX());
             telemetry.addData("yPos",robot.odometry.getGlobalPosY());
             telemetry.addData("heading",robot.odometry.getGlobalAngle());
+            telemetry.addData("xLocal",robot.odometry.getVectorPositionLocal().getX());
+            telemetry.addData("yLocal",robot.odometry.getVectorPositionLocal().getY());
+            telemetry.addData("xDelta",robot.odometry.getVectorPositionLocal().getX()- xOld);
+            xOld = robot.odometry.getVectorPositionLocal().getX();
         }
         if (velocityOdometer){
             telemetry.addData("hardSpeedY",robot.odometry.getHardVelOdometerRightY());

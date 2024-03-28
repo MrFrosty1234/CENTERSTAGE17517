@@ -177,7 +177,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     }
     public static double kpAngle=450;
     public static double kiAngle=0;
-    public static double kdAngle=0;
+    public static double kdAngle=50;
     public static double ksAngle=0;
     public static double maxIAngle;
     PID pidAngle = new PID(kpAngle,kiAngle,kdAngle,ksAngle,maxIAngle,0);
@@ -264,6 +264,7 @@ public class DriveTrainVelocityControl implements RobotModule {
         powerRight_front_drive  = -powerX + powerY - powerH;
         powerLeft_back_drive  = -powerX + powerY + powerH;
         powerRight_back_drive = powerX + powerY - powerH;
+
         left_front_drive.setPower(powerLeft_front_drive);
         right_front_drive.setPower(powerRight_front_drive);
         left_back_drive.setPower(powerLeft_back_drive);

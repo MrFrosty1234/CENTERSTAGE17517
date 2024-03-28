@@ -33,62 +33,29 @@ public class AutnomModules {
     }
 
     public void move(double x, double y, double h, double time) {
-        robot.updateWhilePositionFalse(
+        robot.updateWhilePositionFalse(new Runnable[]{
                 () -> robot.driveTrainVelocityControl.moveAngle(h),
                 () -> robot.driveTrainVelocityControl.moveWithAngleControl(x, y),
                 () -> robot.timer.waitSeconds(time),
                 () -> robot.driveTrainVelocityControl.moveWithAngleControl(0, 0),
-                () -> robot.timer.waitSeconds(0.1));
+                () -> robot.timer.waitSeconds(0.1)});
     }
 
     List<Trajectory> trajectories ;
     public void scoring() {
-        robot.updateWhilePositionFalse(
+        robot.updateWhilePositionFalse(new Runnable[]{
                 () -> robot.intake.scoring(),
-                () -> robot.timer.waitSeconds(0.5));
+                () -> robot.timer.waitSeconds(0.5)});
     }
 
     public void backdropLow() {
-        robot.updateWhilePositionFalse(() -> robot.intake.waitUp(LiftPosition.BACKDROPDOWN));
+        robot.updateWhilePositionFalse(new Runnable[]{() -> robot.intake.waitUp(LiftPosition.BACKDROPDOWN)});
     }
 
-    public void eatWhite(){
-        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.EAT));
-    }
-    public void reverseEatWhite(){
-        robot.updateWhilePositionFalse(() -> robot.intake.setState(State.REVERS_AFTER_EAT));
-    }
 
-    public void bacBoardPixels() {
-        robot.updateWhilePositionFalse(() -> robot.grabber.close(),
-                () -> robot.grabber.safe(),
-                () -> robot.timer.waitSeconds(0.2),
-                () -> robot.lift.moveUP(),
-                () -> move(0, 20000, 0, 1),
-                () -> robot.grabber.finish(),
-                () -> move(0, -20000, 0, 1),
-                () -> robot.grabber.open(),
-                () -> robot.timer.waitSeconds(0.5),
-                () -> robot.grabber.safe(),
-                () -> robot.lift.moveDown(),
-                () -> robot.grabber.down());
-    }
 
     public void timer(double time){
-        robot.updateWhilePositionFalse(() -> robot.timer.waitSeconds(time));
+        robot.updateWhilePositionFalse(new Runnable[]{() -> robot.timer.waitSeconds(time)});
     }
 
-    public void eatPixels() {
-        robot.updateWhilePositionFalse(
-                () -> robot.brush.out(),
-                () -> robot.timer.waitSeconds(1),
-                () -> robot.brush.in(),
-                () -> robot.timer.waitSeconds(2),
-                () -> robot.grabber.close(),
-                () -> robot.timer.waitSeconds(0.1),
-                () -> robot.brush.out(),
-                () -> robot.timer.waitSeconds(1),
-                () -> robot.brush.off(),
-                () -> robot.timer.waitSeconds(0.1));
-    }
 }

@@ -22,15 +22,15 @@ public class DriveTrain implements RobotModule{
         targetH = 0;
         targetVector.setCord(0,0);
     }
-    public static double kPX = 0;
+    public static double kPX = 2000;
     public static double kDX = 0;
     public static double kIX = 0;
 
-    public static double kPY = 0;
+    public static double kPY = 2000;
     public static double kDY = 0;
-    public static double kIY = 2;
+    public static double kIY = 0;
 
-    public static double kPH = 0;
+    public static double kPH = 450;
     public static double kDH = 0;
     public static double kIH = 0;
 
@@ -51,16 +51,11 @@ public class DriveTrain implements RobotModule{
     private double errX;
     private double errY;
     private double errH;
-    public static double minErrX;
-    public static double minErrY;
-    public static double minErrH;
+    public static double minErrX = 5;
+    public static double minErrY = 5;
+    public static double minErrH = 5;
 
     public static double kg = 0;
-
-    public static double u_X = 0;
-    public static double u_H = 0;
-    public static double u_Y = 0;
-    public static double u_max = 2000;
 
 
     private PID pidX = new PID(kPX,kIX,kDX,0,ImaxX,0);
@@ -100,14 +95,9 @@ public class DriveTrain implements RobotModule{
         reset();
         autoMode = true;
     }
-    public void moveRobot(double x, double y, double h){
-        targetVector = Vector2D.plus(positionVector,new Vector2D(x,y));
-        targetH = posH + h;
-        reset();
-        autoMode = true;
-    }
     public void update(){
         if (autoMode) {
+            pidH.setIsAngle(true);
             voltage = robot.voltageSensorPoint.getVol();
 
             positionVector = robot.odometry.getGlobalPositionVector();
@@ -115,11 +105,7 @@ public class DriveTrain implements RobotModule{
 
             errX = targetVector.getX() - positionVector.getX();
             errY = targetVector.getY() - positionVector.getY();
-            errH = targetH - posH;
-
-            while (Math.abs(errH) > 180) {
-                targetH -= 360 * Math.signum(targetH - posH);
-            }
+            errH = Vector2D.getAngleError(targetH - posH);
 
 
             pidX.setCoefficients(kPX, kIX, kDX, 0, ImaxX, kg);
@@ -128,39 +114,11 @@ public class DriveTrain implements RobotModule{
 
             X = pidX.pid(targetVector.getX(), positionVector.getX(), voltage);
             Y = pidY.pid(targetVector.getY(), positionVector.getY(), voltage);
-            H = pidH.pid(targetH, posH, voltage);
-            /*
-            u_X = timer.seconds()*kt;
 
-            if (u_X > u_max) {
-                u_X = u_max;
-            }
-
-            if (abs(X) > u_X) {
-                X = u_X * Math.signum(u_X);
-            }
-
-            u_H = timer.seconds() * kt;
-
-            if (u_H > u_max) {
-                u_H = u_max;
-            }
-
-            if (abs(X) > u_H) {
-                X = u_H * Math.signum(u_H);
-            }
-
-
-            u_Y = timer.seconds() * kt;
-
-            if (u_Y > u_max) {
-                u_Y = u_max;
-            }
-            if (abs(Y) > u_Y) {
-                Y = u_Y * Math.signum(u_Y);
-            }
-            */
-            robot.driveTrainVelocityControl.moveGlobalCord(X, Y, H);
+            robot.driveTrainVelocityControl.moveAngle(targetH);
+            Vector2D vector = new Vector2D(X,Y);
+            vector.turn(-posH);
+            robot.driveTrainVelocityControl.moveWithAngleControl(vector.getX(),vector.getY());
         }
         }
 

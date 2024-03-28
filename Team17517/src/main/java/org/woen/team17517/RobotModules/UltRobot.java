@@ -72,7 +72,7 @@ public class UltRobot {
         mover= new Mover(this);
         hang = new Hang(this);
 
-        this.robotModules = new RobotModule[]{mover,driveTrainVelocityControl,odometry,gyro,driveTrain, opticalSensor,intake,lift,grabber,brush
+        this.robotModules = new RobotModule[]{mover,driveTrain,driveTrainVelocityControl,odometry,gyro, opticalSensor,intake,lift,grabber,brush
                 ,lighting,voltageSensorPoint,telemetryOutput,timer,hang};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
@@ -105,7 +105,7 @@ public class UltRobot {
         }
 
     }
-    public void updateWhilePositionFalse(Runnable... runnables){
+    public void updateWhilePositionFalse(Runnable[] runnables){
         for (Runnable runnable : runnables){
             runnable.run();
             allUpdate();
