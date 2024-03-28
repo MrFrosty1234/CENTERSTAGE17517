@@ -14,8 +14,8 @@ public class Plane{
         down();
     }
 
-    public static double upPos = 0.4;
-    public static double shootPos = 0.5;
+    public static double upPos = 0.3;
+    public static double shootPos = 0.6;
     public static double downPos = 0.17;
     public enum PlaneStatus{
         SHOOT,UP,DOWN

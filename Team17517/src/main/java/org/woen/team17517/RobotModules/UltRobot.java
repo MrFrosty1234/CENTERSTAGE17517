@@ -3,9 +3,11 @@ package org.woen.team17517.RobotModules;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.woen.team17517.Devices.Hanging;
 import org.woen.team17517.RobotModules.DriveTrain.Mover;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrain;
 import org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl;
+import org.woen.team17517.RobotModules.EndGame.Hang;
 import org.woen.team17517.RobotModules.EndGame.Plane;
 import org.woen.team17517.RobotModules.Intake.Grabber.Brush;
 import org.woen.team17517.RobotModules.Intake.Grabber.GrabberNew;
@@ -46,6 +48,7 @@ public class UltRobot {
     public Brush brush;
     public Plane plane;
     public Intake intake;
+    public Hang hang;
     private final List<LynxModule> revHubs;
 
     public UltRobot(LinearOpMode linearOpMode1) {
@@ -67,9 +70,10 @@ public class UltRobot {
         driveTrain = new DriveTrain(this);
         plane = new Plane(this);
         mover= new Mover(this);
+        hang = new Hang(this);
 
         this.robotModules = new RobotModule[]{mover,driveTrainVelocityControl,odometry,gyro,driveTrain, opticalSensor,intake,lift,grabber,brush
-                ,lighting,voltageSensorPoint,telemetryOutput,timer,};
+                ,lighting,voltageSensorPoint,telemetryOutput,timer,hang};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }

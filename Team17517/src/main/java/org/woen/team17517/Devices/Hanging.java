@@ -1,13 +1,13 @@
 package org.woen.team17517.Devices;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Hanging {
+public class Hanging{
     HardwareMap hardwareMap;
-    public DcMotor hangingMotor;
+    public DcMotorEx hangingMotor;
     public Hanging(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
-        hangingMotor = hardwareMap.get(DcMotor.class, "hangingMotor");
+        hangingMotor = hardwareMap.get(DcMotorEx.class, "hang");
     }
 }

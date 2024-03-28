@@ -7,7 +7,7 @@ import org.woen.team17517.Service.RobotModule;
 
 public class Lighting implements RobotModule {
 
-    public LightningMode lightMode = LightningMode.ON;
+    public LightningMode lightMode = LightningMode.OFF;
     DcMotorEx light;
     DcMotorEx light2;
     UltRobot robot;
@@ -18,7 +18,7 @@ public class Lighting implements RobotModule {
     }
 
     public void setPower(double x) {
-        light2.setPower(x);
+        light2.setPower(-x);
         light.setPower(-x);
     }
 

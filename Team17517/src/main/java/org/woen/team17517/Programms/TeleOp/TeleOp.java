@@ -8,6 +8,7 @@ import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -25,6 +26,8 @@ public  class TeleOp extends LinearOpMode {
     boolean shoot          ;
     boolean planeDown      ;
     boolean revers         ;
+    boolean hangUp         ;
+    boolean hangDown       ;
     public void runOpMode(){
         robot = new UltRobot(this);
         waitForStart();
@@ -46,6 +49,8 @@ public  class TeleOp extends LinearOpMode {
             planeDown   = gamepad1.cross;
             shoot       = gamepad1.square;
             revers = gamepad1.dpad_right;
+            hangUp      = gamepad1.options;
+            hangDown    = gamepad1.share;
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed,
                     robot.lift.getPosition()>200&&forwardSpeed<0?forwardSpeed/2:forwardSpeed,angleSpeed);
 
@@ -58,7 +63,9 @@ public  class TeleOp extends LinearOpMode {
             if (planeDown)   robot.plane.down();
             if (shoot && (tNow - tStart) > 90)       robot.plane.shoot();
             if (revers)       robot.intake.setState(SAVE_BRUSH);
-
+            if (hangUp)       robot.hang.up();
+            else if (hangDown){robot.hang.down();robot.lighting.lightMode = Lighting.LightningMode.OFF;}
+            else              robot.hang.stop();
 
             telemetry.addLine(robot.intake.getState().toString());
             telemetry.addData("Plane",robot.plane.getStatus().toString());
