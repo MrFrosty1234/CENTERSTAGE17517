@@ -25,7 +25,9 @@ public class Lighting implements RobotModule {
     public void on() {
         lightMode = LightningMode.ON;
     }
-
+    public void off() {
+        lightMode = LightningMode.OFF;
+    }
 
     public void update() {
         switch (lightMode) {

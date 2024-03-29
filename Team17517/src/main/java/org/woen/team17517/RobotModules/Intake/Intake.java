@@ -4,6 +4,7 @@ package org.woen.team17517.RobotModules.Intake;
 import static org.woen.team17517.RobotModules.Intake.State.*;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.woen.team17517.RobotModules.EndGame.Hang;
 import org.woen.team17517.RobotModules.Intake.Grabber.Brush;
 import org.woen.team17517.RobotModules.Intake.Grabber.GrabberNew;
 import org.woen.team17517.RobotModules.Intake.Grabber.OpticalSensor;
@@ -23,12 +24,14 @@ public class Intake implements RobotModule {
         brush = robot.brush;
         opticalSensor = robot.opticalSensor;
         light = robot.lighting;
+        hang = robot.hang;
     }
     GrabberNew grabber;
     Lift lift;
     Brush brush;
     OpticalSensor opticalSensor;
     Lighting light;
+    Hang hang;
     private boolean isOn = false;
     public void on(){
         isOn = true;
@@ -52,9 +55,21 @@ public class Intake implements RobotModule {
         state = State.SCORING_TWO;
         opticalSensor.startFreeTime = System.currentTimeMillis();
     }
+
+    public void upHang(){
+        isHangUpping = true;
+        startHangTime = System.currentTimeMillis();
+        state = END_GAME;
+    }
+    public void downHang(){
+        isHangUpping = false;
+        setState(END_GAME);
+    }
     private double startReversTime = System.currentTimeMillis();
     private double startSaveTime = System.currentTimeMillis();
     private double startOffDefenseStart = System.currentTimeMillis();
+    private double startHangTime = System.currentTimeMillis();
+    private boolean isHangUpping = false;
     public void update(){
         if (isOn) {
             switch (state) {
@@ -102,7 +117,7 @@ public class Intake implements RobotModule {
                     light.on();
                     lift.move(upPos);
                     brush.off();
-                    if(lift.getPosition()>200)grabber.finish();
+                    if(lift.getPosition()>450)grabber.finish();
                     grabber.close();
                     grabber.backWallClose();
                     break;
@@ -117,6 +132,19 @@ public class Intake implements RobotModule {
                         }
                     }else {
                         setState(WAIT_DOWN);
+                    }
+                    break;
+                case END_GAME:
+                    light.off();
+                    brush.off();
+                    if (isHangUpping){
+                        lift.move(LiftPosition.LOW);
+                        if(System.currentTimeMillis()-startHangTime>500) grabber.finish();
+                        if(System.currentTimeMillis()-startHangTime>1000) hang.up();
+                    } else {
+                        grabber.finish();
+                        lift.moveDown();
+                        hang.down();
                     }
                     break;
             }

@@ -65,15 +65,16 @@ public class UltRobot {
         gyro = new Gyro(this);
         lighting = new Lighting(this);
         testAprilTagPipeline = new TestAprilTagPipeline(this);
+        hang = new Hang(this);
         intake = new Intake(this);
         odometry = new Localization(this);
         driveTrain = new DriveTrain(this);
         plane = new Plane(this);
         mover= new Mover(this);
-        hang = new Hang(this);
 
-        this.robotModules = new RobotModule[]{mover,driveTrain,driveTrainVelocityControl,odometry,gyro, opticalSensor,intake,lift,grabber,brush
-                ,lighting,voltageSensorPoint,telemetryOutput,timer,hang};
+        this.robotModules = new RobotModule[]{mover,driveTrain,driveTrainVelocityControl,odometry,gyro,
+                opticalSensor,intake,lift,grabber,brush,hang
+                ,lighting,voltageSensorPoint,telemetryOutput,timer};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);
         revHubs.forEach(it -> it.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL));
     }

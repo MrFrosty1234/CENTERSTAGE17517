@@ -99,8 +99,21 @@ public class Lift implements RobotModule {
         }else{
             power = 0.1;
         }
-        setPower(power);
+        if(isMan){
+            setPower(manPower);
+        }else{
+            setPower(power);
+        }
     }
+    private boolean isMan = true;
+    public void man(double power){
+        isMan = true;
+        manPower = power;
+    }
+    public void auto(){
+        isMan = false;
+    }
+    private double manPower = 0;
     public double getCurrent(){
         return liftMotor.getCurrent(CurrentUnit.AMPS);
     }

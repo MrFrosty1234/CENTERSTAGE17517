@@ -28,6 +28,8 @@ public  class TeleOp extends LinearOpMode {
     boolean revers         ;
     boolean hangUp         ;
     boolean hangDown       ;
+    boolean munDown        ;
+    boolean mumUp          ;
     public void runOpMode(){
         robot = new UltRobot(this);
         waitForStart();
@@ -47,10 +49,13 @@ public  class TeleOp extends LinearOpMode {
             liftDown    = gamepad1.circle;
             planeUp     = gamepad1.triangle;
             planeDown   = gamepad1.cross;
-            shoot       = gamepad1.square;
+            shoot       = gamepad1.square&&((tNow-tStart>90)||gamepad1.ps);
             revers = gamepad1.dpad_right;
-            hangUp      = gamepad1.options;
-            hangDown    = gamepad1.share;
+            hangUp      = gamepad1.options&&((tNow-tStart>90)||gamepad1.ps);
+            hangDown    = gamepad1.share&&((tNow-tStart>90)||gamepad1.ps);
+            mumUp = gamepad1.dpad_up&&gamepad1.ps;
+            munDown = gamepad1.dpad_down&&gamepad1.ps;
+
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed,
                     robot.lift.getPosition()>200&&forwardSpeed<0?forwardSpeed/2:forwardSpeed,angleSpeed);
 
@@ -61,14 +66,23 @@ public  class TeleOp extends LinearOpMode {
             if (liftDown)    robot.intake.setState(WAIT_DOWN);
             if (planeUp)     robot.plane.up();
             if (planeDown)   robot.plane.down();
-            if (shoot && (tNow - tStart) > 90)       robot.plane.shoot();
+            if (shoot)       robot.plane.shoot();
             if (revers)       robot.intake.setState(SAVE_BRUSH);
-            if (hangUp)       robot.hang.up();
-            else if (hangDown){robot.hang.down();robot.lighting.lightMode = Lighting.LightningMode.OFF;}
-            else              robot.hang.stop();
-
+            if (hangUp)       robot.intake.upHang();
+            else if (hangDown)robot.intake.downHang();;
+            if(munDown){
+                robot.intake.off();
+                robot.lift.man(-0.1);
+            } else if (mumUp) {
+                robot.intake.off();
+                robot.lift.man(0.1);
+            }else{
+                robot.intake.on();
+                robot.lift.auto();
+            }
             telemetry.addLine(robot.intake.getState().toString());
             telemetry.addData("Plane",robot.plane.getStatus().toString());
+            telemetry.addData("Hang",robot.hang.getState().toString());
             robot.allUpdate();
         }
     }
