@@ -44,5 +44,17 @@ public class DriveTrainMotors{
         right_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
+    public void allStop(){
+        left_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    public void allStart(){
+        left_front_drive.setMode(DcMotor.RunMode .RUN_WITHOUT_ENCODER);
+        left_back_drive.setMode(DcMotor.RunMode  .RUN_WITHOUT_ENCODER);
+        right_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        right_back_drive.setMode(DcMotor.RunMode .RUN_WITHOUT_ENCODER);
+    }
 }
 

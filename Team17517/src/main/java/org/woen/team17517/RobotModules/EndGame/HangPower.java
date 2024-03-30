@@ -4,7 +4,7 @@ public enum HangPower {
     UP, DOWN, ZERO;
     public static  double powerToHangUp = 1;
     public static  double powerToHangDown = -1;
-    public static double powerToRide = 0;
+    public static double powerToRide = 0.02;
     public double get(){
         switch (this){
             case UP:

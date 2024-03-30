@@ -38,23 +38,32 @@ public class AutnomModules {
                 () -> robot.driveTrainVelocityControl.moveWithAngleControl(x, y),
                 () -> robot.timer.waitSeconds(time),
                 () -> robot.driveTrainVelocityControl.moveWithAngleControl(0, 0),
-                () -> robot.timer.waitSeconds(0.1)});
+                () -> robot.timer.waitSeconds(0.1)
+        });
     }
 
-    List<Trajectory> trajectories ;
+    List<Trajectory> trajectories;
+
     public void scoring() {
         robot.updateWhilePositionFalse(new Runnable[]{
                 () -> robot.intake.scoring(),
                 () -> robot.timer.waitSeconds(0.5)});
     }
+    public void wait(int seconds){
+        robot.updateWhilePositionFalse( new Runnable[]{
+            ()->robot.timer.waitSeconds(seconds)
+        });
+    }
 
     public void backdropLow() {
-        robot.updateWhilePositionFalse(new Runnable[]{() -> robot.intake.waitUp(LiftPosition.BACKDROPDOWN)});
+        robot.updateWhilePositionFalse(new Runnable[]{
+                () -> robot.intake.on(),
+                () -> robot.lift.auto(),
+                () -> robot.intake.waitUp(LiftPosition.BACKDROPDOWN)});
     }
 
 
-
-    public void timer(double time){
+    public void timer(double time) {
         robot.updateWhilePositionFalse(new Runnable[]{() -> robot.timer.waitSeconds(time)});
     }
 

@@ -7,9 +7,12 @@ import static org.woen.team17517.RobotModules.Intake.State.*;
 import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.PwmControl;
 
+import org.woen.team17517.RobotModules.EndGame.HangPower;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
+import org.woen.team17517.Service.Button;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public  class TeleOp extends LinearOpMode {
@@ -30,6 +33,7 @@ public  class TeleOp extends LinearOpMode {
     boolean hangDown       ;
     boolean munDown        ;
     boolean mumUp          ;
+    boolean hangReset       = true;
     public void runOpMode(){
         robot = new UltRobot(this);
         waitForStart();
@@ -53,8 +57,8 @@ public  class TeleOp extends LinearOpMode {
             revers = gamepad1.dpad_right;
             hangUp      = gamepad1.options&&((tNow-tStart>90)||gamepad1.ps);
             hangDown    = gamepad1.share&&((tNow-tStart>90)||gamepad1.ps);
-            mumUp = gamepad1.dpad_up&&gamepad1.ps;
-            munDown = gamepad1.dpad_down&&gamepad1.ps;
+            mumUp = gamepad1.triangle&&gamepad1.ps;
+            munDown = gamepad1.cross&&gamepad1.ps;
 
             robot.driveTrainVelocityControl.moveRobotCord(sideSpeed,
                     robot.lift.getPosition()>200&&forwardSpeed<0?forwardSpeed/2:forwardSpeed,angleSpeed);
@@ -67,12 +71,25 @@ public  class TeleOp extends LinearOpMode {
             if (planeUp)     robot.plane.up();
             if (planeDown)   robot.plane.down();
             if (shoot)       robot.plane.shoot();
-            if (revers)       robot.intake.setState(SAVE_BRUSH);
-            if (hangUp)       robot.intake.upHang();
-            else if (hangDown)robot.intake.downHang();;
+            if (revers)      robot.intake.setState(SAVE_BRUSH);
+            if (hangUp && hangReset){
+                robot.intake.hangReset();
+                hangReset = false;
+            }
+            if (hangUp)      robot.intake.upHang(HangPower.UP);
+            else if (hangDown) {
+                robot.intake.upHang(HangPower.DOWN);
+                robot.hardware.driveTrainMotors.allStop();
+                while (opModeIsActive()){
+                    robot.intake.upHang(HangPower.DOWN);
+                    robot.hardware.driveTrainMotors.allStop();
+                    robot.linearOpMode.hardwareMap.getAll(PwmControl.class).forEach(PwmControl::setPwmDisable);
+                    robot.hardware.hanging.hangingMotor.setPower(-1 );
+
+                }
+            }
             if(munDown){
-                robot.intake.off();
-                robot.lift.man(-0.1);
+                robot.intake.off();robot.lift.man(-0.1);
             } else if (mumUp) {
                 robot.intake.off();
                 robot.lift.man(0.1);

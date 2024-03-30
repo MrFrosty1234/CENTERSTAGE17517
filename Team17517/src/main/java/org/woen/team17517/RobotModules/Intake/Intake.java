@@ -3,8 +3,11 @@ package org.woen.team17517.RobotModules.Intake;
 
 import static org.woen.team17517.RobotModules.Intake.State.*;
 
+import com.qualcomm.robotcore.hardware.PwmControl;
+
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.woen.team17517.RobotModules.EndGame.Hang;
+import org.woen.team17517.RobotModules.EndGame.HangPower;
 import org.woen.team17517.RobotModules.Intake.Grabber.Brush;
 import org.woen.team17517.RobotModules.Intake.Grabber.GrabberNew;
 import org.woen.team17517.RobotModules.Intake.Grabber.OpticalSensor;
@@ -56,33 +59,33 @@ public class Intake implements RobotModule {
         opticalSensor.startFreeTime = System.currentTimeMillis();
     }
 
-    public void upHang(){
-        isHangUpping = true;
-        startHangTime = System.currentTimeMillis();
+    public void upHang(HangPower power){
+        hangPower = power;
         state = END_GAME;
     }
-    public void downHang(){
-        isHangUpping = false;
-        setState(END_GAME);
+    public void hangReset(){
+        startHangTime = System.currentTimeMillis();
     }
+
     private double startReversTime = System.currentTimeMillis();
     private double startSaveTime = System.currentTimeMillis();
     private double startOffDefenseStart = System.currentTimeMillis();
     private double startHangTime = System.currentTimeMillis();
-    private boolean isHangUpping = false;
+    private HangPower hangPower = HangPower.ZERO;
     public void update(){
         if (isOn) {
             switch (state) {
                 case SAVE_BRUSH:
-                    light.on();
+                    light.off();
                     if(System.currentTimeMillis() - startSaveTime < 2000) brush.out();
                     else {
                         startOffDefenseStart = System.currentTimeMillis();
                         setState(EAT);
                     }
+                    robot.hardware.driveTrainMotors.allStart();
                     break;
                 case EAT:
-                    light.lightMode = Lighting.LightningMode.OFF;
+                    light.on();
                     if((robot.hardware.intakeAndLiftMotors.brushMotor.getCurrent(CurrentUnit.AMPS) > 4) &&
                             System.currentTimeMillis() - startOffDefenseStart > 1000){
                         startSaveTime = System.currentTimeMillis();
@@ -98,32 +101,36 @@ public class Intake implements RobotModule {
                         grabber.open();
                         grabber.down();
                     }
+                    robot.hardware.driveTrainMotors.allStart();
                     break;
                 case REVERS_AFTER_EAT:
-                    light.on();
+                    light.off();
                     grabber.close();
                     if(System.currentTimeMillis() - startReversTime < 1700) brush.out();
                     else                                                         setState(WAIT_DOWN);
+                    robot.hardware.driveTrainMotors.allStart();
                     break;
                 case WAIT_DOWN:
-                    light.on();
+                    light.off();
                     lift.moveDown();
                     brush.off();
                     grabber.down();
                     grabber.close();
                     grabber.backWallClose();
+                    robot.hardware.driveTrainMotors.allStart();
                     break;
                 case WAIT_UP:
-                    light.on();
+                    light.off();
                     lift.move(upPos);
                     brush.off();
                     if(lift.getPosition()>450)grabber.finish();
                     grabber.close();
                     grabber.backWallClose();
+                    robot.hardware.driveTrainMotors.allStart();
                     break;
                 case SCORING_TWO:
                     if(lift.getPosition()>200) {
-                        light.on();
+                        light.off();
                         grabber.finish();
                         grabber.open();
                         grabber.backWallOpen();
@@ -133,18 +140,26 @@ public class Intake implements RobotModule {
                     }else {
                         setState(WAIT_DOWN);
                     }
+                    robot.hardware.driveTrainMotors.allStart();
                     break;
                 case END_GAME:
                     light.off();
                     brush.off();
-                    if (isHangUpping){
+                    if (hangPower==HangPower.UP){
                         lift.move(LiftPosition.LOW);
                         if(System.currentTimeMillis()-startHangTime>500) grabber.finish();
-                        if(System.currentTimeMillis()-startHangTime>1000) hang.up();
-                    } else {
+                    } else if(hangPower == HangPower.DOWN) {
                         grabber.finish();
                         lift.moveDown();
-                        hang.down();
+                        robot.linearOpMode.hardwareMap.getAll(PwmControl.class).forEach(PwmControl::setPwmDisable);
+                        robot.hardware.driveTrainMotors.allStop();
+                    }
+                    if(System.currentTimeMillis()-startHangTime>1000) {
+                        if (hangPower == HangPower.UP && robot.hardware.hanging.hangingMotor.getCurrent(CurrentUnit.AMPS) > 2) {
+                            hangPower = HangPower.ZERO;
+                            hang.setHangPower(hangPower);
+                        } else
+                            hang.setHangPower(hangPower);
                     }
                     break;
             }
