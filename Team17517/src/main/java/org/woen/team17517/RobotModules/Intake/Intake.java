@@ -91,7 +91,7 @@ public class Intake implements RobotModule {
                         startSaveTime = System.currentTimeMillis();
                         setState(SAVE_BRUSH);
                     }
-                    if(opticalSensor.isPixels(500)){
+                    if(opticalSensor.isPixels(400)){
                         robot.linearOpMode.gamepad1.rumble(400);
                         startReversTime = System.currentTimeMillis();
                         setState(REVERS_AFTER_EAT);

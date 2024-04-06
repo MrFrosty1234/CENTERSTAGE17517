@@ -37,25 +37,23 @@ public class AutonomCameraRedFar extends LinearOpMode {
 
         robot.linearOpMode.telemetry.addData("Pos", pipeLine);
         robot.grabber.closePurplePixel();
-        autnomModules.wait(12);
         if (pipeLine.pos == 1) {
-            autnomModules.move(0, -28000, 0, 1.3);
+            autnomModules.move(17500, -32000, 0, 1.2);
             robot.grabber.openPurplePixel();
-            autnomModules.move(20000, 28000, 0, 1);
-            autnomModules.move(0, -30000, 0, 1.35);
-            autnomModules.move(-30000, 0, 0, 0.9);
-            autnomModules.move(20000, 0, 0, 1);
-            ////////////////
-            autnomModules.move(0,-30000,0,1);
+            autnomModules.move(0, 22000, 0, 0.5);
+            ///////////
+            autnomModules.move(0,20000,0,0.5);
+            autnomModules.move(-30000,0,0,0.6);
+            autnomModules.move(0,-30000,0,1.9);
             autnomModules.move(0,0,90,0);
-            autnomModules.move(0,-40000,90,3);
-            autnomModules.move(-40000,0,90,1.2);
+            autnomModules.move(0,-40000,90,2.8);
+            autnomModules.move(-40000,0,90,0.8);
             autnomModules.backdropLow();
             autnomModules.move(0,-20000,90,1);
             autnomModules.scoring();
             robot.intake.setState(State.WAIT_DOWN);
             autnomModules.move(0,30000,90,0.5);
-            autnomModules.move(30000,0,90,0.65);
+            autnomModules.move(-30000,0,90,1.5);
         } else if (pipeLine.pos == 2) {
             autnomModules.move(0, -40000, 0,1);
             robot.grabber.openPurplePixel();
@@ -65,28 +63,29 @@ public class AutonomCameraRedFar extends LinearOpMode {
             autnomModules.move(20000,0,90,0.5);
             autnomModules.move(0,-40000,90,2.3);
             autnomModules.backdropLow();
-            autnomModules.move(-5000,-20000,90,1.5);
+            autnomModules.move(2500,-20000,90,1.5);
             autnomModules.scoring();
             robot.intake.setState(State.WAIT_DOWN);
             autnomModules.move(0,30000,90,0.5);
-            autnomModules.move(30000,0,90,0.9);
+            autnomModules.move(-30000,0,90,1.5);
         } else if (pipeLine.pos == 3) {
-            autnomModules.move(18500, -32000, 0, 1.2);
+            autnomModules.move(0, -28000, 0, 1.3);
             robot.grabber.openPurplePixel();
-            autnomModules.move(0, 22000, 0, 0.5);
-            ///////////
-            autnomModules.move(0,20000,0,0.5);
-            autnomModules.move(-30000,0,0,0.6);
-            autnomModules.move(0,-30000,0,1.9);
+            autnomModules.move(20000, 28000, 0, 1);
+            autnomModules.move(0, -30000, 0, 1.45);
+            autnomModules.move(-30000, 0, 0, 1);
+            autnomModules.move(20000, 0, 0, 1);
+            ////////////////
+            autnomModules.move(0,-30000,0,0.85);
             autnomModules.move(0,0,90,0);
-            autnomModules.move(0,40000,90,2.8);
-            autnomModules.move(-40000,0,90,0.9);
+            autnomModules.move(0,-40000,90,3);
+            autnomModules.move(-40000,0,90,1.2);
             autnomModules.backdropLow();
-            autnomModules.move(0,-20000,90,1.3);
+            autnomModules.move(0,-20000,90,1);
             autnomModules.scoring();
             robot.intake.setState(State.WAIT_DOWN);
             autnomModules.move(0,30000,90,0.5);
-            autnomModules.move(30000,0,90,1.2);
+            autnomModules.move(-30000,0,90,1.5);
         }
     }
 }

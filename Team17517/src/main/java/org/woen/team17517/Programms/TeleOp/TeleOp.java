@@ -1,6 +1,7 @@
 package org.woen.team17517.Programms.TeleOp;
 
 import static org.woen.team17517.RobotModules.Intake.Lift.LiftPosition.MIDDLE;
+import static org.woen.team17517.RobotModules.Intake.Lift.LiftPosition.TWO_LINE;
 import static org.woen.team17517.RobotModules.Intake.Lift.LiftPosition.UP;
 import static org.woen.team17517.RobotModules.Intake.State.*;
 
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.PwmControl;
 
 import org.woen.team17517.RobotModules.EndGame.HangPower;
+import org.woen.team17517.RobotModules.Intake.Lift.LiftPosition;
 import org.woen.team17517.RobotModules.Lighting.Lighting;
 import org.woen.team17517.RobotModules.UltRobot;
 import org.woen.team17517.Service.Button;
@@ -33,6 +35,7 @@ public  class TeleOp extends LinearOpMode {
     boolean hangDown       ;
     boolean munDown        ;
     boolean mumUp          ;
+    boolean liftTwoLine    ;
     boolean hangReset       = true;
     public void runOpMode(){
         robot = new UltRobot(this);
@@ -48,7 +51,8 @@ public  class TeleOp extends LinearOpMode {
             double tNow = System.currentTimeMillis() / 1000.0;
             eatPixels   = gamepad1.right_bumper;
             openGrabber = gamepad1.left_bumper;
-            liftUp      = gamepad1.dpad_down;
+            liftUp      = gamepad1.dpad_left;
+            liftTwoLine = gamepad1.dpad_down;
             liftCentre  = gamepad1.dpad_up;
             liftDown    = gamepad1.circle;
             planeUp     = gamepad1.triangle;
@@ -68,6 +72,7 @@ public  class TeleOp extends LinearOpMode {
             if (liftUp)      robot.intake.waitUp(UP);
             if (liftCentre)  robot.intake.waitUp(MIDDLE);
             if (liftDown)    robot.intake.setState(WAIT_DOWN);
+            if (liftTwoLine) robot.intake.waitUp(TWO_LINE);
             if (planeUp)     robot.plane.up();
             if (planeDown)   robot.plane.down();
             if (shoot)       robot.plane.shoot();
@@ -84,7 +89,8 @@ public  class TeleOp extends LinearOpMode {
                     robot.intake.upHang(HangPower.DOWN);
                     robot.hardware.driveTrainMotors.allStop();
                     robot.linearOpMode.hardwareMap.getAll(PwmControl.class).forEach(PwmControl::setPwmDisable);
-                    robot.hardware.hanging.hangingMotor.setPower(-1 );
+                    robot.hardware.hanging.hangingMotor.setPower(-1);
+
 
                 }
             }

@@ -37,36 +37,41 @@ public class AutonomCameraRedNear extends LinearOpMode {
         robot.linearOpMode.telemetry.addData("Pos", pipeLine);
         robot.grabber.closePurplePixel();
         if (pipeLine.pos == 1) {
-            autnomModules.move(0, -28000, 0, 1.3);
+            autnomModules.move(0, -30000, 0, 1.05);
             robot.grabber.openPurplePixel();
             autnomModules.move(-20000, 28000, 0, 1);
             autnomModules.move(0, -30000, 0, 1);
-            autnomModules.move(30000, 0, 0, 1.25);
+            autnomModules.move(30000, 0, 0, 0.9);
             autnomModules.move(-20000, 0, 0, 1);
             autnomModules.backdropLow();
             autnomModules.move(13000, -35000, 90, 2.4);
             autnomModules.scoring();
             autnomModules.move(0, 20000, 90, 0.3);
             autnomModules.move(-45000, 0, 90, 1.2);
+            robot.intake.setState(State.WAIT_DOWN);
+
         } else if (pipeLine.pos == 2) {
             autnomModules.move(0, -40000, 0,0.95);
             robot.grabber.openPurplePixel();
             autnomModules.move(-10500, 30000, 0, 0.5);
             autnomModules.move(0, 0, 90, 0);
             autnomModules.backdropLow();
-            autnomModules.move(11000, -31000, 90, 1.8);
+            autnomModules.move(13000, -31000, 90, 1.8);
             autnomModules.scoring();
-
+            robot.intake.setState(State.WAIT_DOWN);
+            autnomModules.move(0,30000,90,0.5);
+            autnomModules.move(-30000,0,90,1.6);
         } else if (pipeLine.pos == 3) {
             autnomModules.move(-17500, -32000, 0, 1.0);
             robot.grabber.openPurplePixel();
             autnomModules.move(0, 22000, 0, 0.5);
             autnomModules.backdropLow();
             autnomModules.move(0, 0, 90, 0);
-            autnomModules.move( 0, -32000, 90, 1.3);
+            autnomModules.move(0, -32000, 90, 1.5);
             autnomModules.scoring();
-            autnomModules.move(5000, 30000, 90, 0.2);
-            autnomModules.move(-30000, 0, 90, 0.9);
+            robot.intake.setState(State.WAIT_DOWN);
+            autnomModules.move(0,30000,90,0.5);
+            autnomModules.move(-30000,0,90,1.6);
         }
     }
 }
