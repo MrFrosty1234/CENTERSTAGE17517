@@ -2,6 +2,7 @@ package org.woen.team18742.Test;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.woen.team18742.Test.DeviceTest.DeviceType.*;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -27,7 +28,7 @@ public class DeviceTest extends LinearOpMode {
     public static DeviceType deviceType = DeviceType.NONE;
 
     private DeviceType getDeviceClass(HardwareDevice hardwareDevice) {
-        if (hardwareDevice instanceof DcMotorEx) return DC_MOTOR;
+        if (hardwareDevice instanceof DcMotorEx) return DeviceType.DC_MOTOR;
         if (hardwareDevice instanceof DigitalChannel) return DIGITAL_CHANNEL;
         if (hardwareDevice instanceof VoltageSensor) return BATTERY_VOLTAGE;
         if (hardwareDevice instanceof AnalogInput) return ANALOG_INPUT;
