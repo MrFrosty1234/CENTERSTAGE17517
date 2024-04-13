@@ -1,6 +1,7 @@
 package org.woen.team17517.RobotModules.DriveTrain;
 
 import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.VEL_ANGLE_TO_ENC;
+import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.VEL_SM_TO_ENC;
 import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
@@ -30,6 +31,11 @@ import org.woen.team17517.Service.RobotModule;
 import java.util.*;
 @Config
 public class Mover implements RobotModule {
+    public static double maxAccel = 5;
+    public static double minAccel = -5;
+
+    public static double maxLinSpeed = 15;
+    public static double maxAngSpeed = 0.1;
     public Mover(UltRobot robot)
     {
         this.robot = robot;
@@ -39,11 +45,9 @@ public class Mover implements RobotModule {
         double xMultiplier = 1.2;
         MecanumKinematics kinematics = new MecanumKinematics(wheelDiameter, xMultiplier);
         VelConstraint velConstraint = new MinVelConstraint(Arrays.asList(kinematics.
-                        new WheelVelConstraint(DriveTrainVelocityControl.maxLinerSpeedSm),
-                new AngularVelConstraint(50)
+                        new WheelVelConstraint(maxLinSpeed),
+                new AngularVelConstraint(maxAngSpeed)
         ));
-        double maxAccel = 20;
-        double minAccel = -5;
         AccelConstraint accelConstraint = new ProfileAccelConstraint(minAccel, maxAccel);
         builder = new TrajectoryBuilder(beginPose, 1e-6, 0, velConstraint,
                 accelConstraint, 0.25, 0.1);
@@ -51,9 +55,9 @@ public class Mover implements RobotModule {
     }
 
     UltRobot robot;
-    public static double kPForward = .0;
-    public static double kPSide = .0;
-    public static double kPTurn = .0;
+    public static double kPForward = 2300;
+    public static double kPSide = 2300;
+    public static double kPTurn = 4;
     protected final TrajectoryBuilder builder;
     public TrajectoryBuilder builder() {
         return builder;
@@ -97,9 +101,9 @@ public class Mover implements RobotModule {
                 Pose2dDual<Time> target = timeTrajectory.get(time.seconds());
                 PoseVelocity2dDual<Time> targetVelocity = controller.compute(target, pose, velocity);
                 robot.driveTrainVelocityControl.moveRobotCord(
-                        -targetVelocity.linearVel.y.value(),
-                        targetVelocity.linearVel.x.value(),
-                        toDegrees(targetVelocity.angVel.value())*VEL_ANGLE_TO_ENC
+                        VEL_SM_TO_ENC*-targetVelocity.linearVel.y.value(),
+                        VEL_SM_TO_ENC*targetVelocity.linearVel.x.value(),
+                        -toDegrees(targetVelocity.angVel.value())*VEL_ANGLE_TO_ENC
                 );
                 if(isAtPosition())trajectories.remove(0);
             }else if (end!=null){
@@ -115,6 +119,6 @@ public class Mover implements RobotModule {
 
     @Override
     public boolean isAtPosition() {
-        return !isOn || (abs(errorHeading) < 0.1 && abs(error) < 15);
+        return !isOn || (abs(errorHeading) < 0.1 && abs(error) < 5);
     }
 }

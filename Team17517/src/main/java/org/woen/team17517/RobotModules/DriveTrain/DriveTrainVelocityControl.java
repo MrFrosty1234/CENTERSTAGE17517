@@ -150,9 +150,10 @@ public class DriveTrainVelocityControl implements RobotModule {
     private static final double lightOfOdometer = 4.8d*PI;
     private static final double maxRoundOdometerPerSecond = maxLinerSpeedSm /lightOfOdometer;
     private static final double odometerConstant = 8192;
-    public  static final double maxLinearSpeedOd = maxRoundOdometerPerSecond*odometerConstant;
-    private static final double trackLight = 27d;
-    public  static final double maxAngleSpeedOd = 30_000;
+    public static final double maxLinearSpeedOd = maxRoundOdometerPerSecond*odometerConstant;
+    public static final double trackLight = 27d;
+    public static final double maxAngleSpeedOd = 30_000;
+    public static final double VEL_SM_TO_ENC = maxLinearSpeedOd/maxLinerSpeedSm;
     public static double toEnc(double target){
         return target*maxLinearSpeedOd/maxLinerSpeedSm;
     }

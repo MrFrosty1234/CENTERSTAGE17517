@@ -117,7 +117,7 @@ public class Localization implements RobotModule {
     private double hOld = 0;
     public static double xOdometerDistance = 9;
     private void localPositionUpdate(){
-        h = robot.gyro.getAngle() + startPosition.getAngle();
+        h = -(robot.gyro.getAngle() + startPosition.getAngle()) ;
         double    deltaH = h - hOld;
         deltaH = Vector2D.getAngleError(deltaH);
         hOld = h;
@@ -130,13 +130,14 @@ public class Localization implements RobotModule {
     }
     private final Vector2D vectorDeltaPosition = new Vector2D();
     private final Vector2D vectorPositionLocalOld = new Vector2D();
-    private void globalPositionUpdate(){
+    private void globalPositionUpdate() {
         vectorDeltaPosition.copyFrom(vectorPositionLocal);
         vectorDeltaPosition.minus(vectorPositionLocalOld);
         vectorPositionLocalOld.copyFrom(vectorPositionLocal);
         vectorDeltaPosition.turn(h);
         vectorPositionGlobal.plus(vectorDeltaPosition);
     }
+
     private final Vector2D vectorDeltaVelocity = new Vector2D();
     private final Vector2D vectorVelocityLocalOld = new Vector2D();
     private void globalVelocityUpdate(){

@@ -19,9 +19,9 @@ public class TestDriveTrain extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()){
             robot.updateWhilePositionFalse(new Runnable[]{
-                    ()->robot.driveTrain.moveGlobal(x, y, h),
+                    ()->robot.driveTrainVelocityControl.moveRobotCord(x,y,  h),
                     ()->robot.timer.waitSeconds(1),
-                    ()->robot.driveTrain.moveGlobal(-x, -y, -h),
+                    ()->robot.driveTrainVelocityControl.moveRobotCord(-x,-y,-h),
                     ()->robot.timer.waitSeconds(1),
             });
         }

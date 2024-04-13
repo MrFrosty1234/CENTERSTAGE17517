@@ -20,9 +20,11 @@ public class RoadrunnerTest extends LinearOpMode {
                     () -> robot.mover.trajectories(robot.mover.builder()
                             .strafeTo(new Vector2d(-50, 0))
                             .build()),
+                    () -> robot.timer.waitSeconds(1),
                     () -> robot.mover.trajectories(robot.mover.builder()
                             .strafeTo(new Vector2d(0, 0))
-                            .build())
+                            .build()),
+                    () -> robot.timer.waitSeconds(1),
             });
             robot.allUpdate();
         }

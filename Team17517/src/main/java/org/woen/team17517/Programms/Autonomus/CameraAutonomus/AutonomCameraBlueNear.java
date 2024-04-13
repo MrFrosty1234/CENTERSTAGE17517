@@ -32,9 +32,10 @@ public class AutonomCameraBlueNear extends LinearOpMode {
         waitForStart();
 
 
-        visionPortal.close();
+        //visionPortal.close();
 
         robot.linearOpMode.telemetry.addData("Pos", pipeLine);
+        //visionPortal.close();
         robot.grabber.closePurplePixel();
         if (pipeLine.pos == 1) {
             autnomModules.move(17500, -32000, 0, 1.0);
@@ -53,11 +54,18 @@ public class AutonomCameraBlueNear extends LinearOpMode {
             autnomModules.move(10500, 30000, 0, 0.5);
             autnomModules.move(0, 0, -90, 0);
             autnomModules.backdropLow();
-            autnomModules.move(-13000, -31000, -90, 1.8);
+            autnomModules.move(-10000, -31000, -90, 1.8);
             autnomModules.scoring();
             robot.intake.setState(State.WAIT_DOWN);
             autnomModules.move(0,30000,-90,0.5);
-            autnomModules.move(30000,0,-90,1.6);
+            autnomModules.move(-50000,0,-90,0.9);
+            autnomModules.move(0,50000,-90,1.8);
+            robot.intake.setState(State.EAT);
+            autnomModules.move(5000,25000,-90,1.5);
+           /// robot.intake.setState(State.REVERSEBRUSH);
+            ///autnomModules.move(-20000,-10000,-90,0.8);
+            ///robot.intake.setState(State.EAT);
+            autnomModules.move(0,20000,-90,0.6);
         } else if (pipeLine.pos == 3) {
             autnomModules.move(0, -30000, 0, 1.05);
             robot.grabber.openPurplePixel();

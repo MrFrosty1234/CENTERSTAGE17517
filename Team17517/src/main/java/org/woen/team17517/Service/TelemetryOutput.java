@@ -51,6 +51,7 @@ public class TelemetryOutput implements RobotModule {
         if(roadRunner){
             telemetry.addData("rrX",robot.mover.getPose().position.x);
             telemetry.addData("rrY",robot.mover.getPose().position.y);
+            telemetry.addData("rrH",robot.mover.getPose().heading.toDouble());
             telemetry.addData("velX",robot.mover.getVelocity().linearVel.x);
             telemetry.addData("velY",robot.mover.getVelocity().linearVel.y);
         }
