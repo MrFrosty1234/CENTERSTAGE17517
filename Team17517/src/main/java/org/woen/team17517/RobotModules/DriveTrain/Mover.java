@@ -103,8 +103,8 @@ public class Mover implements RobotModule {
                 Pose2dDual<Time> target = timeTrajectory.get(time.seconds());
                 PoseVelocity2dDual<Time> targetVelocity = controller.compute(target, pose, velocity);
                 robot.driveTrainVelocityControl.moveRobotCord(
-                        ENC_TO_SM *-targetVelocity.linearVel.y.value(),
-                        ENC_TO_SM *targetVelocity.linearVel.x.value(),
+                        -targetVelocity.linearVel.y.value()/ENC_TO_SM,
+                        targetVelocity.linearVel.x.value()/ENC_TO_SM,
                         -toDegrees(targetVelocity.angVel.value())*VEL_ANGLE_TO_ENC
                 );
                 if(isAtPosition())trajectories.remove(0);
