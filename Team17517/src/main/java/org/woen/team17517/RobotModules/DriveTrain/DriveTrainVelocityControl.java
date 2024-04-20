@@ -157,7 +157,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static double toEnc(double target){
         return target*maxLinearSpeedOd/maxLinerSpeedSm;
     }
-    public static double toSm(double target){return target*maxLinerSpeedSm/maxLinearSpeedOd;}
+    public static double toSm(double target){return target*ENC_TO_SM;}
     private double moveRat(double target)
     {
         return speedH.pid(target,hEnc,this.voltage);
