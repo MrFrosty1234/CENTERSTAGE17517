@@ -1,10 +1,12 @@
 package org.woen.team17517.RobotModules.DriveTrain;
 
 import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.VEL_ANGLE_TO_ENC;
-import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.VEL_SM_TO_ENC;
+import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.ENC_TO_SM;
 import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
+
+import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.AccelConstraint;
@@ -36,11 +38,12 @@ public class Mover implements RobotModule {
 
     public static double maxLinSpeed = 15;
     public static double maxAngSpeed = 0.1;
-    public Mover(UltRobot robot)
+    public Mover(@NonNull UltRobot robot)
     {
         this.robot = robot;
         robot.hardware.odometers.reset();
-        Pose2d beginPose = new Pose2d(robot.odometry.getGlobalPositionVector().convertToVector2d(),toRadians(robot.odometry.getGlobalAngle()));
+        Pose2d beginPose = new Pose2d(robot.odometry.getGlobalPositionVector().convertToSmFromEnc()
+                .convertToVector2d(),toRadians(robot.odometry.getGlobalAngle()));
         double wheelDiameter = 9.6;
         double xMultiplier = 1.2;
         MecanumKinematics kinematics = new MecanumKinematics(wheelDiameter, xMultiplier);
@@ -51,7 +54,6 @@ public class Mover implements RobotModule {
         AccelConstraint accelConstraint = new ProfileAccelConstraint(minAccel, maxAccel);
         builder = new TrajectoryBuilder(beginPose, 1e-6, 0, velConstraint,
                 accelConstraint, 0.25, 0.1);
-
     }
 
     UltRobot robot;
@@ -86,9 +88,9 @@ public class Mover implements RobotModule {
     @Override
     public void update() {
         if(isOn){
-            pose = new Pose2d(robot.odometry.getGlobalPositionVector().convertToVector2d(),
+            pose = new Pose2d(robot.odometry.getGlobalPositionVector().convertToSmFromEnc().convertToVector2d(),
                     toRadians(robot.odometry.getGlobalAngle()));
-            velocity = new PoseVelocity2d(robot.odometry.getLocalVelocityVector().convertToVector2d(),
+            velocity = new PoseVelocity2d(robot.odometry.getLocalVelocityVector().convertToSmFromEnc().convertToVector2d(),
                     toRadians(robot.odometry.getVelLocalH()));
             HolonomicController controller = new HolonomicController(kPForward, kPSide, kPTurn);
             if(!trajectories.isEmpty()) {
@@ -101,8 +103,8 @@ public class Mover implements RobotModule {
                 Pose2dDual<Time> target = timeTrajectory.get(time.seconds());
                 PoseVelocity2dDual<Time> targetVelocity = controller.compute(target, pose, velocity);
                 robot.driveTrainVelocityControl.moveRobotCord(
-                        VEL_SM_TO_ENC*-targetVelocity.linearVel.y.value(),
-                        VEL_SM_TO_ENC*targetVelocity.linearVel.x.value(),
+                        ENC_TO_SM *-targetVelocity.linearVel.y.value(),
+                        ENC_TO_SM *targetVelocity.linearVel.x.value(),
                         -toDegrees(targetVelocity.angVel.value())*VEL_ANGLE_TO_ENC
                 );
                 if(isAtPosition())trajectories.remove(0);
