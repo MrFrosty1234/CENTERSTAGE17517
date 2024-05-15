@@ -108,23 +108,24 @@ public class Localization implements RobotModule {
     public double getMathSpeedOdometerRightY() {return mathSpeedOdometerRightY;}
     private void localVelocityUpdate(){
         overflowDef();
-        double velX = toSm(velOdometerX);
-        double velY = toSm((velOdometerLeftY + velOdometerRightY)/2d);
+        double velX = correctLinK*toSm(velOdometerX);
+        double velY = correctLinK*toSm((velOdometerLeftY + velOdometerRightY)/2d);
         velH = ((velOdometerLeftY - velOdometerRightY)/2d)/ VEL_ANGLE_TO_ENC;
         vectorVelocityLocal.setCord(velX,velY);
     }
     public double hEncoder = 0;
     private double hOld = 0;
     public static double xOdometerDistance = 9;
+    public static double correctLinK = 1.0165920056426600796082396820644;
     private void localPositionUpdate(){
         h = -(robot.gyro.getAngle() + startPosition.getAngle()) ;
         double    deltaH = h - hOld;
         deltaH = Vector2D.getAngleError(deltaH);
         hOld = h;
         double xCorrect = xOdometerDistance*Math.toRadians(deltaH);
-        //robot.linearOpMode.telemetry.addData("xCorrect",xCorrect);
-        double yEnc = toSm((robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometerLeftY))/2d);
-        double xEnc = toSm(robot.hardware.odometers.getPosition(odometerX))-xCorrect;
+
+        double yEnc = correctLinK*toSm((robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometerLeftY))/2d);
+        double xEnc = correctLinK*toSm(robot.hardware.odometers.getPosition(odometerX))-xCorrect;
         hEncoder = (-robot.hardware.odometers.getPosition(odometerRightY) + robot.hardware.odometers.getPosition(odometerLeftY))/2d;
         vectorPositionLocal.setCord(xEnc,yEnc);
     }

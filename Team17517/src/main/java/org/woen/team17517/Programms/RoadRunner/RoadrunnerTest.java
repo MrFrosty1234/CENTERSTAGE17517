@@ -1,5 +1,6 @@
 package org.woen.team17517.Programms.RoadRunner;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,13 +16,14 @@ public class RoadrunnerTest extends LinearOpMode {
         robot = new UltRobot(this);
         waitForStart();
         robot.mover.on();
-        while (opModeIsActive()) {
-            robot.updateWhilePositionFalse(new  Runnable[]{
-                    ()->robot.mover.trajectories(
-                            robot.mover.builder().strafeTo(new Vector2d(100,0)).strafeTo(new Vector2d(0,0)).build()),
+        if(opModeIsActive()) {
+            robot.updateWhilePositionFalse(new Runnable[]{
+                    ()-> robot.mover.trajectories(
+                            robot.mover.builder()
+                                    .strafeTo(new Vector2d(50,0))
+                                    .build()),
                     ()->robot.timer.waitSeconds(1),
-                   // ()->robot.mover.trajectories(robot.mover.builder().strafeTo(new Vector2d(-100,0)).build()),
-            });
+        });
         }
     }
 }

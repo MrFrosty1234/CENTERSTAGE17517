@@ -49,6 +49,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("BrushCurrent", robot.hardware.intakeAndLiftMotors.brushMotor.getCurrent(CurrentUnit.AMPS));
         }
         if(roadRunner){
+            telemetry.addData("error",robot.mover.getError());
             telemetry.addData("rrX",robot.mover.getPose().position.x);
             telemetry.addData("rrY",robot.mover.getPose().position.y);
             telemetry.addData("rrH",robot.mover.getPose().heading.toDouble());
