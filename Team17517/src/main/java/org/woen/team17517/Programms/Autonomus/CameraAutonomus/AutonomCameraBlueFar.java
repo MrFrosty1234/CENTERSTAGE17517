@@ -33,7 +33,8 @@ public class AutonomCameraBlueFar extends LinearOpMode {
         waitForStart();
 
 
-        visionPortal.close();
+        ///
+        // visionPortal.close();
 
         robot.linearOpMode.telemetry.addData("Pos", pipeLine);
         robot.grabber.closePurplePixel();

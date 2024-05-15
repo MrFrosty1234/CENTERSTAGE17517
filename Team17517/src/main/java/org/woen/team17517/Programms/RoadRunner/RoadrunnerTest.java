@@ -16,17 +16,12 @@ public class RoadrunnerTest extends LinearOpMode {
         waitForStart();
         robot.mover.on();
         while (opModeIsActive()) {
-            robot.updateWhilePositionFalse(new Runnable[]{
-                    () -> robot.mover.trajectories(robot.mover.builder()
-                            .strafeTo(new Vector2d(-50, 0))
-                            .build()),
-                    () -> robot.timer.waitSeconds(1),
-                    () -> robot.mover.trajectories(robot.mover.builder()
-                            .strafeTo(new Vector2d(0, 0))
-                            .build()),
-                    () -> robot.timer.waitSeconds(1),
+            robot.updateWhilePositionFalse(new  Runnable[]{
+                    ()->robot.mover.trajectories(
+                            robot.mover.builder().strafeTo(new Vector2d(100,0)).strafeTo(new Vector2d(0,0)).build()),
+                    ()->robot.timer.waitSeconds(1),
+                   // ()->robot.mover.trajectories(robot.mover.builder().strafeTo(new Vector2d(-100,0)).build()),
             });
-            robot.allUpdate();
         }
     }
 }

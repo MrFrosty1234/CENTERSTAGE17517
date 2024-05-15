@@ -24,7 +24,7 @@ import org.opencv.imgproc.Moments;
 import java.util.concurrent.atomic.AtomicReference;
 
 //@Config
-public class PipeLine implements VisionProcessor, CameraStreamSource {
+public class PipeLine implements VisionProcessor {
     double x = 640;
     double y = 480;
     double r1 = 5;
@@ -96,9 +96,9 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
         cx = moments.m10 / moments.m00;
         double cy = moments.m01 / moments.m00;
 
-        Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
-        Utils.matToBitmap(frame, b);
-        lastFrame.set(b);
+      //  Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
+       // Utils.matToBitmap(frame, b);
+       // lastFrame.set(b);
 
 
         if (cx <= 240) {
@@ -119,8 +119,10 @@ public class PipeLine implements VisionProcessor, CameraStreamSource {
 
     }
 
-    @Override
+  /*  @Override
     public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
         continuation.dispatch(bitmapConsumer -> bitmapConsumer.accept(lastFrame.get()));
     }
+
+   */
 }

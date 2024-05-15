@@ -72,7 +72,7 @@ public class UltRobot {
         plane = new Plane(this);
         mover= new Mover(this);
 
-        this.robotModules = new RobotModule[]{mover,driveTrain,driveTrainVelocityControl,odometry,gyro,
+        this.robotModules = new RobotModule[]{odometry,mover,driveTrain,driveTrainVelocityControl,gyro,
                 opticalSensor,intake,lift,grabber,brush,hang
                 ,lighting,voltageSensorPoint,telemetryOutput,timer};
         revHubs = linearOpMode.hardwareMap.getAll(LynxModule.class);

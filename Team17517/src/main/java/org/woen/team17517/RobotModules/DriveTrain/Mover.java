@@ -57,17 +57,21 @@ public class Mover implements RobotModule {
     }
 
     UltRobot robot;
-    public static double kPForward = 2300;
-    public static double kPSide = 2300;
-    public static double kPTurn = 4;
+    public static double kPForward = 0;
+    public static double kPSide = 0;
+    public static double kPTurn = 0;
     protected final TrajectoryBuilder builder;
     public TrajectoryBuilder builder() {
         return builder;
     }
     public void trajectories(List<Trajectory> trajectories) {
         this.trajectories = trajectories;
+        reset();
     }
     ElapsedTime time = new ElapsedTime();
+    public void reset(){
+        time.reset();
+    }
     private Pose2dDual<Time> end;
     private boolean isOn = false;
     public void on(){isOn = true;}
@@ -85,18 +89,21 @@ public class Mover implements RobotModule {
 
     Pose2d pose = new Pose2d(0,0,0);
     PoseVelocity2d velocity = new PoseVelocity2d(new Vector2d(0,0),0);
+    private boolean isFirst = true;
+    private double duration;
     @Override
     public void update() {
         if(isOn){
-            pose = new Pose2d(robot.odometry.getGlobalPositionVector().convertToSmFromEnc().convertToVector2d(),
+            pose = new Pose2d(robot.odometry.getGlobalPositionVector().convertToVector2d(),
                     toRadians(robot.odometry.getGlobalAngle()));
-            velocity = new PoseVelocity2d(robot.odometry.getLocalVelocityVector().convertToSmFromEnc().convertToVector2d(),
+            velocity = new PoseVelocity2d(robot.odometry.getLocalVelocityVector().convertToVector2d(),
                     toRadians(robot.odometry.getVelLocalH()));
             HolonomicController controller = new HolonomicController(kPForward, kPSide, kPTurn);
             if(!trajectories.isEmpty()) {
+                isFirst = false;
                 Trajectory trajectory = trajectories.get(0);
                 TimeTrajectory timeTrajectory = new TimeTrajectory(trajectory);
-                double duration = timeTrajectory.duration;
+                duration = timeTrajectory.duration;
                 end = timeTrajectory.get(duration);
                 error        = timeTrajectory.get(duration).value().position.minus(pose.position).norm();
                 errorHeading = timeTrajectory.get(duration).value().heading.toDouble() - pose.heading.toDouble();
@@ -121,6 +128,7 @@ public class Mover implements RobotModule {
 
     @Override
     public boolean isAtPosition() {
-        return !isOn || (abs(errorHeading) < 0.1 && abs(error) < 5);
+        return trajectories != null && !trajectories.isEmpty() && (!isOn || (abs(errorHeading) < 0.1 && abs(error) < 5)) ||
+                new TimeTrajectory(trajectories.get(trajectories.size()-1)).duration<time.seconds();
     }
 }
