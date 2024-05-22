@@ -1,6 +1,6 @@
 package org.woen.team17517.Service;
 
-import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.ENC_TO_SM;
+import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.enc_to_sm;
 import static java.lang.Math.*;
 
 import com.acmerobotics.roadrunner.Vector2d;
@@ -38,11 +38,6 @@ public class Vector2D
     }
     public Vector2d convertToVector2d(){
         return new Vector2d(y,-x);
-    }
-    public Vector2D convertToSmFromEnc(){
-        x = x*ENC_TO_SM;
-        y = y*ENC_TO_SM;
-        return this;
     }
     public void copyFrom(Vector2D vector){
         setCord(vector.getX(),vector.getY());

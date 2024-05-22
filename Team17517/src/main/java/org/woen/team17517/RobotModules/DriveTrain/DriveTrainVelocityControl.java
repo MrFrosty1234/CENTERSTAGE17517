@@ -36,7 +36,7 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static  double maxIX = 0.04;
 
     public static double ksRat = 0.000025;
-    public static double ksY = 0.0000115;
+    public static double ksY = 0.000015;
     public static double ksX = 0.0000115;
     public static double kSlide = 1.2;
 
@@ -153,11 +153,13 @@ public class DriveTrainVelocityControl implements RobotModule {
     public static final double maxLinearSpeedOd = maxRoundOdometerPerSecond*odometerConstant;
     public static final double trackLight = 27d;
     public static final double maxAngleSpeedOd = 30_000;
-    public static final double ENC_TO_SM = lightOfOdometer/odometerConstant;
+    public static final double enc_to_sm = lightOfOdometer/odometerConstant;
     public static double toEnc(double target){
         return target*maxLinearSpeedOd/maxLinerSpeedSm;
     }
-    public static double toSm(double target){return target*ENC_TO_SM;}
+    public static double correctLinK = 1.0165920056426600796082396820644;
+    public static double toSm(double target){return target* enc_to_sm *correctLinK;}
+    public static double ENC_TO_SM = enc_to_sm *correctLinK;
     private double moveRat(double target)
     {
         return speedH.pid(target,hEnc,this.voltage);
