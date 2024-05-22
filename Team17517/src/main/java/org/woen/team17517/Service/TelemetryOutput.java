@@ -55,6 +55,7 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("rrH",robot.mover.getPose().heading.toDouble());
             telemetry.addData("velX",robot.mover.getVelocity().linearVel.x);
             telemetry.addData("velY",robot.mover.getVelocity().linearVel.y);
+            telemetry.addData("velH",robot.mover.getVelocity().angVel);
         }
         if(driveTrain){
             HashMap<String,Double> targetMap = robot.driveTrain.getTargets();
@@ -107,10 +108,9 @@ public class TelemetryOutput implements RobotModule {
             telemetry.addData("xPos",robot.odometry.getGlobalPosX());
             telemetry.addData("yPos",robot.odometry.getGlobalPosY());
             telemetry.addData("heading",robot.odometry.getGlobalAngle());
-            telemetry.addData("xLocal",robot.odometry.getVectorPositionLocal().getX());
-            telemetry.addData("yLocal",robot.odometry.getVectorPositionLocal().getY());
-            telemetry.addData("xDelta",robot.odometry.getVectorPositionLocal().getX()- xOld);
-            xOld = robot.odometry.getVectorPositionLocal().getX();
+            telemetry.addData("xVel",robot.odometry.getVelLocalX());
+            telemetry.addData("yVel",robot.odometry.getVelLocalY());
+            telemetry.addData("VelH",Math.toRadians(robot.odometry.getVelLocalH()));
         }
         if (velocityOdometer){
             telemetry.addData("hardSpeedY",robot.odometry.getHardVelOdometerRightY());

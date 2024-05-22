@@ -1,7 +1,8 @@
 package org.woen.team17517.RobotModules.DriveTrain;
 
-import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.VEL_ANGLE_TO_ENC;
 import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.ENC_TO_SM;
+import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.VEL_ANGLE_TO_ENC;
+import static org.woen.team17517.RobotModules.DriveTrain.DriveTrainVelocityControl.enc_to_sm;
 import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
@@ -33,11 +34,11 @@ import org.woen.team17517.Service.RobotModule;
 import java.util.*;
 @Config
 public class Mover implements RobotModule {
-    public static double maxAccel = 100;
-    public static double minAccel = -100;
+    public static double maxAccel = 50;
+    public static double minAccel = -50;
 
-    public static double maxLinSpeed = 100;
-    public static double maxAngSpeed = 10;
+    public static double maxLinSpeed = 150;
+    public static double maxAngSpeed = 4;
 
     public Mover(@NonNull UltRobot robot) {
         this.robot = robot;
