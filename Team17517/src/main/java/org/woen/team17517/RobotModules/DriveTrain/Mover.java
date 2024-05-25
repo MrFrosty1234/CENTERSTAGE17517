@@ -34,8 +34,8 @@ import org.woen.team17517.Service.RobotModule;
 import java.util.*;
 @Config
 public class Mover implements RobotModule {
-    public static double maxAccel = 50;
-    public static double minAccel = -50;
+    public static double maxAccel = 70;
+    public static double minAccel = -70;
 
     public static double maxLinSpeed = 150;
     public static double maxAngSpeed = 4;
@@ -57,9 +57,9 @@ public class Mover implements RobotModule {
     VelConstraint velConstraint;
     MecanumKinematics kinematics;
     AccelConstraint accelConstraint;
-    public static double kPForward = 0;
-    public static double kPSide = 0;
-    public static double kPTurn = 0;
+    public static double kPForward = 5;
+    public static double kPSide = 5;
+    public static double kPTurn = 10;
     protected  TrajectoryBuilder builder;
 
     public TrajectoryBuilder builder() {
